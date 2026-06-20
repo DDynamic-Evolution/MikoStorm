@@ -2106,7 +2106,6 @@
 		</button>
 		 
 	</panel>
-
   <!-- Chat: CmdLine -->
   <panel
 	  top_pad="3"
@@ -2597,6 +2596,12 @@
 	  name="FSCmdLineAnnounceChannel"
 	  width="90"/>
   </panel>
+
+        <panel
+         class="panel_preference"
+         filename="panel_preferences_voicebox.xml"
+         label="VoiceBox TTS"
+         name="voicebox" />
 
 </tab_container>
 </panel>

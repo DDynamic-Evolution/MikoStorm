@@ -60,6 +60,7 @@
 #include "llmd5.h"
 #include "llmutelist.h"
 #include "llrecentpeople.h"
+#include "fschattts.h"
 #include "llimprocessing.h" // <FS> FS autoresponse feature
 #include "llviewermessage.h"
 #include "llviewerwindow.h"
@@ -1911,6 +1912,17 @@ bool LLIMModel::addToHistory(const LLUUID& session_id,
         nearby_chat->addMessage(chat, true, LLSD());
     }
     // </FS:Ansariel>
+
+    if (!from_id.isNull() && from_id != gAgentID && !is_announcement && !utf8_text.empty())
+    {
+        LLSD tts_chat;
+        tts_chat["message"] = utf8_text;
+        tts_chat["from"] = from;
+        tts_chat["from_id"] = from_id;
+        tts_chat["source"] = (S32)CHAT_SOURCE_AGENT;
+        tts_chat["chat_type"] = (S32)(session->isGroupSessionType() ? CHAT_TYPE_IM_GROUP : CHAT_TYPE_IM);
+        FSChatTTS::instance().onChatMessage(tts_chat);
+    }
 
     return true;
 }

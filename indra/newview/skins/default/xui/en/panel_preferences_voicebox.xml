@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+ top_pad="1"
+ bottom="-1"
+ left="1"
+ right="-1"
+ follows="all"
+ label="VoiceBox TTS"
+ name="tab-VoiceBoxTTS" >
+
+    <check_box
+     control_name="FSVoiceBoxTTSEnabled"
+     follows="left|top"
+     height="16"
+     label="Enable VoiceBox TTS"
+     layout="topleft"
+     left="20"
+     top="15"
+     name="voicebox_tts_enable"
+     width="450" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left="40"
+     height="15"
+     name="voicebox_read_label"
+     width="100"
+     top_pad="10">
+        Read:
+    </text>
+    <check_box
+     control_name="FSVoiceBoxTTSReadWhisper"
+     follows="left|top"
+     height="16"
+     label="Whisper"
+     layout="topleft"
+     left_pad="5"
+     name="voicebox_read_whisper"
+     top_delta="-1"
+     width="80" />
+    <check_box
+     control_name="FSVoiceBoxTTSReadNormal"
+     follows="left|top"
+     height="16"
+     label="Normal"
+     layout="topleft"
+     left_pad="5"
+     name="voicebox_read_normal"
+     top_delta="0"
+     width="80" />
+    <check_box
+     control_name="FSVoiceBoxTTSReadShout"
+     follows="left|top"
+     height="16"
+     label="Shout"
+     layout="topleft"
+     left_pad="5"
+     name="voicebox_read_shout"
+     top_delta="0"
+     width="80" />
+    <check_box
+     control_name="FSVoiceBoxTTSReadIMs"
+     follows="left|top"
+     height="16"
+     label="IMs"
+     layout="topleft"
+     left_pad="5"
+     name="voicebox_tts_read_ims"
+     top_delta="0"
+     width="80" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="15"
+     name="voicebox_endpoint_label"
+     width="200"
+     top_pad="15">
+        VoiceBox API endpoint:
+    </text>
+    <line_editor
+     control_name="FSVoiceBoxEndpoint"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left="20"
+     max_length_chars="256"
+     name="voicebox_endpoint"
+     top_pad="-2"
+     width="480" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="15"
+     name="voicebox_profile_label"
+     width="200"
+     top_pad="5">
+        TTS Profile:
+    </text>
+    <line_editor
+     control_name="FSVoiceBoxProfileID"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left="20"
+     max_length_chars="256"
+     name="voicebox_profile"
+     top_pad="-2"
+     width="300" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="15"
+     name="voicebox_language_label"
+     width="200"
+     top_pad="5">
+        Language:
+    </text>
+    <line_editor
+     control_name="FSVoiceBoxTTSLanguage"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left="20"
+     max_length_chars="10"
+     name="voicebox_language"
+     top_pad="-2"
+     width="80" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left_pad="3"
+     name="voicebox_language_hint"
+     top_delta="4"
+     width="200">
+        e.g. en, de
+    </text>
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     layout="topleft"
+     left="20"
+     height="15"
+     name="voicebox_name_format_label"
+     width="200"
+     top_pad="10">
+        Name format:
+    </text>
+    <combo_box
+     control_name="FSVoiceBoxTTSNameFormat"
+     follows="left|top"
+     height="23"
+     layout="topleft"
+     left="20"
+     name="voicebox_name_format"
+     top_pad="-2"
+     width="300">
+        <combo_box.item
+         name="full_name"
+         label="Full Name (John Doe says ...)"
+         value="full" />
+        <combo_box.item
+         name="first_name"
+         label="First Name Only (John says ...)"
+         value="first" />
+        <combo_box.item
+         name="no_name"
+         label="No Name (just the text)"
+         value="none" />
+    </combo_box>
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerifSmall"
+     height="30"
+     layout="topleft"
+     left="20"
+     name="voicebox_tts_note"
+     top_pad="15"
+     width="480">
+        Reads nearby chat and IMs aloud via VoiceBox TTS.
+        Requires a running VoiceBox backend at the endpoint URL.
+        To find your profile ID, check http://localhost:17493/profiles
+    </text>
+
+</panel>
