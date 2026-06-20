@@ -1,3 +1,10 @@
+ATTENTION! This is a fork of the original viewer and contains experimental (but legal) features. There is no guarantee they work for you.
+
+## Experimental features
+- Voicebox TTS support. Reads your IMs and chat aloud if you run a voicebox server.
+- Script bulk upload. Specially made for scripter who want to upload their script repositories to SL.
+
+## Original text
 <img align="left" width="100" height="100" src="doc/firestorm_256.png" alt="Logo of Firestorm viewer"/>
 
 **[Firestorm](https://www.firestormviewer.org) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.**
