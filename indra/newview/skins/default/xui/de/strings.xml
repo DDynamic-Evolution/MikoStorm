@@ -388,24 +388,6 @@ Wenn Sie der Ansicht sind, dass Sie diese Meldung fälschlicherweise erhalten ha
 	<string name="TestingDisconnect">
 		Verbindungsabbruch wird getestet
 	</string>
-	<string name="SocialFlickrConnecting">
-		Verbinden mit Flickr...
-	</string>
-	<string name="SocialFlickrPosting">
-		Posten...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Flickr-Verbindung wird getrennt...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Problem beim Verbinden mit Flickr
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Problem beim Posten auf Flickr
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Problem beim Trennen der Flickr-Verbindung
-	</string>
 	<string name="SocialPrimfeedConnecting">
 		Verbinden mit Primfeed...
 	</string>
@@ -4915,9 +4897,6 @@ Erfahren Sie mehr unter https://second.life/scripted-agents.
 	<string name="share_alert">
 		Objekte aus dem Inventar hier her ziehen
 	</string>
-	<string name="flickr_post_success">
-		Sie haben auf Flickr gepostet.
-	</string>
 	<string name="twitter_post_success">
 		Sie haben auf Twitter gepostet.
 	</string>
@@ -5925,9 +5904,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Environments_Label">
 		Umgebungen
 	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
 	<string name="Command_Gestures_Label">
 		Gesten
 	</string>
@@ -6106,9 +6082,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Stop_Animations_Label">
 		Avatar-Animationen stoppen
 	</string>
-	<string name="Command_Discord_Label">
-		Discord
-	</string>
 	<string name="Command_Poser_Label">
 		Poser
 	</string>
@@ -6147,9 +6120,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Umgebungen
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Auf Flickr hochladen
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Gesten für Ihren Avatar (Strg+G)
@@ -6318,9 +6288,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Beacons_Tooltip">
 		Ortungssignale anzeigen
-	</string>
-	<string name="Command_Discord_Tooltip">
-		Discord
 	</string>
 	<string name="Command_Poser_Tooltip">
 		Eigenen Avatar und Animeshe posieren

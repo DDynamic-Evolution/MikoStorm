@@ -389,24 +389,6 @@ Bunun səhv olduğunu düşünürsünüzsə, buraya məktub göndərin: support@
 		Proqram Bağlantısını Ayırma Testi
 	</string>
 
-	<string name="SocialFlickrConnecting">
-		Flickr ilə bağlantı qurulur...
-	</string>
-	<string name="SocialFlickrPosting">
-		Göndərilir...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Flickr-dən ayrılma gedir...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Flickr-ə qoşulmaq mümkün deyil
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Flickr-ə göndərmək mümkün deyil
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Flickr-dən ayrılmaq mümkün deyil
-	</string>
 	<string name="BlackAndWhite">
 		Qara və Ağ
 	</string>
@@ -4775,9 +4757,6 @@ Bu mesaj göstərilməyə davam edərsə, [SUPPORT_SITE] saytına daxil olun.
 	<string name="share_alert">
 		Elementləri avadanlıq siyahısından buraya daşıyın
 	</string>
-	<string name="flickr_post_success">
-		Siz Flickr-də mesaj paylaşdınız.
-	</string>
 	<string name="no_session_message">
 		(IM sessiyası mövcud deyil)
 	</string>
@@ -5492,9 +5471,6 @@ Dəyişdiricinin yolunu qoşa dırnaq içərisində qoymağa çalışın
 	<string name="Command_Environments_Label">
 		Mühitlər
 	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
 	<string name="Command_Gestures_Label">
 		Jestlər
 	</string>
@@ -5680,9 +5656,6 @@ Dəyişdiricinin yolunu qoşa dırnaq içərisində qoymağa çalışın
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Mühitlər
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Flickr-a yükləyin
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Avatarınız üçün jestlər (CTRL+G)

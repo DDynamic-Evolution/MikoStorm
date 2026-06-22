@@ -32,6 +32,7 @@
 #include "llpanel.h"
 #include "llpointer.h"          // LLPointer<>
 #include "llmediactrl.h"    // LLMediaCtrlObserver
+#include "llviewertexture.h"    // LLViewerTexture
 
 class LLLineEditor;
 class LLSLURL;
@@ -73,6 +74,7 @@ public:
     void showLoginWidgets();
 
     static void loadLoginPage();
+    void loadLoginImage();
     static void giveFocus();
     static void setAlwaysRefresh(bool refresh);
 
@@ -114,6 +116,8 @@ private:
     static void onShowHidePasswordClick(void*);
     static std::string credentialName();
 
+    virtual void draw();
+
 private:
     boost::signals2::connection mGridListChangedCallbackConnection;
 
@@ -139,6 +143,8 @@ private:
     std::string     mPreviousUsername;
     static std::string  sPassword;
     static std::string  sPendingNewGridURI;
+
+    LLPointer<LLViewerTexture> mLoginImage;
 
     bool            mInitialized;
 };

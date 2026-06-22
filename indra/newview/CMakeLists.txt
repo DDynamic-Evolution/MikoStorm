@@ -15,9 +15,6 @@ include(CMakeCopyIfDifferent)
 include(CubemapToEquirectangularJS)
 include(GLIB)
 include(DragDrop)
-if (USE_DISCORD)
-  include(Discord)
-endif ()
 include(EXPAT)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
@@ -55,7 +52,6 @@ include(LLPrimitive)
 include(Growl)
 include(ColladaDom)
 include(jemalloc)
-include(Discord)
 
 if (HAVOK)
    # When using HAVOK_TPV, the library is precompiled, so no need for this
@@ -95,8 +91,7 @@ set(viewer_SOURCE_FILES
     chatbar_as_cmdline.cpp
     daeexport.cpp
     dialogstack.cpp
-    exoflickr.cpp
-    exoflickrauth.cpp
+
     fsprimfeedauth.cpp
     exogroupmutelist.cpp
     floatermedialists.cpp
@@ -139,6 +134,7 @@ set(viewer_SOURCE_FILES
     fsfloaterprotectedfolders.cpp
     fsfloaterradar.cpp
     fsfloatersearch.cpp
+    fsfloaterloginimagesettings.cpp
     fsfloatersplashscreensettings.cpp
     fsfloaterstatistics.cpp
     fsfloaterstreamtitle.cpp
@@ -192,8 +188,7 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
-    llflickrconnect.cpp
-    llfloaterflickr.cpp
+
     omnifilter.cpp
     omnifilterengine.cpp
     fsprimfeedconnect.cpp
@@ -956,8 +951,7 @@ set(viewer_HEADER_FILES
     chatbar_as_cmdline.h
     daeexport.h
     dialogstack.h
-    exoflickr.h
-    exoflickrauth.h
+
     fsprimfeedauth.h
     exogroupmutelist.h
     floatermedialists.h
@@ -1002,6 +996,7 @@ set(viewer_HEADER_FILES
     fsfloaterprotectedfolders.h
     fsfloaterradar.h
     fsfloatersearch.h
+    fsfloaterloginimagesettings.h
     fsfloatersplashscreensettings.h
     fsfloaterstatistics.h
     fsfloaterstreamtitle.h
@@ -1057,8 +1052,7 @@ set(viewer_HEADER_FILES
     lggbeamscolors.h
     lggcontactsets.h
     lfsimfeaturehandler.h
-    llflickrconnect.h
-    llfloaterflickr.h
+
     fsprimfeedconnect.h
     fsfloaterprimfeed.h
     # <FS:Ansariel> [Legacy Bake]
@@ -1805,29 +1799,7 @@ if (USE_BUGSPLAT)
         )
 endif (USE_BUGSPLAT)
 
-# <FS:Ansariel> Flickr / Discord keys and fsversionvalues headers are generated in here
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-
-# <exodus>
-# Generate the flickr keys header.
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/exoflickrkeys.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h
-    @ONLY
-)
-list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
-# </exodus>
-
-#<FS:LO> Discord rich presence
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/fsdiscordkey.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/fsdiscordkey.h
-    @ONLY
-)
-list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/fsdiscordkey.h)
-LIST(APPEND viewer_HEADER_FILES fsfloaterdiscord.h fsdiscordconnect.h)
-LIST(APPEND viewer_SOURCE_FILES fsfloaterdiscord.cpp fsdiscordconnect.cpp)
-#</FS:LO>
 
 # <FS:TS> Generate the version information header file.
 configure_file(
@@ -2374,12 +2346,6 @@ if (WINDOWS)
                )
     endif (ADDRESS_SIZE EQUAL 64)
 
-    if (TARGET ll::discord_sdk)
-        list(APPEND COPY_INPUT_DEPENDENCIES
-             ${SHARED_LIB_STAGING_DIR}/discord_partner_sdk.dll
-             )
-    endif ()
-
     if (TARGET ll::fmodstudio)
       list(APPEND COPY_INPUT_DEPENDENCIES
            ${SHARED_LIB_STAGING_DIR}/fmod.dll
@@ -2403,7 +2369,7 @@ if (WINDOWS)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
-        "--discord=${USE_DISCORD}"
+        
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
@@ -2445,7 +2411,7 @@ if (WINDOWS)
             --arch=${ARCH}
             --artwork=${ARTWORK_DIR}
             "--bugsplat=${BUGSPLAT_DB}"
-            "--discord=${USE_DISCORD}"
+            
             "--fmodstudio=${USE_FMODSTUDIO}"
             "--openal=${USE_OPENAL}"
             "--tracy=${USE_TRACY}"
@@ -2513,7 +2479,7 @@ if (WINDOWS)
               --arch=${ARCH}
               --artwork=${ARTWORK_DIR}
               "--bugsplat=${BUGSPLAT_DB}"
-              "--discord=${USE_DISCORD}"
+              
               "--fmodstudio=${USE_FMODSTUDIO}"
               "--openal=${USE_OPENAL}"
               "--tracy=${USE_TRACY}"
@@ -2638,12 +2604,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         ll::tracy
         ll::openxr
         fs::glod # <FS:Beq/> restore GLOD dependencies
-        fs::discord # <FS:Ansariel> Discord  support
         )
-
-if (USE_DISCORD)
-   target_link_libraries(${VIEWER_BINARY_NAME} ll::discord_sdk )
-endif ()
 
 if (TARGET ll::velopack)
    target_link_libraries(${VIEWER_BINARY_NAME} ll::velopack )
@@ -2736,7 +2697,7 @@ if (LINUX)
         --arch=${ARCH}
         --artwork=${ARTWORK_DIR}
         "--bugsplat=${BUGSPLAT_DB}"
-        "--discord=${USE_DISCORD}"
+        
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
@@ -2765,7 +2726,7 @@ if (LINUX)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
-      "--discord=${USE_DISCORD}"
+      
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
@@ -2860,7 +2821,7 @@ if (DARWIN)
       --arch=${ARCH}
       --artwork=${ARTWORK_DIR}
       "--bugsplat=${BUGSPLAT_DB}"
-      "--discord=${USE_DISCORD}"
+      
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
@@ -2897,7 +2858,7 @@ if (DARWIN)
           --artwork=${ARTWORK_DIR}
           "--bugsplat=${BUGSPLAT_DB}"
           --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
-          "--discord=${USE_DISCORD}"
+          
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
           "--tracy=${USE_TRACY}"

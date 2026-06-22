@@ -4,5 +4,4 @@
 	<button label="Enviar por correo electrónico" name="save_to_email_btn"/>
 	<button label="Guardar en mi inventario" name="save_to_inventory_btn"/>
 	<button label="Guardar en mi ordenador" name="save_to_computer_btn"/>
-	<button label="Subir a Flickr" name="save_to_flickr_btn"/>
 </panel>

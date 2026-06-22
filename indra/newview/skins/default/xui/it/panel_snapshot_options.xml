@@ -10,9 +10,6 @@
 		<layout_panel name="lp_profile">	
 			<button label="Condividi sul feed" name="save_to_profile_btn"/>
 		</layout_panel>
-		<layout_panel name="lp_flickr">	
-			<button label="Carica su Flickr" name="send_to_flickr_btn"/>
-		</layout_panel>
 		<layout_panel name="lp_email">	
 			<button label="Invia per e-mail" name="save_to_email_btn"/>
 		</layout_panel>

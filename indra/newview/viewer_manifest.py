@@ -672,8 +672,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
             ):
                 self.path(libfile)
 
-            if self.args['discord'] == 'ON':
-                self.path("discord_partner_sdk.dll")
+
 
             # Mesh 3rd party libs needed for auto LOD and collada reading
             try:
@@ -1665,12 +1664,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                                 ):
                     self.path2basename(relpkgdir, libfile)
 
-                # Discord social SDK
-                if self.args['discord'] == 'ON':
-                    for libfile in (
-                                "libdiscord_partner_sdk.dylib",
-                                ):
-                        self.path2basename(relpkgdir, libfile)
+
 
                 # Fmod studio dylibs (vary based on configuration)
                 # <FS:Beq> Fix intolerant processing of booleans
@@ -2510,7 +2504,7 @@ if __name__ == "__main__":
     extra_arguments = [
         dict(name='bugsplat', description="""BugSplat database to which to post crashes,
              if BugSplat crash reporting is desired""", default=''),
-        dict(name='discord', description="""Indication discord social sdk libraries are needed""", default='OFF'),
+
         dict(name='fmodstudio', description="""Indication if fmod studio libraries are needed""", default='OFF'),
         dict(name='openal', description="""Indication openal libraries are needed""", default='OFF'),
         dict(name='tracy', description="""Indication tracy profiler is enabled""", default='OFF'),

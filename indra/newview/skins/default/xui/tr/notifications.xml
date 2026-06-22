@@ -2688,9 +2688,6 @@ Daha küçük bir arazi parçası seçmeyi deneyin.
 	<notification name="FacebookConnect">
 		[MESSAGE]
 	</notification>
-	<notification name="FlickrConnect">
-		[MESSAGE]
-	</notification>
 	<notification name="TwitterConnect">
 		[MESSAGE]
 	</notification>

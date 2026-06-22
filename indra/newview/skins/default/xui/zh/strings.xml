@@ -415,24 +415,6 @@ support@secondlife.com.
 	<string name="TestingDisconnect">
 		正在斷開檢視器測試。
 	</string>
-	<string name="SocialFlickrConnecting">
-		正在連線Flickr...
-	</string>
-	<string name="SocialFlickrPosting">
-		發布中...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		斷開與Flickr的連線...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		連線Flickr時發生錯誤
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		發布到Flickr時發生錯誤
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		斷開與Flickr的連線時發生錯誤
-	</string>
 	<string name="SocialPrimfeedConnecting">
 		正在連接到Primfeed...
 	</string>
@@ -5091,9 +5073,6 @@ support@secondlife.com.
 	<string name="share_alert">
 		將庫存物件拖拽到這裡
 	</string>
-	<string name="flickr_post_success">
-		成功發布到 Flickr。
-	</string>
 	<string name="no_session_message">
 		(私聊對話不存在)
 	</string>
@@ -6121,9 +6100,6 @@ support@secondlife.com.
 	<string name="Command_Environments_Label">
 		環境
 	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
 	<string name="Command_Gestures_Label">
 		手勢
 	</string>
@@ -6336,9 +6312,6 @@ support@secondlife.com.
 	<string name="Command_Environments_Tooltip">
 		環境
 	</string>
-	<string name="Command_Flickr_Tooltip">
-		上傳到 Flickr
-	</string>
 	<string name="Command_Gestures_Tooltip">
 		你的化身手勢 (CTRL+G)
 	</string>
@@ -6525,12 +6498,6 @@ support@secondlife.com.
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
 		停止我的化身上的動畫
-	</string>
-	<string name="Command_Discord_Label">
-		Discord
-	</string>
-	<string name="Command_Discord_Tooltip">
-		Discord
 	</string>
 	<!-- Mesh UI terms -->
 	<string name="Retain%">

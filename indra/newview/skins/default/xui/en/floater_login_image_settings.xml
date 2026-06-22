@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="login_image_settings"
+ title="Login Image Settings"
+ width="450"
+ height="160"
+ min_width="450"
+ min_height="160"
+ save_rect="true"
+ single_instance="true"
+ can_resize="false"
+ can_minimize="true"
+ can_close="true"
+ can_drag_on_left="false">
+
+    <text
+     follows="left|top"
+     height="40"
+     layout="topleft"
+     left="10"
+     name="description"
+     top="10"
+     word_wrap="true"
+     width="430">
+        Select a local image file to display as the login background instead of the default web login page. Leave empty to restore the default web login page. Supported formats: JPG, PNG, BMP, TGA.
+    </text>
+
+    <text
+     follows="left|top"
+     height="16"
+     layout="topleft"
+     left="10"
+     name="path_label"
+     top_pad="10"
+     width="430">
+        Login Image Path:
+    </text>
+
+    <line_editor
+     control_name="LoginImagePath"
+     border_style="line"
+     border_thickness="1"
+     follows="left|top"
+     font="SansSerif"
+     height="23"
+     left="10"
+     max_length_chars="4096"
+     name="login_image_path"
+     top_pad="3"
+     width="310" />
+
+    <button
+     follows="left|top"
+     height="23"
+     label="Browse..."
+     label_selected="Browse..."
+     left_pad="5"
+     name="set_path_btn"
+     top_delta="0"
+     width="100">
+     <button.commit_callback
+      function="LoginImage.SetPath" />
+    </button>
+
+    <button
+     follows="left|top"
+     height="23"
+     label="Clear"
+     label_selected="Clear"
+     left="10"
+     name="clear_path_btn"
+     top_pad="5"
+     width="100">
+     <button.commit_callback
+      function="LoginImage.ClearPath" />
+    </button>
+
+</floater>

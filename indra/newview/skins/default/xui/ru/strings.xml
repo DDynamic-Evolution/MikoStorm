@@ -400,24 +400,6 @@ support@secondlife.com.
 	<string name="TestingDisconnect">
 		Тестирование отключения клиента
 	</string>
-	<string name="SocialFlickrConnecting">
-		Подключение к Flickr...
-	</string>
-	<string name="SocialFlickrPosting">
-		Публикация...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Отключение от Flickr...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Проблема с подключением к Flickr
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Проблема с публикацией на Flickr
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Проблема с отключением от Flickr
-	</string>
 	<string name="SocialPrimfeedConnecting">
 		Подключение к Primfeed...
 	</string>
@@ -4886,9 +4868,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="share_alert">
 		Перетащите элементы из инвентаря сюда
 	</string>
-	<string name="flickr_post_success">
-		Вы опубликовали в Flickr.
-	</string>
 	<string name="no_session_message">
 		(Сеанс ЛС не существует)
 	</string>
@@ -5616,9 +5595,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	<string name="Command_Environments_Label">
 		Среды
 	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
 	<string name="Command_Gestures_Label">
 		Жесты
 	</string>
@@ -5813,9 +5789,6 @@ https://www.firestormviewer.org/support за помощь в решении эт
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Среды
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Загрузить на Flickr
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Жесты для вашего аватара (CTRL+G)

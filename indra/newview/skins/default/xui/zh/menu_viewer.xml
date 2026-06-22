@@ -103,9 +103,7 @@
 		<menu_item_check label="聊天" name="Conversations" />
 		<menu_item_call label="全方位過濾器" name="Omnifilter" />
 		<menu_item_check label="快捷手勢" name="Gestures" />
-		<menu_item_call label="Flickr..." name="Flickr" />
 		<menu_item_call label="Primfeed..." name="Primfeed"/>
-		<menu_item_call label="Discord..." name="Discord" />
 		<menu_item_check label="聊天記錄" name="Conversation Log..." />
 		<menu_item_check label="附近的語音" name="Nearby Voice" />
 		<menu_item_call label="封鎖列表" name="Block List" />

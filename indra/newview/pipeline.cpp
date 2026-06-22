@@ -110,7 +110,7 @@
 #include "llfloaterpathfindingcharacters.h"
 #include "llfloatertools.h"
 #include "llfloatersnapshot.h" // <FS:Beq/> for snapshotFrame
-#include "llfloaterflickr.h" // <FS:Beq/> for snapshotFrame
+ // <FS:Beq/> for snapshotFrame
 #include "fsfloaterprimfeed.h" // <FS:Beq/> for snapshotFrame
 #include "llsnapshotlivepreview.h" // <FS:Beq/> for snapshotFrame
 // #include "llpanelface.h"  // <FS:Zi> switchable edit texture/materials panel - include not needed
@@ -8527,10 +8527,9 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
     }
     const F32 guide_visibility_value = show_guides ? (F32)guide_visibility : 0.f;
     const bool simple_snapshot_visible = LLFloaterReg::instanceVisible("simple_snapshot");
-    const bool flickr_snapshot_visible = LLFloaterReg::instanceVisible("flickr");
     const bool primfeed_snapshot_visible = LLFloaterReg::instanceVisible("primfeed"); // <FS:Beq/> Primfeed integration
     const bool snapshot_visible = LLFloaterReg::instanceVisible("snapshot");
-    const bool any_snapshot_visible = simple_snapshot_visible || flickr_snapshot_visible || primfeed_snapshot_visible || snapshot_visible; // <FS:Beq/> Primfeed integration
+    const bool any_snapshot_visible = simple_snapshot_visible || primfeed_snapshot_visible || snapshot_visible;
     if (!show_frame || !any_snapshot_visible || !gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
     {
         return false;
@@ -8541,13 +8540,7 @@ bool LLPipeline::renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst)
         auto * floater =dynamic_cast<LLFloaterSnapshotBase*>(LLFloaterReg::findInstance("snapshot"));
         previewView = floater->impl->getPreviewView();
     }
-    // Note: simple_snapshot not supported as there can be more than one active and more complex selection is required
-    if (flickr_snapshot_visible && !previewView)
-    {
-        auto * floater = dynamic_cast<LLFloaterFlickr*>(LLFloaterReg::findInstance("flickr"));
-        previewView = floater->getPreviewView();
-    }
-     // <FS:Beq> Primfeed integration
+    // <FS:Beq> Primfeed integration
     if (primfeed_snapshot_visible && !previewView)
     {
         auto * floater = dynamic_cast<FSFloaterPrimfeed*>(LLFloaterReg::findInstance("primfeed"));

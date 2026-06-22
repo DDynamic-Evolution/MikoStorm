@@ -9,11 +9,6 @@
 	<string name="profile_progress_str">
 		プロフィールに投稿
 	</string>
-	<!--
-	<string name="flickr_progress_str">
-		Flickrにアクセス
-	</string>
-	-->
 	<string name="inventory_progress_str">
 		インベントリに保存
 	</string>
@@ -23,11 +18,6 @@
 	<string name="profile_succeeded_str">
 		画像がアップロードされました。
 	</string>
-	<!--
-	<string name="flickr_succeeded_str">
-		Flickr に画像がアップロードされました
-	</string>
-	-->
 	<string name="postcard_succeeded_str">
 		メールが送信されました！
 	</string>
@@ -49,11 +39,6 @@
 	<string name="local_failed_str">
 		コンピュータへの保存に失敗しました。
 	</string>
-	<!--
-	<string name="flickr_failed_str">
-		Flickr  にアップロードできませんでした。
-	</string>
-	-->
 	<view name="controls_container">
 		<button label="リフレッシュ" name="new_snapshot_btn"/>
 		<panel name="advanced_options_panel">
