@@ -147,7 +147,16 @@ class OmnifilterEngine
         typedef std::pair<needle_ordered_list_t, needle_list_t> rule_set_t;
         typedef std::map<std::string, rule_set_t> rule_sets_t;
         rule_sets_t& getRuleSets() { return mNeedleRuleSets; }
-        // </FS:minerjr> [FIRE-36763]
+
+        // Create a signal for the rule set changing, so that multiple UI can be changed in sync.
+        typedef boost::signals2::signal<void()> rule_set_updated_signal_t;
+
+        boost::signals2::connection setRuleSetUpdatedCallback(const rule_set_updated_signal_t::slot_type& cb)
+        {
+            return mRuleSetUpdatedCallback.connect(cb);
+        }
+        void onRuleSetsUpdated();
+        rule_set_updated_signal_t mRuleSetUpdatedCallback;
     protected:
         const Needle* logMatch(const std::string& needle_name, const Needle& needle);
         bool matchStrings(std::string_view needle_string, std::string_view haystack_string, eMatchType match_type, bool case_insensitive);
