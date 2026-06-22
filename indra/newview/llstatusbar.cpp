@@ -211,7 +211,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
     mMouseEnterPresetsCameraConnection(),
     mMouseEnterVolumeConnection(),
     mMouseEnterNearbyMediaConnection(),
-    mCurrentLocationString()
+    mCurrentLocationString(),
+    mOmnifilterPanel(nullptr)
 {
     setRect(rect);
 
@@ -460,6 +461,7 @@ bool LLStatusBar::postBuild()
     // Hook up and init for filtering
     mFilterEdit = getChild<LLSearchEditor>( "search_menu_edit" );
     mSearchPanel = getChild<LLPanel>( "menu_search_panel" );
+    mBalancePanel = getChild<LLPanel>("balance_bg");
 
     bool search_panel_visible = gSavedSettings.getBOOL("MenuSearch");
     mSearchPanel->setVisible(search_panel_visible);
@@ -472,6 +474,10 @@ bool LLStatusBar::postBuild()
     {
         updateMenuSearchPosition();
     }
+
+    mOmnifilterPanel = getChild<LLPanel>("omnifilter_controls_panel");
+    gSavedSettings.getControl("OmnifilterControls")->getCommitSignal()->connect(boost::bind(&LLStatusBar::updateOmnifilterPanelPosition, this));
+    updateOmnifilterPanelPosition();
 
     // <FS:Ansariel> Script debug
     mScriptOut = getChild<LLIconCtrl>("scriptout");
@@ -495,7 +501,6 @@ bool LLStatusBar::postBuild()
     mBuyParcelBtn = getChild<LLButton>("buy_land_btn");
     mBuyParcelBtn->setClickedCallback(boost::bind(&LLStatusBar::onBuyLandClicked, this));
 
-    mBalancePanel = getChild<LLPanel>("balance_bg");
     mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
 
     // <FS:Beq> Make FPS a clickable button with contextual colour
@@ -877,6 +882,11 @@ void LLStatusBar::setBalance(S32 balance)
     if (mSearchPanel && mSearchPanel->getVisible())
     {
         updateMenuSearchPosition();
+    }
+
+    if (mOmnifilterPanel && mOmnifilterPanel->getVisible())
+    {
+        updateOmnifilterPanelPosition();
     }
 
     if (mBalance && (fabs((F32)(mBalance - balance)) > gSavedSettings.getF32("UISndMoneyChangeThreshold")))
@@ -1332,17 +1342,30 @@ void LLStatusBar::updateMenuSearchVisibility(const LLSD& data)
     {
         updateMenuSearchPosition();
     }
+
+    updateOmnifilterPanelPosition();
 }
 
 void LLStatusBar::updateMenuSearchPosition()
 {
-    const S32 HPAD = 12;
-    LLRect balanceRect = getChildView("balance_bg")->getRect();
+    constexpr S32 HPAD = 12;
+    LLRect balanceRect = mBalancePanel->getRect();
     LLRect searchRect = mSearchPanel->getRect();
     S32 w = searchRect.getWidth();
     searchRect.mLeft = balanceRect.mLeft - w - HPAD;
     searchRect.mRight = searchRect.mLeft + w;
     mSearchPanel->setShape( searchRect );
+}
+
+void LLStatusBar::updateOmnifilterPanelPosition()
+{
+    LLRect balanceRect = mBalancePanel->getRect();
+    LLRect searchRect = mSearchPanel->getRect();
+    LLRect omnifilterRect = mOmnifilterPanel->getRect();
+    S32 w = omnifilterRect.getWidth();
+    omnifilterRect.mLeft = (gSavedSettings.getBOOL("MenuSearch") ? searchRect.mLeft : balanceRect.mLeft) - w;
+    omnifilterRect.mRight = omnifilterRect.mLeft + w;
+    mOmnifilterPanel->setShape(omnifilterRect);
 }
 
 void LLStatusBar::updateBalancePanelPosition()
@@ -1488,6 +1511,9 @@ void LLStatusBar::setParcelInfoText(const std::string& new_text)
     // The menu search editor is left from the balance rect. If it is shown, use that rect
     if (mSearchPanel && mSearchPanel->getVisible())
         panelBalanceRect = mSearchPanel->getRect();
+
+    if (mOmnifilterPanel && mOmnifilterPanel->getVisible())
+        panelBalanceRect = mOmnifilterPanel->getRect();
 
     panelParcelInfoRect.mRight = panelParcelInfoRect.mLeft + rect.mRight;
     S32 borderRight = panelBalanceRect.mLeft - ParcelInfoSpacing;
@@ -1792,6 +1818,7 @@ void LLStatusBar::setBackgroundColor( const LLColor4& color )
     LLPanel::setBackgroundColor(color);
     mBalancePanel->setBackgroundColor(color);
     mTimeMediaPanel->setBackgroundColor(color);
+    getChild<LLPanel>("omnifilter_controls_panel")->setBackgroundColor(color);
 }
 
 void LLStatusBar::updateNetstatVisibility(const LLSD& data)
@@ -1813,6 +1840,7 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
     mBalancePanel->setRect(rect);
 
     updateMenuSearchPosition();
+    updateOmnifilterPanelPosition();
     update();
 }
 
@@ -1838,6 +1866,7 @@ void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
     mBalancePanel->setRect(rect);
 
     updateMenuSearchPosition();
+    updateOmnifilterPanelPosition();
     update();
 }
 
@@ -1859,6 +1888,7 @@ void LLStatusBar::onShowFPSChanged(const LLSD& newvalue)
     mBalancePanel->setRect(rect);
 
     updateMenuSearchPosition();
+    updateOmnifilterPanelPosition();
     update();
 }
 
