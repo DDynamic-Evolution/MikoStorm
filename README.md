@@ -3,6 +3,12 @@ ATTENTION! This is a fork of the original viewer and contains experimental (but 
 ## Experimental features
 - Voicebox TTS support. Reads your IMs and chat aloud if you run a voicebox server. I am planning on a wrapper for other TTS.
 - Script bulk upload. Specially made for scripter who want to upload their script repositories to SL.
+- (planned) EQ for soundengine
+- (removed) discord and Flickr support. personal preference
+- (planned) Remove translate api. personal preference
+- (planned) Integratiion of [espeak NG](https://github.com/espeak-ng/espeak-ng) IF possible. as alternative for Voicebox
+- (idea) A new skin as default taking inspiration from cyberpunk2077
+- (idea) Better script editor?
 
 ## Original text
 <img align="left" width="100" height="100" src="doc/firestorm_256.png" alt="Logo of Firestorm viewer"/>
