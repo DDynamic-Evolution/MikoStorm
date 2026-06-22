@@ -196,6 +196,7 @@ private:
     void updateMenuSearchVisibility( const LLSD& data );
     void updateMenuSearchPosition(); // depends onto balance position
     void updateBalancePanelPosition();
+    void updateOmnifilterPanelPosition();
 
     class LLParcelChangeObserver;
 
@@ -373,6 +374,7 @@ private:
     LLPanel*                mBalancePanel;
     LLButton*               mBuyParcelBtn;
     LLPanel*                mTimeMediaPanel;
+    LLPanel*                mOmnifilterPanel;
 
     boost::signals2::connection mParcelPropsCtrlConnection;
     boost::signals2::connection mShowCoordsCtrlConnection;
