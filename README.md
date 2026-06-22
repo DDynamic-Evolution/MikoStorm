@@ -7,8 +7,7 @@ ATTENTION! This is a fork of the original viewer and contains experimental (but 
 - (removed) discord and Flickr support. personal preference
 - (planned) Remove translate api. personal preference
 - (planned) Integratiion of [espeak NG](https://github.com/espeak-ng/espeak-ng) IF possible. as alternative for Voicebox
-- (idea) A new skin as default taking inspiration from cyberpunk2077
-- (idea) Better script editor?
+- (planned) A new skin as default taking inspiration from cyberpunk2077
 
 ## Original text
 <img align="left" width="100" height="100" src="doc/firestorm_256.png" alt="Logo of Firestorm viewer"/>
