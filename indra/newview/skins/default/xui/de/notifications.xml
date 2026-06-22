@@ -3063,9 +3063,6 @@ Wählen Sie eine kleinere Landfläche.
 	<notification name="SystemMessage">
 		[MESSAGE]
 	</notification>
-	<notification name="FlickrConnect">
-		[MESSAGE]
-	</notification>
 	<notification name="PrimfeedConnect">
 		[MESSAGE]
 	</notification>
@@ -5839,30 +5836,9 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
-<!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
-	<notification name="ExodusFlickrVerificationExplanation">
-Um die Flickr-Uploadfunktion nutzen zu können, muss [APP_NAME] Zugriff auf deinen Account gewährt werden. Beim Fortfahren wird die Flickr-Website im Webbrowser geöffnet, wo du dich einloggen und den Zugriff durch [APP_NAME] autorisieren musst. Der daraufhin angezeigte Code muss in [APP_NAME] eingetragen werden.
 
-Soll [APP_NAME] autorisiert werden, Fotos unter deinem Flickr-Konto zu posten?
-		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
-	</notification>
 
-	<notification name="ExodusFlickrVerificationPrompt">
-Bitte den Flickr-Zugriff im Webbrowser autorisieren und den angezeigen Code eingeben:
-		<form name="form">
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Abbrechen"/>
-		</form>
-	</notification>
 
-	<notification name="ExodusFlickrVerificationFailed">
-Flickr-Verifikation fehlgeschlagen. Bitte erneut versuchen sowie den eingegebenen Code überprüfen.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-
-	<notification name="ExodusFlickrUploadComplete">
-Das Foto kann jetzt [https://www.flickr.com/photos/me/[ID] hier] betrachtet werden.
-	</notification>
 	<notification name="FSPrimfeedUploadComplete">
 Der Primfeed-Post kann jetzt [[PF_POSTURL] hier] betrachtet werden.
 	</notification>

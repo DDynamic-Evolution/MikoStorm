@@ -29,7 +29,7 @@
 #include "llfloatersnapshot.h"
 
 #include "llfloaterreg.h"
-#include "llfloaterflickr.h" // <FS:Ansariel> Share to Flickr
+
 #include "fsfloaterprimfeed.h" // <FS:Beq> Share to Primfeed
 #include "llimagefiltersmanager.h"
 #include "llcheckboxctrl.h"
@@ -1462,15 +1462,9 @@ bool LLFloaterSnapshot::isWaitingState()
     return (impl->getStatus() == ImplBase::STATUS_WORKING);
 }
 
-// <FS:Beq> FIRE-35002 - Post to flickr broken, improved solution
-// bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized)
 bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized, bool have_socials)
-// </FS:Beq>
 {
-    // <FS:Ansariel> Share to Flickr
-    //if (!initialized)
     if (!initialized && !have_socials)
-    // </FS:Ansariel>
         return false;
 
     bool changed = false;
@@ -1487,15 +1481,12 @@ bool LLFloaterSnapshotBase::ImplBase::updatePreviewList(bool initialized, bool h
 void LLFloaterSnapshotBase::ImplBase::updateLivePreview()
 {
     // don't update preview for hidden floater
-    // <FS:Beq> FIRE-35002 - Post to flickr broken
     bool have_socials = (
-        LLFloaterReg::findTypedInstance<LLFloaterFlickr>("flickr") != nullptr ||
         LLFloaterReg::findTypedInstance<FSFloaterPrimfeed>("primfeed") != nullptr
         );
     if ( ((mFloater && mFloater->isInVisibleChain()) ||
         have_socials) &&
         ImplBase::updatePreviewList(true, have_socials))
-    // </FS:Beq>
     {
         LL_DEBUGS() << "changed" << LL_ENDL;
         updateControls(mFloater);

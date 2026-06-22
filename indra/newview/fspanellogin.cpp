@@ -71,6 +71,12 @@
 #include "lltrans.h"
 #include "llglheaders.h"
 #include "llpanelloginlistener.h"
+#include "llimage.h"
+#include "llimagebmp.h"
+#include "llimagejpeg.h"
+#include "llimagepng.h"
+#include "llimagetga.h"
+#include "llviewertexturelist.h"
 
 #include "fsdata.h"
 
@@ -878,6 +884,13 @@ void FSPanelLogin::loadLoginPage()
 {
     if (!sInstance) return;
 
+    std::string login_image_path = gSavedSettings.getString("LoginImagePath");
+    if (!login_image_path.empty())
+    {
+        sInstance->loadLoginImage();
+        return;
+    }
+
     LLURI login_page = LLURI(LLGridManager::getInstance()->getLoginPage());
     LLSD params(login_page.queryMap());
 
@@ -963,6 +976,69 @@ void FSPanelLogin::loadLoginPage()
     {
         LL_DEBUGS("AppInit") << "loading:    " << login_uri << LL_ENDL;
         web_browser->navigateTo( login_uri.asString(), HTTP_CONTENT_TEXT_HTML );
+    }
+}
+
+void FSPanelLogin::loadLoginImage()
+{
+    std::string image_path = gSavedSettings.getString("LoginImagePath");
+    if (image_path.empty()) return;
+
+    LL_DEBUGS("AppInit") << "Loading login image: " << image_path << LL_ENDL;
+
+    LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
+    web_browser->navigateTo("about:blank");
+
+    // Determine image type from extension
+    U8 image_codec = IMG_CODEC_JPEG;
+    std::string ext = gDirUtilp->getExtension(image_path);
+    LLStringUtil::toLower(ext);
+    if (ext == "png") image_codec = IMG_CODEC_PNG;
+    else if (ext == "bmp") image_codec = IMG_CODEC_BMP;
+    else if (ext == "tga") image_codec = IMG_CODEC_TGA;
+
+    LLPointer<LLImageFormatted> image_frmted = LLImageFormatted::createFromType(image_codec);
+    if (!image_frmted->load(image_path))
+    {
+        LL_WARNS("AppInit") << "Failed to load login image: " << image_path << LL_ENDL;
+        sInstance->mLoginImage = NULL;
+        return;
+    }
+
+    LLPointer<LLImageRaw> raw = new LLImageRaw;
+    if (!image_frmted->decode(raw, 0.0f))
+    {
+        LL_WARNS("AppInit") << "Failed to decode login image: " << image_path << LL_ENDL;
+        sInstance->mLoginImage = NULL;
+        return;
+    }
+
+    raw->expandToPowerOfTwo();
+    sInstance->mLoginImage = LLViewerTextureManager::getLocalTexture(raw.get(), false);
+}
+
+void FSPanelLogin::draw()
+{
+    LLPanel::draw();
+
+    if (mLoginImage.notNull())
+    {
+        LLView* web_browser = getChildView("login_html");
+        LLRect r = web_browser->getRect();
+        gGL.color4f(1, 1, 1, 1);
+        gGL.getTexUnit(0)->bind(mLoginImage);
+        gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
+        gGL.begin(LLRender::TRIANGLES);
+        {
+            gGL.texCoord2f(0, 0); gGL.vertex2i(r.mLeft, r.mBottom);
+            gGL.texCoord2f(1, 0); gGL.vertex2i(r.mRight, r.mBottom);
+            gGL.texCoord2f(0, 1); gGL.vertex2i(r.mLeft, r.mTop);
+            gGL.texCoord2f(1, 0); gGL.vertex2i(r.mRight, r.mBottom);
+            gGL.texCoord2f(1, 1); gGL.vertex2i(r.mRight, r.mTop);
+            gGL.texCoord2f(0, 1); gGL.vertex2i(r.mLeft, r.mTop);
+        }
+        gGL.end();
+        gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
     }
 }
 

@@ -232,12 +232,6 @@ If you feel this is an error, please contact support@secondlife.com</string>
 	<string name="SentToInvalidRegion">You were sent to an invalid region.</string>
 	<string name="TestingDisconnect">Testing viewer disconnect</string>
 
-  <string name="SocialFlickrConnecting">Connecting to Flickr...</string>
-  <string name="SocialFlickrPosting">Posting...</string>
-  <string name="SocialFlickrDisconnecting">Disconnecting from Flickr...</string>
-  <string name="SocialFlickrErrorConnecting">Problem connecting to Flickr</string>
-  <string name="SocialFlickrErrorPosting">Problem posting to Flickr</string>
-  <string name="SocialFlickrErrorDisconnecting">Problem disconnecting from Flickr</string>
   <string name="SocialPrimfeedConnecting">Connecting to Primfeed...</string>
   <string name="SocialPrimfeedNotAuthorized">Not Authorized...</string>
   <string name="SocialPrimfeedPosting">Posting...</string>
@@ -2252,9 +2246,6 @@ Learn more at https://second.life/scripted-agents.
   <string name="share_alert">
     Drag items from inventory here
   </string>
-  <string name="flickr_post_success">
-    You posted to Flickr.
-  </string>
   <string name="no_session_message">
     (IM Session Doesn't Exist)
   </string>
@@ -2728,7 +2719,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Compass_Label">Compass</string>
   <string name="Command_Destinations_Label">Destinations</string>
   <string name="Command_Environments_Label">Environments</string>
-  <string name="Command_Flickr_Label">Flickr</string>
   <string name="Command_Gestures_Label">Gestures</string>
   <string name="Command_Grid_Status_Label">Grid status</string>
   <string name="Command_HowTo_Label">Guidebook</string>
@@ -2802,7 +2792,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Compass_Tooltip">Compass</string>
   <string name="Command_Destinations_Tooltip">Destinations of interest</string>
   <string name="Command_Environments_Tooltip">Environments</string>
-  <string name="Command_Flickr_Tooltip">Upload to Flickr</string>
   <string name="Command_Gestures_Tooltip">Gestures for your avatar (CTRL+G)</string>
   <string name="Command_Grid_Status_Tooltip">Show current Grid status</string>
   <string name="Command_HowTo_Tooltip">How to do common tasks</string>
@@ -2869,8 +2858,6 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Stop_Animations_Label">Stop Animations</string>
   <string name="Command_Stop_Animations_Tooltip">Stop Animating my Avatar</string>
   
-  <string name="Command_Discord_Label">Discord</string>
-  <string name="Command_Discord_Tooltip">Discord</string>
 
  <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>

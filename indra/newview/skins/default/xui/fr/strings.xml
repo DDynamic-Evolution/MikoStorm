@@ -390,24 +390,6 @@ Si vous pensez qu'il s'agit d'une erreur, veuillez contacter support@secondlife.
 	<string name="SocialFacebookErrorDisconnecting">
 		Un problème est survenu lors de la déconnexion à Facebook.
 	</string>
-	<string name="SocialFlickrConnecting">
-		Connexion à Flickr...
-	</string>
-	<string name="SocialFlickrPosting">
-		Publication…
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Déconnexion de Flickr...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Un problème est survenu lors de la connexion à Flickr.
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Un problème est survenu lors de la publication sur Flickr.
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Un problème est survenu lors de la déconnexion de Flickr.
-	</string>
 	<string name="SocialTwitterConnecting">
 		Connexion à Twitter...
 	</string>
@@ -4851,9 +4833,6 @@ Pour en savoir plus, rendez-vous sur https://second.life/scripted-agents.
 	<string name="share_alert">
 		Faire glisser les objets de l&apos;inventaire ici
 	</string>
-	<string name="flickr_post_success">
-		Vous avez publié sur Flickr.
-	</string>
 	<string name="no_session_message">
 		(Session IM inexistante)
 	</string>
@@ -5823,9 +5802,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Environments_Label">
 		Mes environnements
 	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
 	<string name="Command_Gestures_Label">
 		Gestes
 	</string>
@@ -6030,9 +6006,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	<string name="Command_Environments_Tooltip">
 		Mes environnements
 	</string>
-	<string name="Command_Flickr_Tooltip">
-		Charger sur Flickr
-	</string>
 	<string name="Command_Gestures_Tooltip">
 		Gestes de votre avatar
 	</string>
@@ -6206,12 +6179,6 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 	</string>
 	<string name="Command_Stop_Animations_Tooltip">
 		Arrêter l'animation
-	</string>
-	<string name="Command_Discord_Label">
-		Discord
-	</string>
-	<string name="Command_Discord_Tooltip">
-		Discord
 	</string>
 	<string name="Retain%">
 		Garder%

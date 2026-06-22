@@ -3047,9 +3047,6 @@ URL: [AUDIOURL]
 	<notification name="SystemMessage">
 		[MESSAGE]
 	</notification>
-	<notification name="FlickrConnect">
-		[MESSAGE]
-	</notification>
 	<notification name="PaymentReceived">
 		[MESSAGE]
 	</notification>
@@ -5343,26 +5340,6 @@ https://wiki.firestormviewer.org/fs_voice
 			<button name="OK" text="OK"/>
 			<button name="Cancel" text="Отмена"/>
 		</form>
-	</notification>
-	<notification name="ExodusFlickrVerificationExplanation">
-		Чтобы использовать функцию загрузки на Flickr, необходимо авторизовать [APP_NAME], чтобы получить доступ к вашей учетной записи. Если вы продолжите, ваш веб-браузер откроет сайт Flickr, где вам будет предложено войти в систему и разрешить доступ [APP_NAME]. Вам будет предоставлен код, чтобы скопировать обратно в [APP_NAME].
-
-Хотите, разрешить [APP_NAME] отправлять сообщения в вашей учетной записи Flickr?
-		<usetemplate name="okcancelbuttons" notext="Нет" yestext="Да"/>
-	</notification>
-	<notification name="ExodusFlickrVerificationPrompt">
-		Пожалуйста, авторизуйте [APP_NAME], чтобы отправлять сообщения в вашей учетной записи Flickr в веб-браузере, затем введите код, указанный на веб-сайте ниже:
-		<form name="form">
-			<input name="oauth_verifier" type="text"/>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Отмена"/>
-		</form>
-	</notification>
-	<notification name="ExodusFlickrVerificationFailed">
-		Flickr проверка не удалась. Пожалуйста, попробуйте еще раз, и проверьте код подтверждения.
-	</notification>
-	<notification name="ExodusFlickrUploadComplete">
-		Ваш снимок теперь может быть просмотрен [https://www.flickr.com/photos/me/[ID] тут].
 	</notification>
 	<notification name="FSPrimfeedUploadComplete">
 		Ваш пост Primfeed теперь можно просмотреть [[PF_POSTURL] здесь].

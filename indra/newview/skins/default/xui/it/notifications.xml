@@ -5121,24 +5121,6 @@ L'azione non può essere annullata.
 			<button name="Cancel" text="Annulla"/>
 		</form>
 	</notification>
-	<notification name="ExodusFlickrVerificationExplanation">
-		Per usare la funzione di caricamento su Flickr si deve autorizzare [APP_NAME] ad accedere al proprio profilo. Verrà aperto il web browser sul sito Flickr dove verrà chiesto di accedere ed autorizzare [APP_NAME]. Verrà fornito un codice da incollare in [APP_NAME].
-
-Autorizzare [APP_NAME] a pubblicare su Flickr?
-		<usetemplate name="okcancelbuttons" notext="No" yestext="Sì"/>
-	</notification>
-	<notification name="ExodusFlickrVerificationPrompt">
-		Autorizzare [APP_NAME] a pubblicare sull&apos;account Flickr tramite il web browser, quindi riportare qui il codice di autorizzazione dato dal sito:
-		<form name="form">
-			<button name="Cancel" text="Annulla"/>
-		</form>
-	</notification>
-	<notification name="ExodusFlickrVerificationFailed">
-		Autenticazione Flickr fallita. Riprovare dopo aver controllato il codice di verifica.
-	</notification>
-	<notification name="ExodusFlickrUploadComplete">
-		La foto può essere vista [https://www.flickr.com/photos/me/[ID] qui].
-	</notification>
 	<notification name="RegionTrackerAdd">
 		Inserire l&apos;etichetta che si vuole usare
 per la regione &quot;[REGION]&quot;

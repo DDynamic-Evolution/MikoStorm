@@ -373,24 +373,6 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	<string name="SocialFacebookErrorDisconnecting">
 		Facebook bağlantısı kesilirken sorun oluştu
 	</string>
-	<string name="SocialFlickrConnecting">
-		Flickr bağlantısı kuruluyor...
-	</string>
-	<string name="SocialFlickrPosting">
-		Yayınlanıyor...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Flickr bağlantısı kesiliyor...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Flickr bağlantısı kurulurken sorun çıktı
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Flickr&apos;da yayınlarken sorun çıktı
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Flickr bağlantısı kesilirken sorun çıktı
-	</string>
 	<string name="SocialTwitterConnecting">
 		Twitter bağlantısı kuruluyor...
 	</string>
@@ -4590,9 +4572,6 @@ Daha fazla bilgi için: https://second.life/scripted-agents.
 	<string name="facebook_post_success">
 		Facebook&apos;ta yayınladınız.
 	</string>
-	<string name="flickr_post_success">
-		Flickr&apos;da yayınladınız.
-	</string>
 	<string name="twitter_post_success">
 		Twitter&apos;da yayınladınız.
 	</string>
@@ -5535,9 +5514,6 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	<string name="Command_Environments_Label">
 		Ortamlarım
 	</string>
-	<string name="Command_Flickr_Label">
-		Flickr
-	</string>
 	<string name="Command_Gestures_Label">
 		Mimikler
 	</string>
@@ -5630,9 +5606,6 @@ Düzenleyici yolunu çift tırnakla çevrelemeyi deneyin.
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Ortamlarım
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Flickr&apos;a yükle
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Avatarınız için mimikler

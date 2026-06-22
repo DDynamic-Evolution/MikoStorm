@@ -3166,9 +3166,6 @@ URL：[AUDIOURL]
 	<notification name="SystemMessage">
 		[MESSAGE]
 	</notification>
-	<notification name="FlickrConnect">
-		[MESSAGE]
-	</notification>
 	<notification name="PaymentReceived">
 		[MESSAGE]
 	</notification>
@@ -5548,27 +5545,6 @@ switch語句在沒有預設標籤情況下的行為不正確已被修正。
 			<button name="OK" text="確定"/>
 			<button name="Cancel" text="取消"/>
 		</form>
-	</notification>
-	<!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
-	<notification name="ExodusFlickrVerificationExplanation">
-爲了使用 Flickr 上傳功能，[APP_NAME] 需要被授權訪問您的賬戶。繼續操作將會打開 Flickr 網站的一個網頁，在那裡您需要登錄並授權 [APP_NAME]。然後，您需要將顯示的程式碼輸入到 [APP_NAME] 中。
-
-是否授權 [APP_NAME] 在您的 Flickr 賬戶下發布相片？
-		<usetemplate name="okcancelbuttons" notext="否" yestext="是"/>
-	</notification>
-	<notification name="ExodusFlickrVerificationPrompt">
-請在網頁瀏覽器中授權 Flickr 訪問許可權，並輸入顯示的程式碼：
-		<form name="form">
-			<button name="OK" text="確定"/>
-			<button name="Cancel" text="取消"/>
-		</form>
-	</notification>
-	<notification name="ExodusFlickrVerificationFailed">
-Flickr 驗證失敗。請重試並檢查輸入的程式碼。
-		<usetemplate name="okbutton" yestext="確定"/>
-	</notification>
-	<notification name="ExodusFlickrUploadComplete">
-現在可以在這裡 https://www.flickr.com/photos/me/[ID] 檢視相片。
 	</notification>
 	<notification name="FSPrimfeedUploadComplete">
 		Primfeed發佈已完成，可以[在這裡[PF_POSTURL]]查看。

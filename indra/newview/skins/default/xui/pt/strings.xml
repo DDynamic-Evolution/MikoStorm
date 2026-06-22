@@ -376,24 +376,6 @@ Se você acredita que isso é um erro, entre em contato com support@secondlife.c
 	<string name="TestingDisconnect">
 		Testando desconexão do viewer
 	</string>
-	<string name="SocialFlickrConnecting">
-		Conectando ao Flickr...
-	</string>
-	<string name="SocialFlickrPosting">
-		Publicando...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Desconectando do Flickr...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Problema ao conectar ao Flickr
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Problema ao publicar no Flickr
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Problema ao desconectar do Flickr
-	</string>
 	<string name="SocialPrimfeedConnecting">
 		Conectando ao Primfeed...
 	</string>
@@ -4725,9 +4707,6 @@ Saiba mais em https://second.life/scripted-agents.
 	<string name="share_alert">
 		Arraste itens do inventário para cá
 	</string>
-	<string name="flickr_post_success">
-		Você publicou no Flickr.
-	</string>
 	<string name="no_session_message">
 		(Sessão de MI inexistente)
 	</string>
@@ -5610,9 +5589,6 @@ Coloque o caminho do editor entre aspas
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Ambientes
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Carregar no Flickr
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Gestos para seu avatar (Ctrl+G)

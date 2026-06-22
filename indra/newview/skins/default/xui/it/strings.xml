@@ -379,24 +379,6 @@ Se ritieni che si tratti di un errore, contatta support@secondlife.com
 	<string name="SocialFacebookErrorDisconnecting">
 		Problemi con la disconnessione da Facebook
 	</string>
-	<string name="SocialFlickrConnecting">
-		Collegamento a Flickr...
-	</string>
-	<string name="SocialFlickrPosting">
-		Pubblico...
-	</string>
-	<string name="SocialFlickrDisconnecting">
-		Interruzione del collegamento con Flickr...
-	</string>
-	<string name="SocialFlickrErrorConnecting">
-		Problema nel collegamento a Flickr
-	</string>
-	<string name="SocialFlickrErrorPosting">
-		Problema nella pubblicazione su Flickr
-	</string>
-	<string name="SocialFlickrErrorDisconnecting">
-		Problema nella chiusura del collegamento a Flickr
-	</string>
 	<string name="SocialTwitterConnecting">
 		Collegamento a Twitter...
 	</string>
@@ -4774,9 +4756,6 @@ Scopri di più su https://second.life/scripted-agents.
 	<string name="share_alert">
 		Trascinare qui oggetti da inventario
 	</string>
-	<string name="flickr_post_success">
-		Hai pubblicato su Flickr.
-	</string>
 	<string name="twitter_post_success">
 		Hai pubblicato su Twitter.
 	</string>
@@ -5626,9 +5605,6 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Environments_Tooltip">
 		Personalizza l'ambiente
-	</string>
-	<string name="Command_Flickr_Tooltip">
-		Carica su Flickr
 	</string>
 	<string name="Command_Gestures_Tooltip">
 		Gesti per il tuo avatar

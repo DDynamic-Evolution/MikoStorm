@@ -4019,10 +4019,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
         }
     }
 
-#ifdef LL_DISCORD
-    if (gSavedSettings.getBOOL("EnableDiscord"))
-        LLAppViewer::updateDiscordActivity();
-#endif
+
 
     if ( LLTracker::isTracking(NULL) )
     {

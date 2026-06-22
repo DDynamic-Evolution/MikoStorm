@@ -16,9 +16,6 @@
 		<layout_panel name="lp_twitter">
 			<button label="Auf Twitter teilen" name="send_to_twitter_btn"/>
 		</layout_panel>
-		<layout_panel name="lp_flickr">
-			<button label="Auf Flickr teilen" name="send_to_flickr_btn"/>
-		</layout_panel>
 		<layout_panel name="lp_primfeed">
 			<button label="Auf Primfeed teilen" name="send_to_primfeed_btn"/>
 		</layout_panel>

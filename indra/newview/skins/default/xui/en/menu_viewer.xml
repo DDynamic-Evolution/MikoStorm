@@ -918,25 +918,11 @@
         </menu_item_check>
         <menu_item_separator/>
       <menu_item_call
-        label="Flickr..."
-        name="Flickr">
-        <menu_item_call.on_click
-          function="Floater.Toggle"
-          parameter="flickr"/>
-      </menu_item_call>
-      <menu_item_call
         label="Primfeed..."
         name="Primfeed">
         <menu_item_call.on_click
           function="Floater.Toggle"
           parameter="primfeed"/>
-      </menu_item_call>
-      <menu_item_call
-        label="Discord..."
-        name="Discord">
-        <menu_item_call.on_click
-          function="Floater.Toggle"
-          parameter="fs_discord"/>
       </menu_item_call>
         <menu_item_separator/>
         <menu_item_check
@@ -2633,15 +2619,7 @@
              name="firestorm_primfeed_url"
              parameter="WebLaunchExternalTarget,https://www.primfeed.com/firestorm-viewer" />
        </menu_item_call>
-    	<menu_item_call
-             label="Firestorm Flickr"
-             name="Firestorm Flickr">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="firestorm_flickr_url"
-             parameter="WebLaunchExternalTarget,http://www.flickr.com/groups/firestormviewer/pool/" />
-       </menu_item_call>
-    	<menu_item_call
+        	<menu_item_call
              label="Firestorm YouTube"
              name="Firestorm YouTube">
              <menu_item_call.on_click
@@ -3902,6 +3880,13 @@
             <menu_item_call.on_click
              function="Advanced.ShowDebugSettings"
              parameter="all" />
+        </menu_item_call>
+        <menu_item_call
+         label="Login Image Settings..."
+         name="Login Image Settings">
+            <menu_item_call.on_click
+             function="Floater.Show"
+             parameter="fs_login_image_settings" />
         </menu_item_call>
      <!-- <FS:TS> FIRE-17589: Use control-alt-Q on OS X too -->
      <menu_item_check

@@ -5121,26 +5121,6 @@ Bu əməliyyatı geri qaytara bilməzsiniz.
 			<button name="Cancel" text="Ləğv et"/>
 		</form>
 	</notification>
-	<notification name="ExodusFlickrVerificationExplanation">
-		Flickr yükləmə funksiyasından istifadə etmək üçün hesabınıza daxil olmaq üçün [APP_NAME] tətbiqinə icazə verməlisiniz. Davam etsəniz, veb brauzeriniz Flickr veb-saytını açacaq, burada sizdən daxil olmaq və [APP_NAME] tətbiqinə icazə vermək istəniləcək. Daha sonra sizə [APP_NAME] tətbiqinə yenidən köçürtmək üçün kod veriləcək.
-		
-[APP_NAME] tətbiqinə Flickr hesabınıza yazmağa icazə vermək istərdinizmi?
-		<usetemplate name="okcancelbuttons" notext="Xeyr" yestext="Bəli"/>
-	</notification>
-	<notification name="ExodusFlickrVerificationPrompt">
-		Lütfən, [APP_NAME] tətbiqinə veb brauzerinizdə Flickr hesabınıza yerləşdirməyə icazə verin, sonra aşağıdakı vebsayt tərəfindən verilən kodu daxil edin:
-		<form name="form">
-			<input name="oauth_verifier" type="text"/>
-			<button name="OK" text="OK"/>
-			<button name="Cancel" text="Ləğv et"/>
-		</form>
-	</notification>
-	<notification name="ExodusFlickrVerificationFailed">
-		Flickr doğrulaması alınmadı. Zəhmət olmasa, yenidən cəhd edin və doğrulama kodunu iki dəfə yoxladığınızdan əmin olun.
-	</notification>
-	<notification name="ExodusFlickrUploadComplete">
-		Şəkiliniz indi [https://www.flickr.com/photos/me/[ID] burada] baxıla bilər.
-	</notification>
 	<notification name="RegionTrackerAdd">
 		&quot;[REGION]&quot; üçün
 hansı nişandan istifadə etmək istərdiniz?
