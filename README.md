@@ -13,8 +13,8 @@ ATTENTION! This is a fork of the Firestorm viewer and contains experimental (but
 
 ## Open Source
 
-Gridrunner Client is a third party viewer derived from the official [Second Life](https://github.com/secondlife/viewer) client. 
-The client codebase has been open source since 2007 and is available under the LGPL license and for [Firestorm Viewer] (https://github.com/FirestormViewer/phoenix-firestorm).
+Gridrunner Client is a third party viewer derived from the official [Second Life](https://github.com/secondlife/viewer) client and [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm).
+The client codebase has been open source since 2007 and is available under the LGPL license
 
 ## Build Instructions
 
