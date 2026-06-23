@@ -1027,6 +1027,11 @@ const LLUUID LLInventoryModel::findUserDefinedCategoryUUIDForType(LLFolderType::
         cat_id = LLUUID(gSavedPerAccountSettings.getString("PBRUploadFolder"));
         break;
     }
+    case LLFolderType::FT_LSL_TEXT:
+    {
+        cat_id = LLUUID(gSavedPerAccountSettings.getString("ScriptUploadFolder"));
+        break;
+    }
     default:
         break;
     }

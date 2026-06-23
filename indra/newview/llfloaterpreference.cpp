@@ -672,6 +672,7 @@ bool LLFloaterPreference::postBuild()
     gSavedPerAccountSettings.getControl("TextureUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeTextureFolder, this));
     gSavedPerAccountSettings.getControl("SoundUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeSoundFolder, this));
     gSavedPerAccountSettings.getControl("AnimationUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeAnimationFolder, this));
+    gSavedPerAccountSettings.getControl("ScriptUploadFolder")->getSignal()->connect(boost::bind(&LLFloaterPreference::onChangeScriptFolder, this));
 
     LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
     if (!tabcontainer->selectTab(gSavedSettings.getS32("LastPrefTab")))
@@ -1200,6 +1201,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
     onChangeTextureFolder();
     onChangeSoundFolder();
     onChangeAnimationFolder();
+    onChangeScriptFolder();
 
     // Load (double-)click to walk/teleport settings.
     updateClickActionViews();
@@ -2999,6 +3001,14 @@ void LLFloaterPreference::onChangeAnimationFolder()
     if (gInventory.isInventoryUsable())
     {
         getChild<LLTextBox>("upload_animation")->setText(get_category_path(LLFolderType::FT_ANIMATION));
+    }
+}
+
+void LLFloaterPreference::onChangeScriptFolder()
+{
+    if (gInventory.isInventoryUsable())
+    {
+        getChild<LLTextBox>("upload_scripts")->setText(get_category_path(LLFolderType::FT_LSL_TEXT));
     }
 }
 

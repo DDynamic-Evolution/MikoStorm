@@ -34,6 +34,7 @@
 #include "llagentcamera.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
+#include "fslslpreproc.h"
 #include "llbuycurrencyhtml.h"
 #include "llfloatermap.h"
 #include "llfloatermodelpreview.h"
@@ -1077,6 +1078,12 @@ private:
         mCurrentContent = std::string((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
         t.close();
 
+        if (gSavedSettings.getBOOL("_NACL_LSLPreprocessorBulk") && gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+        {
+            FSLSLPreprocessor preproc;
+            mCurrentContent = preproc.encode(mCurrentContent);
+        }
+
         if (mProgressDialog)
         {
             mProgressDialog->setMessage(llformat("Uploading script %d of %d: %s",
@@ -1118,7 +1125,10 @@ private:
             if (compiled)
                 self->mSuccessCount++;
             else
+            {
                 self->mFailCount++;
+                LLFloaterReg::showInstance("preview_script", LLSD(newItemId), true);
+            }
             self->mCurrentIndex++;
             self->uploadNext();
         };
@@ -1174,7 +1184,7 @@ void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID
     {
         std::string ext = gDirUtilp->getExtension(filename);
         LLStringUtil::toLower(ext);
-        if (ext == "lsl")
+        if (ext == "lsl" || ext == "lua")
         {
             lsl_files.push_back(filename);
         }
@@ -1186,7 +1196,12 @@ void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID
         return;
     }
 
-    FSBulkScriptUploader::start(lsl_files, destFolder);
+    LLUUID folder = destFolder;
+    if (folder.isNull())
+    {
+        folder = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_LSL_TEXT);
+    }
+    FSBulkScriptUploader::start(lsl_files, folder);
 }
 
 // <FS:CR> Import Linkset

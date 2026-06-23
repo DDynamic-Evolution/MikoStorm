@@ -4211,6 +4211,10 @@ void LLInventoryAction::fileUploadLocation(const LLUUID& dest_id, const std::str
     {
         gSavedPerAccountSettings.setString("PBRUploadFolder", dest_id.asString());
     }
+    else if (action == "def_script")
+    {
+        gSavedPerAccountSettings.setString("ScriptUploadFolder", dest_id.asString());
+    }
     else if (action == "upload_texture")
     {
         LLFilePickerReplyThread::startPicker(boost::bind(&upload_single_file, _1, _2, dest_id), LLFilePicker::FFLOAD_IMAGE, false);
@@ -4258,6 +4262,10 @@ bool LLInventoryAction::isFileUploadLocation(const LLUUID& dest_id, const std::s
     else if (action == "def_pbr_material")
     {
         return gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_MATERIAL) == dest_id;
+    }
+    else if (action == "def_script")
+    {
+        return gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_LSL_TEXT) == dest_id;
     }
     return false;
 }

@@ -322,4 +322,5 @@ void FSPanelPrefs::onResetDefaultFolders()
     gSavedPerAccountSettings.getControl("SoundUploadFolder")->resetToDefault(true);
     gSavedPerAccountSettings.getControl("AnimationUploadFolder")->resetToDefault(true);
     gSavedPerAccountSettings.getControl("PBRUploadFolder")->resetToDefault(true);
+    gSavedPerAccountSettings.getControl("ScriptUploadFolder")->resetToDefault(true);
 }

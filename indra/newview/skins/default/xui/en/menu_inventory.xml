@@ -449,6 +449,17 @@
          function="Inventory.FileUploadLocation.Check"
          parameter="def_pbr_material" />
       </menu_item_check>
+      <menu_item_check
+       label="Script uploads"
+       layout="topleft"
+       name="Script uploads">
+        <on_click
+         function="Inventory.FileUploadLocation"
+         parameter="def_script" />
+        <on_check
+         function="Inventory.FileUploadLocation.Check"
+         parameter="def_script" />
+      </menu_item_check>
     </menu>
     <menu
      label="Change Type"

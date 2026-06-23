@@ -66,6 +66,7 @@
 #include "llinventorymodel.h"
 #include "lluiusage.h"
 #include "lltranslate.h"
+#include "hwspoof_engine.h"
 
 // "Minimal Vulkan" to get max API Version
 
@@ -710,13 +711,24 @@ void send_viewer_stats(bool include_preferences)
     system["address_size"] = ADDRESS_SIZE;
     system["os_bitness"] = LLOSInfo::instance().getOSBitness();
     system["hardware_concurrency"] = (LLSD::Integer) std::thread::hardware_concurrency();
-    unsigned char MACAddress[MAC_ADDRESS_BYTES];
-    LLUUID::getNodeID(MACAddress);
-    std::string macAddressString = llformat("%02x-%02x-%02x-%02x-%02x-%02x",
-                                            MACAddress[0],MACAddress[1],MACAddress[2],
-                                            MACAddress[3],MACAddress[4],MACAddress[5]);
+    std::string macAddressString;
+    std::string serialNumberString;
+    if (hwspoof_is_initialized())
+    {
+        macAddressString = hwspoof_get_faux_nodeid_str();
+        serialNumberString = hwspoof_get_id0();
+    }
+    else
+    {
+        unsigned char MACAddress[MAC_ADDRESS_BYTES];
+        LLUUID::getNodeID(MACAddress);
+        macAddressString = llformat("%02x-%02x-%02x-%02x-%02x-%02x",
+                                    MACAddress[0],MACAddress[1],MACAddress[2],
+                                    MACAddress[3],MACAddress[4],MACAddress[5]);
+        serialNumberString = LLAppViewer::instance()->getSerialNumber();
+    }
     system["mac_address"] = macAddressString;
-    system["serial_number"] = LLAppViewer::instance()->getSerialNumber();
+    system["serial_number"] = serialNumberString;
     std::string gpu_desc = llformat(
         "%-6s Class %d ",
         gGLManager.mGLVendorShort.substr(0,6).c_str(),
