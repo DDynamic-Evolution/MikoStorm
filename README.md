@@ -3,7 +3,9 @@ ATTENTION! This is a fork of the Firestorm viewer and contains experimental (but
 ## Experimental features
 - [Voicebox TTS] (https://voicebox.sh/linux-install) support. Reads your IMs and chat aloud if you run a voicebox server. I am planning on a wrapper for other TTS.
 - Script bulk upload. Specially made for scripter who want to upload their script repositories to SL.
- - Removed discord and Flickr support.
+- Removed discord and Flickr support.
+- Removed velo updater
+- Hides your data
 - Custom and definable login page (Done!)
 - (idea) A new skin as default taking inspiration from cyberpunk2077
 - Renamed the viewer to Gridstorm
