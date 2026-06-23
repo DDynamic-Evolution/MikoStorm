@@ -11,14 +11,10 @@ ATTENTION! This is a fork of the Firestorm viewer and contains experimental (but
 - (idea) A new skin as default taking inspiration from cyberpunk2077
 - (idea) Better script editor?
 
-## Original text
-
-**Gridrunner Client is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.**
-
 ## Open Source
 
-Gridrunner Client is a third party viewer derived from the official [Second Life](https://github.com/secondlife/viewer) client. 
-The client codebase has been open source since 2007 and is available under the LGPL license and for [Firestorm Viewer] (https://github.com/FirestormViewer/phoenix-firestorm).
+The Client is a third party viewer derived from the official [Second Life](https://github.com/secondlife/viewer) and [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm).
+The client codebase has been open source since 2007 and is available under the LGPL license
 
 ## Build Instructions
 
