@@ -69,7 +69,7 @@ LLFilePicker LLFilePicker::sInstance;
 #define MATERIAL_FILTER L"GLTF Files (*.gltf; *.glb)\0*.gltf;*.glb\0"
 #define HDRI_FILTER L"HDRI Files (*.exr)\0*.exr\0"
 #define MATERIAL_TEXTURES_FILTER L"GLTF Import (*.gltf; *.glb; *.tga; *.bmp; *.jpg; *.jpeg; *.png)\0*.gltf;*.glb;*.tga;*.bmp;*.jpg;*.jpeg;*.png\0"
-#define SCRIPT_FILTER L"Script files (*.lsl)\0*.lsl\0"
+#define SCRIPT_FILTER L"Script files (*.lsl; *.lua)\0*.lsl;*.lua\0"
 #define DICTIONARY_FILTER L"Dictionary files (*.dic; *.xcu)\0*.dic;*.xcu\0"
 // <FS:CR> Import filter
 //#define IMPORT_FILTER L"Import (*.oxp; *.hpa)\0*.oxp;*.hpa\0"
@@ -749,6 +749,7 @@ std::unique_ptr<std::vector<std::string>> LLFilePicker::navOpenFilterProc(ELoadF
             break;
         case FFLOAD_SCRIPT:
             allowedv->push_back("lsl");
+            allowedv->push_back("lua");
             break;
         case FFLOAD_DICTIONARY:
             allowedv->push_back("dic");
@@ -1483,8 +1484,13 @@ static std::string add_imageload_filter_to_gtkchooser(GtkWindow *picker)
 
 static std::string add_script_filter_to_gtkchooser(GtkWindow *picker)
 {
-    return add_simple_mime_filter_to_gtkchooser(picker,  HTTP_CONTENT_TEXT_PLAIN,
-                            LLTrans::getString("script_files") + " (*.lsl)");
+    GtkFileFilter *gfilter = gtk_file_filter_new();
+    gtk_file_filter_add_mime_type(gfilter, HTTP_CONTENT_TEXT_PLAIN.c_str());
+    gtk_file_filter_add_pattern(gfilter, "*.lsl");
+    gtk_file_filter_add_pattern(gfilter, "*.lua");
+    std::string filtername = LLTrans::getString("script_files") + " (*.lsl; *.lua)";
+    add_common_filters_to_gtkchooser(gfilter, picker, filtername);
+    return filtername;
 }
 
 static std::string add_dictionary_filter_to_gtkchooser(GtkWindow *picker)

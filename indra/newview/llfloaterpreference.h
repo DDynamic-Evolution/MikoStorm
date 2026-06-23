@@ -265,6 +265,7 @@ public:
     void onChangeTextureFolder();
     void onChangeSoundFolder();
     void onChangeAnimationFolder();
+    void onChangeScriptFolder();
     void onClickBlockList();
     void onClickProxySettings();
     void onClickTranslationSettings();

@@ -269,6 +269,7 @@ using namespace LL;
 // Include for security api initialization
 #include "llsecapi.h"
 #include "llmachineid.h"
+#include "hwspoof_engine.h"
 #include "llcleanup.h"
 
 #include "llcoproceduremanager.h"
@@ -1148,6 +1149,32 @@ bool LLAppViewer::init()
 
     // Find partition serial number (Windows) or hardware serial (Mac)
     mSerialNumber = generateSerialNumber();
+    // <FS:CR> Hardware spoofing: capture real IDs, load/generate seed
+    {
+        hwspoof_set_real_serial(mSerialNumber);
+
+        unsigned char node_id[6] = {};
+        if (LLUUID::getNodeID(node_id))
+            hwspoof_set_real_nodeid(node_id);
+
+        unsigned char machine_id[6] = {};
+        if (LLMachineID::getUniqueID(machine_id, 6))
+            hwspoof_set_real_machineid(machine_id);
+
+        std::string spoof_seed = gSavedSettings.getString("HWSpoofSeed");
+        if (spoof_seed.empty())
+        {
+            hwspoof_reroll_seed();
+            gSavedSettings.setString("HWSpoofSeed", hwspoof_get_seed());
+        }
+        else
+        {
+            hwspoof_set_seed(spoof_seed);
+        }
+
+        mSerialNumber = hwspoof_get_id0();
+    }
+    // </FS:CR>
 
     // do any necessary set-up for accepting incoming SLURLs from apps
     initSLURLHandler();
@@ -3529,6 +3556,9 @@ bool LLAppViewer::initConfiguration()
     // Set the name of the window
     //
     gWindowTitle = LLVersionInfo::getInstance()->getChannelAndVersion();    // <FS:CR>
+    // <FS:CR> Replace channel name in title bar
+    LLStringUtil::replaceString(gWindowTitle, "Firestorm", "Gridstorm");
+    // </FS:CR>
 #if LL_DEBUG
     gWindowTitle += std::string(" [DEBUG]");
 #endif
@@ -4247,6 +4277,11 @@ LLSD LLAppViewer::getViewerInfo() const
         info["VRAM_BUDGET_ENGLISH"] = "Unlimited";
     }
     // </FS:Ansariel>
+
+    if (hwspoof_is_initialized())
+    {
+        hwspoof_fake_support_info(info);
+    }
 
     return info;
 }

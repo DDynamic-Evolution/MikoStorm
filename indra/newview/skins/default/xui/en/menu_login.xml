@@ -21,10 +21,24 @@
              parameter="preferences" />
         </menu_item_call>
         <menu_item_call
-         label="Close Window"
-         name="Close Window"
-         visible="false" 
-         shortcut="control|W">
+          label="Login Image Settings..."
+          name="Login Image Settings">
+            <menu_item_call.on_click
+             function="Floater.Show"
+             parameter="fs_login_image_settings" />
+        </menu_item_call>
+        <menu_item_call
+          label="Hardware ID Spoofing..."
+          name="Hardware ID Spoofing">
+            <menu_item_call.on_click
+             function="Floater.Show"
+             parameter="hwspoof" />
+        </menu_item_call>
+        <menu_item_call
+          label="Close Window"
+          name="Close Window"
+          visible="false" 
+          shortcut="control|W">
             <menu_item_call.on_click
              function="File.CloseWindow" />
             <menu_item_call.on_enable
