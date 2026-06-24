@@ -1140,6 +1140,9 @@
      name="ChatTimestampColor"
      reference="White" />
     <color
+     name="URLWarningColor"
+     reference="Red" />
+    <color
       name="MenuBarBetaBgColor"
       reference="DkBlue" />
   <color

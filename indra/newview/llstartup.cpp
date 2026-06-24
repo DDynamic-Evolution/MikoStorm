@@ -29,11 +29,6 @@
 #include "llappviewer.h"
 #include "llstartup.h"
 
-#if LL_VELOPACK && LL_WINDOWS
-#include "llvelopack.h"
-#include <shellapi.h>
-#endif
-
 #if LL_WINDOWS
 #   include <process.h>     // _spawnl()
 #else
@@ -321,7 +316,6 @@ std::unique_ptr<LLViewerStats::PhaseMap> LLStartUp::sPhases(new LLViewerStats::P
 
 void login_show();
 void login_callback(S32 option, void* userdata);
-void uninstall_nsis_if_required();
 void show_release_notes_if_required();
 //void show_first_run_dialog(); // <FS:CR> Unused in Firestorm
 bool first_run_dialog_callback(const LLSD& notification, const LLSD& response);
@@ -1398,7 +1392,6 @@ bool idle_startup()
         LL_DEBUGS("AppInit") << "PeekMessage processed" << LL_ENDL;
 #endif
         do_startup_frame();
-        uninstall_nsis_if_required();
         timeout.reset();
         return false;
     }
@@ -3562,67 +3555,6 @@ void release_notes_coro(const std::string url)
     LLWeb::loadURLInternal(url);
 }
 
-/**
-* Check if this is a fresh velopack install and
-* if uninstallation of old viewer is needed.
-*/
-void uninstall_nsis_if_required()
-{
-#if LL_VELOPACK && LL_WINDOWS
-    bool checked_for_legacy_install = gSavedSettings.getBOOL("PreviousInstallChecked");
-    if (checked_for_legacy_install)
-    {
-        return;
-    }
-    gSavedSettings.setBOOL("PreviousInstallChecked", true);
-
-    LL_INFOS() << "Looking for previous NSIS installs" << LL_ENDL;
-
-    S32 found_major = 0;
-    S32 found_minor = 0;
-    S32 found_patch = 0;
-    U64 found_build = 0;
-
-    if (!get_nsis_version(found_major, found_minor, found_patch, found_build))
-    {
-        return;
-    }
-
-    LLVersionInfo* ver_inst = LLVersionInfo::getInstance();
-
-    if (found_major > ver_inst->getMajor())
-    {
-        LL_INFOS() << "Found installed nsis version that is newer" << found_major << "." << found_minor << "." << found_patch << "." << found_build << LL_ENDL;
-        return;
-    }
-
-    if (found_major == ver_inst->getMajor()
-        && found_minor > ver_inst->getMinor())
-    {
-        LL_INFOS() << "Found installed nsis version that is newer" << found_major << "." << found_minor << "." << found_patch << "." << found_build << LL_ENDL;
-        return;
-    }
-
-    if (found_major == ver_inst->getMajor()
-        && found_minor == ver_inst->getMinor()
-        && found_patch > ver_inst->getPatch())
-    {
-        LL_INFOS() << "Found installed nsis version that is newer" << found_major << "." << found_minor << "." << found_patch << "." << found_build << LL_ENDL;
-        return;
-    }
-
-    // Assume that nsis is going to be something like x.x.x, while velopack is x.x.(x+1),
-    // so there is no point to check build.
-    LL_INFOS() << "Found NSIS install " << found_major << "." << found_minor << "." << found_patch << "." << found_build << LL_ENDL;
-
-    clear_nsis_links();
-
-    LLSD args;
-    args["VERSION"] = llformat("%d.%d.%d", found_major, found_minor, found_patch);
-    LLNotificationsUtil::add("FoundLegacyNsisInstallation", args);
-#endif
-}
-
 void validate_release_notes_coro(const std::string url)
 {
     LLVersionInfo& versionInfo(LLVersionInfo::instance());
@@ -3645,8 +3577,7 @@ void validate_release_notes_coro(const std::string url)
 }
 
 /**
-* Check if user is running a new version of the viewer.
-* Display the Release Notes if it's not overriden by the "UpdaterShowReleaseNotes" setting.
+* Display the Release Notes if user is running a new version of the viewer.
 */
 void show_release_notes_if_required()
 {
@@ -3662,44 +3593,11 @@ void show_release_notes_if_required()
     {
         return;
     }
-    S32 mode = gSavedSettings.getS32("UpdaterShowReleaseNotes");
-    if (mode == 0)
-    {
-        return;
-    }
-    if (mode == 2 // Show even for test builds
-        || LLVersionInfo::instance().getViewerMaturity() != LLVersionInfo::TEST_VIEWER) // don't show Release Notes for the test builds
-
-    {
-
-#if LL_RELEASE_FOR_DOWNLOAD
-        if (!gSavedSettings.getBOOL("CmdLineSkipUpdater"))
-        {
-            // Instantiate a "relnotes" listener which assumes any arriving event
-            // is the release notes URL string. Since "relnotes" is an
-            // LLEventMailDrop, this listener will be invoked whether or not the
-            // URL has already been posted. If so, it will fire immediately;
-            // otherwise it will fire whenever the URL is (later) posted. Either
-            // way, it will display the release notes as soon as the URL becomes
-            // available.
-            LLEventPumps::instance().obtain("relnotes").listen(
-                "showrelnotes",
-                [](const LLSD& url) {
-                    LLCoros::instance().launch("releaseNotesCoro",
-                    boost::bind(&validate_release_notes_coro, url.asString()));
-                return false;
-            });
-        }
-        else
-#endif // LL_RELEASE_FOR_DOWNLOAD
-        {
-            LLSD info(LLAppViewer::instance()->getViewerInfo());
-            std::string url = info["VIEWER_RELEASE_NOTES_URL"].asString();
-            LLCoros::instance().launch("releaseNotesCoro",
-                                       boost::bind(&release_notes_coro, url));
-        }
-        release_notes_shown = true;
-    }
+    LLSD info(LLAppViewer::instance()->getViewerInfo());
+    std::string url = info["VIEWER_RELEASE_NOTES_URL"].asString();
+    LLCoros::instance().launch("releaseNotesCoro",
+                                boost::bind(&release_notes_coro, url));
+    release_notes_shown = true;
 }
 
 // <FS:CR> Ditch the first run modal. Assume the user already has an account.

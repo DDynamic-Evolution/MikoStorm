@@ -253,6 +253,16 @@
         <check_box
          top_pad="10"
          left="10"
+         label="Enable URL Security Checking"
+         control_name="FSEnableURLChecking"
+         follows="left|top"
+         height="16"
+         name="FSEnableURLChecking"
+         width="256"
+         tool_tip="When enabled, the viewer will check clicked URLs for phishing, typosquatting, and brand impersonation of Second Life domains, displaying a warning for suspicious links."/>
+        <check_box
+         top_pad="4"
+         left="10"
          label="Block left-click sitting on objects"
          control_name="FSBlockClickSit"
          follows="left|top"

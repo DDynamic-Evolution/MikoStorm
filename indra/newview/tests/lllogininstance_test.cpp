@@ -372,7 +372,6 @@ namespace tut
             gSavedSettings.declareString("ClientSettingsFile", "test_settings.xml", "", LLControlVariable::PERSIST_NO);
             gSavedSettings.declareString("NextLoginLocation", "", "", LLControlVariable::PERSIST_NO);
             gSavedSettings.declareBOOL("LoginLastLocation", false, "", LLControlVariable::PERSIST_NO);
-            gSavedSettings.declareBOOL("CmdLineSkipUpdater", true, "", LLControlVariable::PERSIST_NO);
 
             LLSD authenticator = LLSD::emptyMap();
             LLSD identifier = LLSD::emptyMap();

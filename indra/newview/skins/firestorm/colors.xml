@@ -861,6 +861,9 @@
      name="ChatTimestampColor"
      reference="White" />
     <color
+     name="URLWarningColor"
+     reference="Red" />
+    <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
 	 

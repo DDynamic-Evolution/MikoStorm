@@ -410,14 +410,12 @@ void LLLoginInstance::handleLoginFailure(const LLSD& event)
     }
     else if(reason_response == "update")
     {
-        // login.cgi rejected login and requires an update. Since Velopack
-        // handles updates now, the best we can do here is tell the user
-        // to download the update manually via the release notes URL.
+        // login.cgi rejected login and requires an update.
+        // The best we can do here is tell the user to download
+        // the update manually via the release notes URL.
         std::string login_version = response["message_args"]["VERSION"];
         LL_WARNS("LLLogin") << "Login failed because an update to version " << login_version << " is required." << LL_ENDL;
 
-        // Try to use the release notes URL from the VVM query if available,
-        // otherwise fall back to constructing one from the version.
         std::string relnotes = LLVersionInfo::instance().getReleaseNotes();
         if (relnotes.empty() || relnotes.find("://") == std::string::npos)
         {

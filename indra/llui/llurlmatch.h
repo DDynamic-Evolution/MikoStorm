@@ -41,6 +41,13 @@
 /// as tooltip/status text, an icon, and a XUI file for a context menu
 /// that can be used in a popup for a Url (e.g., Open, Copy URL, etc.)
 ///
+enum ESecurityStatus
+{
+    SECURITY_NONE,
+    SECURITY_WARNING,
+    SECURITY_BLOCKED
+};
+
 class LLUrlMatch
 {
 public:
@@ -89,6 +96,11 @@ public:
 
     bool getSkipProfileIcon() const { return mSkipProfileIcon; }
 
+    ESecurityStatus getSecurityStatus() const { return mSecurityStatus; }
+    std::string getSecurityMessage() const { return mSecurityMessage; }
+    void setSecurityStatus(ESecurityStatus status) { mSecurityStatus = status; }
+    void setSecurityMessage(const std::string& msg) { mSecurityMessage = msg; }
+
     // <FS:PP> Preview real URLs of bracket links
     bool getLabeledLinkMasked() const { return mLabeledLinkMasked; }
     void setLabeledLinkMasked(bool masked) { mLabeledLinkMasked = masked; }
@@ -128,6 +140,8 @@ private:
     bool mLabeledLinkMasked { false };
     bool mLabeledLinkTrusted { false };
     // </FS:PP>
+    ESecurityStatus mSecurityStatus;
+    std::string     mSecurityMessage;
 };
 
 #endif
