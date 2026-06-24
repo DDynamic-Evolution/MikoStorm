@@ -11,7 +11,7 @@ ATTENTION! This is a fork of the Firestorm viewer and contains experimental (but
 - Renamed the viewer to Gridstorm
 - (planned) Adding security features.
 - Added privacy features
-- Add an MP3 Player for all those quiet parcels
+- (scrapped) Add an MP3 Player for all those quiet parcels
 
 ## Open Source
 
