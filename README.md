@@ -7,10 +7,9 @@ ATTENTION! This is a fork of the Firestorm viewer and contains experimental (but
 - Removed velo updater
 - Hides your data
 - Custom and definable login page (Done!)
-- (idea) A new skin as default taking inspiration from cyberpunk2077
-- Renamed the viewer to Gridstorm
 - Added privacy features
 - (scrapped) Add an MP3 Player for all those quiet parcels
+- latest original code merged. 
 
 ## Open Source
 
