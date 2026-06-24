@@ -73,10 +73,7 @@
 #include <fstream>
 #include <exception>
 
-// Velopack installer and update framework
-#if LL_VELOPACK
-#include "llvelopack.h"
-#endif
+
 
 // Bugsplat (http://bugsplat.com) crash reporting tool
 #ifdef LL_BUGSPLAT
@@ -494,30 +491,11 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
                      PWSTR     pCmdLine,
                      int       nCmdShow)
 {
-#if LL_VELOPACK
-    // Velopack MUST be initialized first - it may handle install/uninstall
-    // commands and exit the process before we do anything else.
-    if (!velopack_initialize())
-    {
-        // Velopack handled the invocation (install/uninstall hook)
+    // Drop install related settings
+    gDirUtilp->initAppDirs("SecondLife");
 
-        // Drop install related settings
-        gDirUtilp->initAppDirs("SecondLife");
-
-        std::string user_settings_path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings.xml");
-        LLControlGroup settings("global");
-        if (settings.loadFromFile(user_settings_path))
-        {
-            // If user reinstalls or updates, we want to recheck for nsis leftovers.
-            if (settings.controlExists("PreviousInstallChecked"))
-            {
-                settings.setBOOL("PreviousInstallChecked", false);
-            }
-            settings.saveToFile(user_settings_path, true);
-        }
-        return 0;
+    return 0;
     }
-#endif
 
     // Call Tracy first thing to have it allocate memory
     // https://github.com/wolfpld/tracy/issues/196

@@ -30,6 +30,7 @@
 			<check_box name="FSRepeatedEnvTogglesShared" label="環境設定快捷鍵為開關式" tool_tip="重複按下快捷鍵可在想要的環境設定和共享環境之間切換。"/>
 		</panel>
 		<panel label="保護" name="ProtectionTab">
+			<check_box label="啟用 URL 安全檢查" name="FSEnableURLChecking" />
 			<check_box label="阻止通過簡單點擊坐在物件上" name="FSBlockClickSit" />
 			<check_box label="預覽私聊和群組聊天中括號連結的真實URL（懸停時）" name="FSDisableLabeledChatLinks" tool_tip="啟用後，私聊、群組聊天、臨時會議和群組通知中的方括號連結會保留其文字，但懸停時會立即以大型提示顯示真實的目標URL。有助於發現標籤隱藏不同目標的釣魚攻擊。附近聊天使用下方的選項。檢視器內建文字不受影響。"/>
 			<check_box label="允許指令碼顯示地圖 (llMapDestination)" name="ScriptsCanShowUI" />

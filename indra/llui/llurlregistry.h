@@ -95,7 +95,17 @@ public:
 
     bool containsAgentMention(const std::string& text);
 
+    // URL security checking
+    static ESecurityStatus checkUrlSecurity(const std::string& url, std::string& warning_msg);
+
 private:
+    static std::string normalizeDomain(const std::string& domain);
+    static std::string extractETLDPlusOne(const std::string& domain);
+    static U32 levenshteinDistance(const std::string& a, const std::string& b);
+    static bool isSLDomain(const std::string& domain);
+    static bool isSLTyposquatAttempt(const std::string& domain);
+    static bool isSLSubdomainTrick(const std::string& domain, const std::string& registrable_domain);
+    static bool isSLBrandImpersonation(const std::string& domain);
     std::vector<LLUrlEntryBase *> mUrlEntry;
     LLUrlEntryBase* mUrlEntryTrusted;
     LLUrlEntryBase* mUrlEntryIcon;

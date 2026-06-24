@@ -98,11 +98,6 @@
 #include "llurlmatch.h"
 #include "lltextutil.h"
 #include "lllogininstance.h"
-#include "llvvmquery.h"
-
-#if LL_VELOPACK
-#include "llvelopack.h"
-#endif
 #include "llprogressview.h"
 #include "llvocache.h"
 #include "lldiskcache.h"
@@ -1368,20 +1363,6 @@ bool LLAppViewer::init()
 
     gGLActive = false;
 
-    // <FS:Ansariel> Disable updater
-////#if LL_RELEASE_FOR_DOWNLOAD
-//    // Launch VVM update check
-//    if (!gSavedSettings.getBOOL("CmdLineSkipUpdater") && !gNonInteractive)
-//    {
-//        initVVMUpdateCheck();
-//    }
-//    else
-//    {
-//        LL_WARNS("InitInfo") << "Skipping updater check." << LL_ENDL;
-//    }
-////#endif //LL_RELEASE_FOR_DOWNLOAD
-    // </FS:Ansariel>
-
     {
         // Iterate over --leap command-line options. But this is a bit tricky: if
         // there's only one, it won't be an array at all.
@@ -2006,16 +1987,6 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
-#if LL_VELOPACK
-    // Apply any pending Velopack update before shutdown
-    if (velopack_is_update_pending())
-    {
-        LL_INFOS("AppInit") << "Applying pending Velopack update on shutdown..." << LL_ENDL;
-        velopack_apply_pending_update(velopack_should_restart_after_update());
-    }
-    velopack_cleanup();
-#endif
-
     //ditch LLVOAvatarSelf instance
     gAgentAvatarp = NULL;
 
@@ -3986,7 +3957,6 @@ LLSD LLAppViewer::getViewerInfo() const
     // return a URL to the release notes for this viewer, such as:
     // https://releasenotes.secondlife.com/viewer/2.1.0.123456.html
     // <FS:Ansariel> FIRE-13993: Create URL in the form of https://wiki.firestormviewer.org/firestorm_change_log_x.y.z.rev
-    //std::string url = versionInfo.getReleaseNotes(); // VVM supplied
     //if (url.empty())
     //{
     //    url = LLTrans::getString("RELEASE_NOTES_BASE_URL");

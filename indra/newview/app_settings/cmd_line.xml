@@ -111,16 +111,6 @@
       <string>CmdLineGridChoice</string>
     </map>
 
-    <key>update-service</key>
-    <map>
-      <key>desc</key>
-      <string>Override the url base for the update query.</string>
-      <key>count</key>
-      <integer>1</integer>
-      <key>map-to</key>
-      <string>CmdLineUpdateService</string>
-    </map>
-
     <key>help</key>
     <map>
       <key>desc</key>
@@ -443,14 +433,6 @@
       <key>count</key>
       <integer>1</integer>
       <!-- Special case. Mapped to settings procedurally. -->
-    </map>
-
-    <key>skipupdatecheck</key>
-    <map>
-      <key>desc</key>
-      <string>Skips update check at startup.</string>
-      <key>map-to</key>
-      <string>CmdLineSkipUpdater</string>
     </map>
 
     <!-- FS:Ansariel - Option to not auto-save passwords when using login option >

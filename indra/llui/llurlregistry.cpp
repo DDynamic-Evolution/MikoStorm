@@ -362,6 +362,15 @@ bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LL
         }
         // </FS:PP>
 
+        // URL security check
+        {
+            std::string checked_url = match_entry->getUrl(url);
+            std::string warning;
+            ESecurityStatus security = checkUrlSecurity(checked_url, warning);
+            match.setSecurityStatus(security);
+            match.setSecurityMessage(warning);
+        }
+
         return true;
     }
 
@@ -410,6 +419,459 @@ bool LLUrlRegistry::findUrl(const LLWString &text, LLUrlMatch &match, const LLUr
         return true;
     }
     return false;
+}
+
+// URL Security Checking Implementation
+
+// ---------------------------------------------------------------------------
+// SL-related domains that might be typosquatted for phishing
+// Note: entries ending with ".*" are wildcard prefixes
+// (e.g., "lindenlab.com.*" matches any subdomain of lindenlab.com)
+// ---------------------------------------------------------------------------
+static const char* sSLDomains[] = {
+    // Core
+    "secondlife.com",
+    "secondlife.net",
+    "secondlifegrid.net",
+    "secondlife.org",
+    "secondlife.io",
+    "secondlife.community",
+    "lindenlab.com",
+    "slurl.com",
+
+    // secondlife.com subdomains (explicit enumeration)
+    "www.secondlife.com",
+    "marketplace.secondlife.com",
+    "community.secondlife.com",
+    "wiki.secondlife.com",
+    "maps.secondlife.com",
+    "support.secondlife.com",
+    "status.secondlife.com",
+    "accounts.secondlife.com",
+    "my.secondlife.com",
+    "join.secondlife.com",
+    "premium.secondlife.com",
+    "go.secondlife.com",
+    "blog.secondlife.com",
+    "engage.secondlife.com",
+
+    // lindenlab.com subdomains (wildcard patterns)
+    "www.lindenlab.com",
+    "lindenlab.com.*",      // *.lindenlab.com wildcard
+    "agni.lindenlab.com.*", // *.agni.lindenlab.com wildcard
+    "aditi.lindenlab.com.*",// *.aditi.lindenlab.com wildcard
+
+    NULL
+};
+
+// ---------------------------------------------------------------------------
+// Homoglyph mapping: Cyrillic / lookalike Unicode chars -> ASCII
+// ---------------------------------------------------------------------------
+struct HomoglyphMap { llwchar homoglyph; char ascii; };
+static const HomoglyphMap sHomoglyphs[] = {
+    { 0x0430, 'a' }, // Cyrillic small a
+    { 0x0435, 'e' }, // Cyrillic small ie
+    { 0x043E, 'o' }, // Cyrillic small o
+    { 0x0440, 'p' }, // Cyrillic small er
+    { 0x0441, 'c' }, // Cyrillic small es
+    { 0x0445, 'x' }, // Cyrillic small ha
+    { 0x0432, 'b' }, // Cyrillic small ve
+    { 0x043D, 'h' }, // Cyrillic small en
+    { 0x043A, 'k' }, // Cyrillic small ka
+    { 0x043C, 'm' }, // Cyrillic small em
+    { 0x0438, 'i' }, // Cyrillic small i
+    { 0x0456, 'i' }, // Cyrillic small Byelorussian/Ukrainian i
+    { 0x04CF, 'l' }, // Cyrillic small palochka (used in Caucasus languages)
+    { 0x00ED, 'i' }, // Latin i with acute
+    { 0x0442, 't' }, // Cyrillic small te
+    { 0x0443, 'y' }, // Cyrillic small u
+    { 0, 0 }
+};
+
+// ---------------------------------------------------------------------------
+// Normalize a domain: lowercase, replace homoglyph chars with ASCII
+// ---------------------------------------------------------------------------
+std::string LLUrlRegistry::normalizeDomain(const std::string& domain)
+{
+    LLWString wdomain = utf8str_to_wstring(domain);
+    std::string result;
+    result.reserve(wdomain.size());
+
+    for (U32 i = 0; i < wdomain.size(); ++i)
+    {
+        llwchar wc = wdomain[i];
+
+        if (wc >= 'A' && wc <= 'Z')
+        {
+            result += (char)(wc - 'A' + 'a');
+        }
+        else
+        {
+            bool replaced = false;
+            for (S32 j = 0; sHomoglyphs[j].homoglyph != 0; ++j)
+            {
+                if (wc == sHomoglyphs[j].homoglyph)
+                {
+                    result += sHomoglyphs[j].ascii;
+                    replaced = true;
+                    break;
+                }
+            }
+            if (!replaced && wc < 128)
+            {
+                result += (char)wc;
+            }
+        }
+    }
+
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// Extract eTLD+1 (simplified): last 2-3 labels handling common multi-part TLDs
+// ---------------------------------------------------------------------------
+std::string LLUrlRegistry::extractETLDPlusOne(const std::string& domain)
+{
+    // Split domain by '.'
+    std::vector<std::string> labels;
+    std::string label;
+    for (size_t i = 0; i < domain.size(); ++i)
+    {
+        if (domain[i] == '.')
+        {
+            if (!label.empty())
+            {
+                labels.push_back(label);
+                label.clear();
+            }
+        }
+        else
+        {
+            label += domain[i];
+        }
+    }
+    if (!label.empty())
+        labels.push_back(label);
+
+    if (labels.size() < 2)
+        return domain;
+
+    // Common two-part TLDs (simplified list)
+    static const char* sTwoPartTLDs[] = {
+        "co.uk", "org.uk", "ac.uk", "gov.uk", "net.uk", "nhs.uk",
+        "com.au", "net.au", "org.au", "gov.au", "edu.au",
+        "co.nz", "net.nz", "org.nz",
+        "co.jp", "ne.jp", "or.jp",
+        "co.kr", "ne.kr", "or.kr",
+        "com.cn", "net.cn", "org.cn", "gov.cn",
+        "co.in", "net.in", "org.in", "gov.in",
+        "co.za", "net.za", "org.za", "gov.za",
+        "com.br", "net.br", "org.br", "gov.br",
+        "com.mx", "org.mx",
+        "co.il", "org.il", "net.il", "ac.il", "gov.il",
+        "com.pl", "net.pl", "org.pl",
+        "co.th", "or.th", "go.th",
+        "com.tr", "net.tr", "org.tr", "gov.tr",
+        "com.hk", "net.hk", "org.hk", "gov.hk",
+        "com.sg", "net.sg", "org.sg", "gov.sg",
+        "co.at", "or.at",
+        "com.tw", "net.tw", "org.tw", "gov.tw",
+        "co.hu", "net.hu", "org.hu",
+        "co.ve", "com.ve", "net.ve", "org.ve", "gov.ve",
+        "com.eg", "net.eg", "org.eg", "gov.eg",
+        NULL
+    };
+
+    if (labels.size() >= 3)
+    {
+        std::string last_two = labels[labels.size() - 2] + "." + labels[labels.size() - 1];
+        for (S32 i = 0; sTwoPartTLDs[i] != NULL; ++i)
+        {
+            if (last_two == sTwoPartTLDs[i])
+            {
+                // Return last three labels
+                return labels[labels.size() - 3] + "." + last_two;
+            }
+        }
+    }
+
+    // Default: return last two labels
+    return labels[labels.size() - 2] + "." + labels[labels.size() - 1];
+}
+
+// ---------------------------------------------------------------------------
+// Levenshtein distance (iterative, O(n*m))
+// ---------------------------------------------------------------------------
+U32 LLUrlRegistry::levenshteinDistance(const std::string& a, const std::string& b)
+{
+    size_t n = a.size();
+    size_t m = b.size();
+
+    if (n == 0) return (U32)m;
+    if (m == 0) return (U32)n;
+
+    // Use two rows to reduce memory
+    std::vector<U32> prev(m + 1);
+    std::vector<U32> cur(m + 1);
+
+    for (size_t j = 0; j <= m; ++j)
+        prev[j] = (U32)j;
+
+    for (size_t i = 1; i <= n; ++i)
+    {
+        cur[0] = (U32)i;
+        for (size_t j = 1; j <= m; ++j)
+        {
+            U32 cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
+            cur[j] = llmin(prev[j] + 1,              // deletion
+                      llmin(cur[j - 1] + 1,          // insertion
+                            prev[j - 1] + cost));    // substitution
+        }
+        prev.swap(cur);
+    }
+
+    return prev[m];
+}
+
+// ---------------------------------------------------------------------------
+// Check if domain (normalized eTLD+1) is a known SL domain.
+// Supports wildcard entries ending with ".*" which match any subdomain.
+// ---------------------------------------------------------------------------
+bool LLUrlRegistry::isSLDomain(const std::string& domain)
+{
+    for (S32 i = 0; sSLDomains[i] != NULL; ++i)
+    {
+        std::string entry(sSLDomains[i]);
+
+        // Wildcard pattern: "prefix.*" matches any subdomain of prefix
+        if (entry.size() >= 2 && entry.substr(entry.size() - 2) == ".*")
+        {
+            std::string prefix = entry.substr(0, entry.size() - 2);
+            // Domain must have at least one extra label before the prefix
+            if (domain.size() > prefix.size() + 1
+                && domain.compare(domain.size() - prefix.size(), prefix.size(), prefix) == 0
+                && domain[domain.size() - prefix.size() - 1] == '.')
+            {
+                return true;
+            }
+        }
+        else if (domain == entry)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// Check if the domain looks like a typosquat of an SL domain
+// ---------------------------------------------------------------------------
+bool LLUrlRegistry::isSLTyposquatAttempt(const std::string& domain)
+{
+    for (S32 i = 0; sSLDomains[i] != NULL; ++i)
+    {
+        U32 dist = levenshteinDistance(domain, std::string(sSLDomains[i]));
+        // Distance 1 is extremely suspicious (single char diff)
+        // Distance 2 could be coincidence for short domains
+        if (dist <= 1)
+            return true;
+        if (dist <= 2 && strlen(sSLDomains[i]) > 4)
+            return true;
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// Subdomain trick detection: SL domain used as a subdomain in a different
+// registered domain. e.g., "secondlife.login.evil.com" or
+// "secondlife.com.evil.com"
+// Also catches typosquat/impersonation domains in subdomain chain
+// ---------------------------------------------------------------------------
+bool LLUrlRegistry::isSLSubdomainTrick(const std::string& domain, const std::string& registrable_domain)
+{
+    std::vector<std::string> labels;
+    std::string label;
+    for (size_t i = 0; i < domain.size(); ++i)
+    {
+        if (domain[i] == '.')
+        {
+            if (!label.empty())
+            {
+                labels.push_back(label);
+                label.clear();
+            }
+        }
+        else
+        {
+            label += domain[i];
+        }
+    }
+    if (!label.empty())
+        labels.push_back(label);
+
+    if (labels.size() < 3)
+        return false;
+
+    // Check each subdomain label sequence for SL domain matches
+    for (size_t i = 0; i < labels.size() - 1; ++i)
+    {
+        std::string candidate;
+        for (size_t j = i; j < labels.size() - 1; ++j)
+        {
+            if (!candidate.empty())
+                candidate += ".";
+            candidate += labels[j];
+
+            if (candidate == registrable_domain)
+                continue;
+
+            if (isSLDomain(candidate))
+                return true;
+
+            if (isSLTyposquatAttempt(candidate))
+                return true;
+            if (isSLBrandImpersonation(candidate))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// Brand impersonation: domain name contains "secondlife", "lindenlab", or
+// "slurl" as a substring of its registrable name (leftmost label of eTLD+1)
+// e.g. "secondlife-marketplace.com", "mylindenlabs.com"
+// ---------------------------------------------------------------------------
+bool LLUrlRegistry::isSLBrandImpersonation(const std::string& domain)
+{
+    // Extract the name part (first label of the eTLD+1)
+    // e.g. "secondlife-marketplace" from "secondlife-marketplace.com"
+    std::string::size_type dot = domain.find('.');
+    if (dot == std::string::npos)
+        return false;
+    std::string name = domain.substr(0, dot);
+
+    static const char* sBrandKeywords[] = {
+        "secondlife",
+        "lindenlab",
+        "slurl",
+        NULL
+    };
+
+    for (S32 i = 0; sBrandKeywords[i] != NULL; ++i)
+    {
+        if (name.find(sBrandKeywords[i]) != std::string::npos)
+            return true;
+        // Check if name is a typosquat of the brand keyword
+        if (levenshteinDistance(name, sBrandKeywords[i]) <= 2)
+            return true;
+        // Also check each hyphen-separated segment
+        std::string::size_type start = 0;
+        std::string::size_type hyphen;
+        while ((hyphen = name.find('-', start)) != std::string::npos)
+        {
+            std::string segment = name.substr(start, hyphen - start);
+            if (!segment.empty() && levenshteinDistance(segment, sBrandKeywords[i]) <= 2)
+                return true;
+            start = hyphen + 1;
+        }
+        std::string last_segment = name.substr(start);
+        if (!last_segment.empty() && levenshteinDistance(last_segment, sBrandKeywords[i]) <= 2)
+            return true;
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// Main security check entry point
+// ---------------------------------------------------------------------------
+ESecurityStatus LLUrlRegistry::checkUrlSecurity(const std::string& url, std::string& warning_msg)
+{
+    // Extract hostname from URL
+    std::string hostname;
+    std::string::size_type scheme_end = url.find("://");
+    std::string::size_type host_start = (scheme_end != std::string::npos) ? scheme_end + 3 : 0;
+
+    // Skip past scheme
+    std::string::size_type host_end = url.find_first_of("/?#", host_start);
+    if (host_end == std::string::npos)
+        host_end = url.size();
+
+    hostname = url.substr(host_start, host_end - host_start);
+
+    // Remove userinfo (user:pass@host)
+    std::string::size_type at_pos = hostname.find('@');
+    if (at_pos != std::string::npos)
+        hostname = hostname.substr(at_pos + 1);
+
+    // Remove port
+    std::string::size_type port_pos = hostname.find(':');
+    if (port_pos != std::string::npos)
+        hostname = hostname.substr(0, port_pos);
+
+    if (hostname.empty())
+        return SECURITY_NONE;
+
+    // Check if URL security checking is enabled (user preference)
+    static LLUICachedControl<bool> sEnableURLChecking("FSEnableURLChecking", true);
+    if (!sEnableURLChecking)
+        return SECURITY_NONE;
+
+    // Check for homoglyph-based impersonation BEFORE allowlist check.
+    // If the domain contains non-ASCII characters and normalizing it
+    // reveals an SL domain, it's a homoglyph attack.
+    bool has_non_ascii = false;
+    for (size_t i = 0; i < hostname.size(); ++i)
+    {
+        if ((unsigned char)hostname[i] >= 128)
+        {
+            has_non_ascii = true;
+            break;
+        }
+    }
+    if (has_non_ascii)
+    {
+        std::string normalized_full = normalizeDomain(hostname);
+        std::string normalized_etld1 = extractETLDPlusOne(normalized_full);
+        if (isSLDomain(normalized_etld1))
+        {
+            warning_msg = "Suspicious link: domain uses lookalike characters to impersonate Second Life";
+            return SECURITY_WARNING;
+        }
+    }
+
+    // Extract eTLD+1 and check if it's a known SL domain (exact match)
+    std::string raw_etld1 = extractETLDPlusOne(hostname);
+    if (isSLDomain(raw_etld1))
+        return SECURITY_NONE;
+
+    // Normalize (lowercase + homoglyph replacement) for further checks
+    std::string normalized = normalizeDomain(hostname);
+    std::string etld1 = extractETLDPlusOne(normalized);
+
+    // Check subdomain tricks (SL domain used as subdomain in a non-SL domain)
+    if (isSLSubdomainTrick(normalized, etld1))
+    {
+        warning_msg = "Suspicious link: may impersonate a Second Life website";
+        return SECURITY_WARNING;
+    }
+
+    // Check typosquatting of SL domains
+    if (isSLTyposquatAttempt(etld1))
+    {
+        warning_msg = "Suspicious link: domain looks similar to Second Life";
+        return SECURITY_WARNING;
+    }
+
+    // Check brand impersonation (domain name contains SL keyword as substring)
+    if (isSLBrandImpersonation(etld1))
+    {
+        warning_msg = "Suspicious link: domain name references Second Life";
+        return SECURITY_WARNING;
+    }
+
+    return SECURITY_NONE;
 }
 
 bool LLUrlRegistry::hasUrl(const std::string &text)

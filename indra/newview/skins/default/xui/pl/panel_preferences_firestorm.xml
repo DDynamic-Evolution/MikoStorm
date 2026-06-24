@@ -40,6 +40,7 @@
         <check_box name="FSRepeatedEnvTogglesShared" label="Skróty klawiszowe zmiany otoczenia przy powtarzaniu przełączają na otoczenie współdzielone" tool_tip="Sprawia, że powielone używanie skrótów klawiszowych (np. ctrl+shift+y) przełącza między wybranym wstępnie zapisanym otoczeniem, a otoczeniem współdzielonym." />
     </panel>
     <panel label="Ochrona" name="ProtectionTab">
+        <check_box label="Włącz sprawdzanie bezpieczeństwa URL" name="FSEnableURLChecking" />
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
         <check_box label="Podgląd prawdziwego URL linków w nawiasach: IM, czat grupowy (po najechaniu)" name="FSDisableLabeledChatLinks" tool_tip="Po włączeniu linki w nawiasach kwadratowych w IM, czacie grupowym, konferencjach ad-hoc i ogłoszeniach grup zachowują swój tekst, ale najechanie kursorem natychmiast pokazuje prawdziwy adres docelowy w dużej podpowiedzi. Pomaga wykryć phishing, gdy etykieta ukrywa inny cel. Czat w pobliżu używa opcji poniżej. Wbudowany tekst przeglądarki nie jest zmieniany."/>
         <check_box label="Podgląd prawdziwego URL linków w nawiasach: czat w pobliżu, obiekty (po najechaniu)" name="FSDisableLabeledChatLinksNearbyChat" tool_tip="Po włączeniu linki w nawiasach kwadratowych w czacie w pobliżu (lokalnym) i tekstach obiektów zachowują swój tekst, ale najechanie kursorem natychmiast pokazuje prawdziwy adres docelowy w dużej podpowiedzi. Domyślnie wyłączone."/>

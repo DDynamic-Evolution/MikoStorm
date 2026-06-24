@@ -801,11 +801,7 @@ void send_viewer_stats(bool include_preferences)
     fail["failed_resends"] = (S32) gMessageSystem->mFailedResendPackets;
     fail["off_circuit"] = (S32) gMessageSystem->mOffCircuitPackets;
     fail["invalid"] = (S32) gMessageSystem->mInvalidOnCircuitPackets;
-#if LL_VELOPACK
-    fail["missing_updater"] = false;
-#else
     fail["missing_updater"] = true;
-#endif
 
     LLSD &inventory = body["inventory"];
     inventory["usable"] = gInventory.isInventoryUsable();

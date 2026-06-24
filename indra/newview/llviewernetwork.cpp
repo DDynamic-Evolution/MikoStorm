@@ -593,15 +593,9 @@ std::string LLGridManager::getGridLoginID()
 
 std::string LLGridManager::getUpdateServiceURL()
 {
+    std::string update_url_base;
     auto env_update_service = LLStringUtil::getoptenv("SL_UPDATE_SERVICE");
-    std::string update_url_base = gSavedSettings.getString("CmdLineUpdateService");;
-    if ( !update_url_base.empty() )
-    {
-        LL_INFOS("UpdaterService","GridManager")
-            << "Update URL base overridden from command line: " << update_url_base
-            << LL_ENDL;
-    }
-    else if (env_update_service && env_update_service->find("http") != std::string::npos)
+    if (env_update_service && env_update_service->find("http") != std::string::npos)
     {
         update_url_base = *env_update_service;
         LL_INFOS("UpdaterService", "GridManager")

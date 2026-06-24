@@ -200,15 +200,6 @@ No tutorial is currently available.
      yestext="OK"/>
   </notification>
 
-  <notification
-   icon="alertmodal.tga"
-   name="FoundLegacyNsisInstallation"
-   type="alertmodal">
-      [APP_NAME] found an installation of an older version [VERSION]. To uninstall the older version, please follow [https://community.secondlife.com/knowledgebase/english/how-to-uninstall-and-reinstall-second-life-r524 this manual].
-      <usetemplate
-       name="okbutton"
-       yestext="OK"/>
-  </notification>
 
   <notification
    icon="alertmodal.tga"

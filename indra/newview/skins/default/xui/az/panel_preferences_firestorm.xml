@@ -39,6 +39,7 @@
         <check_box name="EnvironmentPersistAcrossLogin" label="Seanslar arasında mühit seçimlərini yadda saxlayın" tool_tip="Növbəti girişdən sonra cari mühit seçimlərini bərpa edir."/>
     </panel>
     <panel label="Qoruma" name="ProtectionTab">
+        <check_box label="URL təhlükəsizlik yoxlamasını aktiv edin" name="FSEnableURLChecking" />
         <check_box label="Sol maus düyməsi ilə basdıqda obyektə oturmaq bloku" name="FSBlockClickSit" />
         <check_box label="IM və qrup çatında mötərizəli linklərin əsl URL-ni göstər (kursorla)" name="FSDisableLabeledChatLinks" tool_tip="Aktiv olduqda, IM, qrup çatı, ad-hoc konfranslar və qrup bildirişlərindəki kvadrat mötərizəli linklər mətnini saxlayır, lakin kursoru saxlayanda əsl təyinat URL-i böyük ipucu kimi dərhal göstərilir. Etiketin fərqli hədəfi gizlətdiyi fişinqi aşkar etməyə kömək edir. Yaxınlıqdakı çat aşağıdakı seçimdən istifadə edir. Viewer-in daxili mətni dəyişmir."/>
         <check_box label="Skriptlərin (llMapDestination) istifadəsinə icazə verin" name="ScriptsCanShowUI" />
