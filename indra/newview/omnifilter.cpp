@@ -34,6 +34,7 @@
 #include "llnotificationsutil.h" // Needed for Notifications
 // </FS:minerjr> [FIRE-36763]
 #include "llfloaterreg.h" // Needed for LLFloaterReg::showInstance
+#include "lltrans.h" // Needed for LLTrans::getString
 
 #include "fsscrolllistctrl.h"
 
@@ -495,7 +496,8 @@ void Omnifilter::reloadRules()
         const std::string needle_rule_set_name(instance->getOrderedRuleSetName(index));
         LLSD value(index);
         // And add to the UI element. The value is the value that is passed along with the commit callback method.
-        mRuleSetsCmb->add(needle_rule_set_name, value);
+        // If index is 0, use the translated Default text
+        mRuleSetsCmb->add(index == 0 ? LLTrans::getString("OmnifilterDefaultName") : needle_rule_set_name, value);
     }
     // Finally, select the stored rule set
     mRuleSetsCmb->selectByValue(LLSD(current_rule_set_id));
@@ -865,7 +867,8 @@ void OmnifilterMenuPanel::reloadRules()
         const std::string needle_rule_set_name(instance->getOrderedRuleSetName(index));
         LLSD value(index);
         // And add to the UI element. The value is the value that is passed along with the commit callback method.
-        mRuleSetsCmb->add(needle_rule_set_name, value);
+        // If index is 0, use the translated Default text
+        mRuleSetsCmb->add(index == 0 ? LLTrans::getString("OmnifilterDefaultName") : needle_rule_set_name, value);
     }
     // Finally, select the stored rule set
     mRuleSetsCmb->selectByValue(LLSD(current_rule_set_id));
