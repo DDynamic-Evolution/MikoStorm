@@ -664,6 +664,7 @@ https://www.firestormviewer.org/support for help fixing this problem.
 	<string name="collada_files">COLLADA Models</string>
 	<string name="model_files">Mesh Models</string>
 	<string name="csv_files">Comma separated values</string>
+	<string name="ogg_audio_file">Ogg Audio File</string>
 	<string name="recompile_script_verb">Recompile</string>
 
 <!-- FS:Zi: add missing file picker translations -->
@@ -3268,6 +3269,9 @@ Your current position: [AVATAR_POS]
   <string name="AlwaysRunDisabled">Always Run disabled.</string>
 
   <string name="FSRegionRestartInLocalChat">The region you are in now is about to restart. If you stay in this region you will be logged out.</string>
+  <string name="FSRestartAvoidStatusDisabled">Restart Avoidance: disabled</string>
+  <string name="FSRestartAvoidStatusEnabled">Restart Avoidance: enabled</string>
+  <string name="FSRestartAvoidStatusActive">Restart Avoidance: active - evacuating...</string>
 
   <string name="Mute_Add">'[NAME]' has been added to the blocklist.</string>
   <string name="Mute_Remove">'[NAME]' has been removed from the blocklist.</string>

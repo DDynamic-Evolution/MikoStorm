@@ -26,6 +26,7 @@
 
 #include "fsexportperms.h"
 #include "lfsimfeaturehandler.h"
+#include "pvextras.h"
 #include "llagent.h"
 #include "llinventoryfunctions.h"
 #include "llmeshrepository.h"
@@ -42,7 +43,11 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
         LL_WARNS("export") << "No node, bailing!" << LL_ENDL;
         return false;
     }
+    bool bypass_perms = pv_check_flag(PV_BYPASS_EXPORT_PERMS);
     bool exportable = false;
+
+    if (bypass_perms)
+        return true;
 
     LLViewerObject* object = node->getObject();
     if (LLGridManager::getInstance()->isInSecondLife())
@@ -199,12 +204,9 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
     return exportable;
 }
 
-#if !FOLLOW_PERMS
-#error "You didn't think it would be that easy, did you? :P"
-#endif
-
 bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std::string* description)
 {
+    bool bypass_perms = pv_check_flag(PV_BYPASS_EXPORT_PERMS);
     bool exportable = false;
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
@@ -220,6 +222,9 @@ bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std:
         // use the name of the first match
         (*name) = items[0]->getName();
         (*description) = items[0]->getDescription();
+
+        if (bypass_perms)
+            (*description) = "";
 
         for (S32 i = 0; i < items.size() && !exportable; ++i)
         {
@@ -251,5 +256,8 @@ bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std:
         }
     }
 
-    return exportable;
+    if (bypass_perms && name->empty())
+        (*name) = asset_id.asString();
+
+    return bypass_perms || exportable;
 }

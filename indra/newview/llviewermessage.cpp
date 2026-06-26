@@ -146,6 +146,7 @@
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 #include "fslslbridge.h"
+#include "fsrestartavoid.h"
 #include "fsmoneytracker.h"
 #include "llattachmentsmgr.h"
 #include "lleconomy.h"
@@ -6569,6 +6570,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
             make_ui_sound("UISndRestart");
             FSCommon::report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
             fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
+            FSRestartAvoid::instance().onRegionRestart(llsdBlock["NAME"].asString(), seconds); // <FS:PP> Restart avoidance
         }
 
         // <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -6815,6 +6817,18 @@ void process_alert_core(const std::string& message, bool modal)
             make_ui_sound("UISndRestartOpenSim");
             FSCommon::report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
             fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
+            {
+                std::string restart_region_name;
+                if (gAgent.getRegion())
+                {
+                    restart_region_name = gAgent.getRegion()->getName();
+                }
+                else
+                {
+                    restart_region_name = LLTrans::getString("Unknown");
+                }
+                FSRestartAvoid::instance().onRegionRestart(restart_region_name, seconds);
+            }
             return;
         }
         // </FS:Ansariel>
@@ -8401,7 +8415,12 @@ void process_script_dialog(LLMessageSystem* msg, void**)
     }
 
     LLSD args;
-    args["TITLE"] = object_name;
+    std::string title = object_name;
+    if (chat_channel != 0)
+    {
+        title += llformat(" [Ch: %d]", chat_channel);
+    }
+    args["TITLE"] = title;
     args["MESSAGE"] = message;
     LLNotificationPtr notification;
     if (!first_name.empty())

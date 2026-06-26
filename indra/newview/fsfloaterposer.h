@@ -289,6 +289,10 @@ public:
     void onCommitSlider(const LLUICtrl* slider, const S32 id);
     void onClickSymmetrize(const S32 ID);
     void onClickLockWorldRotBtn();
+    void onRightAvatarRefresh();
+    void onRightAvatarSelect();
+    void onRightStartStopPose();
+    void populateRightAvatarList();
 
     // UI Refreshments
     void refreshRotationSlidersAndSpinners();
@@ -548,6 +552,12 @@ public:
     LLButton* mBtnWorldFrame{ nullptr };
     LLButton* mBtnAvatarFrame{ nullptr };
     LLButton* mBtnScreenFrame{ nullptr };
+
+    // Right avatar list panel
+    LLScrollListCtrl* mRightAvatarList{ nullptr };
+    LLButton* mRightAvatarRefreshBtn{ nullptr };
+    LLButton* mRightStartStopBtn{ nullptr };
+    LLUUID mRightSelectedAvatarId;
 
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 

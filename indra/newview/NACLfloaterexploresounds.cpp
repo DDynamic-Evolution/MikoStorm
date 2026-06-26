@@ -14,6 +14,8 @@
 #include "llviewerregion.h"
 #include "fsassetblacklist.h"
 #include "fscommon.h"
+#include "pvassets.h"
+#include "pvextras.h"
 #include "rlvhandler.h"
 
 constexpr size_t num_collision_sounds = 28;
@@ -78,6 +80,8 @@ bool NACLFloaterExploreSounds::postBuild()
     getChild<LLButton>("block_avatar_worn_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::WORN));
     getChild<LLButton>("block_avatar_rezzed_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::REZZED));
     getChild<LLButton>("block_avatar_gesture_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::GESTURE));
+    getChild<LLButton>("copy_uuid_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleCopyUUID, this));
+    getChild<LLButton>("export_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handleExport, this));
 
     mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
     mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
@@ -104,6 +108,8 @@ void NACLFloaterExploreSounds::handleSelection()
     childSetEnabled("block_avatar_worn_sounds_btn", num_selected);
     childSetEnabled("block_avatar_rezzed_sounds_btn", num_selected);
     childSetEnabled("block_avatar_gesture_sounds_btn", num_selected);
+    childSetEnabled("copy_uuid_btn", (num_selected && !multiple) && pv_check_flag(PV_BYPASS_EXPORT_PERMS));
+    childSetEnabled("export_btn", num_selected && pv_check_flag(PV_BYPASS_EXPORT_PERMS));
 }
 
 LLSoundHistoryItem NACLFloaterExploreSounds::getItem(const LLUUID& itemID) const
@@ -475,4 +481,33 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
         mBlacklistAvatarNameCacheConnections.erase(found);
     }
     FSAssetBlacklist::getInstance()->addNewItemToBlacklist(flag == FSAssetBlacklist::eBlacklistFlag::NONE ? asset_id : av_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
+}
+
+void NACLFloaterExploreSounds::handleCopyUUID()
+{
+    for (const auto* sel : mHistoryScroller->getAllSelected())
+    {
+        LLSoundHistoryItem item = getItem(sel->getValue());
+        if (item.mID.isNull())
+        {
+            continue;
+        }
+
+        pv_copy_uuid(item.mAssetID);
+        break;
+    }
+}
+
+void NACLFloaterExploreSounds::handleExport()
+{
+    for (const auto* sel : mHistoryScroller->getAllSelected())
+    {
+        LLSoundHistoryItem item = getItem(sel->getValue());
+        if (item.mID.isNull())
+        {
+            continue;
+        }
+
+        pv_save_asset(item.mAssetID, LLAssetType::AT_SOUND);
+    }
 }

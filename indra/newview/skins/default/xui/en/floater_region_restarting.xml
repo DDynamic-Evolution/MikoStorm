@@ -99,5 +99,16 @@ If you stay in this region you will be logged out.
      name="teleport_btn"
      top_delta="0"
      width="28" />
+    <text
+     type="string"
+     length="1"
+     follows="left|bottom"
+     layout="topleft"
+     height="16"
+     left="10"
+     name="avoid_status"
+     top_pad="2"
+     width="270">
+    </text>
   </panel>
  </floater>

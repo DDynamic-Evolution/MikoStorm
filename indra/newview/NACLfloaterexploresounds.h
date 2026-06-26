@@ -33,6 +33,8 @@ private:
     void handleStopLocally();
     void handleSelection();
     void blacklistSound(FSAssetBlacklist::eBlacklistFlag flag);
+    void handleCopyUUID();
+    void handleExport();
 
     LLScrollListCtrl* mHistoryScroller{ nullptr };
     LLCheckBoxCtrl*   mCollisionSounds{ nullptr };

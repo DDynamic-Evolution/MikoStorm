@@ -52,8 +52,41 @@
 #include "llavatarnamecache.h"
 
 #include "fsassetblacklist.h"
+#include "llviewercontrol.h"
+#include "llassetstorage.h"
+#include "llfilesystem.h"
+#include "llinventorymodel.h"
+#include "llnotificationsutil.h"
+#include "llpermissionsflags.h"
+#include "llviewermenufile.h"
+#include "llviewerinventory.h"
+
+#include "pvassets.h"
+#include "pvextras.h"
 
 constexpr S32 MAX_ANIMATIONS = 100;
+
+namespace
+{
+
+std::string getAnimationName(const LLUUID& anim_id)
+{
+    LLViewerInventoryItem* item = gInventory.getItem(anim_id);
+    if (item)
+    {
+        return item->getName();
+    }
+
+    std::string name = gAnimLibrary.animationName(anim_id);
+    if (!name.empty() && name.front() != '[')
+    {
+        return name;
+    }
+
+    return anim_id.asString();
+}
+
+} // anonymous namespace
 
 // --------------------------------------------------------------------------
 
@@ -156,13 +189,17 @@ bool AnimationExplorer::postBuild()
     mStopButton = getChild<LLButton>("stop_btn");
     mBlacklistButton = getChild<LLButton>("blacklist_btn");
     mStopAndRevokeButton = getChild<LLButton>("stop_and_revoke_btn");
+    mExportButton = getChild<LLButton>("export_btn");
     mNoOwnedAnimationsCheckBox = getChild<LLCheckBoxCtrl>("no_owned_animations_check");
 
     mAnimationScrollList->setCommitCallback(boost::bind(&AnimationExplorer::onSelectAnimation, this));
     mStopButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopPressed, this));
     mBlacklistButton->setCommitCallback(boost::bind(&AnimationExplorer::onBlacklistPressed, this));
     mStopAndRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopAndRevokePressed, this));
+    mExportButton->setCommitCallback(boost::bind(&AnimationExplorer::onExportPressed, this));
     mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled, this));
+
+    mExportButton->setEnabled(false);
 
     mPreviewCtrl = findChild<LLView>("animation_preview");
     if (mPreviewCtrl)
@@ -201,6 +238,7 @@ void AnimationExplorer::onSelectAnimation()
     mCurrentObject = item->getColumn(column)->getValue().asUUID();
 
     startMotion(mCurrentAnimationID);
+    mExportButton->setEnabled(mCurrentAnimationID.notNull() && pv_check_flag(PV_BYPASS_EXPORT_PERMS));
 }
 
 void AnimationExplorer::onStopPressed()
@@ -241,6 +279,11 @@ void AnimationExplorer::onStopAndRevokePressed()
             gAgentAvatarp->revokePermissionsOnObject(vo);
         }
     }
+}
+
+void AnimationExplorer::onExportPressed()
+{
+    pv_save_asset(mCurrentAnimationID, LLAssetType::AT_ANIMATION);
 }
 
 void AnimationExplorer::onOwnedCheckToggled()
@@ -305,6 +348,7 @@ void AnimationExplorer::updateList(F64 current_timestamp)
     S32 priority_column = mAnimationScrollList->getColumn("priority")->mIndex;
     S32 object_id_column = mAnimationScrollList->getColumn("object_id")->mIndex;
     S32 anim_id_column = mAnimationScrollList->getColumn("animation_id")->mIndex;
+    S32 anim_name_column = mAnimationScrollList->getColumn("animation_name")->mIndex;
 
     // go through the full animation scroll list
     for (auto item : mAnimationScrollList->getAllData())
@@ -353,6 +397,9 @@ void AnimationExplorer::updateList(F64 current_timestamp)
             prio_text = llformat("%d", (S32)motion->getPriority());
         }
         dynamic_cast<LLScrollListText*>(item->getColumn(priority_column))->setText(prio_text);
+
+        LLUUID anim_id2 = item->getColumn(anim_id_column)->getValue().asUUID();
+        dynamic_cast<LLScrollListText*>(item->getColumn(anim_name_column))->setText(getAnimationName(anim_id2));
     }
 }
 
@@ -434,16 +481,18 @@ void AnimationExplorer::addAnimation(const LLUUID& id, const LLUUID& played_by, 
     LLSD item;
     item["columns"][0]["column"] = "played_by";
     item["columns"][0]["value"] = playedByName;
-    item["columns"][1]["column"] = "played";
-    item["columns"][1]["value"] = LLTrans::getString("animation_explorer_still_playing");
-    item["columns"][2]["column"] = "priority";
-    item["columns"][2]["value"] = LLTrans::getString("animation_explorer_unknown_priority");
-    item["columns"][3]["column"] = "timestamp";
-    item["columns"][3]["value"] = time;
-    item["columns"][4]["column"] = "animation_id";
-    item["columns"][4]["value"] = id;
-    item["columns"][5]["column"] = "object_id";
-    item["columns"][5]["value"] = played_by;
+    item["columns"][1]["column"] = "animation_name";
+    item["columns"][1]["value"] = getAnimationName(id);
+    item["columns"][2]["column"] = "played";
+    item["columns"][2]["value"] = LLTrans::getString("animation_explorer_still_playing");
+    item["columns"][3]["column"] = "priority";
+    item["columns"][3]["value"] = LLTrans::getString("animation_explorer_unknown_priority");
+    item["columns"][4]["column"] = "timestamp";
+    item["columns"][4]["value"] = time;
+    item["columns"][5]["column"] = "animation_id";
+    item["columns"][5]["value"] = id;
+    item["columns"][6]["column"] = "object_id";
+    item["columns"][6]["value"] = played_by;
 
     mAnimationScrollList->addElement(item, ADD_TOP);
 }
