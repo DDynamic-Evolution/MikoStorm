@@ -15247,4 +15247,36 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
             yestext="OK"/>
     </notification>
   <!-- </FS:minerjr> [FIRE-36763] -->
+
+  <notification
+   icon="notifytip.tga"
+   name="FSRestartAvoidActivated"
+   type="notify">
+    <unique/>
+    Region restart detected! Auto-evacuation in [DELAY] seconds.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSRestartAvoidTeleported"
+   type="notify">
+    <unique/>
+    Emergency teleport to [REGION] completed.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="FSRestartAvoidNoDestinations"
+   type="alertmodal">
+    <unique/>
+    Restart avoidance is enabled but no destinations are configured. Please add destinations in Preferences -> Firestorm -> Extras.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="FSRestartAvoidReturned"
+   type="notify">
+    <unique/>
+    Returned to [REGION] - restart avoidance complete.
+  </notification>
 </notifications>

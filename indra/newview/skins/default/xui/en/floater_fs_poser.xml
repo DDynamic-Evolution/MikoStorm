@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ can_resize="true"
+ min_width="720"
+ min_height="330"
  positioning="None"
  save_rect="true"
  height="330"
@@ -7,7 +10,7 @@
  name="floater_poser"
  title="Avatar and Animesh Poser"
  help_topic="poser"
- width="450">
+ width="720">
 	<string name="icon_category" translate="false">Inv_BodyShape</string>
 	<string name="icon_bone" translate="false"></string>
 	<string name="icon_object" translate="false">Inv_Object</string>
@@ -473,14 +476,14 @@
 	 name="poser_stack"
 	 orientation="vertical"
 	 top="0"
-	 width="700">
+	 width="720">
 		<layout_panel
 		 follows="top|left"
 		 layout="topleft"
 		 auto_resize="false"
 		 name="regular_controls_layout"
 		 height="310"
-		 width="700">
+		 width="720">
 			<panel
 			 follows="left"
 			 height="300"
@@ -490,20 +493,20 @@
 			 name="joints_parent_panel"
 			 top="0"
 			 left="0"
-			 width="235">
-				<tab_container
-				 follows="all"
-				 halign="center"
-				 height="295"
-				 layout="topleft"
-				 left="0"
-				 name="joints_tabs"
-				 tab_height="20"
-				 tab_width="55"
-				 tab_group="1"
-				 tab_position="left"
-				 top="0"
-				 width="235">
+			 width="245">
+			<tab_container
+			 follows="all"
+			 halign="center"
+			 height="295"
+			 layout="topleft"
+			 left="0"
+			 name="joints_tabs"
+			 tab_height="20"
+			 tab_width="55"
+			 tab_group="1"
+			 tab_position="left"
+			 top="0"
+			 width="245">
 					<panel
 					 follows="all"
 					 background_visible="false"
@@ -1894,6 +1897,89 @@
 				 label="Enter Pose Name To Save..."
 				 name="pose_save_name"
 				 width="275"/>
+			</panel>
+			<panel
+			 follows="left|top|bottom"
+			 background_visible="false"
+			 layout="topleft"
+			 mouse_opaque="false"
+			 name="right_avatar_panel"
+			 top="0"
+			 left="490"
+			 height="300"
+			 width="225">
+				<text
+				 follows="top|left"
+				 name="right_avatar_label"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 top="5"
+				 width="210">
+					Avatars in Range:
+				</text>
+				<scroll_list
+				 column_padding="0"
+				 height="235"
+				 can_sort="false"
+				 follows="all"
+				 keep_one_selected="false"
+				 layout="topleft"
+				 left="3"
+				 multi_select="false"
+				 name="right_avatar_list"
+				 top="20"
+				 width="219">
+					<scroll_list.columns
+					 label=""
+					 name="icon"
+					 relative_width="0.0"/>
+					<scroll_list.columns
+					 label="Name"
+					 name="name"
+					 relative_width="1.0"/>
+					<scroll_list.columns
+					 label="UUID"
+					 name="uuid"
+					 relative_width="0.0"/>
+					<scroll_list.columns
+					 label="SaveFileName"
+					 name="saveFileName"
+					 relative_width="0.0"/>
+				</scroll_list>
+	 <button
+				 height="21"
+				 follows="top|left"
+				 layout="topleft"
+				 label=""
+				 image_overlay="Refresh_Off"
+				 image_unselected="Toolbar_Middle_Off"
+				 name="right_avatar_refresh"
+				 tool_tip="Refresh the list of avatars in range"
+				 width="20"
+				 top="245"
+				 left="3">
+					<button.commit_callback
+					 function="Poser.RefreshAvatars"/>
+				</button>
+				<button
+				 height="21"
+				 follows="top|left"
+				 enabled="false"
+				 is_toggle="true"
+				 label="Start Posing"
+				 top_delta="0"
+				 left_pad="2"
+				 label_selected="Stop Posing"
+				 image_hover_unselected="Toolbar_Middle_Over"
+				 image_selected="Toolbar_Middle_Selected"
+				 image_unselected="Toolbar_Middle_Off"
+				 name="right_start_stop_btn"
+				 tool_tip="Start or stop posing the selected avatar"
+				 width="195">
+					<button.commit_callback
+					 function="Poser.StartStopPose"/>
+				</button>
 			</panel>
 		</layout_panel>
 		<layout_panel

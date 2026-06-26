@@ -238,7 +238,60 @@
          left="10"
          width="500"
          tool_tip="Causes repeated keybinds (e.g. ctrl+shift+y) to alternate between the requested preset &amp; shared environment"/>
-    </panel>
+        <check_box
+         top_pad="10"
+         control_name="FSRestartAvoidEnabled"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         name="FSRestartAvoidEnabled"
+         label="Enable region restart avoidance"
+         left="10"
+         width="500"
+         tool_tip="When enabled, automatically teleports you to a configured destination when a region restart is detected. Will attempt to return when the original region is back online."/>
+        <spinner
+         top_pad="5"
+         control_name="FSRestartAvoidDelay"
+         enabled_control="FSRestartAvoidEnabled"
+         decimal_digits="0"
+         follows="left|top"
+         height="18"
+         layout="topleft"
+         left="25"
+         increment="1"
+         initial_value="30"
+         max_val="120"
+         min_val="1"
+         name="FSRestartAvoidDelay"
+         label="Delay before teleport (seconds):"
+         width="300" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         left="25"
+         name="FSRestartAvoidDestLabel"
+         top_pad="10"
+         width="500">
+         Emergency destinations (region/x/y/z per line):
+        </text>
+        <text_editor
+         control_name="FSRestartAvoidDestinations"
+         enabled_control="FSRestartAvoidEnabled"
+         use_ellipses="false"
+         commit_on_focus_lost="true"
+         follows="left|top"
+         height="80"
+         layout="topleft"
+         left="25"
+         top_pad="2"
+         name="FSRestartAvoidDestinations"
+         width="475"
+         word_wrap="false">
+        </text_editor>
+     </panel>
 
 
     <!--Protection-->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_poser" title="Poseur d'avatars et d'animesh">
+<floater can_resize="true" min_width="720" min_height="330" name="floater_poser" title="Poseur d'avatars et d'animesh">
 	<string name="header_mHead">Corps</string>
 	<string name="header_mFaceForeheadLeft">Front/sourcils</string>
 	<string name="header_mEyeLeft">Yeux/Paupières</string>
@@ -309,6 +309,19 @@
 					<scroll_list.columns label="Date" name="load_file_date_column"/>
 				</scroll_list>
 				<line_editor label="Nom de la pose à enregistrer..." name="pose_save_name" />
+			</panel>
+			<panel left="490" height="300" name="right_avatar_panel">
+				<text name="right_avatar_label">
+					Avatars in Range:
+				</text>
+				<scroll_list keep_one_selected="false" name="right_avatar_list">
+					<scroll_list.columns label="" name="icon"/>
+					<scroll_list.columns label="Name" name="name"/>
+					<scroll_list.columns label="UUID" name="uuid"/>
+					<scroll_list.columns label="SaveFileName" name="saveFileName"/>
+				</scroll_list>
+				<button name="right_avatar_refresh" tool_tip="Refresh the list of avatars in range"/>
+				<button label="Start Posing" label_selected="Stop Posing" name="right_start_stop_btn"/>
 			</panel>
 		</layout_panel>
 		<layout_panel name="button_controls_layout">

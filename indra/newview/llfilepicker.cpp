@@ -628,6 +628,16 @@ bool LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
         L"Comma seperated values (*.csv)\0*.csv\0" \
         L"\0";
         break;
+    case FFSAVE_OGG:
+        if (filename.empty())
+        {
+            wcsncpy( mFilesW, L"untitled.ogg", FILENAME_BUFFER_SIZE);
+        }
+        mOFN.lpstrDefExt = L"ogg";
+        mOFN.lpstrFilter =
+        L"OGG Audio File (*.ogg)\0*.ogg\0" \
+        L"\0";
+        break;
 // </Firestorm>
     default:
         return false;
@@ -722,6 +732,7 @@ std::unique_ptr<std::vector<std::string>> LLFilePicker::navOpenFilterProc(ELoadF
             break;
         case FFLOAD_WAV:
             allowedv->push_back("wav");
+            allowedv->push_back("ogg");
             break;
         case FFLOAD_ANIM:
             allowedv->push_back("bvh");
@@ -910,6 +921,11 @@ void set_nav_save_data(LLFilePicker::ESaveFilter filter, std::string &extension,
             type = "CSV ";
             creator = "\?\?\?\?";
             extension = "csv";
+            break;
+        case LLFilePicker::FFSAVE_OGG:
+            type = "\?\?\?\?";
+            creator = "\?\?\?\?";
+            extension = "ogg";
             break;
         // </FS:CR>
         case LLFilePicker::FFSAVE_BEAM:
@@ -1621,6 +1637,11 @@ bool LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
         case FFSAVE_CSV:
             caption += add_simple_pattern_filter_to_gtkchooser
                 (picker, "*.csv", LLTrans::getString("csv_files") + " (*.csv)");
+            break;
+        case FFSAVE_OGG:
+            caption += add_simple_pattern_filter_to_gtkchooser
+                (picker, "*.ogg", LLTrans::getString("ogg_audio_file") + " (*.ogg)");
+            break;
 // </FS:CR>
         default:;
             break;
@@ -1909,6 +1930,10 @@ bool LLFilePicker::openFileDialog( int32_t filter, bool blocking, EType aType )
             case FFSAVE_CSV:
                 file_type = "csv_files";
                 file_dialog_filter = "*.csv";
+                break;
+            case FFSAVE_OGG:
+                file_type = "ogg_audio_file";
+                file_dialog_filter = "*.ogg";
                 break;
 
 #ifdef _CORY_TESTING

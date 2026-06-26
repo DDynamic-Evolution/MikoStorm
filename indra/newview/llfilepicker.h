@@ -123,7 +123,8 @@ public:
         // Firestorm additions
         FFSAVE_BEAM = 50,
         FFSAVE_EXPORT = 51,
-        FFSAVE_CSV = 52
+        FFSAVE_CSV = 52,
+        FFSAVE_OGG = 53
     };
 
     // open the dialog. This is a modal operation
