@@ -964,8 +964,8 @@ with the same filename but different name
 
 
   <!-- Firstorm virtual system folders - added in FS 2.6.1 -->
-  <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
-  <texture name="Inv_FirestormClosed"	file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_MikoStormOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_MikoStormClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_PhoenixOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_PhoenixClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_RLVOpen"			file_name="icons/Inv_SysOpen.png" />

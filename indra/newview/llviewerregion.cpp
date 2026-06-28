@@ -3238,6 +3238,8 @@ void LLViewerRegion::clearVOCacheFromMemory()
     mImpl->mCacheMap.clear();
 }
 
+static void region_handshake_reply_cb(void**, S32 result);
+
 void LLViewerRegion::unpackRegionHandshake()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_NETWORK;
@@ -3448,9 +3450,23 @@ void LLViewerRegion::unpackRegionHandshake()
         flags |= 0x00000002; //set the bit 1 to be 1 to tell sim the cache file is empty, no need to send cache probes.
     }
     msg->addU32("Flags", flags );
-    msg->sendReliable(host);
+    msg->sendReliable(
+        host,
+        gSavedSettings.getS32("UseCircuitCodeMaxRetries"),
+        false,
+        (F32Seconds)gSavedSettings.getF32("UseCircuitCodeTimeout"),
+        region_handshake_reply_cb,
+        NULL);
 
     mRegionTimer.reset(); //reset region timer.
+}
+
+static void region_handshake_reply_cb(void**, S32 result)
+{
+    if (result && !LLApp::isExiting())
+    {
+        LL_WARNS("Region") << "RegionHandshakeReply failed with error code " << result << LL_ENDL;
+    }
 }
 
 // static

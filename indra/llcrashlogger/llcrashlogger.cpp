@@ -559,7 +559,7 @@ bool LLCrashLogger::sendCrashLog(std::string dump_dir)
 
     // std::string dump_path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,
     //                                                        "SecondLifeCrashReport");
-    std::string dump_path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "FirestormCrashReport");
+    std::string dump_path = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "MikoStormCrashReport");
     std::string report_file = dump_path + ".log";
 
     LL_DEBUGS("CRASHREPORT") << "sending " << report_file << LL_ENDL;
@@ -686,18 +686,18 @@ bool LLCrashLogger::init()
 
     // We assume that all the logs we're looking for reside on the current drive
 #if ADDRESS_SIZE == 64
-    gDirUtilp->initAppDirs( "Firestorm_x64" );
+    gDirUtilp->initAppDirs( "MikoStorm_x64" );
 #else
-    gDirUtilp->initAppDirs("Firestorm");
+    gDirUtilp->initAppDirs("MikoStorm");
 #endif
 
     LLError::initForApplication(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, ""), gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 
     // Default to the product name "Second Life" (this is overridden by the -name argument)
 
-    // <FS:ND> Change default to Firestorm
+    // <FS:ND> Change default to MikoStorm
     //  mProductName = "Second Life";
-    mProductName = "Firestorm";
+    mProductName = "MikoStorm";
     // </FS:ND>
 
     // Rename current log file to ".old"

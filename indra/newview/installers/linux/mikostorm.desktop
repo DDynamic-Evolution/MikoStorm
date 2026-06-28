@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Gridstorm
-Exec=firestorm
+Name=MikoStorm
+Exec=mikostorm
 Comment=Client for virtual worlds
-Icon=firestorm_icon
+Icon=mikostorm_icon
 Categories=Development;
 Terminal=true

@@ -68,7 +68,7 @@ showUsage()
     echo
     echo "  --clean                  : Remove past builds & configuration"
     echo "  --config                 : Generate a new architecture-specific config"
-    echo "  --build                  : Build Firestorm"
+    echo "  --build                  : Build MikoStorm"
     echo "  --version                : Update version number"
     echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
     echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
@@ -394,7 +394,7 @@ if [ -z $CHANNEL ] ; then
 else
     CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
 fi
-CHANNEL="Firestorm-$CHANNEL"
+CHANNEL="MikoStorm-$CHANNEL"
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     echo "Cleaning $TARGET_PLATFORM...."
@@ -531,14 +531,14 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
         # This name is consumed by indra/newview/CMakeLists.txt
         if [ $TARGET_PLATFORM == "linux" ] ; then
-            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/firestorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/mikostorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
         else
-            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/firestorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
+            VIEWER_SYMBOL_FILE="${BUILD_DIR}/newview/$BTYPE/mikostorm-symbols-${TARGET_PLATFORM}-${AUTOBUILD_ADDRSIZE}.tar.bz2"
         fi
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING=ON"
         if [ ! -z $CHANNEL_SIMPLE ]
         then
-            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=firestorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:] | sed -e 's/x64//' | sed 's/[^A-Za-z0-9]//g'`
+            CRASH_REPORTING="$CRASH_REPORTING -DUSE_BUGSPLAT=On -DBUGSPLAT_DB=mikostorm_"`echo $CHANNEL_SIMPLE | tr [:upper:] [:lower:] | sed -e 's/x64//' | sed 's/[^A-Za-z0-9]//g'`
         fi
     else
         CRASH_REPORTING="-DRELEASE_CRASH_REPORTING:BOOL=OFF"
@@ -617,7 +617,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         else
             JOBS="-jobs $JOBS"
         fi
-        xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS 2>&1 | tee -a "$LOG"
+        xcodebuild -configuration $BTYPE -project MikoStorm.xcodeproj $JOBS 2>&1 | tee -a "$LOG"
         build_status=${PIPESTATUS[0]}
     elif [ $TARGET_PLATFORM == "linux" ] ; then
         if [ $JOBS == "0" ] ; then
@@ -633,16 +633,16 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
         # VS2026+ now uses .slnx so determine which one exists
-        if [ -f "Firestorm.slnx" ]; then
-          SOLUTION="Firestorm.slnx"
-        elif [ -f "Firestorm.sln" ]; then
-          SOLUTION="Firestorm.sln"
+        if [ -f "MikoStorm.slnx" ]; then
+          SOLUTION="MikoStorm.slnx"
+        elif [ -f "MikoStorm.sln" ]; then
+          SOLUTION="MikoStorm.sln"
         else
-          echo "Build failed! No Firestorm.slnx or Firestorm.sln found"
+          echo "Build failed! No MikoStorm.slnx or MikoStorm.sln found"
           exit 1
         fi
-        msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
-            -flp1:"errorsonly;LogFile=logs\\FirestormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
+        msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\MikoStormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
+            -flp1:"errorsonly;LogFile=logs\\MikoStormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
             -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
         build_status=$?
     fi

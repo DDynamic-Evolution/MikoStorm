@@ -1,6 +1,6 @@
 # Build instructions for Windows
 
-This page describes all necessary steps to build the Firestorm viewer for Windows. For building instructions up to (and including) release 6.5.3, see the archived version for [building with Python 2.7](https://wiki.firestormviewer.org/archive:fs_compiling_firestorm_windows_py_27).
+This page describes all necessary steps to build the MikoStorm viewer for Windows. For building instructions up to (and including) release 6.5.3, see the archived version for [building with Python 2.7](https://wiki.firestormviewer.org/archive:fs_compiling_firestorm_windows_py_27).
 
 > [!WARNING]
 > Please note that we do not give support for compiling the viewer on your own. However, there is a self-compilers group in Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
@@ -275,7 +275,7 @@ There are a number of switches you can use to modify the configuration process. 
 - **--fmodstudio** controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using Autobuild](#fmod-studio-using-autobuild) for this to work. You will not have any sound if you do not include FMOD.
 - **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling.
 - **--package** makes sure all files are copied into viewers output directory. You won't be able to start your compiled viewer if you don't enable package or do 'compile' it in VS. It will also run NSIS to create a setup package.
-- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
+- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "MikoStorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
 
 > [!TIP]
@@ -309,9 +309,9 @@ Compiling will take quite a bit of time.
 
 ### Building from within Visual Studio
 
-Inside the Firestorm source folder, you will find a folder named build-vc170-\<architecture\>, with \<architecture\> either being 32 or 64, depending on what you chose during the configuration step. Inside the folder is the Visual Studio solution file for Firestorm, called Firestorm.sln.
+Inside the Firestorm source folder, you will find a folder named build-vc170-\<architecture\>, with \<architecture\> either being 32 or 64, depending on what you chose during the configuration step. Inside the folder is the Visual Studio solution file for Firestorm, called MikoStorm.sln.
 
-- Double-click Firestorm.sln to open the Firestorm solution in Visual Studio.
+- Double-click MikoStorm.sln to open the Firestorm solution in Visual Studio.
 - From the menu, choose Build -> Build Solution
 - Wait until the build is finished
 

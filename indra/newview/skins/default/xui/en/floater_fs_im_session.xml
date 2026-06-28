@@ -505,6 +505,36 @@
        width="100" />
   </layout_panel>
   <!-- END: FS Prefix -->
+  <!-- EncroChat encryption toggle -->
+    <layout_panel
+      name="encrochat_panel"
+      auto_resize="false"
+      user_resize="false"
+      top="0"
+      layout="topleft"
+      height="20"
+      width="105"
+      follows="left|top">
+      <icon
+        follows="left|right"
+        image_name="Toolbar_Middle_Off"
+        left="2"
+        name="dummy_icon_encrochat"
+        top="0"
+        height="20"
+        width="103"/>
+      <check_box
+       control_name="FSEncroChatEnabled"
+       follows="left|top"
+       height="19"
+       label="Encrypt"
+       layout="topleft"
+       top="0"
+       left_delta="5"
+       name="encrochat_toggle"
+       tool_tip="Enable EncroChat end-to-end encryption for this conversation"
+       width="100" />
+  </layout_panel>
     <layout_panel
       name="lp_bar"
       auto_resize="true"

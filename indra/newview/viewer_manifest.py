@@ -45,7 +45,7 @@ import time
 
 sys.dont_write_bytecode = True # <FS:Ansariel> Prevents creating __pycache__ directory
 
-from fs_viewer_manifest import FSViewerManifest #<FS:ND/> Manifest extensions for Firestorm
+from fs_viewer_manifest import FSViewerManifest #<FS:ND/> Manifest extensions for MikoStorm
 
 viewer_dir = os.path.dirname(__file__)
 # Add indra/lib/python to our path so we don't have to muck with PYTHONPATH.
@@ -193,7 +193,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("*.txt")
                 self.path("*.xml")
                 
-            # <FS:AO> Include firestorm resources
+            # <FS:AO> Include mikostorm resources
             with self.prefix(src_dst="fs_resources"):
                 self.path("*.lsltxt")
                 self.path("*.dae") # <FS:Beq> FIRE-30963 - better physics defaults
@@ -203,12 +203,12 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     self.path("skins.xml")
                     # include the entire textures directory recursively
                     with self.prefix(src_dst="*/textures"):
-                            self.path("*/*.jpg") # <FS:TJ> Needed for Firestorm skins
+                            self.path("*/*.jpg") # <FS:TJ> Needed for MikoStorm skins
                             self.path("*/*.tga") # <FS:Ansariel> Needed for legacy icons
                             self.path("*/*.png")
                             self.path("*.tga")
                             self.path("*.j2c")
-                            self.path("*.jpg") # <FS:Ansariel> Needed for Firestorm
+                            self.path("*.jpg") # <FS:Ansariel> Needed for MikoStorm
                             self.path("*.png")
                             self.path("textures.xml")
                     self.path("*/xui/*/*.xml")
@@ -625,7 +625,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         if self.is_packaging_viewer():
-            # Find firestorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
+            # Find mikostorm-bin.exe in the 'configuration' dir, then rename it to the result of final_exe.
             self.path(src='%s/firestorm-bin.exe' % self.args['configuration'], dst=self.final_exe())
 
             # <FS:Ansariel> Undo Github-Build stuff - I don't think we need this
@@ -1035,7 +1035,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
         #                dirs_exist_ok=True)
         # </FS:Ansariel>
 
-        tempfile = "firestorm_setup_tmp.nsi"
+        tempfile = "mikostorm_setup_tmp.nsi"
 
         self.fs_sign_win_binaries() # <FS:ND/> Sign files, step one. Sign compiled binaries
 
@@ -1333,7 +1333,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         # copy over the build result (this is a no-op if run within the xcode
         # script)
         #self.path(os.path.join(self.args['configuration'], self.channel() + ".app"), dst="")
-        self.path(os.path.join(self.args['configuration'], "Firestorm.app"), dst="")
+        self.path(os.path.join(self.args['configuration'], "MikoStorm.app"), dst="")
 
         pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
         relpkgdir = os.path.join(pkgdir, "lib", "release")
@@ -1345,7 +1345,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
 
         with self.prefix(src="", dst="Contents"):  # everything goes in Contents
             with self.prefix(dst="MacOS"):
-                executable = self.dst_path_of("Firestorm") # locate the executable within the bundle.
+                executable = self.dst_path_of("MikoStorm") # locate the executable within the bundle.
 
             bugsplat_db = self.args.get('bugsplat')
             print(f"debug: bugsplat_db={bugsplat_db}")
@@ -1608,7 +1608,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
         if ("package" in self.args['actions'] or 
             "unpacked" in self.args['actions']):
             self.run_command_shell('strip -S %(viewer_binary)r' %
-                            { 'viewer_binary' : self.dst_path_of('Contents/MacOS/Firestorm')})
+                            { 'viewer_binary' : self.dst_path_of('Contents/MacOS/MikoStorm')})
 # </FS:Ansariel> construct method VMP trampoline crazy VMP launcher juggling shamelessly replaced with old version
 
     def package_finish(self):
@@ -1655,9 +1655,9 @@ class Darwin_x86_64_Manifest(ViewerManifest):
             # will use the release .DS_Store, and will look broken.
             # - Ambroff 2008-08-20
             #<FS:TS> Select proper directory based on flavor and build type
-            dmg_template_prefix = 'firestorm'
+            dmg_template_prefix = 'mikostorm'
             if self.fs_is_opensim():
-                dmg_template_prefix = 'firestormos'
+                dmg_template_prefix = 'mikostormos'
             dmg_template = os.path.join(
                 'installers', 'darwin', '%s-%s-dmg' % (dmg_template_prefix, self.channel_type()))
             print ("Trying template directory", dmg_template)
@@ -1785,7 +1785,7 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                         plain_sign += glob.glob(resources + "SLPlugin.app/Contents/Frameworks/Chromium Embedded Framework.framework/Libraries/*.dylib")
 
                         deep_sign = [
-                            # <FS:ND> Firestorm does not ship SLVersionChecker
+                            # <FS:ND> MikoStorm does not ship SLVersionChecker
                             #resources + "updater/SLVersionChecker",
                             resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
                             resources + "SLVoice",
@@ -1882,13 +1882,13 @@ class LinuxManifest(ViewerManifest):
         self.path("licenses-linux.txt","licenses.txt")
         self.path("VivoxAUP.txt")
         self.path("LGPL-license.txt")
-        self.path("res/firestorm_icon.png","firestorm_icon.png")
+        self.path("res/miko_storm.png","mikostorm_icon.png")
         with self.prefix("linux_tools"):
             self.path("client-readme.txt","README-linux.txt")
-            self.path("FIRESTORM_DESKTOPINSTALL.txt","FIRESTORM_DESKTOPINSTALL.txt")
+            self.path("FIRESTORM_DESKTOPINSTALL.txt","MIKOSTORM_DESKTOPINSTALL.txt")
             self.path("client-readme-voice.txt","README-linux-voice.txt")
             self.path("client-readme-joystick.txt","README-linux-joystick.txt")
-            self.path("wrapper.sh","firestorm")
+            self.path("wrapper.sh","mikostorm")
             with self.prefix(dst="etc"):
                 self.path("handle_secondlifeprotocol.sh")
                 self.path("register_secondlifeprotocol.sh")
@@ -1898,7 +1898,7 @@ class LinuxManifest(ViewerManifest):
 
         with self.prefix(dst="bin"):
             self.path( os.path.join(os.pardir,'build_data.json'), "build_data.json" )
-            self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
+            self.path("firestorm-bin","do-not-directly-run-mikostorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             #this copies over the python wrapper script, associated utilities and required libraries, see SL-321, SL-322 and SL-323
@@ -1914,9 +1914,9 @@ class LinuxManifest(ViewerManifest):
         icon_path = self.icon_path()
         print("DEBUG: icon_path '%s'" % icon_path)
         with self.prefix(src=icon_path) :
-            self.path("firestorm_256.png","firestorm_48.png")
+            self.path("firestorm_256.png","mikostorm_48.png")
             #with self.prefix(dst="res-sdl") :
-            #    self.path("firestorm_256.bmp","ll_icon.BMP")
+            #    self.path("mikostorm_256.bmp","ll_icon.BMP")
 
         # plugins
         with self.prefix(src=os.path.join(self.args['build'], os.pardir, 'media_plugins'), dst="bin/llplugin"):

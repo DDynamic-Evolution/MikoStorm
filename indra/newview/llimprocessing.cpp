@@ -48,6 +48,8 @@
 #include "llregex.h"
 #include "llregionhandle.h"
 #include "llsdserialize.h"
+
+#include "fsimcipher.h"
 #include "llslurl.h"
 #include "llstring.h"
 #include "lltoastnotifypanel.h"
@@ -884,6 +886,30 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
         }
     }
     // </FS:Zi>
+
+    // EncroChat decryption for incoming IMs
+    {
+        static LLCachedControl<bool> encrochat_enabled(gSavedPerAccountSettings, "FSEncroChatEnabled", false);
+        if (encrochat_enabled && message.size() > FSIMCipher::ENCRYPTED_MARKER.size() &&
+            message.substr(0, FSIMCipher::ENCRYPTED_MARKER.size()) == FSIMCipher::ENCRYPTED_MARKER)
+        {
+            static LLCachedControl<std::string> encrochat_key(gSavedPerAccountSettings, "FSEncroChatKey", "");
+            std::string key = encrochat_key;
+            if (!key.empty())
+            {
+                std::string decrypted = FSIMCipher::decrypt(message.substr(FSIMCipher::ENCRYPTED_MARKER.size()), key);
+                if (!decrypted.empty())
+                {
+                    LL_DEBUGS("EncroChat") << "Successfully decrypted IM message" << LL_ENDL;
+                    message = decrypted;
+                }
+                else
+                {
+                    LL_WARNS("EncroChat") << "Failed to decrypt IM message" << LL_ENDL;
+                }
+            }
+        }
+    }
 
     std::string notice_name;
     LLSD notice_args;

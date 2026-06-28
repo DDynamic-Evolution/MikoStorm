@@ -18,8 +18,8 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.31.0")
     cmake_policy(SET CMP0179 NEW)
 endif()
 
-set(ROOT_PROJECT_NAME "Gridstorm" CACHE STRING
-    "The root project/makefile/solution name. Defaults to Gridstorm.")
+set(ROOT_PROJECT_NAME "MikoStorm" CACHE STRING
+    "The root project/makefile/solution name. Defaults to MikoStorm.")
 project(${ROOT_PROJECT_NAME})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake"  "${CMAKE_CURRENT_BINARY_DIR}")

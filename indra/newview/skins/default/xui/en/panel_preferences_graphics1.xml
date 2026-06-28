@@ -952,6 +952,20 @@
      follows="all"
      label="Hardware Settings"
      name="Hardware Settings" >
+      <scroll_container
+         follows="all"
+         layout="topleft"
+         left="0"
+         top="0"
+         name="hardware_tab_scroll"
+         bottom="-1"
+         right="-1">
+        <panel
+         height="1700"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="524">
         <check_box
          control_name="RenderAnisotropic"
          height="16"
@@ -1230,6 +1244,142 @@ If you do not understand the distinction then leave this control alone."
          width="100">
             Second(s)
         </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="10"
+         name="ThreadSettingsHeader"
+         top_pad="15"
+         width="500">
+            Thread Settings:
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="15"
+         name="TextureFetchConcurrency_label"
+         top_pad="10"
+         width="275">
+            Texture Download (0=auto):
+        </text>
+        <spinner
+          control_name="TextureFetchConcurrency"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="12"
+          min_val="0"
+          name="TextureFetchConcurrency"
+          tool_tip="Maximum concurrent HTTP connections for texture downloads. 0 = use default (8). Changes apply immediately."
+          top_delta="-5"
+          width="60"
+        />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="15"
+         name="AssetFetchConcurrency_label"
+         top_pad="10"
+         width="275">
+            Asset Download (0=auto):
+        </text>
+        <spinner
+          control_name="AssetFetchConcurrency"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="16"
+          min_val="0"
+          name="AssetFetchConcurrency"
+          tool_tip="Maximum concurrent HTTP connections for asset downloads. 0 = use default (12). Changes apply immediately."
+          top_delta="-5"
+          width="60"
+        />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="15"
+         name="FSImageDecodeThreads_label"
+         top_pad="10"
+         width="275">
+            Image Decode Threads (0=auto, requires restart):
+        </text>
+        <spinner
+          control_name="FSImageDecodeThreads"
+          decimal_digits="0"
+          follows="left|top"
+          height="20"
+          increment="1"
+          layout="topleft"
+          left_pad="5"
+          max_val="32"
+          min_val="0"
+          name="FSImageDecodeThreads"
+          tool_tip="Number of threads for image texture decoding. 0 = auto (CPU cores - 4). Requires restart."
+          top_delta="-5"
+          width="60"
+        />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="15"
+         name="RenderMultithreadingHeader"
+         top_pad="15"
+         width="500">
+            Render Multi-Threading:
+        </text>
+
+        <check_box
+          control_name="RenderGLMultiThreadedTextures"
+          height="16"
+          label="Multi-threaded texture loading (requires restart/skip on Intel)"
+          layout="topleft"
+          left="15"
+          name="RenderGLMultiThreadedTextures"
+          tool_tip="Allow OpenGL to use multiple render contexts for loading textures (may reduce frame stutters, doesn't play nice with Intel drivers)."
+          top_pad="5"
+          width="385"
+        />
+        <check_box
+          control_name="RenderGLMultiThreadedMedia"
+          height="16"
+          label="Multi-threaded media loading (requires restart/skip on Intel)"
+          layout="topleft"
+          left="15"
+          name="RenderGLMultiThreadedMedia"
+          tool_tip="Allow OpenGL to use multiple render contexts for playing media (may reduce frame stutters, doesn't play nice with Intel drivers)."
+          top_pad="5"
+          width="385"
+        />
+
+        </panel>
+      </scroll_container>
     </panel>
 
 <!--Rendering-->

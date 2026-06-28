@@ -37,8 +37,8 @@
 const S32 COMPUTE_STOCK_INFINITE = -1;
 const S32 COMPUTE_STOCK_NOT_EVALUATED = -2;
 
-// <FS:TT> - Firestorm folder name for use by AO, bridge and possibly others
-#define ROOT_FIRESTORM_FOLDER   "#Firestorm"
+// <FS:TT> - MikoStorm folder name for use by AO, bridge and possibly others
+#define ROOT_FIRESTORM_FOLDER   "#MikoStorm"
 // </FS:TT>
 
 /********************************************************************************

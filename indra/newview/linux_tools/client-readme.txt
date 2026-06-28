@@ -72,11 +72,11 @@ Life Linux client is very similar to that for Windows, as detailed at:
 3. INSTALLING & RUNNING
 -=-=-=-=-=-=-=-=-=-=-=-
 
-The Firestorm Linux client can entirely run from the directory you have
+The MikoStorm Linux client can entirely run from the directory you have
 unpacked it into - no installation step is required.  If you wish to
 perform a separate installation step anyway, you may run './install.sh'
 
-Run './firestorm' from the installation directory to start Firestorm.
+Run './mikostorm' from the installation directory to start MikoStorm.
 
 For in-world MOVIE and MUSIC PLAYBACK, you will need (32-bit) GStreamer 0.10
 installed on your system.  This is optional - it is not required for general
@@ -86,8 +86,8 @@ plugins you have; if you cannot play a certain in-world movie then you are
 probably missing the appropriate GStreamer plugin on your system - you may
 be able to install it (see TROUBLESHOOTING).
 
-User data is stored in the hidden directory ~/.firestorm by default; you may
-override this location with the FIRESTORM_USER_DIR, or FIRESTORM_X64_USER_DIR
+User data is stored in the hidden directory ~/.mikostorm by default; you may
+override this location with the MIKOSTORM_USER_DIR, or MIKOSTORM_X64_USER_DIR
 if using the 64 bit version, environment variable if you wish.
 
 

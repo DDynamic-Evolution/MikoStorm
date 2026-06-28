@@ -243,6 +243,7 @@ public:
     void set_cookies(const std::string &cookies);
     void cookies_enabled(bool enable);
     void proxy_setup(bool enable, const std::string &host = LLStringUtil::null, int port = 0);
+    void setGPUDisabled(const bool disabled);
     void browse_stop();
     void browse_reload(bool ignore_cache = false);
     void browse_forward();

@@ -14,7 +14,7 @@ The steps listed below are expected to be run from a shell prompt. Simply copy a
 You will need to install the following tools:
 
 ### Xcode
-XCode is a free download from Apple but you will need an Apple ID to login and access the download section. The current version used to compile Firestorm is 16.4.
+XCode is a free download from Apple but you will need an Apple ID to login and access the download section. The current version used to compile MikoStorm is 16.4.
 - Go [here](https://developer.apple.com/download) and log in with an apple ID.
 - Either find the 16.4 download in the list or use this [direct link](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_16.4/Xcode_16.4.xip) (will prompt you to log in if you skipped the above step.)
 - Open the downloaded file and copy the Xcode application to the Applications folder.
@@ -218,7 +218,7 @@ There are a number of switches you can use to modify the configuration process. 
 - **--fmodstudio** controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using autobuild](#fmod-studio-using-autobuild) for this to work.
 - **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling. 
 - **--package** makes sure all files are copied into viewers output directory. It will also generate a DMG installer package
-- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
+- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "MikoStorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
 
 > [!TIP]
