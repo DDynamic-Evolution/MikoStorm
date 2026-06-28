@@ -9,6 +9,7 @@
 #include <vector>
 
 const std::string FSIMCipher::ENCRYPTED_MARKER = "[E2E]";
+const std::string FSIMCipher::FALLBACK_MARKER = "!ENC!";
 
 static const int PBKDF2_ITERATIONS = 100000;
 static const int SALT_SIZE = 16;

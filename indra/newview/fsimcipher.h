@@ -10,6 +10,7 @@ public:
     static std::string decrypt(const std::string& ciphertext_b64, const std::string& password);
 
     static const std::string ENCRYPTED_MARKER;
+    static const std::string FALLBACK_MARKER;
 
 private:
     static std::string base64Encode(const unsigned char* data, size_t length);
