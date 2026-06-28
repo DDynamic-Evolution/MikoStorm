@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Firestorm Viewer Installation Script
+# MikoStorm Viewer Installation Script
 
 # ANSI color codes for styling
 VT102_STYLE_NORMAL='\E[0m'
@@ -12,8 +12,8 @@ RUN_PATH=$(dirname "${SCRIPTSRC}" || echo .)
 tarball_path="${RUN_PATH}"
 
 # Default installation directories
-DEFAULT_SYSTEM_INSTALL_DIR="/opt/firestorm"
-DEFAULT_USER_INSTALL_DIR="$HOME/firestorm"
+DEFAULT_SYSTEM_INSTALL_DIR="/opt/mikostorm"
+DEFAULT_USER_INSTALL_DIR="$HOME/mikostorm"
 
 # Default number of retained backups
 DEFAULT_RETAIN_BACKUPS=5
@@ -106,7 +106,7 @@ install_to_prefix() {
         die "Cannot install into a subdirectory of the source package."
     fi
 
-    echo " - Installing Firestorm Viewer to $install_prefix"
+    echo " - Installing MikoStorm Viewer to $install_prefix"
 
     # Copy all files from the tarball to the installation directory
     cp -a "${tarball_path}/." "$install_prefix/" || die "Failed to complete the installation!"
@@ -116,8 +116,8 @@ install_to_prefix() {
 # Function for user-specific installation (non-root)
 homedir_install() {
     warn "You are not running as a privileged user, so you will only be able"
-    warn "to install the Firestorm Viewer in your home directory. If you"
-    warn "would like to install the Firestorm Viewer system-wide, please run"
+    warn "to install the MikoStorm Viewer in your home directory. If you"
+    warn "would like to install the MikoStorm Viewer system-wide, please run"
     warn "this script as the root user, or with the 'sudo' command."
     echo
 
@@ -215,7 +215,7 @@ parse_arguments() {
 
 # Main installation workflow
 main() {
-    echo "Starting Firestorm Viewer installation script..."
+    echo "Starting MikoStorm Viewer installation script..."
 
     RETAIN_BACKUPS="${DEFAULT_RETAIN_BACKUPS}"
     NON_INTERACTIVE="false"
@@ -237,7 +237,7 @@ main() {
         homedir_install
     fi
 
-    echo "Firestorm Viewer installation process completed successfully."
+    echo "MikoStorm Viewer installation process completed successfully."
 }
 
 # Execute the main function with all passed arguments

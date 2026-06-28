@@ -190,7 +190,7 @@ There are a number of switches you can use to modify the configuration process. 
 - **--fmodstudio** will tell autobuiild to use the FmodStudio package when compiling.
 - **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling.
 - **--package** makes sure all files are copied into viewers output directory. It will also result in a bzip2 archive of the completed viewer. Enabled by default, you would have to use **-DPACKAGE:BOOL=Off** to disable it
-- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "Firestorm-". By default, the channel is "private" followed by your computer's name.
+- **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "MikoStorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.
 
 Most switches start with a double-dash (\--). And if you use any switches you must enclose them with a double-dash at the start and an optional double-dash at the end.
@@ -207,7 +207,7 @@ autobuild configure -A 64 -c ReleaseFS_open -- --fmodstudio
 autobuild configure -A 64 -c ReleaseFS_open -- --chan="MyBuild"
 ```
 
-In the last example, the channel and resulting viewer name would be "Firestorm-MyBuild". 
+In the last example, the channel and resulting viewer name would be "MikoStorm-MyBuild". 
 
 The first time you configure, several additional files will be downloaded from Firestorm and Second Life sources. These are mostly binary packages maintained outside the viewer development itself. And if you use the `--clean` switch, you will re-download them all.
 
@@ -295,5 +295,5 @@ rm ../build-linux-x86_64/packages/LICENSES/SDL.txt
 rm ../build-linux-x86_64/packages/lib/release/*SDL*
 ```
 - **Delayed sounds:** Some users have noted that OpenAL plays sounds from the viewer up to 20 seconds after they are triggered. There is no solution to this via the viewer, but there may be some solutions on the Internet. Compiling with FModStudio may resolve this issue.
-- **No sounds:** The viewer will try to use whatever sound service you have running, but might need a little coaxing. Read through the firestorm script inside the program directlry, you will find various commented options. Uncommenting one or more may help restore sound, as can compiling with FModStudio. Refer also to the README.Linux.txt and README-linux-voice.txt files in the program directory. 
+- **No sounds:** The viewer will try to use whatever sound service you have running, but might need a little coaxing. Read through the mikostorm script inside the program directlry, you will find various commented options. Uncommenting one or more may help restore sound, as can compiling with FModStudio. Refer also to the README.Linux.txt and README-linux-voice.txt files in the program directory. 
 - **Voice won't connect:** Refer to **[this link](https://wiki.firestormviewer.org/fs_voice#linux)** or the relevant link on **[this page](https://wiki.firestormviewer.org/linux)** to make needed adjustments to your computer and/or the SLVoice files.

@@ -9924,6 +9924,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>8</integer>
     </map>
 
+    <key>FSDisableEmbeddedBrowser</key>
+    <map>
+      <key>Comment</key>
+      <string>Disable the embedded web browser entirely (prevents all CEF/SLPlugin processes)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>CEFDisableGPU</key>
+    <map>
+      <key>Comment</key>
+      <string>Disable GPU acceleration in the CEF embedded browser (reduces crashes)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
    <key>PluginUseReadThread</key>
     <map>
       <key>Comment</key>

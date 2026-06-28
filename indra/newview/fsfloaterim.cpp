@@ -1060,6 +1060,9 @@ bool FSFloaterIM::postBuild()
     //But we cannot with the support group button, because testing groups are also support groups
     childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
 
+    static LLCachedControl<std::string> encrochat_key(gSavedPerAccountSettings, "FSEncroChatKey", "");
+    childSetVisible("encrochat_panel", !encrochat_key().empty());
+
     // <FS:Zi> Viewer version popup
     if (isFSSupportGroup || isFSTestingGroup)
     {

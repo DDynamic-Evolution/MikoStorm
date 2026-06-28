@@ -57,7 +57,7 @@ class FSViewerManifest:
         return "".join(self.fs_channel_unique().split())
 
     def fs_channel_unique(self):
-        return self.channel().replace("Firestorm", "").strip()
+        return self.channel().replace("MikoStorm", "").strip()
 
     def fs_sign_win_binaries(self):
         signtool_path = os.getenv('SIGNTOOL_PATH')
@@ -185,7 +185,7 @@ class FSViewerManifest:
         self.fs_save_symbols("darwin")
 
     def fs_save_symbols(self, osname):
-        if (os.path.exists("%s/firestorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
+        if (os.path.exists("%s/mikostorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
                                                                        osname,
                                                                        self.address_size))):
             # Rename to add version numbers

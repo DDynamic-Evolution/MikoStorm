@@ -87,10 +87,10 @@ Name ${INSTNAME}
 ;SubCaption 0 $(LicenseSubTitleSetup)	# Override "license agreement" text
 
 # <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version
-#!define MUI_ICON   "%%SOURCE%%\installers\windows\firestorm_icon_os.ico"
-#!define MUI_UNICON "%%SOURCE%%\installers\windows\firestorm_icon_os.ico"
-!define MUI_ICON   "%%SOURCE%%\installers\windows\firestorm_icon${ICON_SUFFIX}.ico"
-!define MUI_UNICON "%%SOURCE%%\installers\windows\firestorm_icon${ICON_SUFFIX}.ico"
+#!define MUI_ICON   "%%SOURCE%%\installers\windows\mikostorm_icon_os.ico"
+#!define MUI_UNICON "%%SOURCE%%\installers\windows\mikostorm_icon_os.ico"
+!define MUI_ICON   "%%SOURCE%%\installers\windows\mikostorm_icon${ICON_SUFFIX}.ico"
+!define MUI_UNICON "%%SOURCE%%\installers\windows\mikostorm_icon${ICON_SUFFIX}.ico"
 # </FS:Ansariel>
 
 BrandingText " "						# Bottom of window text
@@ -1011,28 +1011,28 @@ Push $2
 # Required since ProfileImagePath is of type REG_EXPAND_SZ
     ExpandEnvStrings $2 $2
 
-# Delete files in \Users\<User>\AppData\Roaming\Firestorm
+# Delete files in \Users\<User>\AppData\Roaming\MikoStorm
 # Remove all settings files but leave any other .txt files to preserve the chat logs
-    RMDir /r "$2\AppData\Roaming\Firestorm\logs"
-    RMDir /r "$2\AppData\Roaming\Firestorm\browser_profile"
-    RMDir /r "$2\AppData\Roaming\Firestorm\user_settings"
-    Delete  "$2\AppData\Roaming\Firestorm\*.xml"
-    Delete  "$2\AppData\Roaming\Firestorm\*.bmp"
-    Delete  "$2\AppData\Roaming\Firestorm\search_history.txt"
-    Delete  "$2\AppData\Roaming\Firestorm\plugin_cookies.txt"
-    Delete  "$2\AppData\Roaming\Firestorm\typed_locations.txt"
-# Delete files in \Users\<User>\AppData\Local\Firestorm
+    RMDir /r "$2\AppData\Roaming\MikoStorm\logs"
+    RMDir /r "$2\AppData\Roaming\MikoStorm\browser_profile"
+    RMDir /r "$2\AppData\Roaming\MikoStorm\user_settings"
+    Delete  "$2\AppData\Roaming\MikoStorm\*.xml"
+    Delete  "$2\AppData\Roaming\MikoStorm\*.bmp"
+    Delete  "$2\AppData\Roaming\MikoStorm\search_history.txt"
+    Delete  "$2\AppData\Roaming\MikoStorm\plugin_cookies.txt"
+    Delete  "$2\AppData\Roaming\MikoStorm\typed_locations.txt"
+# Delete files in \Users\<User>\AppData\Local\MikoStorm
     ${If} ${ISOPENSIM} == "0"
         ${If} ${IS64BIT} == "0"
-            RMDir /r "$2\AppData\Local\Firestorm"				#Delete the Havok cache folder
+            RMDir /r "$2\AppData\Local\MikoStorm"				#Delete the Havok cache folder
         ${Else}
-            RMDir /r "$2\AppData\Local\Firestorm_x64"			#Delete the OpenSim cache folder
+            RMDir /r "$2\AppData\Local\MikoStorm_x64"			#Delete the OpenSim cache folder
         ${EndIf}
     ${Else}
         ${If} ${IS64BIT} == "0"
-            RMDir /r "$2\AppData\Local\FirestormOS"			#Delete the Havok cache folder
+            RMDir /r "$2\AppData\Local\MikoStormOS"			#Delete the Havok cache folder
         ${Else}
-            RMDir /r "$2\AppData\Local\FirestormOS_x64"		#Delete the OpenSim cache folder
+            RMDir /r "$2\AppData\Local\MikoStormOS_x64"		#Delete the OpenSim cache folder
         ${EndIf}
     ${EndIf}
 
@@ -1045,11 +1045,11 @@ Pop $2
 Pop $1
 Pop $0
 
-# Delete files in ProgramData\Firestorm
+# Delete files in ProgramData\MikoStorm
 Push $0
   ReadRegStr $0 SHELL_CONTEXT "${MSCURRVER_KEY}\Explorer\Shell Folders" "Common AppData"
   StrCmp $0 "" +2
-  RMDir /r "$0\Firestorm"
+  RMDir /r "$0\MikoStorm"
 Pop $0
 
 Keep:

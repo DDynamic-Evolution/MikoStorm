@@ -1799,8 +1799,13 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
     {
         return NULL;
     }
-
     std::string plugin_basename = LLMIMETypes::implType(media_type);
+
+    // If embedded browser is disabled, block CEF plugin creation
+    static LLCachedControl<bool> sDisableEmbeddedBrowser(gSavedSettings, "FSDisableEmbeddedBrowser", false);
+    if (sDisableEmbeddedBrowser && plugin_basename == "media_plugin_cef")
+        return NULL;
+
     LLPluginClassMedia* media_source = NULL;
 
 #ifdef LL_LINUX
@@ -1897,6 +1902,13 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
             // configure and pass proxy setup based on debug settings that are
             // configured by UI in prefs -> setup
             media_source->proxy_setup(gSavedSettings.getBOOL("BrowserProxyEnabled"), gSavedSettings.getString("BrowserProxyAddress"), gSavedSettings.getS32("BrowserProxyPort"));
+
+            // <FS:CRASH> disable GPU acceleration in CEF to reduce crashes
+            if (plugin_basename == "media_plugin_cef")
+            {
+                static LLCachedControl<bool> sDisableGPU(gSavedSettings, "CEFDisableGPU", true);
+                media_source->setGPUDisabled(sDisableGPU);
+            }
 
             media_source->setTarget(target);
 

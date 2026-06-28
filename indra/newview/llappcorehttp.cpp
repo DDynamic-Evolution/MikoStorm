@@ -127,6 +127,7 @@ static const struct
 };
 
 static void setting_changed();
+static void thread_setting_changed();
 static void ssl_verification_changed();
 
 
@@ -311,12 +312,33 @@ void LLAppCoreHttp::init()
             }
         }
     }
+
+    // <PandaView> Save thread settings immediately on change
+    const char* thread_settings[] = { "FSImageDecodeThreads", "RenderGLMultiThreadedTextures", "RenderGLMultiThreadedMedia" };
+    for (int i = 0; i < 3; ++i)
+    {
+        if (gSavedSettings.controlExists(thread_settings[i]))
+        {
+            LLPointer<LLControlVariable> cntrl_ptr = gSavedSettings.getControl(thread_settings[i]);
+            if (cntrl_ptr.notNull())
+            {
+                cntrl_ptr->getCommitSignal()->connect(boost::bind(&thread_setting_changed));
+            }
+        }
+    }
+    // </PandaView>
 }
 
 
 void setting_changed()
 {
     LLAppViewer::instance()->getAppCoreHttp().refreshSettings(false);
+    gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), true);
+}
+
+void thread_setting_changed()
+{
+    gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), true);
 }
 
 void ssl_verification_changed()

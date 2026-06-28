@@ -61,7 +61,7 @@ export AUTOBUILD_VARIABLES_FILE=$HOME/src/fs-build-variables/variables
 cd ~/src/phoenix-firestorm
 
 # Configure (one time, re-run with --clean to force re-download)
-autobuild configure -A 64 -c ReleaseFS -- --avx2 --fmodstudio --no-opensim -DLL_TESTS:BOOL=FALSE -DVIEWER_CHANNEL:STRING="Firestorm-Release"
+autobuild configure -A 64 -c ReleaseFS -- --avx2 --fmodstudio --no-opensim -DLL_TESTS:BOOL=FALSE -DVIEWER_CHANNEL:STRING="MikoStorm-Release"
 
 # Build & package
 autobuild build -A 64 -c ReleaseFS -- --avx2 --fmodstudio --no-opensim -DLL_TESTS:BOOL=FALSE
@@ -77,7 +77,7 @@ autobuild build -A 64 -c ReleaseFS -- --avx2 --fmodstudio --no-opensim -DLL_TEST
 | `ReleaseOS` | no KDU, no FMOD, with OpenSim |
 
 ### Useful switches
-- `--chan "MyBuild"` → channel becomes `Firestorm-MyBuild`
+- `--chan "MyBuild"` → channel becomes `MikoStorm-MyBuild`
 - `--clean` → force re-download all packages
 - `-DLL_TESTS:BOOL=FALSE` → skip tests (faster)
 - `--package` → package the build after compiling (creates tarball)
@@ -86,7 +86,7 @@ autobuild build -A 64 -c ReleaseFS -- --avx2 --fmodstudio --no-opensim -DLL_TEST
 ## Run
 ```bash
 cd ~/src/phoenix-firestorm/build-linux-x86_64/newview/packaged
-./firestorm
+./mikostorm
 ```
 
 ## Troubleshooting

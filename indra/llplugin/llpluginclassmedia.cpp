@@ -1471,6 +1471,13 @@ void LLPluginClassMedia::cookies_enabled(bool enable)
     sendMessage(message);
 }
 
+void LLPluginClassMedia::setGPUDisabled(const bool disabled)
+{
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "gpu_disabled");
+    message.setValueBoolean("disable", disabled);
+    sendMessage(message);
+}
+
 void LLPluginClassMedia::proxy_setup(bool enable, const std::string &host, int port)
 {
     LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER, "proxy_setup");

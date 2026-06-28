@@ -214,7 +214,7 @@ const gint NOTIFICATION_TIMEOUT_MS = 5000;
 std::string Find_BMP_Resource( bool a_bSmallIcon )
 {
     const std::string ICON_128( "firestorm_icon128.png" );
-    const std::string ICON_512( "firestorm_icon.png" );
+    const std::string ICON_512( "miko_storm.png" );
 
     std::string strRet( gDirUtilp->getAppRODataDir() );
     strRet += gDirUtilp->getDirDelimiter();
@@ -264,7 +264,7 @@ DesktopNotifierLinux::DesktopNotifierLinux()
 
         LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notification icon: " << m_strIcon << LL_ENDL;
 
-        m_pNotification = m_pLibNotify->mNotificationNew( "Firestorm", "Intializing", m_strIcon.c_str(), 0 );
+        m_pNotification = m_pLibNotify->mNotificationNew( "MikoStorm", "Intializing", m_strIcon.c_str(), 0 );
     }
     else
     {

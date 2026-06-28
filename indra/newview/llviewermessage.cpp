@@ -494,6 +494,14 @@ void give_money(const LLUUID& uuid, LLViewerRegion* region, S32 amount, bool is_
     }
 }
 
+static void complete_agent_movement_cb(void**, S32 result)
+{
+    if (result && !LLApp::isExiting())
+    {
+        LL_WARNS("Teleport") << "CompleteAgentMovement failed with error code " << result << LL_ENDL;
+    }
+}
+
 void send_complete_agent_movement(const LLHost& sim_host)
 {
     LL_DEBUGS("Teleport", "Messaging") << "Sending CompleteAgentMovement to sim_host " << sim_host << LL_ENDL;
@@ -503,7 +511,13 @@ void send_complete_agent_movement(const LLHost& sim_host)
     msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
     msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
     msg->addU32Fast(_PREHASH_CircuitCode, msg->mOurCircuitCode);
-    msg->sendReliable(sim_host);
+    msg->sendReliable(
+        sim_host,
+        gSavedSettings.getS32("UseCircuitCodeMaxRetries"),
+        false,
+        (F32Seconds)gSavedSettings.getF32("UseCircuitCodeTimeout"),
+        complete_agent_movement_cb,
+        NULL);
 }
 
 void process_logout_reply(LLMessageSystem* msg, void**)

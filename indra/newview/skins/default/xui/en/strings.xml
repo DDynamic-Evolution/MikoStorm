@@ -7,15 +7,15 @@
 
 	<!-- Default Args - these arguments will be replaced in all strings -->
 	<string name="SECOND_LIFE">[CURRENT_GRID]</string>
-	<string name="APP_NAME">Gridstorm</string>
-	<string name="CAPITALIZED_APP_NAME">GRIDSTORM</string>
+	<string name="APP_NAME">MikoStorm</string>
+	<string name="CAPITALIZED_APP_NAME">MIKOSTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
-	<string name="SUPPORT_SITE">Firestorm Support Portal</string>
+	<string name="SUPPORT_SITE">MikoStorm Support Portal</string>
 	<string name="DOWNLOAD_URL">https://www.firestormviewer.org/choose-your-platform/</string>
 	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 	<string name="VIEWER_GENERATION">Viewer [VERSION]</string>
 	<string name="SHORT_VIEWER_GENERATION">V[VERSION]</string>
-	<string name="APP_NAME_ABBR">GS</string>
+	<string name="APP_NAME_ABBR">MS</string>
 
 	<!-- starting up -->
 	<string name="StartupLoading">Loading [APP_NAME]...</string>
@@ -3358,4 +3358,5 @@ Your current position: [AVATAR_POS]
   <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
+  <string name="EncroChatMessageSent">EncroChat: Message sent with end-to-end encryption.</string>
 </strings>
