@@ -890,22 +890,32 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
     // EncroChat decryption for incoming IMs
     {
         static LLCachedControl<bool> encrochat_enabled(gSavedPerAccountSettings, "FSEncroChatEnabled", false);
-        if (encrochat_enabled && message.size() > FSIMCipher::ENCRYPTED_MARKER.size() &&
-            message.substr(0, FSIMCipher::ENCRYPTED_MARKER.size()) == FSIMCipher::ENCRYPTED_MARKER)
+        if (encrochat_enabled)
         {
-            static LLCachedControl<std::string> encrochat_key(gSavedPerAccountSettings, "FSEncroChatKey", "");
-            std::string key = encrochat_key;
-            if (!key.empty())
+            std::string marker;
+            if (message.size() > FSIMCipher::ENCRYPTED_MARKER.size() &&
+                message.substr(0, FSIMCipher::ENCRYPTED_MARKER.size()) == FSIMCipher::ENCRYPTED_MARKER)
+                marker = FSIMCipher::ENCRYPTED_MARKER;
+            else if (message.size() > FSIMCipher::FALLBACK_MARKER.size() &&
+                     message.substr(0, FSIMCipher::FALLBACK_MARKER.size()) == FSIMCipher::FALLBACK_MARKER)
+                marker = FSIMCipher::FALLBACK_MARKER;
+
+            if (!marker.empty())
             {
-                std::string decrypted = FSIMCipher::decrypt(message.substr(FSIMCipher::ENCRYPTED_MARKER.size()), key);
-                if (!decrypted.empty())
+                static LLCachedControl<std::string> encrochat_key(gSavedPerAccountSettings, "FSEncroChatKey", "");
+                std::string key = encrochat_key;
+                if (!key.empty())
                 {
-                    LL_DEBUGS("EncroChat") << "Successfully decrypted IM message" << LL_ENDL;
-                    message = decrypted;
-                }
-                else
-                {
-                    LL_WARNS("EncroChat") << "Failed to decrypt IM message" << LL_ENDL;
+                    std::string decrypted = FSIMCipher::decrypt(message.substr(marker.size()), key);
+                    if (!decrypted.empty())
+                    {
+                        LL_DEBUGS("EncroChat") << "Successfully decrypted IM message" << LL_ENDL;
+                        message = decrypted;
+                    }
+                    else
+                    {
+                        LL_WARNS("EncroChat") << "Failed to decrypt IM message" << LL_ENDL;
+                    }
                 }
             }
         }
