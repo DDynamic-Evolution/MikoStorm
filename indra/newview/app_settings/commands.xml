@@ -336,6 +336,16 @@
            is_running_parameters="quickprefs"
            />
 
+  <command name="animationspeed"
+           available_in_toybox="true"
+           icon="Inv_Animation"
+           label_ref="Command_AnimationSpeed_Label"
+           tooltip_ref="Command_AnimationSpeed_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="animationspeed"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="animationspeed"
+           />
   <command name="animationoverride"
            available_in_toybox="true"
            icon="ao_toggle_18"

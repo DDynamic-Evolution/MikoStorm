@@ -240,6 +240,7 @@
 #include "NACLfloaterexploresounds.h"
 #include "particleeditor.h"
 #include "quickprefs.h"
+#include "animationspeed.h"
 #include "vjfloaterlocalmesh.h" // local mesh
 #include "fsfloaterwhitelisthelper.h" // fs whitelist helper
 #include "omnifilter.h"               // Omnifilter support
@@ -681,6 +682,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("phototools", "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>); // Corrected line - using string literal "phototools"
     LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
     LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
+    LLFloaterReg::add("animationspeed", "floater_animationspeed.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAnimationSpeed>);
     LLFloaterReg::add("region_tracker", "floater_region_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ALFloaterRegionTracker>);
     LLFloaterReg::add("search_replace", "floater_search_replace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearchReplace>);
     LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLSidepanelInventory::createSecondaryInventoryWindow);

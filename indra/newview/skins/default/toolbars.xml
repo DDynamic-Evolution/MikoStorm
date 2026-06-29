@@ -26,6 +26,8 @@
         <command
          name="animationoverride" />
         <command
+         name="animationspeed" />
+        <command
          name="quickprefs" />
    </bottom_toolbar>
    <left_toolbar
