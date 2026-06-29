@@ -146,7 +146,7 @@ set(viewer_SOURCE_FILES
     fsfloatervramusage.cpp
     fsfloaterwearablefavorites.cpp
     fsfloaterwhitelisthelper.cpp
-    fsimcipher.cpp
+
     fsjointpose.cpp
     fskeywords.cpp
     fslslbridge.cpp
@@ -1012,7 +1012,6 @@ set(viewer_HEADER_FILES
     fsfloatervramusage.h
     fsfloaterwearablefavorites.h
     fsfloaterwhitelisthelper.h
-    fsimcipher.h
     fsjointpose.h
     fsgridhandler.h
     fskeywords.h

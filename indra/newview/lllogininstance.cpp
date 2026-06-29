@@ -232,7 +232,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
     // request_params["version"] = LLVersionInfo::instance().getVersion();
     // request_params["channel"] = LLVersionInfo::instance().getChannel();
     request_params["version"] = LLVersionInfo::instance().getVersion();
-    request_params["channel"] = LLVersionInfo::instance().getChannel();
+    request_params["channel"] = LLVersionInfo::instance().getServerChannel();
     request_params["platform"] = mPlatform;
     request_params["address_size"] = ADDRESS_SIZE;
     request_params["platform_version"] = mPlatformVersion;

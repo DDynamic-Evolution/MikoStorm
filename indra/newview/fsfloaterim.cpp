@@ -964,6 +964,7 @@ bool FSFloaterIM::postBuild()
                 getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
                 getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
                 getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION end" << LL_ENDL;
                 break;
             }
@@ -971,6 +972,7 @@ bool FSFloaterIM::postBuild()
                 LL_DEBUGS("FSFloaterIM") << "default buttons start" << LL_ENDL;
                 getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
                 getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
+
                 LL_DEBUGS("FSFloaterIM") << "default buttons end" << LL_ENDL;
                 break;
         }
@@ -1060,8 +1062,6 @@ bool FSFloaterIM::postBuild()
     //But we cannot with the support group button, because testing groups are also support groups
     childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
 
-    static LLCachedControl<std::string> encrochat_key(gSavedPerAccountSettings, "FSEncroChatKey", "");
-    childSetVisible("encrochat_panel", !encrochat_key().empty());
 
     // <FS:Zi> Viewer version popup
     if (isFSSupportGroup || isFSTestingGroup)

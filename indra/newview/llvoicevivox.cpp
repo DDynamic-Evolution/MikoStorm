@@ -608,7 +608,7 @@ void LLVivoxVoiceClient::connectorCreate()
         << "<FileNameSuffix>.log</FileNameSuffix>"
         << "<LogLevel>" << vivoxLogLevel << "</LogLevel>"
         << "</Logging>"
-        << "<Application>" << LLVersionInfo::instance().getChannel() << " " << LLVersionInfo::instance().getVersion() << "</Application>"
+        << "<Application>" << LLVersionInfo::instance().getServerChannel() << " " << LLVersionInfo::instance().getVersion() << "</Application>"
         //<< "<Application></Application>"  //Name can cause problems per vivox.
         << "<MaxCalls>12</MaxCalls>"
         << "</Request>\n\n\n";

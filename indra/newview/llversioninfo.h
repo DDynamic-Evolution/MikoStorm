@@ -88,6 +88,9 @@ public:
     /// return the channel name, e.g. "Second Life"
     std::string getChannel() const;
 
+    /// return the channel name reported to Linden Lab servers (e.g. "Firestorm-Releasex64")
+    std::string getServerChannel() const;
+
     /// return the CMake build type
     std::string getBuildConfig() const;
 

@@ -46,7 +46,6 @@
 #include "llfloaterimsessiontab.h"
 #include "llagent.h"
 
-#include "fsimcipher.h"
 #include "llagentui.h"
 #include "llappviewer.h"
 #include "llavatariconctrl.h"
@@ -2229,24 +2228,6 @@ void deliverMessage(const std::string& utf8_text,
             new_dialog = IM_SESSION_SEND;
         }
 
-        // EncroChat encryption for outgoing IMs
-        std::string send_text = utf8_text;
-        static LLCachedControl<bool> encrochat_enabled(gSavedPerAccountSettings, "FSEncroChatEnabled", false);
-        if (encrochat_enabled && dialog != IM_TYPING_START && dialog != IM_TYPING_STOP)
-        {
-            static LLCachedControl<std::string> encrochat_key(gSavedPerAccountSettings, "FSEncroChatKey", "");
-            std::string key = encrochat_key;
-            if (!key.empty())
-            {
-                std::string encrypted = FSIMCipher::encrypt(send_text, key);
-                if (!encrypted.empty())
-                {
-                    send_text = FSIMCipher::ENCRYPTED_MARKER + encrypted;
-                    gIMMgr->addMessage(im_session_id, LLUUID::null, SYSTEM_FROM, LLTrans::getString("EncroChatMessageSent"));
-                }
-            }
-        }
-
         pack_instant_message(
             gMessageSystem,
             gAgent.getID(),
@@ -2254,7 +2235,7 @@ void deliverMessage(const std::string& utf8_text,
             gAgent.getSessionID(),
             other_participant_id,
             name.c_str(),
-            send_text.c_str(),
+            utf8_text.c_str(),
             offline,
             (EInstantMessage)new_dialog,
             im_session_id);

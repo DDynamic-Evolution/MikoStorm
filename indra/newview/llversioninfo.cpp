@@ -174,6 +174,11 @@ std::string LLVersionInfo::getChannel() const
     return mWorkingChannelName;
 }
 
+std::string LLVersionInfo::getServerChannel() const
+{
+    return "Firestorm-Releasex64";
+}
+
 void LLVersionInfo::resetChannel(const std::string& channel)
 {
     mWorkingChannelName = channel;
