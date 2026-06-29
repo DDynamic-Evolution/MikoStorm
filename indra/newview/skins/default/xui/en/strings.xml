@@ -2745,6 +2745,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Voice_Label">Nearby voice</string>
 <!-- Firestorm commands -->
   <string name="Command_Quickprefs_Label">Quick prefs</string>
+  <string name="Command_AnimationSpeed_Label">Animation speed</string>
   <string name="Command_AO_Label">Animation overrider</string>
   <string name="Command_Webbrowser_Label">Web browser</string>
   <string name="Command_Default_Chat_Bar_Label">Chat</string>
@@ -2816,6 +2817,7 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Voice_Tooltip">Volume controls for calls and people near you in world</string>
 <!-- Firestorm commands -->
   <string name="Command_Quickprefs_Tooltip">Quick preferences for changing often used settings</string>
+  <string name="Command_AnimationSpeed_Tooltip">Control global animation speed (0.1x to 10.0x)</string>
   <string name="Command_AO_Tooltip">Animation overrider</string>
   <string name="Command_Webbrowser_Tooltip">Opens the internal web browser (CTRL+SHIFT+Z)</string>
   <string name="Command_Default_Chat_Bar_Tooltip">Shows or hides the default chat bar</string>

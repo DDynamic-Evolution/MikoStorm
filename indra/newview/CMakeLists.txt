@@ -895,6 +895,7 @@ set(viewer_SOURCE_FILES
     pipeline.cpp
     qtoolalign.cpp
     quickprefs.cpp
+    animationspeed.cpp
     rlvactions.cpp
     rlvenvironment.cpp
     rlvcommon.cpp
@@ -1770,6 +1771,7 @@ set(viewer_HEADER_FILES
     roles_constants.h
     qtoolalign.h
     quickprefs.h
+    animationspeed.h
     sanitycheck.h
     streamtitledisplay.h
     utilitybar.h

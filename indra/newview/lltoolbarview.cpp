@@ -48,6 +48,7 @@
 
 #include "fscommon.h"
 #include "quickprefs.h"
+#include "animationspeed.h"
 
 LLToolBarView* gToolBarView = NULL;
 
@@ -573,6 +574,17 @@ void LLToolBarView::onToolBarButtonAdded(LLView* button)
         }
     }
     // </FS:Ansariel>
+    // <FS:Miko> Dockable AnimationSpeed floater
+    else if (button->getName() == "animationspeed" && !FSCommon::isLegacySkin())
+    {
+        LLTransientFloaterMgr::getInstance()->addControlView(button);
+        FloaterAnimationSpeed* animspeed_floater = LLFloaterReg::findTypedInstance<FloaterAnimationSpeed>("animationspeed");
+        if (animspeed_floater && animspeed_floater->isShown())
+        {
+            animspeed_floater->dockToToolbarButton();
+        }
+    }
+    // </FS:Miko>
 }
 
 void LLToolBarView::onToolBarButtonRemoved(LLView* button)
@@ -627,6 +639,21 @@ void LLToolBarView::onToolBarButtonRemoved(LLView* button)
         }
     }
     // </FS:Ansariel>
+    // <FS:Miko> Dockable AnimationSpeed floater
+    else if (button->getName() == "animationspeed" && !FSCommon::isLegacySkin())
+    {
+        LLTransientFloaterMgr::getInstance()->removeControlView(button);
+        FloaterAnimationSpeed* animspeed_floater = LLFloaterReg::findTypedInstance<FloaterAnimationSpeed>("animationspeed");
+        if (animspeed_floater && animspeed_floater->isShown())
+        {
+            animspeed_floater->setUseTongue(false);
+            animspeed_floater->setDocked(false, false);
+            animspeed_floater->setCanDock(false);
+            LLDockControl* dock_control = animspeed_floater->getDockControl();
+            dock_control->setDock(NULL);
+        }
+    }
+    // </FS:Miko>
 }
 
 void LLToolBarView::draw()
