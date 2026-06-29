@@ -421,7 +421,7 @@ std::string LLViewerMedia::getCurrentUserAgent()
 
     // Just in case we need to check browser differences in A/B test
     // builds.
-    std::string channel = LLVersionInfo::instance().getChannel();
+    std::string channel = LLVersionInfo::instance().getServerChannel();
 
     // append our magic version number string to the browser user agent id
     // See the HTTP 1.0 and 1.1 specifications for allowed formats:

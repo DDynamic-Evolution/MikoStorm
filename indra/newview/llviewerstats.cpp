@@ -685,7 +685,7 @@ void send_viewer_stats(bool include_preferences)
     agent["normalized_frametime_variance"] = LLViewerStats::instance().getLastNormalizedFrametimeVariance();
     agent["normalized_period_jitter"]      = LLViewerStats::instance().getLastNormalizedPeriodJitter();
 
-    agent["version"] = LLVersionInfo::instance().getChannelAndVersion();
+    agent["version"] = LLVersionInfo::instance().getServerChannel() + " " + LLVersionInfo::instance().getVersion();
     std::string language = LLUI::getLanguage();
     agent["language"] = language;
 

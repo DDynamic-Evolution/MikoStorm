@@ -3358,5 +3358,4 @@ Your current position: [AVATAR_POS]
   <string name="OmnifilterReplacement">Omnifilter Replacement: [REPLACEMENT]</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
-  <string name="EncroChatMessageSent">EncroChat: Message sent with end-to-end encryption.</string>
 </strings>

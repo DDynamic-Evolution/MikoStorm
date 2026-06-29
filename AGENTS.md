@@ -1,3 +1,11 @@
+# MikoStorm Phoenix Firestorm
+
+Custom Phoenix Firestorm viewer fork.
+
+## Key Changes
+- Server identification: `getServerChannel()` → `"Firestorm-Releasex64"` (für LL), UI zeigt `"MikoStorm-Release"` (Channel-Name)
+- EncroChat komplett entfernt (fsimcipher.cpp/.h, Preferences-Subtab, IM-UI, Settings, Strings)
+
 # Build Instructions (Linux)
 
 ## System Requirements
