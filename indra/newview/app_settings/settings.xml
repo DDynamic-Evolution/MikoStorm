@@ -5848,7 +5848,7 @@
     <key>LoginImagePath</key>
     <map>
       <key>Comment</key>
-      <string>Path to a local image file to display instead of the remote login page. If empty, the default web login page is used.</string>
+      <string>Path to a local image file to display instead of the remote login page. If empty, the built-in start image is used.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
