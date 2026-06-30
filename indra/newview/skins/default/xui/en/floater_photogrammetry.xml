@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ can_resize="false"
+ can_close="true"
+ can_minimize="true"
+ height="580"
+ layout="topleft"
+ name="photogrammetry"
+ single_instance="true"
+ title="Photogrammetry Capture"
+ width="360">
+
+	<!-- Capture Settings -->
+	<text
+	 follows="left|top"
+	 font="SansSerifBold"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="capture_settings_label"
+	 top="10"
+	 width="340">
+	 Capture Settings
+	</text>
+
+	<spinner
+	 height="20"
+	 increment="1"
+	 initial_value="3"
+	 label="Delay (sec)"
+	 label_width="120"
+	 layout="topleft"
+	 left="20"
+	 max_val="30"
+	 min_val="0"
+	 name="capture_delay"
+	 top_pad="5"
+	 width="200" />
+
+	<spinner
+	 height="20"
+	 increment="1"
+	 initial_value="108"
+	 label="Total images"
+	 label_width="120"
+	 layout="topleft"
+	 left="20"
+	 max_val="1000"
+	 min_val="100"
+	 name="total_images"
+	 top_pad="5"
+	 width="200" />
+
+	<spinner
+	 height="20"
+	 increment="1"
+	 initial_value="3"
+	 label="Height levels"
+	 label_width="120"
+	 layout="topleft"
+	 left="20"
+	 max_val="20"
+	 min_val="1"
+	 name="num_vertical"
+	 top_pad="5"
+	 width="200" />
+
+	<spinner
+	 decimal_digits="2"
+	 height="20"
+	 increment="0.1"
+	 initial_value="0.0"
+	 label="Height min (m)"
+	 label_width="120"
+	 layout="topleft"
+	 left="20"
+	 max_val="10.0"
+	 min_val="-5.0"
+	 name="height_min"
+	 top_pad="5"
+	 width="200" />
+
+	<spinner
+	 decimal_digits="2"
+	 height="20"
+	 increment="0.1"
+	 initial_value="2.5"
+	 label="Height max (m)"
+	 label_width="120"
+	 layout="topleft"
+	 left="20"
+	 max_val="20.0"
+	 min_val="-5.0"
+	 name="height_max"
+	 top_pad="5"
+	 width="200" />
+
+	<!-- Image Settings -->
+	<text
+	 follows="left|top"
+	 font="SansSerifBold"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="image_settings_label"
+	 top_pad="15"
+	 width="340">
+	 Image Settings
+	</text>
+
+	<combo_box
+	 height="23"
+	 label="Resolution"
+	 label_width="120"
+	 layout="topleft"
+	 left="20"
+	 name="resolution_combo"
+	 top_pad="5"
+	 width="320">
+		<combo_item name="current">Current Window</combo_item>
+		<combo_item name="1920x1080">1920 x 1080</combo_item>
+		<combo_item name="2560x1440">2560 x 1440</combo_item>
+		<combo_item name="3840x2160">3840 x 2160 (4K)</combo_item>
+		<combo_item name="4096x2160">4096 x 2160</combo_item>
+		<combo_item name="7680x4320">7680 x 4320 (8K)</combo_item>
+		<combo_item name="custom">Custom</combo_item>
+	</combo_box>
+
+	<spinner
+	 height="20"
+	 increment="1"
+	 initial_value="1920"
+	 label="Custom W"
+	 label_width="80"
+	 layout="topleft"
+	 left="20"
+	 max_val="16384"
+	 min_val="320"
+	 name="custom_width"
+	 top_pad="5"
+	 visible="false"
+	 width="150" />
+
+	<spinner
+	 height="20"
+	 increment="1"
+	 initial_value="1080"
+	 label="Custom H"
+	 label_width="80"
+	 layout="topleft"
+	 left="20"
+	 max_val="16384"
+	 min_val="240"
+	 name="custom_height"
+	 top_pad="5"
+	 visible="false"
+	 width="150" />
+
+	<line_editor
+	 height="23"
+	 follows="left|top|right"
+	 layout="topleft"
+	 left="20"
+	 name="output_dir"
+	 top_pad="5"
+	 width="260" />
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Browse"
+	 layout="topleft"
+	 left_pad="5"
+	 name="browse_btn"
+	 top_delta="0"
+	 width="60" />
+
+	<!-- Estimated Size -->
+	<text
+	 follows="left|top"
+	 height="16"
+	 layout="topleft"
+	 left="20"
+	 name="estimated_size_label"
+	 top_pad="5"
+	 width="80">
+	 Est. size:
+	</text>
+	<text
+	 follows="left|top"
+	 height="16"
+	 layout="topleft"
+	 left_pad="2"
+	 name="estimated_size"
+	 top_delta="0"
+	 width="200" />
+	<text
+	 follows="left|top"
+	 height="16"
+	 layout="topleft"
+	 left="20"
+	 name="total_images"
+	 top_pad="2"
+	 width="320" />
+
+	<!-- Preview area (drawn via C++) -->
+	<panel
+	 background_visible="true"
+	 bg_opaque="true"
+	 follows="left|top"
+	 height="100"
+	 layout="topleft"
+	 left="20"
+	 name="preview_panel"
+	 top_pad="10"
+	 width="320" />
+
+	<!-- Controls -->
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Start Capture"
+	 layout="topleft"
+	 left="20"
+	 name="start_btn"
+	 top_pad="10"
+	 width="150" />
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Stop"
+	 layout="topleft"
+	 left_pad="10"
+	 name="stop_btn"
+	 top_delta="0"
+	 width="80" />
+
+	<progress_bar
+	 follows="left|top"
+	 height="16"
+	 layout="topleft"
+	 left="20"
+	 name="capture_progress"
+	 top_pad="10"
+	 width="320" />
+
+	<text
+	 follows="left|top"
+	 height="16"
+	 layout="topleft"
+	 left="20"
+	 name="status_text"
+	 top_pad="5"
+	 width="320" />
+
+</floater>

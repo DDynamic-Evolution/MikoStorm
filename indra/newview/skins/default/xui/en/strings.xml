@@ -2783,6 +2783,8 @@ name="Command_360_Capture_Label">360° Snapshot</string>
   <string name="Command_Omnifilter_Label">Omnifilter</string>
   <string name="Command_AvatarAlign_Label">Avatar alignment</string>
   <string name="Command_FaceNearest_Label">Face nearest avatar</string>
+  <string name="Command_Photogrammetry_Label">Photogrammetry</string>
+  <string name="Command_Photogrammetry_Tooltip">Automated camera orbit for photogrammetry capture</string>
 
   <string name="Command_360_Capture_Tooltip">Capture a 360° equirectangular image</string>
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
