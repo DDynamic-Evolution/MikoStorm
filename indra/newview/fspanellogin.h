@@ -74,7 +74,7 @@ public:
     void showLoginWidgets();
 
     static void loadLoginPage();
-    void loadLoginImage();
+    void loadLoginImage(const std::string& path = "");
     static void giveFocus();
     static void setAlwaysRefresh(bool refresh);
 

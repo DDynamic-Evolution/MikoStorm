@@ -885,7 +885,18 @@ void FSPanelLogin::loadLoginPage()
     std::string login_image_path = gSavedSettings.getString("LoginImagePath");
     if (!login_image_path.empty())
     {
-        sInstance->loadLoginImage();
+        sInstance->loadLoginImage(login_image_path);
+        return;
+    }
+
+    // Default: load built-in start image
+    {
+        std::string default_path = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter()
+            + "default" + gDirUtilp->getDirDelimiter()
+            + "textures" + gDirUtilp->getDirDelimiter()
+            + "windows" + gDirUtilp->getDirDelimiter()
+            + "startimage.png";
+        sInstance->loadLoginImage(default_path);
         return;
     }
 
@@ -977,9 +988,9 @@ void FSPanelLogin::loadLoginPage()
     }
 }
 
-void FSPanelLogin::loadLoginImage()
+void FSPanelLogin::loadLoginImage(const std::string& path)
 {
-    std::string image_path = gSavedSettings.getString("LoginImagePath");
+    std::string image_path = path.empty() ? gSavedSettings.getString("LoginImagePath") : path;
     if (image_path.empty()) return;
 
     LL_DEBUGS("AppInit") << "Loading login image: " << image_path << LL_ENDL;
