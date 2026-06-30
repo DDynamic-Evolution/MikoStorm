@@ -2,11 +2,8 @@
 
 This page describes all necessary steps to build the MikoStorm viewer for Windows. For building instructions up to (and including) release 6.5.3, see the archived version for [building with Python 2.7](https://wiki.firestormviewer.org/archive:fs_compiling_firestorm_windows_py_27).
 
-> [!WARNING]
-> Please note that we do not give support for compiling the viewer on your own. However, there is a self-compilers group in Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
-
 > [!IMPORTANT]
-> With the [merge of Linden Lab release 6.6.16](https://github.com/FirestormViewer/phoenix-firestorm/commit/b64793e2b0d14e44274335c874660af9f679f7f8) it is **NOT** possible to create 32bit builds anymore! Only 64bit builds are possible going forward!
+> it is **NOT** possible to create 32bit builds anymore! Only 64bit builds are possible going forward!
 
 ## Install required development tools
 
@@ -137,9 +134,6 @@ If you do not want to install the required Python packages into the default Pyth
 
 - If you plan to package the viewer and create an installer file, you must install the NSIS from the [official website](https://nsis.sourceforge.io).
 - Not required unless you need to build an actual viewer installer for distribution, or change the NSIS installer package logic itself
-  
-> [!IMPORTANT]
-> If you want to package the viewer built on a revision prior to the [Bugsplat merge](https://github.com/FirestormViewer/phoenix-firestorm/commit/a399c6778579ac7c8965737088c275dde1371c9e), you must install the Unicode version of NSIS [from here](http://www.scratchpaper.com) - the installer from the NSIS website **WILL NOT** work!
 
 ## Setup viewer build variables
 
@@ -162,7 +156,7 @@ Plan your directory structure ahead of time. If you are going to be producing ch
 ```
 c:
 cd \firestorm
-git clone https://github.com/FirestormViewer/phoenix-firestorm.git
+git clone https://codeberg.org/mikostorm/MikoStorm.git
 ```
 
 ## Prepare third party libraries
@@ -241,7 +235,7 @@ Then enter:
 
 ```
 c:
-cd \firestorm\phoenix-firestorm
+cd \firestorm\mikostorm
 autobuild configure -A 64 -c ReleaseFS_open
 ```
 
