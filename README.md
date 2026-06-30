@@ -1,4 +1,5 @@
 ### MikoStorm - A Second Life Viewer 
+This is an experimental and privacy focused viewer.
 
 ## Experimental features
 - [Voicebox TTS](https://voicebox.sh/linux-install) support. Reads your IMs and chat aloud if you run a voicebox server. I am planning on a wrapper for other TTS.
