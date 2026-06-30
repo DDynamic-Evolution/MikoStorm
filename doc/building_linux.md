@@ -1,9 +1,8 @@
 # Build instructions for Linux
 
 > [!WARNING]
-> Please note that we do not give support for compiling the viewer on your own. However, there is a self-compilers group in Second Life that can be joined to ask questions related to compiling the viewer: [Firestorm Self Compilers](https://tinyurl.com/firestorm-self-compilers)
 
-This procedure is based on discussions with the Firestorm Linux development team and is the only one recommended for Firestorm for Linux. System requirements are:
+This procedure is only one recommended for MikoStorm for Linux. System requirements are:
 - Ubuntu 22.04 LTS (x86_64) - fully upgraded (this is also now the minimum requirement for running the viewer).
 - 16GB or more RAM ([Low Memory Caution](#common-issuesbugsglitches-and-solutions))
 - 64GB hard drive space 
@@ -73,13 +72,13 @@ There are two required repositories, the viewer itself and the build variables. 
 
 ```
 cd ~/src
-git clone https://github.com/FirestormViewer/phoenix-firestorm.git
+git clone https://codeberg.org/mikostorm/MikoStorm.git
 ```
 
 This will create a folder called phoenix-firestorm and add all the source files. If you desire, you can choose a different folder name by adding the name to the end of the command:
 
 ```
-git clone https://github.com/FirestormViewer/phoenix-firestorm.git NewDestinationDirectory
+git clone https://codeberg.org/mikostorm/MikoStorm.git NewDestinationDirectory
 ```
  
 The rest of this document will assume the default directory, `phoenix-firestorm`
