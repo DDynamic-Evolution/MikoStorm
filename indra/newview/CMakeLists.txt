@@ -146,6 +146,7 @@ set(viewer_SOURCE_FILES
     fsfloatervramusage.cpp
     fsfloaterwearablefavorites.cpp
     fsfloaterwhitelisthelper.cpp
+    llfloaterphotogrammetry.cpp
 
     fsjointpose.cpp
     fskeywords.cpp
@@ -1013,6 +1014,7 @@ set(viewer_HEADER_FILES
     fsfloatervramusage.h
     fsfloaterwearablefavorites.h
     fsfloaterwhitelisthelper.h
+    llfloaterphotogrammetry.h
     fsjointpose.h
     fsgridhandler.h
     fskeywords.h

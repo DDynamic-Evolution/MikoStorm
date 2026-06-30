@@ -245,6 +245,7 @@
 #include "fsfloaterwhitelisthelper.h" // fs whitelist helper
 #include "omnifilter.h"               // Omnifilter support
 #include "fsfloateravataralign.h" // <FS:Chanayane> Compass floater
+#include "llfloaterphotogrammetry.h"
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 const std::string FLOATER_PROFILE("profile");
@@ -695,6 +696,8 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("avatar_align",      "floater_avatar_align.xml",      (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarAlign>);
     LLFloaterReg::add("avatar_align_mini", "floater_avatar_align_mini.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterAvatarAlignMini>);
     // </FS:Chanayane>
+
+    LLFloaterReg::add("photogrammetry", "floater_photogrammetry.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPhotogrammetry>);
 
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }
