@@ -9,8 +9,8 @@
 - Hides your data
 - Custom and definable login page (Done!)
 - Added privacy features
-- (scrapped) Add an MP3 Player for all those quiet parcels
-- latest original code merged. 
+- latest original code merged.
+- Will remove most social links
 
 ## Open Source
 
