@@ -295,6 +295,8 @@ if (USE_TRACY)
   list(APPEND llcommon_SOURCE_FILES llprofiler.cpp)
 endif ()
 
+list(APPEND llcommon_SOURCE_FILES llpluginaudio.h)
+
 list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 add_library (llcommon ${llcommon_SOURCE_FILES})

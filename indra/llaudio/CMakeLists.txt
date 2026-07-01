@@ -8,6 +8,9 @@ include(FMODSTUDIO)
 include(OPENAL)
 include(LLCommon)
 include(LLWindow)
+include(CURL)
+include(OpenSSL)
+include(NGHTTP2)
 
 set(llaudio_SOURCE_FILES
     llaudioengine.cpp
@@ -31,13 +34,40 @@ if (TARGET ll::fmodstudio)
          llaudioengine_fmodstudio.cpp
          lllistener_fmodstudio.cpp
          llstreamingaudio_fmodstudio.cpp
+         llpositionalstream.cpp
+         llpositionalstreamstereo.cpp
+         llpositionalstreammulti.cpp
+         llmultichanneldownmix.cpp
+         llstereoupmix.cpp
+         lllitehrtfdsp.cpp
+         llfftconvolver.cpp
+         llirloader.cpp
+         llvenuereverbdsp.cpp
+         llstream3durlresolve.cpp
+         fmod_codec_ogg.cpp
          )
 
     list(APPEND llaudio_HEADER_FILES
          llaudioengine_fmodstudio.h
          lllistener_fmodstudio.h
          llstreamingaudio_fmodstudio.h
+         llpositionalstream.h
+         llpositionalstreamstereo.h
+         llpositionalstreammulti.h
+         llmultichanneldownmix.h
+         llstereoupmix.h
+         lllitehrtfdsp.h
+         llfftconvolver.h
+         llirloader.h
+         llvenuereverbdsp.h
+         llstream3durlresolve.h
+         fmod_codec_ogg.h
          )
+
+    if (LL_DULLAHAN_AUDIO_CALLBACK)
+        list(APPEND llaudio_SOURCE_FILES llmediaaudiostream.cpp)
+        list(APPEND llaudio_HEADER_FILES llmediaaudiostream.h)
+    endif ()
 endif ()
 
 if (TARGET ll::openal)
@@ -69,4 +99,15 @@ if( TARGET ll::openal )
 endif()
 if( TARGET ll::fmodstudio )
     target_link_libraries( llaudio ll::fmodstudio )
+    find_package(PkgConfig)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(OPUS opus)
+        if(OPUS_FOUND)
+            target_include_directories(llaudio PRIVATE ${OPUS_INCLUDE_DIRS})
+            target_link_libraries(llaudio ${OPUS_LIBRARIES})
+        endif()
+    endif()
+endif()
+if( TARGET ll::libcurl )
+    target_link_libraries( llaudio ll::libcurl ll::openssl ll::nghttp2 )
 endif()

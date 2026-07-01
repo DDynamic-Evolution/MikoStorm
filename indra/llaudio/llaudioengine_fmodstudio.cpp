@@ -32,6 +32,7 @@
 
 #include "llaudioengine_fmodstudio.h"
 #include "lllistener_fmodstudio.h"
+#include "llstream3durlresolve.h"
 
 #include "llerror.h"
 #include "llmath.h"
@@ -41,6 +42,7 @@
 #include "fmodstudio/fmod_errors.h"
 #include "lldir.h"
 #include "llapr.h"
+#include "fmod_codec_ogg.h"
 
 #include "sound_ids.h"
 
@@ -182,7 +184,11 @@ static FMOD_RESULT F_CALL systemCallback(FMOD_SYSTEM *system, FMOD_SYSTEM_CALLBA
     // </FS:minerjr> [FIRE-36022]
 }
 
-LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method)
+LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler,
+                                                   U32 resample_method,
+                                                   U32 parcel_stream_quality,
+                                                   bool opus_codec_enable,
+                                                   U32 opus_codec_priority)
 :   mInited(false),
     mWindGen(NULL),
     mWindDSP(NULL),
@@ -190,6 +196,9 @@ LLAudioEngine_FMODSTUDIO::LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 res
     mEnableProfiler(enable_profiler),
     mWindDSPDesc(NULL),
     mResampleMethod(resample_method),
+    mParcelStreamQuality(parcel_stream_quality),
+    mOpusCodecEnable(opus_codec_enable),
+    mOpusCodecPriority(opus_codec_priority),
     mSelectedDeviceUUID()
 {
 }
@@ -206,6 +215,19 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     FMOD_RESULT result;
 
     LL_DEBUGS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() initializing FMOD" << LL_ENDL;
+
+    FMOD::Thread_SetAttributes(FMOD_THREAD_TYPE_STREAM,
+                               FMOD_THREAD_AFFINITY_STREAM,
+                               FMOD_THREAD_PRIORITY_STREAM,
+                               1024 * 1024);
+    FMOD::Thread_SetAttributes(FMOD_THREAD_TYPE_NONBLOCKING,
+                               FMOD_THREAD_AFFINITY_NONBLOCKING,
+                               FMOD_THREAD_PRIORITY_NONBLOCKING,
+                               1024 * 1024);
+    FMOD::Thread_SetAttributes(FMOD_THREAD_TYPE_MIXER,
+                               FMOD_THREAD_AFFINITY_MIXER,
+                               FMOD_THREAD_PRIORITY_MIXER,
+                               1024 * 1024);
 
     result = FMOD::System_Create(&mSystem);
     if (Check_FMOD_Error(result, "FMOD::System_Create"))
@@ -232,18 +254,25 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
 
     FMOD_ADVANCEDSETTINGS settings = { };
     settings.cbSize = sizeof(FMOD_ADVANCEDSETTINGS);
-    switch (mResampleMethod)
+    if (mParcelStreamQuality == 1)
     {
-    default:
-    case RESAMPLE_LINEAR:
-        settings.resamplerMethod = FMOD_DSP_RESAMPLER_LINEAR;
-        break;
-    case RESAMPLE_CUBIC:
-        settings.resamplerMethod = FMOD_DSP_RESAMPLER_CUBIC;
-        break;
-    case RESAMPLE_SPLINE:
         settings.resamplerMethod = FMOD_DSP_RESAMPLER_SPLINE;
-        break;
+    }
+    else
+    {
+        switch (mResampleMethod)
+        {
+        default:
+        case RESAMPLE_LINEAR:
+            settings.resamplerMethod = FMOD_DSP_RESAMPLER_LINEAR;
+            break;
+        case RESAMPLE_CUBIC:
+            settings.resamplerMethod = FMOD_DSP_RESAMPLER_CUBIC;
+            break;
+        case RESAMPLE_SPLINE:
+            settings.resamplerMethod = FMOD_DSP_RESAMPLER_SPLINE;
+            break;
+        }
     }
 
     result = mSystem->setAdvancedSettings(&settings);
@@ -354,6 +383,45 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
         Check_FMOD_Error(mSystem->createChannelGroup("SFX", &mChannelGroups[AUDIO_TYPE_SFX]), "FMOD::System::createChannelGroup");
         Check_FMOD_Error(mSystem->createChannelGroup("UI", &mChannelGroups[AUDIO_TYPE_UI]), "FMOD::System::createChannelGroup");
         Check_FMOD_Error(mSystem->createChannelGroup("Ambient", &mChannelGroups[AUDIO_TYPE_AMBIENT]), "FMOD::System::createChannelGroup");
+    }
+
+    Check_FMOD_Error(mSystem->createChannelGroup("Stream3D", &mStream3DGroup),
+                     "FMOD::System::createChannelGroup(Stream3D)");
+
+    if (mStream3DGroup)
+    {
+        const std::string ir_dir =
+            gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "venue_ir");
+        if (mVenueReverbDsp.create(mSystem, ir_dir))
+        {
+            Check_FMOD_Error(mStream3DGroup->addDSP(FMOD_CHANNELCONTROL_DSP_TAIL,
+                                                    mVenueReverbDsp.getDsp()),
+                             "ChannelGroup::addDSP(VenueReverbDsp)");
+        }
+        else
+        {
+            LL_WARNS("AppInit") << "VenueReverbDsp.create() failed; "
+                                   "Stream3D bus runs without venue reverb" << LL_ENDL;
+        }
+    }
+
+    if (mOpusCodecEnable)
+    {
+        const unsigned int opus_codec_priority = mOpusCodecPriority;
+        unsigned int opus_codec_handle = 0;
+        FMOD_RESULT codec_result = mSystem->registerCodec(FMODGetCodecDescriptionOgg(), &opus_codec_handle, opus_codec_priority);
+        if (codec_result == FMOD_OK)
+        {
+            LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Ogg Opus/Vorbis codec registered (handle=" << opus_codec_handle << ", priority=" << opus_codec_priority << ")" << LL_ENDL;
+        }
+        else
+        {
+            LL_WARNS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Ogg Opus/Vorbis codec register failed: " << FMOD_ErrorString(codec_result) << LL_ENDL;
+        }
+    }
+    else
+    {
+        LL_WARNS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Ogg Opus/Vorbis codec registration disabled for validation" << LL_ENDL;
     }
 
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
@@ -487,7 +555,19 @@ std::string LLAudioEngine_FMODSTUDIO::getDriverName(bool verbose)
 // create our favourite FMOD-native streaming audio implementation
 LLStreamingAudioInterface *LLAudioEngine_FMODSTUDIO::createDefaultStreamingAudioImpl() const
 {
-    return new LLStreamingAudio_FMODSTUDIO(mSystem);
+    LLStreamingAudio_FMODSTUDIO* impl = new LLStreamingAudio_FMODSTUDIO(mSystem);
+    impl->setQuality(mParcelStreamQuality);
+    return impl;
+}
+
+void LLAudioEngine_FMODSTUDIO::setParcelStreamQuality(U32 quality)
+{
+    mParcelStreamQuality = quality;
+    if (LLStreamingAudio_FMODSTUDIO* impl =
+            dynamic_cast<LLStreamingAudio_FMODSTUDIO*>(getStreamingAudioImpl()))
+    {
+        impl->setQuality(quality);
+    }
 }
 
 
@@ -508,8 +588,17 @@ void LLAudioEngine_FMODSTUDIO::shutdown()
 {
     stopInternetStream();
 
+    LLStream3DUrlResolve::shutdown();
+
     LL_INFOS("FMOD") << "About to LLAudioEngine::shutdown()" << LL_ENDL;
     LLAudioEngine::shutdown();
+
+    mVenueReverbDsp.release();
+    if (mStream3DGroup)
+    {
+        Check_FMOD_Error(mStream3DGroup->release(), "FMOD::ChannelGroup::release(Stream3D)");
+        mStream3DGroup = nullptr;
+    }
 
     LL_INFOS("FMOD") << "LLAudioEngine_FMODSTUDIO::shutdown() closing FMOD Studio" << LL_ENDL;
     if (mSystem)
@@ -669,11 +758,30 @@ void LLAudioEngine_FMODSTUDIO::setInternalGain(F32 gain)
     }
 }
 
+void LLAudioEngine_FMODSTUDIO::forEachActive3DSfxChannel(const SfxOcclusionVisitor& fn)
+{
+    if (!fn) return;
+    for (LLAudioChannel* base : mChannels)
+    {
+        if (!base) continue;
+        auto* fmc = static_cast<LLAudioChannelFMODSTUDIO*>(base);
+        FMOD::Channel* ch = fmc->getFmodChannel();
+        if (!ch) continue;
+        LLAudioSource* src = fmc->getSource();
+        if (!src) continue;
+        if (src->isForcedPriority()) continue;
+
+        LLVector3 spos;
+        spos.setVec(src->getPositionGlobal());
+        fn(ch, fmc->getOcclusionLowpass(), spos);
+    }
+}
+
 //
 // LLAudioChannelFMODSTUDIO implementation
 //
 
-LLAudioChannelFMODSTUDIO::LLAudioChannelFMODSTUDIO(FMOD::System *system) : LLAudioChannel(), mSystemp(system), mChannelp(NULL), mLastSamplePos(0)
+LLAudioChannelFMODSTUDIO::LLAudioChannelFMODSTUDIO(FMOD::System *system) : LLAudioChannel(), mSystemp(system), mChannelp(NULL), mOcclusionLowpass(NULL), mLastSamplePos(0)
 {
 }
 
@@ -738,6 +846,26 @@ bool LLAudioChannelFMODSTUDIO::updateBuffer()
         LL_WARNS() << "Channel " << index << "Source ID: " << mCurrentSourcep->getID()
         << " at " << mCurrentSourcep->getPositionGlobal() << LL_ENDL;
         }*/
+
+        if (mChannelp && !mOcclusionLowpass)
+        {
+            FMOD::DSP* lpf = nullptr;
+            if (!Check_FMOD_Error(getSystem()->createDSPByType(FMOD_DSP_TYPE_LOWPASS_SIMPLE, &lpf),
+                                   "createDSPByType(LowpassSimple SFX)") && lpf)
+            {
+                Check_FMOD_Error(lpf->setParameterFloat(FMOD_DSP_LOWPASS_SIMPLE_CUTOFF, 22000.f),
+                                 "DSP::setParameterFloat(LowpassSimple SFX cutoff init)");
+                if (Check_FMOD_Error(mChannelp->addDSP(FMOD_CHANNELCONTROL_DSP_TAIL, lpf),
+                                     "Channel::addDSP(LowpassSimple SFX)"))
+                {
+                    lpf->release();
+                }
+                else
+                {
+                    mOcclusionLowpass = lpf;
+                }
+            }
+        }
     }
 
     return true;
@@ -804,6 +932,15 @@ void LLAudioChannelFMODSTUDIO::updateLoop()
 
 void LLAudioChannelFMODSTUDIO::cleanup()
 {
+    if (mOcclusionLowpass)
+    {
+        Check_FMOD_Error(mChannelp->removeDSP(mOcclusionLowpass),
+                         "FMOD::Channel::removeDSP(LowpassSimple SFX)");
+        Check_FMOD_Error(mOcclusionLowpass->release(),
+                         "FMOD::DSP::release(LowpassSimple SFX)");
+        mOcclusionLowpass = NULL;
+    }
+
     if (!mChannelp)
     {
         // Aborting cleanup with no channel handle.

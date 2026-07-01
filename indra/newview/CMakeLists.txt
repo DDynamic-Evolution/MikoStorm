@@ -570,6 +570,8 @@ set(viewer_SOURCE_FILES
     lloutfitslist.cpp
     lloutfitobserver.cpp
     lloutputmonitorctrl.cpp
+    llocclusiongeometrymgr.cpp
+    llpositionalstreammgr.cpp
     llpanelappearancetab.cpp
     llpanelavatar.cpp
     llpanelavatartag.cpp
@@ -1433,6 +1435,8 @@ set(viewer_HEADER_FILES
     lloutfitslist.h
     lloutfitobserver.h
     lloutputmonitorctrl.h
+    llocclusiongeometrymgr.h
+    llpositionalstreammgr.h
     llpanelappearancetab.h
     llpanelavatar.h
     llpanelavatartag.h
@@ -1937,7 +1941,7 @@ if (LINUX)
     # </FS:ND>
 
     # Replace the icons with the appropriate ones for the channel
-    # ('test' is the default)
+    # ('private' is the default)
     set(ICON_PATH "private")
     string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
     if(channel_lower MATCHES "release")
@@ -1946,6 +1950,8 @@ if (LINUX)
         set(ICON_PATH "beta")
     elseif(channel_lower MATCHES "project")
         set(ICON_PATH "project")
+    elseif(channel_lower MATCHES "alpha|nightly|experimental|manual|profiling")
+        set(ICON_PATH "test")
     endif()
 
     if (OPENSIM)
@@ -1986,7 +1992,7 @@ if (WINDOWS)
          )
 
     # Replace the icons with the appropriate ones for the channel
-    # ('test' is the default)
+    # ('private' is the default)
     set(ICON_PATH "private")
     #set(VIEWER_MACOSX_PHASE "d") # <FS:Ansariel> Moved to OSX section
     string(TOLOWER ${VIEWER_CHANNEL} channel_lower)
@@ -1999,6 +2005,8 @@ if (WINDOWS)
     elseif(channel_lower MATCHES "project")
         set(ICON_PATH "project")
         #set(VIEWER_MACOSX_PHASE "a") # <FS:Ansariel> Moved to OSX section
+    elseif(channel_lower MATCHES "alpha|nightly|experimental|manual|profiling")
+        set(ICON_PATH "test")
     endif()
 
     # <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version

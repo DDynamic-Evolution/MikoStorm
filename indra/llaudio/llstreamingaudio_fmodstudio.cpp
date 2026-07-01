@@ -26,6 +26,8 @@
 
 #include "linden_common.h"
 
+#include <sstream>
+
 #include "llmath.h"
 
 #include "fmodstudio/fmod.hpp"
@@ -39,6 +41,23 @@ inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
         return false;
     LL_WARNS("AudioImpl") << string << " Error: " << FMOD_ErrorString(result) << LL_ENDL;
     return true;
+}
+
+static std::string stream_buffer_size_to_string(FMOD::System* system, const char* context)
+{
+    unsigned int file_buffer_size = 0;
+    FMOD_TIMEUNIT file_buffer_size_type = FMOD_TIMEUNIT_RAWBYTES;
+    if (Check_FMOD_Error(system->getStreamBufferSize(&file_buffer_size, &file_buffer_size_type),
+                         "FMOD::System::getStreamBufferSize"))
+    {
+        return std::string("FMOD stream buffer size [") + context + "]: unavailable";
+    }
+
+    std::ostringstream stream;
+    stream << "FMOD stream buffer size [" << context
+           << "]: size=" << file_buffer_size
+           << " type=" << static_cast<unsigned int>(file_buffer_size_type);
+    return stream.str();
 }
 
 class LLAudioStreamManagerFMODSTUDIO
@@ -75,13 +94,55 @@ mFMODInternetStreamChannelp(NULL),
 mGain(1.0f),
 mWasAlreadyPlaying(false)
 {
-    // Number of milliseconds of audio to buffer for the audio card.
-    // Must be larger than the usual Second Life frame stutter time.
-    const U32 buffer_seconds = 10;      //sec
-    const U32 estimated_bitrate = 128;  //kbit/sec
-    Check_FMOD_Error(mSystem->setStreamBufferSize(estimated_bitrate * buffer_seconds * 128/*bytes/kbit*/, FMOD_TIMEUNIT_RAWBYTES), "FMOD::System::setStreamBufferSize");
+    applyStreamBufferSize();
 
     Check_FMOD_Error(system->createChannelGroup("stream", &mStreamGroup), "FMOD::System::createChannelGroup");
+
+    if (mStreamGroup &&
+        !Check_FMOD_Error(mSystem->createDSPByType(FMOD_DSP_TYPE_MULTIBAND_EQ, &mStreamEqDsp),
+                          "FMOD::System::createDSPByType(MULTIBAND_EQ)"))
+    {
+        mStreamEqDsp->setParameterInt(FMOD_DSP_MULTIBAND_EQ_A_FILTER,
+                                      FMOD_DSP_MULTIBAND_EQ_FILTER_DISABLED);
+        mStreamEqDsp->setParameterFloat(FMOD_DSP_MULTIBAND_EQ_A_FREQUENCY, 6000.0f);
+        mStreamEqDsp->setParameterFloat(FMOD_DSP_MULTIBAND_EQ_A_GAIN, 4.0f);
+        Check_FMOD_Error(mStreamGroup->addDSP(0, mStreamEqDsp),
+                         "FMOD::ChannelGroup::addDSP(stream EQ)");
+    }
+}
+
+void LLStreamingAudio_FMODSTUDIO::applyStreamBufferSize()
+{
+    const U32 buffer_seconds = 10;
+    const U32 estimated_bitrate = (mQuality == 1) ? 320u : 128u;
+    const U32 stream_buffer_size = estimated_bitrate * buffer_seconds * 128;
+    if (!Check_FMOD_Error(mSystem->setStreamBufferSize(stream_buffer_size, FMOD_TIMEUNIT_RAWBYTES),
+                          "FMOD::System::setStreamBufferSize"))
+    {
+        LL_DEBUGS("AudioImpl") << "FSParcelStreamQuality buffer hint: quality=" << mQuality
+                                << " estimated_bitrate_kbps=" << estimated_bitrate
+                                << " seconds=" << buffer_seconds
+                                << " requested_size=" << stream_buffer_size
+                                << LL_ENDL;
+        LL_DEBUGS("AudioImpl") << stream_buffer_size_to_string(mSystem, "after applyStreamBufferSize") << LL_ENDL;
+    }
+}
+
+void LLStreamingAudio_FMODSTUDIO::applyStreamEq()
+{
+    if (!mStreamEqDsp) return;
+    const int filter_type = (mQuality == 1)
+        ? static_cast<int>(FMOD_DSP_MULTIBAND_EQ_FILTER_HIGHSHELF)
+        : static_cast<int>(FMOD_DSP_MULTIBAND_EQ_FILTER_DISABLED);
+    mStreamEqDsp->setParameterInt(FMOD_DSP_MULTIBAND_EQ_A_FILTER, filter_type);
+}
+
+void LLStreamingAudio_FMODSTUDIO::setQuality(U32 quality)
+{
+    if (mQuality == quality) return;
+    mQuality = quality;
+    applyStreamBufferSize();
+    applyStreamEq();
 }
 
 LLStreamingAudio_FMODSTUDIO::~LLStreamingAudio_FMODSTUDIO()
@@ -92,6 +153,16 @@ LLStreamingAudio_FMODSTUDIO::~LLStreamingAudio_FMODSTUDIO()
         if (releaseDeadStreams())
             break;
         ms_sleep(10);
+    }
+
+    if (mStreamEqDsp)
+    {
+        if (mStreamGroup)
+        {
+            mStreamGroup->removeDSP(mStreamEqDsp);
+        }
+        mStreamEqDsp->release();
+        mStreamEqDsp = nullptr;
     }
 }
 

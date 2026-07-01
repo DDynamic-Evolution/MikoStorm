@@ -63,19 +63,25 @@ public:
     //Streamtitle display DKO
     LLSD getCurrentMetadata() const noexcept { return mMetadata; }
 
+    void setQuality(U32 quality);
+
 private:
     bool releaseDeadStreams();
+    void applyStreamBufferSize();
+    void applyStreamEq();
 
     FMOD::System *mSystem;
 
     LLAudioStreamManagerFMODSTUDIO *mCurrentInternetStreamp;
     FMOD::ChannelGroup* mStreamGroup;
     FMOD::Channel *mFMODInternetStreamChannelp;
+    FMOD::DSP* mStreamEqDsp { nullptr };
     std::list<LLAudioStreamManagerFMODSTUDIO *> mDeadStreams;
 
     std::string mURL;
     std::string mPendingURL;
     F32 mGain;
+    U32 mQuality { 0 };
     // <DKO> Streamtitle display
     LLSD mMetadata;
 

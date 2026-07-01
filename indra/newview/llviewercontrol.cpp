@@ -63,6 +63,7 @@
 #include "llvlcomposition.h"
 #include "pipeline.h"
 #include "llviewerjoystick.h"
+#include "llpositionalstreammgr.h"
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llparcel.h"
@@ -527,6 +528,41 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 {
     audio_update_volume(true);
 }
+
+// <FS:AYA> [PositionalStream]
+static void handleStream3DRolloffChanged(const LLSD&)
+{
+    LLPositionalStreamMgr::instance().applyDefaultRolloff(
+        gSavedSettings.getF32("Stream3DRolloffMin"),
+        gSavedSettings.getF32("Stream3DRolloffMax"));
+}
+
+static void handleStream3DVolumeChanged(const LLSD&)
+{
+    LLPositionalStreamMgr::instance().applyMasterVolume(
+        gSavedSettings.getF32("Stream3DVolumeMaster"));
+}
+
+static void handleStream3DEnabledChanged(const LLSD& newvalue)
+{
+    if (!newvalue.asBoolean())
+    {
+        LLPositionalStreamMgr::instance().shutdownAll();
+    }
+    else
+    {
+        LLPositionalStreamMgr::instance().forceRescan();
+    }
+}
+
+static void handleStream3DDescriptionScanChanged(const LLSD& newvalue)
+{
+    if (!newvalue.asBoolean())
+    {
+        LLPositionalStreamMgr::instance().shutdownPrimBindings();
+    }
+}
+// </FS:AYA> [PositionalStream]
 
 static bool handleJoystickChanged(const LLSD& newvalue)
 {
@@ -1381,6 +1417,12 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMax", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DVolumeMaster", handleStream3DVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteStream3D", handleStream3DVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
     setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);

@@ -409,8 +409,305 @@
     <string>U32</string>
     <key>Value</key>
     <integer>2</integer>
-  </map>
-  <key>StreamMetadataAnnounceToChat</key>
+   </map>
+   <key>Stream3DBinauralRender</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r11/r31: Debug-only override for the lite-HRTF DSP on positional streams. -1 (default, sentinel) = follow the publisher's {binaural:on|off} tag (and treat unspecified as off). 0 = force OFF (FMOD's built-in panner only, r10-equivalent behavior). 1 = force ON (overrides {binaural:off}). Not exposed in Preferences — listeners are intended to hear the publisher's intent unchanged.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>-1</integer>
+   </map>
+   <key>Stream3DDebugPlay</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView: Toggle to start/stop the 3D Stream debug source. URL is read from Stream3DDebugUrl at the moment of toggle-on; the source is anchored 5m in front of the agent at that instant.</string>
+     <key>Persist</key>
+     <integer>0</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>0</integer>
+   </map>
+   <key>Stream3DDebugStereoPlay</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M5-a: Toggle to start/stop a stereo 3D Stream debug source. URL is read from Stream3DDebugUrl. Pulls PCM from a source stream and feeds two OPENUSER 3D mono sounds; in M5-a both sides share the same downmixed signal at 5m in front of the agent (later milestones split L/R).</string>
+     <key>Persist</key>
+     <integer>0</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>0</integer>
+   </map>
+   <key>Stream3DDebugUrl</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView: HTTP audio stream URL used for the 3D Stream debug toggle (set Stream3DDebugPlay to start playback at 5m in front of the agent).</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>String</string>
+     <key>Value</key>
+     <string />
+   </map>
+   <key>Stream3DDescriptionScan</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M8: Advanced developer setting for prim Description tag scanning. When false, active polling stops, ObjectProperties replies are ignored, and all prim-bound streams are torn down. Defaults on so the user-facing Stream3DEnabled setting is the opt-in; URL sources still require per-URL playback confirmation.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>1</integer>
+   </map>
+   <key>Stream3DEnabled</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M8: Master kill switch for the positional stream feature. When false, every active prim and debug stream is torn down immediately, polling stops, and new debug toggles are refused. Defaults off so users explicitly opt in before in-world Description tags can trigger external 3D Stream URLs.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>0</integer>
+   </map>
+   <key>Stream3DLfeGain</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r12.1: Debug-only override for the LFE channel gain multiplier on positional streams. -1.0 (default, sentinel) = follow the publisher's {lfegain:N} tag (and treat unspecified as 1.0 = passthrough). Any value 0.0 or greater forces the LFE gain regardless of tag. Final value is clamped to 0.0 to 3.0 (1.0 = passthrough, 2.0 = +6dB). Applies to both Upmix path (after 80Hz LPF) and 5.1 native LFE feed. Not exposed in Preferences — listeners are intended to hear the publisher's intent unchanged.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>-1.0</real>
+   </map>
+   <key>Stream3DMaxConcurrent</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M8: Maximum number of simultaneously bound positional streams (mono + stereo combined). When the cap is reached, new tagged prims are refused (a WARN is logged) until an existing binding is released. 0 means unlimited.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>4</integer>
+   </map>
+   <key>Stream3DMaxDistance</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M3b: Maximum distance in meters within which prims are polled with RequestObjectPropertiesFamily to discover [3dstream:...] tags. Should be at least as large as Stream3DRolloffMax.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>64.0</real>
+   </map>
+   <key>Stream3DOccluderRange</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r13: Maximum listener-to-source distance (m) at which OBB occlusion raycasts run. Beyond this range applyToChannel skips firstHit and treats the source as un-occluded (still ramping the DSP cutoff back to bypass via the normal smoothing path, so no audible cliff). Default 64 m matches typical SL parcel reach. 0 = disable cull (always raycast — useful for very large venues or debug). Read each tick by LLOcclusionGeometryMgr::applyToChannel; live-tunable. Not exposed in Preferences — implementer / verification adjustment only.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>64.0</real>
+   </map>
+   <key>Stream3DOcclusion</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r13: Master sentinel for tag-based OBB occlusion on positional-stream and llPlaySound channels. -1 (default) = enabled, 0 = disabled (all [pandaview:occlude] tags ignored — raycast is skipped and the DSP cutoff ramps back to bypass through the normal smoothing path so toggling live does not produce an audible cliff), 1 = explicit enabled (reserved for future per-mode overrides). Other values are treated as enabled. Read each tick by LLOcclusionGeometryMgr::applyToChannel; live-tunable. Not exposed in Preferences — implementer / verification adjustment only. Stream3DShowOccluders (debug overlay) is independent of this sentinel.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>-1</integer>
+   </map>
+   <key>Stream3DOcclusionRampMs</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r13: Ramp time (ms) for the OBB-occlusion direct/reverb factor on positional-stream channels. Smooths the transition when an [pandaview:occlude] prim moves into or out of the listener-source segment, so opening a virtual door doesn't jump from silence to full volume in one frame. Default 250 ms (typical perceptual sweet spot). 0 = disable smoothing (binary jump, debug only). Read each tick by LLOcclusionGeometryMgr::applyToChannel; live-tunable. Not exposed in Preferences — implementer / verification adjustment only.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>250.0</real>
+   </map>
+   <key>Stream3DPollInterval</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M3b: Seconds between RequestObjectPropertiesFamily re-polls of in-range prims. Catches LSL llSetObjectDesc tag changes and prims that existed before the viewer arrived. 0 disables active polling (right-click / inspect still updates on demand).</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>30.0</real>
+   </map>
+   <key>Stream3DReconnectAttempts</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M7: Number of times the manager will try to reopen a positional stream after FMOD reports an error or a mid-stream drop. Each retry waits 5 seconds; after exhausting all attempts the binding is released. 0 disables auto-reconnect.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>3</integer>
+   </map>
+   <key>Stream3DRolloffMax</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView: Distance in meters at which a positional stream is fully attenuated (FMOD 3D rolloff far distance). Applied live.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>20.0</real>
+   </map>
+   <key>Stream3DRolloffMin</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView: Distance in meters within which a positional stream plays at full volume (FMOD 3D rolloff near distance). Applied live.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>1.0</real>
+   </map>
+   <key>Stream3DRoutingDiagnostic</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r10.x: When true, emit one chat line per fallback case describing which source channel feeds which speaker prim per the §4.2 compatibility matrix (e.g. "ch:FL prim playing L (source is 2ch)"). Throttled by (root, url, observed channel count, prim-set signature) so it fires once per structural change. False (default) keeps chat silent for ordinary listeners; turn on while placing 5.1ch venues. Bound to the Preferences &gt; Sound checkbox "Show channel routing diagnostics in chat".</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>0</integer>
+   </map>
+   <key>Stream3DShowOccluders</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r13: Render every registered [pandaview:occlude] prim as an oriented bounding-box wireframe so the venue builder can confirm what the audio engine actually sees. Colour scales orange → red with the direct factor (0.0 = registered/transparent ramp, 0.7 = default tag, 1.0 = full opaque wall). Toggle live; no relog needed. Read each frame by LLPipeline::renderDebug from a CachedControl, so cost is one int load when off.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>0</integer>
+   </map>
+   <key>Stream3DStereoMaxSpeakers</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r8: Maximum number of speaker prims allowed in a single distributed-stereo binding ([3dstream-stereo:...]). Speakers beyond this count are dropped from the linkset traversal tail and a throttled toast is emitted. Re-evaluation picks up changes on the next poll cycle.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>16</integer>
+   </map>
+   <key>Stream3DUpmix</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r12: Debug-only override for the 2ch→5.1 upmix dispatch on positional streams. -1 (default, sentinel) = follow the publisher's {upmix:on|off} tag (and treat unspecified as off). 0 = force OFF (the 2ch source plays 2-spk stereo, r11-equivalent behavior). 1 = force ON (overrides {upmix:off}; auto-bypass on 6ch native source still applies — chat will note the bypass). Not exposed in Preferences — listeners are intended to hear the publisher's intent unchanged.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>-1</integer>
+   </map>
+   <key>Stream3DUpmixCenterBleed</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r12: Front L/R center-bleed-removal amount in the 2ch→5.1 upmix path. 1.0 (default) = full extraction (phantom center fully removed from front L/R, plays only from C speaker). 0.0 = no center removal (front L/R full-range, phantom center remains). Range clamped to 0.0–1.0 inside the helper. Same lock-free atomic plumbing as Stream3DUpmixLfeCutoff. Not exposed in Preferences — implementer / verification adjustment only.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>1.0</real>
+   </map>
+   <key>Stream3DUpmixLfeCutoff</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r12: Cutoff frequency (Hz) for the LFE-channel low-pass filter in the 2ch→5.1 upmix path. Default 80 Hz. Range clamped to 20.0–200.0 inside the helper so a hostile / mistyped value can't overflow the biquad coefficients. Read by the FMOD mixer thread via a lock-free atomic snapshot, refreshed every poll. Not exposed in Preferences — for implementer / verification adjustment only.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>80.0</real>
+   </map>
+   <key>Stream3DUpmixRearDelayMs</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r12: Base delay (ms) for the rear-channel decorrelation tap in the 2ch→5.1 upmix path. Default 16 ms. Per-speaker SL/SR delays are split symmetrically around this value by a fixed ±2 ms jitter (so SL=base+2, SR=base-2) for L/R channel decorrelation. Range clamped to 0.0–32.0 inside the helper to fit the pre-allocated delay-line capacity. Same lock-free atomic plumbing as Stream3DUpmixLfeCutoff. Not exposed in Preferences — implementer / verification adjustment only.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>16.0</real>
+   </map>
+   <key>Stream3DVenueOverride</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r11: Debug-only override for the venue convolution reverb on positional streams. Empty (default, sentinel) = follow the publisher's {venue:NAME} tag (and treat unspecified as dry). Non-empty = force this venue regardless of tag. Accepted names: dry, room_small, room_medium, hall_small, hall_medium, hall_large, club, cathedral, outdoor. Unknown names surface as IRNotLoaded chat warnings and fall back to dry. Not exposed in Preferences — listeners are intended to hear the publisher's intent unchanged.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>String</string>
+     <key>Value</key>
+     <string />
+   </map>
+   <key>Stream3DVenueWetGain</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r11: Debug-only override for the venue reverb wet-mix multiplier. -1.0 (default, sentinel) = follow the publisher's {wetgain:N} tag (and treat unspecified as 0.2 — r12.1 default, lowered from 1.0 after live-listening). Any value &gt;= 0.0 forces the wet-mix multiplier regardless of tag. Final value is clamped to [0.0, 2.0]; 0.0 is silent wet (= reverb fully suppressed even if a non-dry venue is selected). Musically usable range is roughly 0.1–0.5; values above that smear the dry mix. Not exposed in Preferences — listeners are intended to hear the publisher's intent unchanged.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>-1.0</real>
+   </map>
+   <key>Stream3DVolumeMaster</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView M7: Master volume multiplier (0.0 - 1.0) applied to every prim-bound positional stream. Live: changes take effect on the next frame.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>F32</string>
+     <key>Value</key>
+     <real>0.5</real>
+   </map>
+   <key>Stream3DUrlPreResolve</key>
+   <map>
+     <key>Comment</key>
+     <string>PandaView r11: viewer-side URL pre-resolve toggle. -1 (default, sentinel) = enabled — libcurl follows HTTPS→HTTP cross-protocol redirects (typical of Cloudflare/CDN fronted Shoutcast/Icecast) before handing the URL to FMOD::createStream, which does not follow such redirects on its own. 0 = disabled (URL passed to FMOD raw, r10 behavior). Probe is HEAD with ranged-GET fallback, max 3 redirects, ~3 s worst-case timeout, HTTP/HTTPS scheme allowlist. Failure modes (timeout / network error / no redirect) are non-fatal — viewer falls back to the raw URL silently.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>S32</string>
+     <key>Value</key>
+     <integer>-1</integer>
+   </map>
+   <key>StreamMetadataAnnounceToChat</key>
   <map>
     <key>Comment</key>
     <string>Announces stream metadata to a defined chat channel.</string>
@@ -8847,11 +9144,22 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>MuteUI</key>
-    <map>
-      <key>Comment</key>
-      <string>UI sound effects play at 0 volume</string>
+     </map>
+     <key>MuteStream3D</key>
+     <map>
+       <key>Comment</key>
+       <string>3D Stream plays at 0 volume.</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>Boolean</string>
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+     <key>MuteUI</key>
+     <map>
+       <key>Comment</key>
+       <string>UI sound effects play at 0 volume</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -25113,8 +25421,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-    </map>
-    <key>FSTypingChevronPrefix</key>
+     </map>
+     <key>FSParcelStreamQuality</key>
+     <map>
+       <key>Comment</key>
+       <string>Parcel music stream quality. 0=Original FS path. 1=PandaView enhanced: stream buffer hint raised from 128 kbps to 320 kbps so high-bitrate streams (256/320 kbps mp3, FLAC-over-HTTP) stop starving and pause/resume cycling. Also picks the SPLINE resampler instead of LINEAR, and applies a +4 dB high-shelf EQ above 6 kHz to restore the presence band typical 128 kbps mp3 streams thin out. Buffer hint applies on next stream start; EQ swaps live; resampler change requires viewer restart. Gain curve is unchanged (squared, perceptual).</string>
+       <key>Persist</key>
+       <integer>1</integer>
+       <key>Type</key>
+       <string>U32</string>
+       <key>Value</key>
+       <integer>0</integer>
+     </map>
+     <key>FSTypingChevronPrefix</key>
     <map>
       <key>Comment</key>
       <string>Adds an additional chevron prefix to the IM window as typing indicator</string>
