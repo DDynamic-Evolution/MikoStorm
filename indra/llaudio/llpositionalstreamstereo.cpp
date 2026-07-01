@@ -1,0 +1,750 @@
+/**
+ * @file llpositionalstreamstereo.cpp
+ * @brief Stereo-aware HTTP audio stream split across two 3D positions (PandaView M5).
+ *
+ * $LicenseInfo:firstyear=2026&license=viewerlgpl$
+ * Second Life Viewer Source Code
+ * Copyright (C) 2026, Phoenix Firestorm Project, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * version 2.1 of the License only.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * $/LicenseInfo$
+ */
+
+#include "linden_common.h"
+
+#include "llpositionalstreamstereo.h"
+
+#include "llaudioengine.h"
+#include "llaudioengine_fmodstudio.h"
+#include "llfasttimer.h"
+#include "llstring.h"
+#include "lltimer.h"
+
+#include "fmodstudio/fmod.hpp"
+#include "fmodstudio/fmod_errors.h"
+
+#include <chrono>
+#include <cstring>
+
+#if LL_LINUX
+#  include <pthread.h>
+#endif
+
+namespace
+{
+    bool checkFmod(FMOD_RESULT result, const char* what)
+    {
+        if (result == FMOD_OK)
+        {
+            return false;
+        }
+        LL_WARNS("Stream3D") << what << " error: " << FMOD_ErrorString(result) << LL_ENDL;
+        return true;
+    }
+
+    // round up to next power of two >= v (used for ring sizing).
+    size_t nextPow2(size_t v)
+    {
+        size_t p = 1;
+        while (p < v) p <<= 1;
+        return p;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// LLFloatRing
+// ---------------------------------------------------------------------------
+
+LLFloatRing::LLFloatRing()
+:   mWriteIdx(0),
+    mReadIdx(0)
+{
+}
+
+void LLFloatRing::reset(size_t capacity)
+{
+    // capacity is in F32 samples; we keep one slot empty to disambiguate
+    // full vs empty so request capacity+1.
+    mBuf.assign(capacity + 1, 0.f);
+    mWriteIdx.store(0, std::memory_order_relaxed);
+    mReadIdx.store(0, std::memory_order_relaxed);
+}
+
+void LLFloatRing::clear()
+{
+    mWriteIdx.store(0, std::memory_order_relaxed);
+    mReadIdx.store(0, std::memory_order_relaxed);
+}
+
+size_t LLFloatRing::readAvailable() const
+{
+    if (mBuf.empty()) return 0;
+    size_t w = mWriteIdx.load(std::memory_order_acquire);
+    size_t r = mReadIdx.load(std::memory_order_acquire);
+    return (w >= r) ? (w - r) : (mBuf.size() - r + w);
+}
+
+size_t LLFloatRing::writeAvailable() const
+{
+    if (mBuf.empty()) return 0;
+    // total slots minus one (reserved) minus what's already filled.
+    return mBuf.size() - 1 - readAvailable();
+}
+
+size_t LLFloatRing::write(const F32* src, size_t n)
+{
+    if (mBuf.empty()) return 0;
+    size_t w = mWriteIdx.load(std::memory_order_relaxed);
+    size_t r = mReadIdx.load(std::memory_order_acquire);
+    size_t free_slots = (mBuf.size() - 1 - ((w >= r) ? (w - r) : (mBuf.size() - r + w)));
+    size_t to_write = (n < free_slots) ? n : free_slots;
+
+    size_t first_chunk = std::min(to_write, mBuf.size() - w);
+    std::memcpy(mBuf.data() + w, src, first_chunk * sizeof(F32));
+    if (to_write > first_chunk)
+    {
+        std::memcpy(mBuf.data(), src + first_chunk, (to_write - first_chunk) * sizeof(F32));
+    }
+    mWriteIdx.store((w + to_write) % mBuf.size(), std::memory_order_release);
+    return to_write;
+}
+
+size_t LLFloatRing::read(F32* dst, size_t n)
+{
+    if (mBuf.empty()) return 0;
+    size_t r = mReadIdx.load(std::memory_order_relaxed);
+    size_t w = mWriteIdx.load(std::memory_order_acquire);
+    size_t available = (w >= r) ? (w - r) : (mBuf.size() - r + w);
+    size_t to_read = (n < available) ? n : available;
+
+    size_t first_chunk = std::min(to_read, mBuf.size() - r);
+    std::memcpy(dst, mBuf.data() + r, first_chunk * sizeof(F32));
+    if (to_read > first_chunk)
+    {
+        std::memcpy(dst + first_chunk, mBuf.data(), (to_read - first_chunk) * sizeof(F32));
+    }
+    mReadIdx.store((r + to_read) % mBuf.size(), std::memory_order_release);
+    return to_read;
+}
+
+// ---------------------------------------------------------------------------
+// LLPositionalStreamStereo
+// ---------------------------------------------------------------------------
+
+LLPositionalStreamStereo::LLPositionalStreamStereo()
+:   mSourceSound(nullptr),
+    mUserSoundL(nullptr),
+    mUserSoundR(nullptr),
+    mChannelL(nullptr),
+    mChannelR(nullptr),
+    mSampleRate(0),
+    mSourceChannels(0),
+    mSourceBytesPerSample(0),
+    mSourceIsFloat(false),
+    mPositionL(0.f, 0.f, 0.f),
+    mPositionR(0.f, 0.f, 0.f),
+    mVolume(1.f),
+    mRolloffMin(1.f),
+    mRolloffMax(20.f),
+    mState(State::Idle),
+    mDecodeStop(false)
+{
+}
+
+LLPositionalStreamStereo::~LLPositionalStreamStereo()
+{
+    if (gAudiop)
+    {
+        stop();
+    }
+    else
+    {
+        // r7 M3: FMOD engine has already been torn down (Quit ordering or
+        // engine restart). releaseAll() would call into freed FMOD pointers,
+        // but the decode thread *must* still be joined or std::thread's
+        // destructor calls std::terminate(). Skip FMOD release; just join.
+        stopDecodeThread();
+    }
+}
+
+FMOD::System* LLPositionalStreamStereo::getFmodSystem() const
+{
+    if (!gAudiop) return nullptr;
+    LLAudioEngine_FMODSTUDIO* engine = dynamic_cast<LLAudioEngine_FMODSTUDIO*>(gAudiop);
+    return engine ? engine->getSystem() : nullptr;
+}
+
+bool LLPositionalStreamStereo::start(const std::string& url,
+                                     const LLVector3& l_pos,
+                                     const LLVector3& r_pos)
+{
+    stop();
+
+    std::string clean_url(url);
+    LLStringUtil::trim(clean_url);
+    if (clean_url.empty())
+    {
+        LL_WARNS("Stream3D") << "Refusing to start stereo stream with empty URL" << LL_ENDL;
+        return false;
+    }
+
+    FMOD::System* system = getFmodSystem();
+    if (!system)
+    {
+        LL_WARNS("Stream3D") << "FMOD Studio system unavailable" << LL_ENDL;
+        return false;
+    }
+
+    mUrl = clean_url;
+    mPositionL = l_pos;
+    mPositionR = r_pos;
+
+    // Source: 2D, non-blocking, no implicit playback. We will drain it via
+    // Sound::readData() rather than playSound().
+    const FMOD_MODE source_mode = FMOD_2D
+                                | FMOD_NONBLOCKING
+                                | FMOD_IGNORETAGS;
+
+    if (checkFmod(system->createStream(clean_url.c_str(), source_mode, nullptr, &mSourceSound),
+                  "createStream(source)"))
+    {
+        mSourceSound = nullptr;
+        mUrl.clear();
+        return false;
+    }
+
+    mState = State::Opening;
+    LL_INFOS("Stream3D") << "Opening stereo source '" << clean_url
+                          << "' L=" << l_pos << " R=" << r_pos << LL_ENDL;
+    return true;
+}
+
+void LLPositionalStreamStereo::stop()
+{
+    // r7 M3: invariant — decode thread must be joined *before* releaseAll()
+    // touches FMOD. The decode thread reads mSourceSound via pumpSource(),
+    // so releasing it underneath an in-flight readData() crashes inside
+    // FMOD. releaseAll() asserts the invariant in debug builds.
+    stopDecodeThread();
+    releaseAll();
+    mUrl.clear();
+    mState = State::Idle;
+}
+
+void LLPositionalStreamStereo::releaseAll()
+{
+    // r7 M3: enforce the shutdown invariant. Any caller that touches FMOD
+    // resources here must have already joined the decode thread, otherwise
+    // pumpSource() may dereference mSourceSound after release().
+    llassert(!mDecodeThread.joinable());
+
+    if (mChannelL)
+    {
+        checkFmod(mChannelL->stop(), "Channel::stop(L)");
+        mChannelL = nullptr;
+    }
+    if (mChannelR)
+    {
+        checkFmod(mChannelR->stop(), "Channel::stop(R)");
+        mChannelR = nullptr;
+    }
+    if (mUserSoundL)
+    {
+        checkFmod(mUserSoundL->release(), "Sound::release(userL)");
+        mUserSoundL = nullptr;
+    }
+    if (mUserSoundR)
+    {
+        checkFmod(mUserSoundR->release(), "Sound::release(userR)");
+        mUserSoundR = nullptr;
+    }
+    if (mSourceSound)
+    {
+        checkFmod(mSourceSound->release(), "Sound::release(source)");
+        mSourceSound = nullptr;
+    }
+    mRingL.clear();
+    mRingR.clear();
+    mSampleRate = 0;
+    mSourceChannels = 0;
+    mSourceBytesPerSample = 0;
+    mSourceIsFloat = false;
+}
+
+void LLPositionalStreamStereo::setPositions(const LLVector3& l_pos, const LLVector3& r_pos)
+{
+    mPositionL = l_pos;
+    mPositionR = r_pos;
+    if (mChannelL) applyChannelAttributes(mChannelL, l_pos);
+    if (mChannelR) applyChannelAttributes(mChannelR, r_pos);
+}
+
+void LLPositionalStreamStereo::applyChannelAttributes(FMOD::Channel* channel, const LLVector3& pos)
+{
+    FMOD_VECTOR fpos = { pos.mV[0], pos.mV[1], pos.mV[2] };
+    FMOD_VECTOR fvel = { 0.f, 0.f, 0.f };
+    checkFmod(channel->set3DAttributes(&fpos, &fvel), "Channel::set3DAttributes");
+}
+
+void LLPositionalStreamStereo::setVolume(F32 volume)
+{
+    mVolume = volume;
+    if (mChannelL) checkFmod(mChannelL->setVolume(volume), "Channel::setVolume(L)");
+    if (mChannelR) checkFmod(mChannelR->setVolume(volume), "Channel::setVolume(R)");
+}
+
+void LLPositionalStreamStereo::setRolloffDistances(F32 min_distance, F32 max_distance)
+{
+    min_distance = llmax(min_distance, 0.1f);
+    max_distance = llmax(max_distance, min_distance + 0.1f);
+    mRolloffMin = min_distance;
+    mRolloffMax = max_distance;
+    if (mChannelL)
+        checkFmod(mChannelL->set3DMinMaxDistance(mRolloffMin, mRolloffMax),
+                  "Channel::set3DMinMaxDistance(L)");
+    if (mChannelR)
+        checkFmod(mChannelR->set3DMinMaxDistance(mRolloffMin, mRolloffMax),
+                  "Channel::set3DMinMaxDistance(R)");
+}
+
+// static
+FMOD_RESULT F_CALL
+LLPositionalStreamStereo::pcmReadCallbackL(FMOD_SOUND* sound, void* data, U32 datalen)
+{
+    void* ud = nullptr;
+    reinterpret_cast<FMOD::Sound*>(sound)->getUserData(&ud);
+    auto* self = static_cast<LLPositionalStreamStereo*>(ud);
+    F32* out = static_cast<F32*>(data);
+    size_t n = datalen / sizeof(F32);
+    size_t got = self ? self->mRingL.read(out, n) : 0;
+    if (got < n)
+    {
+        std::memset(out + got, 0, (n - got) * sizeof(F32));
+    }
+    return FMOD_OK;
+}
+
+// static
+FMOD_RESULT F_CALL
+LLPositionalStreamStereo::pcmReadCallbackR(FMOD_SOUND* sound, void* data, U32 datalen)
+{
+    void* ud = nullptr;
+    reinterpret_cast<FMOD::Sound*>(sound)->getUserData(&ud);
+    auto* self = static_cast<LLPositionalStreamStereo*>(ud);
+    F32* out = static_cast<F32*>(data);
+    size_t n = datalen / sizeof(F32);
+    size_t got = self ? self->mRingR.read(out, n) : 0;
+    if (got < n)
+    {
+        std::memset(out + got, 0, (n - got) * sizeof(F32));
+    }
+    return FMOD_OK;
+}
+
+bool LLPositionalStreamStereo::createUserSounds()
+{
+    FMOD::System* system = getFmodSystem();
+    if (!system) return false;
+
+    auto build = [&](FMOD_SOUND_PCMREAD_CALLBACK cb, FMOD::Sound** out_sound) -> bool
+    {
+        FMOD_CREATESOUNDEXINFO ex = {};
+        ex.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
+        ex.numchannels = 1;
+        ex.defaultfrequency = mSampleRate;
+        ex.format = FMOD_SOUND_FORMAT_PCMFLOAT;
+        // Length in BYTES; FMOD loops back when reaching it but our callback
+        // keeps producing data so playback never genuinely ends.
+        ex.length = static_cast<U32>(mSampleRate) * sizeof(F32) * 5;
+        ex.decodebuffersize = 4096;
+        ex.pcmreadcallback = cb;
+
+        const FMOD_MODE mode = FMOD_OPENUSER
+                             | FMOD_CREATESTREAM
+                             | FMOD_LOOP_NORMAL
+                             | FMOD_3D
+                             | FMOD_3D_LINEARSQUAREROLLOFF;
+
+        if (checkFmod(system->createSound(nullptr, mode, &ex, out_sound), "createSound(OPENUSER)"))
+        {
+            *out_sound = nullptr;
+            return false;
+        }
+        checkFmod((*out_sound)->setUserData(this), "Sound::setUserData");
+        return true;
+    };
+
+    if (!build(&pcmReadCallbackL, &mUserSoundL)) return false;
+    if (!build(&pcmReadCallbackR, &mUserSoundR)) return false;
+    return true;
+}
+
+bool LLPositionalStreamStereo::startUserChannels()
+{
+    FMOD::System* system = getFmodSystem();
+    if (!system || !mUserSoundL || !mUserSoundR) return false;
+
+    if (checkFmod(system->playSound(mUserSoundL, nullptr, true /*paused*/, &mChannelL),
+                  "playSound(L)"))
+    {
+        mChannelL = nullptr;
+        return false;
+    }
+    if (checkFmod(system->playSound(mUserSoundR, nullptr, true /*paused*/, &mChannelR),
+                  "playSound(R)"))
+    {
+        mChannelR = nullptr;
+        return false;
+    }
+
+    applyChannelAttributes(mChannelL, mPositionL);
+    applyChannelAttributes(mChannelR, mPositionR);
+    checkFmod(mChannelL->set3DMinMaxDistance(mRolloffMin, mRolloffMax),
+              "Channel::set3DMinMaxDistance(L)");
+    checkFmod(mChannelR->set3DMinMaxDistance(mRolloffMin, mRolloffMax),
+              "Channel::set3DMinMaxDistance(R)");
+    checkFmod(mChannelL->setVolume(mVolume), "Channel::setVolume(L)");
+    checkFmod(mChannelR->setVolume(mVolume), "Channel::setVolume(R)");
+
+    // Sample-accurate sync between L and R. Without this, the two channels
+    // start on different mixer ticks (~5–20 ms skew), which on shared L/R
+    // content causes a fixed image offset (Haas) and comb filtering.
+    // Read the parent (mixer) DSP clock and schedule both channels to begin
+    // at the same future sample index.
+    unsigned long long parent_now = 0;
+    checkFmod(mChannelL->getDSPClock(nullptr, &parent_now), "Channel::getDSPClock(L)");
+    const unsigned long long lead = static_cast<unsigned long long>(mSampleRate) / 50; // ~20ms
+    const unsigned long long start_at = parent_now + lead;
+    checkFmod(mChannelL->setDelay(start_at, 0, false), "Channel::setDelay(L)");
+    checkFmod(mChannelR->setDelay(start_at, 0, false), "Channel::setDelay(R)");
+
+    checkFmod(mChannelL->setPaused(false), "Channel::setPaused(L)");
+    checkFmod(mChannelR->setPaused(false), "Channel::setPaused(R)");
+    return true;
+}
+
+size_t LLPositionalStreamStereo::pumpSource()
+{
+    // r7 M2: invoked from the decode thread. Returns bytes read this iteration
+    // so the caller can decide whether to sleep (0 → idle wait) or continue
+    // pumping (positive → ring may have more room).
+    if (!mSourceSound || mSampleRate <= 0 || mSourceChannels <= 0) return 0;
+
+    // Try to top up both rings. We read enough source frames to fill whichever
+    // ring has the least free space, capped at a reasonable per-frame amount
+    // so we don't stall the main thread on a single update().
+    constexpr size_t kMaxFramesPerPump = 8192;
+
+    size_t free_l = mRingL.writeAvailable();
+    size_t free_r = mRingR.writeAvailable();
+    size_t want_frames = std::min({ free_l, free_r, kMaxFramesPerPump });
+    if (want_frames == 0) return 0;
+
+    const size_t bytes_per_frame = static_cast<size_t>(mSourceBytesPerSample)
+                                 * static_cast<size_t>(mSourceChannels);
+    size_t want_bytes = want_frames * bytes_per_frame;
+    if (mReadScratch.size() < want_bytes)
+    {
+        mReadScratch.resize(want_bytes);
+    }
+
+    U32 read_bytes = 0;
+    FMOD_RESULT rr = mSourceSound->readData(mReadScratch.data(),
+                                            static_cast<U32>(want_bytes),
+                                            &read_bytes);
+    if (rr != FMOD_OK && rr != FMOD_ERR_FILE_EOF)
+    {
+        // FMOD returns FMOD_ERR_NOTREADY when no buffered data is currently
+        // available; that's expected, just sleep briefly in the decode loop.
+        if (rr != FMOD_ERR_NOTREADY)
+        {
+            LL_WARNS("Stream3D") << "Sound::readData error: "
+                                  << FMOD_ErrorString(rr) << LL_ENDL;
+        }
+        return 0;
+    }
+    if (read_bytes == 0) return 0;
+
+    size_t frames_read = read_bytes / bytes_per_frame;
+
+    // Convert (or pass-through) into F32 stack buffers in chunks. For mono
+    // source we feed the same samples to both rings; for stereo we split the
+    // interleaved L/R channels into separate rings (true M5-b deinterleave).
+    constexpr size_t kChunk = 1024;
+    F32 left[kChunk];
+    F32 right[kChunk];
+
+    const U8* sp = mReadScratch.data();
+    size_t remaining = frames_read;
+
+    while (remaining > 0)
+    {
+        size_t this_chunk = std::min(remaining, kChunk);
+
+        if (mSourceChannels == 1)
+        {
+            // Mono source: same samples on both sides — there is no L/R to
+            // separate. The 3D positions of the L and R channels still
+            // produce different spatial cues from the listener's perspective.
+            if (mSourceIsFloat)
+            {
+                std::memcpy(left, sp, this_chunk * sizeof(F32));
+            }
+            else
+            {
+                const S16* s16 = reinterpret_cast<const S16*>(sp);
+                for (size_t i = 0; i < this_chunk; ++i)
+                {
+                    left[i] = static_cast<F32>(s16[i]) * (1.f / 32768.f);
+                }
+            }
+            mRingL.write(left, this_chunk);
+            mRingR.write(left, this_chunk);
+        }
+        else
+        {
+            // Stereo (or more): take channel 0 as L, channel 1 as R, ignore
+            // any further channels. Source is FMOD-interleaved.
+            if (mSourceIsFloat)
+            {
+                const F32* f32 = reinterpret_cast<const F32*>(sp);
+                for (size_t i = 0; i < this_chunk; ++i)
+                {
+                    left[i]  = f32[i * mSourceChannels + 0];
+                    right[i] = f32[i * mSourceChannels + 1];
+                }
+            }
+            else
+            {
+                const S16* s16 = reinterpret_cast<const S16*>(sp);
+                for (size_t i = 0; i < this_chunk; ++i)
+                {
+                    left[i]  = static_cast<F32>(s16[i * mSourceChannels + 0]) * (1.f / 32768.f);
+                    right[i] = static_cast<F32>(s16[i * mSourceChannels + 1]) * (1.f / 32768.f);
+                }
+            }
+            mRingL.write(left,  this_chunk);
+            mRingR.write(right, this_chunk);
+        }
+
+        sp += this_chunk * bytes_per_frame;
+        remaining -= this_chunk;
+    }
+
+    return read_bytes;
+}
+
+static LLTrace::BlockTimerStatHandle FTM_STREAM3D_STEREO_UPDATE("Stream3D Stereo Update");
+
+void LLPositionalStreamStereo::update()
+{
+    LL_RECORD_BLOCK_TIME(FTM_STREAM3D_STEREO_UPDATE);
+
+    // r7 M2: state is atomic now; load once and use the local for the rest of
+    // this update tick to avoid torn reads if the decode thread happens to
+    // change state mid-function (Failed transition is added in M3).
+    const State st = mState.load(std::memory_order_acquire);
+    if (st == State::Idle || st == State::Failed) return;
+    if (!mSourceSound) return;
+
+    if (st == State::Opening)
+    {
+        FMOD_OPENSTATE state = FMOD_OPENSTATE_LOADING;
+        FMOD_RESULT rr = mSourceSound->getOpenState(&state, nullptr, nullptr, nullptr);
+        if (rr != FMOD_OK || state == FMOD_OPENSTATE_ERROR)
+        {
+            LL_WARNS("Stream3D") << "Stereo source open failed: " << mUrl
+                                  << " (" << FMOD_ErrorString(rr) << ")" << LL_ENDL;
+            releaseAll();
+            mUrl.clear();
+            mState = State::Failed;
+            return;
+        }
+        if (state != FMOD_OPENSTATE_READY && state != FMOD_OPENSTATE_PLAYING)
+        {
+            return; // still buffering; check again next frame
+        }
+
+        FMOD_SOUND_TYPE type;
+        FMOD_SOUND_FORMAT fmt;
+        int channels = 0;
+        int bits = 0;
+        if (checkFmod(mSourceSound->getFormat(&type, &fmt, &channels, &bits), "Sound::getFormat"))
+        {
+            releaseAll();
+            mState = State::Failed;
+            return;
+        }
+        float freq = 44100.f;
+        int prio = 0;
+        if (checkFmod(mSourceSound->getDefaults(&freq, &prio), "Sound::getDefaults"))
+        {
+            releaseAll();
+            mState = State::Failed;
+            return;
+        }
+        if (fmt == FMOD_SOUND_FORMAT_PCMFLOAT)
+        {
+            mSourceIsFloat = true;
+            mSourceBytesPerSample = 4;
+        }
+        else if (fmt == FMOD_SOUND_FORMAT_PCM16)
+        {
+            mSourceIsFloat = false;
+            mSourceBytesPerSample = 2;
+        }
+        else
+        {
+            LL_WARNS("Stream3D") << "Source format unsupported (got " << (int)fmt
+                                  << "); aborting stereo path" << LL_ENDL;
+            releaseAll();
+            mState = State::Failed;
+            return;
+        }
+
+        mSampleRate = static_cast<int>(freq);
+        mSourceChannels = channels;
+        size_t cap = nextPow2(kRingFrames);
+        mRingL.reset(cap);
+        mRingR.reset(cap);
+        mState = State::Buffering;
+
+        LL_INFOS("Stream3D") << "Stereo source ready: " << mUrl
+                              << " " << mSampleRate << " Hz x " << mSourceChannels
+                              << " ch, fmt=" << (mSourceIsFloat ? "PCMFLOAT" : "PCM16")
+                              << ", ring cap " << cap << " frames" << LL_ENDL;
+
+        // r7 M2: format/channels are now committed (mSampleRate / mSourceChannels /
+        // mSourceBytesPerSample / mSourceIsFloat) and the rings are sized. Hand
+        // pumping over to the decode thread *before* leaving Opening; otherwise
+        // the rings would never fill (main thread no longer pumps) and we would
+        // be stuck in Buffering forever waiting for kPrebufferFrames.
+        startDecodeThread();
+    }
+
+    if (st == State::Buffering)
+    {
+        if (mRingL.readAvailable() >= kPrebufferFrames
+            && mRingR.readAvailable() >= kPrebufferFrames)
+        {
+            if (!createUserSounds() || !startUserChannels())
+            {
+                LL_WARNS("Stream3D") << "Failed to start OPENUSER channels" << LL_ENDL;
+                // r7 M3: decode thread was started during the Opening→Buffering
+                // transition; it must be joined before releaseAll() touches
+                // mSourceSound (which the thread is still reading via
+                // pumpSource()). releaseAll()'s invariant assert would fire
+                // otherwise.
+                stopDecodeThread();
+                releaseAll();
+                mState = State::Failed;
+                return;
+            }
+            mState = State::Playing;
+            LL_INFOS("Stream3D") << "Stereo path playing: " << mUrl << LL_ENDL;
+            // (decode thread was already started during the Opening→Buffering
+            // transition above; nothing to do here in M2.)
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// r7 M1: decode thread skeleton
+// ---------------------------------------------------------------------------
+
+void LLPositionalStreamStereo::startDecodeThread()
+{
+    if (mDecodeThread.joinable())
+    {
+        // Already running (e.g. State::Playing re-entered without stop()).
+        return;
+    }
+    mDecodeStop.store(false, std::memory_order_release);
+    mDecodeThread = std::thread(&LLPositionalStreamStereo::decodeThreadMain, this);
+    LL_INFOS("Stream3D") << "Decode thread started for " << mUrl << LL_ENDL;
+}
+
+void LLPositionalStreamStereo::stopDecodeThread()
+{
+    if (!mDecodeThread.joinable())
+    {
+        return;
+    }
+    {
+        std::lock_guard<std::mutex> lk(mDecodeMutex);
+        mDecodeStop.store(true, std::memory_order_release);
+    }
+    mDecodeCv.notify_all();
+    mDecodeThread.join();
+    LL_INFOS("Stream3D") << "Decode thread joined for " << mUrl << LL_ENDL;
+}
+
+void LLPositionalStreamStereo::decodeThreadMain()
+{
+#if LL_LINUX
+    // Visible in `top -H` / perf — helps when isolating audio thread cost.
+    pthread_setname_np(pthread_self(), "Stream3D-decode");
+#endif
+
+    // r7 M2: drive pumpSource() from this thread. The 5 ms cadence gives
+    // ~200 Hz pumping which is far more than the ~44 kHz ring needs to stay
+    // ahead of the FMOD mixer (ring caps at 32768 frames ≈ 0.74 s at 44 kHz),
+    // while keeping per-iteration readData()/decode work small. condvar wait
+    // wakes early on stop().
+    static constexpr auto kPumpInterval = std::chrono::milliseconds(5);
+
+    // r7 M4: lightweight pump-time sampling. fast_timer is main-thread only,
+    // so we accumulate per-iteration elapsed time here and dump min/max/avg
+    // every kReportInterval. Visible only with --logdebug Stream3D so the
+    // log file isn't spammed in normal runs.
+    static constexpr F64 kReportInterval = 5.0;
+    F64 window_start = LLTimer::getElapsedSeconds();
+    F64 sum_ms = 0.0;
+    F64 max_ms = 0.0;
+    U32 count = 0;
+    U32 nonempty = 0;
+
+    while (!mDecodeStop.load(std::memory_order_acquire))
+    {
+        const F64 t0 = LLTimer::getElapsedSeconds();
+        const size_t got = pumpSource();
+        const F64 dt_ms = (LLTimer::getElapsedSeconds() - t0) * 1000.0;
+
+        sum_ms += dt_ms;
+        if (dt_ms > max_ms) max_ms = dt_ms;
+        ++count;
+        if (got > 0) ++nonempty;
+
+        const F64 now = LLTimer::getElapsedSeconds();
+        if (now - window_start >= kReportInterval)
+        {
+            LL_DEBUGS("Stream3D") << "decode pump: count=" << count
+                                   << " nonempty=" << nonempty
+                                   << " avg_ms=" << (count ? sum_ms / count : 0.0)
+                                   << " max_ms=" << max_ms
+                                   << " window_s=" << (now - window_start)
+                                   << LL_ENDL;
+            window_start = now;
+            sum_ms = 0.0;
+            max_ms = 0.0;
+            count = 0;
+            nonempty = 0;
+        }
+
+        std::unique_lock<std::mutex> lk(mDecodeMutex);
+        mDecodeCv.wait_for(lk, kPumpInterval,
+                           [this] { return mDecodeStop.load(std::memory_order_acquire); });
+    }
+}

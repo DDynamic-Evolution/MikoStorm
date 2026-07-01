@@ -30,6 +30,9 @@
 
 #include "llaudioengine.h"
 #include "llwindgen.h"
+#include "llvenuereverbdsp.h"
+
+#include <functional>
 
 //Stubs
 class LLAudioStreamManagerFMODSTUDIO;
@@ -53,7 +56,11 @@ public:
         RESAMPLE_CUBIC,
         RESAMPLE_SPLINE
     };
-    LLAudioEngine_FMODSTUDIO(bool enable_profiler, U32 resample_method);
+    LLAudioEngine_FMODSTUDIO(bool enable_profiler,
+                             U32 resample_method,
+                             U32 parcel_stream_quality = 0,
+                             bool opus_codec_enable = true,
+                             U32 opus_codec_priority = 0);
     virtual ~LLAudioEngine_FMODSTUDIO();
 
     // initialization/startup/shutdown
@@ -78,6 +85,17 @@ public:
 
     LLUUID getSelectedDeviceUUID() const { return mSelectedDeviceUUID; }
 
+    void setParcelStreamQuality(U32 quality);
+
+    FMOD::ChannelGroup* getStream3DGroup() const { return mStream3DGroup; }
+
+    LLVenueReverbDsp* getVenueReverbDsp() { return mVenueReverbDsp.getDsp() ? &mVenueReverbDsp : nullptr; }
+
+    using SfxOcclusionVisitor = std::function<void(FMOD::Channel*,
+                                                   FMOD::DSP* lowpass_dsp,
+                                                   const LLVector3& source_pos)>;
+    void forEachActive3DSfxChannel(const SfxOcclusionVisitor& fn);
+
 protected:
     /*virtual*/ LLAudioBuffer *createBuffer(); // Get a free buffer, or flush an existing one if you have to.
     /*virtual*/ LLAudioChannel *createChannel(); // Create a new audio channel.
@@ -93,6 +111,13 @@ protected:
     FMOD::System *mSystem;
     bool mEnableProfiler;
     U32 mResampleMethod;
+
+    FMOD::ChannelGroup *mStream3DGroup { nullptr };
+    LLVenueReverbDsp mVenueReverbDsp;
+
+    U32 mParcelStreamQuality { 0 };
+    bool mOpusCodecEnable { true };
+    U32 mOpusCodecPriority { 0 };
 
     LLUUID mSelectedDeviceUUID;
 
@@ -118,10 +143,16 @@ protected:
     /*virtual*/ void updateLoop();
 
     void set3DMode(bool use3d);
+
+public:
+    FMOD::Channel* getFmodChannel() const { return mChannelp; }
+    FMOD::DSP*     getOcclusionLowpass() const { return mOcclusionLowpass; }
+
 protected:
     FMOD::System *getSystem()   const {return mSystemp;}
     FMOD::System *mSystemp;
     FMOD::Channel *mChannelp;
+    FMOD::DSP    *mOcclusionLowpass { nullptr };
     S32 mLastSamplePos;
 };
 

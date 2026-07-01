@@ -1674,6 +1674,73 @@ std::string LLViewerParcelMedia::extractDomain(std::string url)
     return url;
 }
 
+LLViewerParcelMedia::MediaFilterResult LLViewerParcelMedia::classifyMediaFilterUrl(
+    const std::string& media_url,
+    bool require_prompt_if_unknown)
+{
+    if (media_url.empty())
+    {
+        return MediaFilterResult::Allow;
+    }
+
+    std::string domain = extractDomain(media_url);
+    for (LLSD::array_iterator it = mMediaFilterList.beginArray();
+         it != mMediaFilterList.endArray();
+         ++it)
+    {
+        bool found = false;
+        std::string listed_domain = (*it)["domain"].asString();
+        if (media_url == listed_domain)
+        {
+            found = true;
+        }
+        else if (domain.length() >= listed_domain.length())
+        {
+            size_t pos = domain.rfind(listed_domain);
+            if ((pos != std::string::npos) &&
+                (pos == domain.length() - listed_domain.length()))
+            {
+                found = true;
+            }
+        }
+
+        if (!found)
+        {
+            continue;
+        }
+
+        const std::string media_action = (*it)["action"].asString();
+        if (media_action == "allow")
+        {
+            return MediaFilterResult::Allow;
+        }
+        if (media_action == "deny")
+        {
+            return MediaFilterResult::Deny;
+        }
+    }
+
+    if (require_prompt_if_unknown || gSavedSettings.getBOOL("MediaEnableFilter"))
+    {
+        return MediaFilterResult::Ask;
+    }
+    return MediaFilterResult::Allow;
+}
+
+void LLViewerParcelMedia::promptStream3DUrl(
+    const std::string& media_url,
+    const std::string& object_name,
+    const LLUUID& owner_id,
+    LLViewerParcelMedia::stream3d_url_callback_t callback)
+{
+    if (!callback)
+    {
+        return;
+    }
+
+    callback(true);
+}
+
 // TODO: observer
 /*
 void LLViewerParcelMediaNavigationObserver::onNavigateComplete( const EventType& event_in )

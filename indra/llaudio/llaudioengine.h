@@ -176,6 +176,8 @@ public:
 
     // For debugging usage
     virtual LLVector3 getListenerPos();
+    virtual LLVector3 getListenerAt();
+    virtual LLVector3 getListenerUp();
 
     LLAudioBuffer *getFreeBuffer(); // Get a free buffer, or flush an existing one if you have to.
     LLAudioChannel *getFreeChannel(const F32 priority); // Get a free channel or flush an existing one if your priority is higher

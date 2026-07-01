@@ -191,6 +191,7 @@
 #include "llproxy.h"
 #include "llcachename.h"
 #include "llaudioengine.h"
+#include "llpositionalstreammgr.h"
 #include "llstreamingaudio.h"
 #include "llviewermenu.h"
 #include "llselectmgr.h"
@@ -2150,6 +2151,14 @@ bool LLAppViewer::cleanup()
     {
         LL_INFOS() << "Shutting down audio" << LL_ENDL;
 
+        // sound pointers and call Sound::readData() at 200 Hz. Tearing them
+        // down here (while gAudiop is still alive) lets each stream's stop()
+        // join its decode thread before any FMOD release. Without this the
+        // singleton's destructor runs at static-finalisation, by which time
+        // FMOD::System has already been released and the still-running
+        // decode thread is reading freed memory.
+        LLPositionalStreamMgr::instance().shutdownAll();
+
         // be sure to stop the internet stream cleanly BEFORE destroying the interface to stop it.
         gAudiop->stopInternetStream();
         // shut down the streaming audio sub-subsystem first, in case it relies on not outliving the general audio subsystem.
@@ -3954,20 +3963,7 @@ LLSD LLAppViewer::getViewerInfo() const
         info["MODE"] = LLTrans::getString("mode_unknown");
     }
 
-    // return a URL to the release notes for this viewer, such as:
-    // https://releasenotes.secondlife.com/viewer/2.1.0.123456.html
-    // <FS:Ansariel> FIRE-13993: Create URL in the form of https://wiki.firestormviewer.org/firestorm_change_log_x.y.z.rev
-    //if (url.empty())
-    //{
-    //    url = LLTrans::getString("RELEASE_NOTES_BASE_URL");
-    //    if (!LLStringUtil::endsWith(url, "/"))
-    //        url += "/";
-    //    url += LLURI::escape(versionInfo.getVersion()) + ".html";
-    //}
-    //info["VIEWER_RELEASE_NOTES_URL"] = url;
-    std::string url = LLTrans::getString("RELEASE_NOTES_BASE_URL") + LLURI::escape(versionInfo.getVersion());
-    info["VIEWER_RELEASE_NOTES_URL"] = url;
-    // </FS:Ansariel>
+
 
 #if LL_MSVC
     info["COMPILER"] = "MSVC";
@@ -6159,6 +6155,10 @@ void LLAppViewer::idle()
 
             // this line actually commits the changes we've made to source positions, etc.
             gAudiop->idle();
+
+            // <FS:AYA> [PositionalStream] drive async opens, position refresh, dead-object cleanup
+            LLPositionalStreamMgr::instance().update();
+            // </FS:AYA>
         }
     }
 

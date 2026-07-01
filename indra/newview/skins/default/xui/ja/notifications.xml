@@ -5787,4 +5787,33 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
+	<notification name="Stream3DAudioAlert">
+		この区画では以下の3D音声ストリームが提供されます：
+
+ドメイン： [AUDIODOMAIN]
+ＵＲＬ： [AUDIOURL]
+
+オブジェクト： [OBJECTNAME]
+所有者： [OWNERNAME]
+ユーザー名： [OWNERUSERNAME]
+		<form name="form">
+			<button name="Allow" text="許可"/>
+			<button name="Deny" text="拒否"/>
+		</form>
+	</notification>
+	<notification name="Stream3DAudioAlert2">
+	選択内容を記憶し、このソースの3D音声ストリームを[LCONDITION]許可しますか？
+
+ドメイン： [AUDIODOMAIN]
+ＵＲＬ： [AUDIOURL]
+
+オブジェクト： [OBJECTNAME]
+所有者： [OWNERNAME]
+ユーザー名： [OWNERUSERNAME]
+		<form name="form">
+			<button name="Do Now" text="[ACTION]する"/>
+			<button name="RememberDomain" text="このドメインを[CONDITION]許可"/>
+			<button name="RememberURL" text="このＵＲＬを[CONDITION]許可"/>
+		</form>
+	</notification>
 </notifications>

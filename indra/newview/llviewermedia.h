@@ -39,6 +39,7 @@
 #include "v4color.h"
 #include "llnotificationptr.h"
 
+#include "llpluginaudio.h"
 #include "llurl.h"
 #include "lleventcoro.h"
 #include "llcoros.h"
@@ -230,6 +231,7 @@ public:
     void setMute(bool mute);
     void updateVolume();
     F32 getVolume();
+    F32 getStream3DAudioGain() const;
     void focus(bool focus);
     // True if the impl has user focus.
     bool hasFocus() const;
@@ -275,6 +277,9 @@ public:
     void doMediaTexUpdate(LLViewerMediaTexture* media_tex, U8* data, S32 data_width, S32 data_height, S32 x_pos, S32 y_pos, S32 width, S32 height, bool sync);
     void updateImagesMediaStreams();
     LLUUID getMediaTextureID() const;
+    LLPluginAudioRingHeader* getAudioRingForStream3D() const;
+    void setStream3DAudioRedirected(bool redirected);
+    bool isStream3DAudioRedirected() const { return mStream3DAudioRedirected; }
 
     void suspendUpdates(bool suspend) { mSuspendUpdates = suspend; }
     void setVisible(bool visible);
@@ -488,6 +493,7 @@ private:
     F64 mPreviousMediaTime;
     bool mIsDisabled;
     bool mIsParcelMedia;
+    bool mStream3DAudioRedirected;
     S32 mProximity;
     F64 mProximityDistance;
     F64 mProximityCamera;

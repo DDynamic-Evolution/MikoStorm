@@ -1298,7 +1298,7 @@
             <menu_item_check.on_check
                control="NavBarShowParcelProperties" />
           </menu_item_check>
-          <menu_item_separator />
+           <menu_item_separator />
           <menu_item_check
              label="Advanced Menu"
              name="Show Advanced Menu">
@@ -1308,6 +1308,16 @@
             <on_click
                function="ToggleControl"
                parameter="UseDebugMenus" />
+          </menu_item_check>
+          <menu_item_check
+             label="Show 3D Stream Occluders (PandaView)"
+             name="Show Stream3D Occluders"
+             shortcut="alt|shift|O">
+            <menu_item_check.on_check
+             control="Stream3DShowOccluders" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="Stream3DShowOccluders" />
           </menu_item_check>
         </menu>
         <menu_item_check
@@ -2671,73 +2681,6 @@
             function="ToggleUIHints"/>
         </menu_item_check>
         
-        <menu_item_call
-         label="Firestorm Wiki"
-         name="Firestorm Wiki"
-	     shortcut="F1">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="script_library_url"
-             parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org" />
-        </menu_item_call>
-        
-        <menu_item_call
-         label="Troubleshooting"
-         name="Troubleshooting">
-            <menu_item_call.on_click
-             function="PromptShowURL"
-             name="wiki_troubleshooting_url"
-             parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_troubleshooting" />
-        </menu_item_call>
-	   
-        <menu_item_call
-         label="Join Firestorm Support Group"
-         name="firestorm_support_group">
-            <menu_item_call.on_click
-             function="Advanced.WebBrowserTest"
-             parameter="https://wiki.firestormviewer.org/firestorm_support_groups_join" />
-            <menu_item_call.on_visible
-             function="GridCheck"
-             parameter="secondlife" />
-        </menu_item_call>
-
-        <menu_item_call
-         label="Firestorm Classes Schedule"
-         name="Firestorm Classes Schedule">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="wiki_classes_url"
-             parameter="WebLaunchExternalTarget,https://wiki.firestormviewer.org/firestorm_classes" />
-        </menu_item_call>
-
-        <menu_item_call
-         label="Firestorm Events Calendar"
-         name="Firestorm Events Calendar">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="events_calendar_url"
-             parameter="WebLaunchExternalTarget,https://teamup.com/ksxdajnbw9mvw7cbwz" />
-        </menu_item_call>
-
-        <menu_item_check
-         label="Guidebook"
-         name="How To">
-            <menu_item_check.on_click
-             function="Help.ToggleHowTo"
-             parameter="" />
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="guidebook" />
-        </menu_item_check>
-
-<!--       <menu_item_call
-         label="Second Life Help"
-         name="Second Life Help">
-             <menu_item_call.on_click
-             function="PromptShowURL"
-             name="script_library_url"
-             parameter="WebLaunchExternalTarget,https://support.secondlife.com/" />
-        </menu_item_call>-->
         <menu_item_separator name="grid_help_seperator"/>
         <menu_item_call
          label="[CURRENT_GRID] Help"
@@ -2798,13 +2741,6 @@
                  parameter="https://community.secondlife.com/news/"/>
         </menu_item_call>-->
         <menu_item_separator/>
-        <menu_item_call
-            name="whitelist_folders"
-            label="Whitelist adviser">
-            <menu_item_call.on_click
-               function="Floater.Show"
-               parameter="fs_whitelist_floater" />
-        </menu_item_call>
         <menu_item_check
              label="Check Grid status"
              name="Grid Status">
@@ -2820,12 +2756,7 @@
                 <menu_item_call.on_click
                  function="ReportAbuse" />
             </menu_item_call>
-        <menu_item_call
-             label="Report Problem"
-             name="Report Bug">
-                <menu_item_call.on_click
-                 function="Advanced.ReportBug"/>
-            </menu_item_call>
+
 
         <menu_item_separator/>
         <menu_item_call

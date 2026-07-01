@@ -1199,4 +1199,8 @@ with the same filename but different name
 <texture name="LagStatus_Good" file_name="icons/green_square.png" preload="false" />
 <texture name="LagStatus_Warning" file_name="icons/yellow_square.png" preload="false" />
 <texture name="LagStatus_Critical" file_name="icons/red_square.png" preload="false" />
+
+<texture name="3dstream_Off" file_name="icons/3dstream_Off.png" preload="true" />
+<texture name="3dstream_Over" file_name="icons/3dstream_Over.png" preload="true" />
+<texture name="3dstream_Press" file_name="icons/3dstream_Press.png" preload="true" />
 </textures>
