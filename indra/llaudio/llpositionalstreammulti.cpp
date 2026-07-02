@@ -1545,7 +1545,8 @@ size_t LLPositionalStreamMulti::pumpSource()
             {
                 for (int c = 0; c < mSourceChannels && c < (int)n_tracks; ++c)
                 {
-                    chunk[i * n_tracks + c] = f32[i * mSourceChannels + c];
+                    const int src_c = (mSwapChannels && mSourceChannels == 2) ? (c ^ 1) : c;
+                    chunk[i * n_tracks + c] = f32[i * mSourceChannels + src_c];
                 }
             }
         }
@@ -1556,8 +1557,9 @@ size_t LLPositionalStreamMulti::pumpSource()
             {
                 for (int c = 0; c < mSourceChannels && c < (int)n_tracks; ++c)
                 {
+                    const int src_c = (mSwapChannels && mSourceChannels == 2) ? (c ^ 1) : c;
                     chunk[i * n_tracks + c] =
-                        static_cast<F32>(s16[i * mSourceChannels + c]) * (1.f / 32768.f);
+                        static_cast<F32>(s16[i * mSourceChannels + src_c]) * (1.f / 32768.f);
                 }
             }
         }
@@ -1676,6 +1678,10 @@ size_t LLPositionalStreamMulti::pumpMediaRingSource()
                                 { 0, 1, 2, 3, 6, 7, 4, 5 };
                             src_channel = kCef71ToStream8[c];
                         }
+                    }
+                    if (mSwapChannels && mSourceChannels == 2)
+                    {
+                        src_channel = (src_channel == 0) ? 1 : 0;
                     }
                     if (src_channel < mMediaRingChannels)
                     {

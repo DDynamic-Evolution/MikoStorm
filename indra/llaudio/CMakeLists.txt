@@ -34,16 +34,12 @@ if (TARGET ll::fmodstudio)
          llaudioengine_fmodstudio.cpp
          lllistener_fmodstudio.cpp
          llstreamingaudio_fmodstudio.cpp
-         llpositionalstream.cpp
-         llpositionalstreamstereo.cpp
-         llpositionalstreammulti.cpp
          llmultichanneldownmix.cpp
          llstereoupmix.cpp
          lllitehrtfdsp.cpp
          llfftconvolver.cpp
          llirloader.cpp
          llvenuereverbdsp.cpp
-         llstream3durlresolve.cpp
          fmod_codec_ogg.cpp
          )
 
@@ -51,18 +47,30 @@ if (TARGET ll::fmodstudio)
          llaudioengine_fmodstudio.h
          lllistener_fmodstudio.h
          llstreamingaudio_fmodstudio.h
-         llpositionalstream.h
-         llpositionalstreamstereo.h
-         llpositionalstreammulti.h
          llmultichanneldownmix.h
          llstereoupmix.h
          lllitehrtfdsp.h
          llfftconvolver.h
          llirloader.h
          llvenuereverbdsp.h
-         llstream3durlresolve.h
          fmod_codec_ogg.h
          )
+
+    if (USE_3D_STREAM)
+        list(APPEND llaudio_SOURCE_FILES
+             llpositionalstream.cpp
+             llpositionalstreamstereo.cpp
+             llpositionalstreammulti.cpp
+             llstream3durlresolve.cpp
+             )
+
+        list(APPEND llaudio_HEADER_FILES
+             llpositionalstream.h
+             llpositionalstreamstereo.h
+             llpositionalstreammulti.h
+             llstream3durlresolve.h
+             )
+    endif ()
 
     if (LL_DULLAHAN_AUDIO_CALLBACK)
         list(APPEND llaudio_SOURCE_FILES llmediaaudiostream.cpp)

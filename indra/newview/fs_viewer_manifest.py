@@ -17,7 +17,7 @@ class FSViewerManifest:
             'app_name_oneword':self.app_name_oneword()
             }
 
-        return "Phoenix-%(app_name)s_%(optimized)s-%(version_dashes)s" % substitution_strings
+        return "MikoStorm-%(app_name)s_%(optimized)s-%(version_dashes)s" % substitution_strings
 
     def fs_is_opensim(self):
         return self.args['viewer_flavor'] == 'oss' #Havok would be hvk
@@ -129,7 +129,7 @@ class FSViewerManifest:
         self.fs_save_symbols("linux")
 
     def fs_linux_tar_excludes(self):
-        installer_name_components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        installer_name_components = ['MikoStorm',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         installer_name = "_".join(installer_name_components)
         return "--exclude=%s/bin/.debug" % installer_name
 
@@ -147,14 +147,14 @@ class FSViewerManifest:
         except:
             print("Cannot run pdbcopy, packaging private symbols")
 
-        tarName = "%s/Phoenix_%s_%s_%s_pdbsymbols-windows-%d.tar.xz" % (self.args['configuration'].lower(),
+        tarName = "%s/MikoStorm_%s_%s_%s_pdbsymbols-windows-%d.tar.xz" % (self.args['configuration'].lower(),
                                                                         self.fs_channel_legacy_oneword(),
                                                                         '-'.join(self.args['version']),
                                                                         self.args['viewer_flavor'],
                                                                         self.address_size)                                      
         # Store windows symbols we want to keep for debugging in a tar file.
         symbolTar = tarfile.open( name=tarName, mode="w:xz")
-        symbolTar.add( "%s/Firestorm-bin.exe" % self.args['configuration'].lower(), "firestorm-bin.exe" )
+        symbolTar.add( "%s/firestorm-bin.exe" % self.args['configuration'].lower(), "firestorm-bin.exe" )
         symbolTar.add( "%s/build_data.json" % self.args['configuration'].lower(), "build_data.json" )
         symbolTar.add( "%s/%s" % (self.args['configuration'].lower(),pdbName), pdbName )
         symbolTar.close()
@@ -189,17 +189,17 @@ class FSViewerManifest:
                                                                        osname,
                                                                        self.address_size))):
             # Rename to add version numbers
-            sName = "%s/Phoenix_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
-                                                                       self.fs_channel_legacy_oneword(),
-                                                                       '-'.join( self.args['version'] ),
-                                                                       self.args['viewer_flavor'],
-                                                                       osname,
-                                                                       self.address_size)
+            sName = "%s/MikoStorm_%s_%s_%s_symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(),
+                                                                        self.fs_channel_legacy_oneword(),
+                                                                        '-'.join( self.args['version'] ),
+                                                                        self.args['viewer_flavor'],
+                                                                        osname,
+                                                                        self.address_size)
 
             if os.path.exists( sName ):
                 os.unlink( sName )
 
-            os.rename("%s/firestorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(), osname, self.address_size), sName)
+            os.rename("%s/mikostorm-symbols-%s-%d.tar.bz2" % (self.args['configuration'].lower(), osname, self.address_size), sName)
 
     def fs_generate_breakpad_symbols_for_file( self, aFile ):
         from os import makedirs, remove
@@ -237,7 +237,7 @@ class FSViewerManifest:
         from shutil import rmtree
         import tarfile
 
-        components = ['Phoenix',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
+        components = ['MikoStorm',self.app_name(),self.args.get('arch'),'.'.join(self.args['version'])]
         symbolsName = "_".join(components)
         symbolsName = symbolsName + "_" + self.args["viewer_flavor"] + "-" + osname + "-" + str(self.address_size) + ".tar.bz2"
 

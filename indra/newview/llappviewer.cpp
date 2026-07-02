@@ -191,7 +191,9 @@
 #include "llproxy.h"
 #include "llcachename.h"
 #include "llaudioengine.h"
+#ifdef USE_3D_STREAM
 #include "llpositionalstreammgr.h"
+#endif
 #include "llstreamingaudio.h"
 #include "llviewermenu.h"
 #include "llselectmgr.h"
@@ -2157,7 +2159,9 @@ bool LLAppViewer::cleanup()
         // singleton's destructor runs at static-finalisation, by which time
         // FMOD::System has already been released and the still-running
         // decode thread is reading freed memory.
+#ifdef USE_3D_STREAM
         LLPositionalStreamMgr::instance().shutdownAll();
+#endif
 
         // be sure to stop the internet stream cleanly BEFORE destroying the interface to stop it.
         gAudiop->stopInternetStream();
@@ -6157,7 +6161,9 @@ void LLAppViewer::idle()
             gAudiop->idle();
 
             // <FS:AYA> [PositionalStream] drive async opens, position refresh, dead-object cleanup
+#ifdef USE_3D_STREAM
             LLPositionalStreamMgr::instance().update();
+#endif
             // </FS:AYA>
         }
     }

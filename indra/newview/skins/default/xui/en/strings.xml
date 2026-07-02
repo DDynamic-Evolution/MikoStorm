@@ -27,7 +27,6 @@
 	<!-- about dialog/support string-->
 	<string name="AboutHeader">
 [APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([ADDRESS_SIZE]bit / [SIMD]) ([CHANNEL]) [BUILD_TYPE]
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
 Parity with Second Life Viewer: [VIEWER_VERSION_LL]
 	</string>
 	<string name="AboutCompiler">Built with [COMPILER] version [COMPILER_VERSION]</string>
@@ -401,7 +400,7 @@ are allowed.
 
 	<string name="ReleaseNotes">Release Notes</string>
 	<!-- Always mark translate="false" for strings that are nothing but URLs, as they don't need translation. -->
-	<string name="RELEASE_NOTES_BASE_URL" translate="false">https://wiki.firestormviewer.org/changelog:firestorm_change_log_</string>
+
 
 	<!-- Indicates something is being loaded. Maybe should be merged with RetrievingData -->
 	<string name="LoadingData">Loading...</string>

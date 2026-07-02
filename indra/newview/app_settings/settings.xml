@@ -696,18 +696,29 @@
      <key>Value</key>
      <real>0.5</real>
    </map>
-   <key>Stream3DUrlPreResolve</key>
-   <map>
-     <key>Comment</key>
-     <string>PandaView r11: viewer-side URL pre-resolve toggle. -1 (default, sentinel) = enabled — libcurl follows HTTPS→HTTP cross-protocol redirects (typical of Cloudflare/CDN fronted Shoutcast/Icecast) before handing the URL to FMOD::createStream, which does not follow such redirects on its own. 0 = disabled (URL passed to FMOD raw, r10 behavior). Probe is HEAD with ranged-GET fallback, max 3 redirects, ~3 s worst-case timeout, HTTP/HTTPS scheme allowlist. Failure modes (timeout / network error / no redirect) are non-fatal — viewer falls back to the raw URL silently.</string>
-     <key>Persist</key>
-     <integer>1</integer>
-     <key>Type</key>
-     <string>S32</string>
-     <key>Value</key>
-     <integer>-1</integer>
-   </map>
-   <key>StreamMetadataAnnounceToChat</key>
+    <key>Stream3DUrlPreResolve</key>
+    <map>
+      <key>Comment</key>
+      <string>PandaView r11: viewer-side URL pre-resolve toggle. -1 (default, sentinel) = enabled — libcurl follows HTTPS→HTTP cross-protocol redirects (typical of Cloudflare/CDN fronted Shoutcast/Icecast) before handing the URL to FMOD::createStream, which does not follow such redirects on its own. 0 = disabled (URL passed to FMOD raw, r10 behavior). Probe is HEAD with ranged-GET fallback, max 3 redirects, ~3 s worst-case timeout, HTTP/HTTPS scheme allowlist. Failure modes (timeout / network error / no redirect) are non-fatal — viewer falls back to the raw URL silently.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-1</integer>
+    </map>
+    <key>Stream3DSwapChannels</key>
+    <map>
+      <key>Comment</key>
+      <string>PandaView: Swap left and right channels on 3D positional streams. 0 (default) = normal stereo. 1 = swap L/R so audio intended for the left speaker plays from the right and vice versa.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>StreamMetadataAnnounceToChat</key>
   <map>
     <key>Comment</key>
     <string>Announces stream metadata to a defined chat channel.</string>

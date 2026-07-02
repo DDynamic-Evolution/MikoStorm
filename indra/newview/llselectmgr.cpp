@@ -72,9 +72,13 @@
 #include "llmenugl.h"
 #include "llmeshrepository.h"
 #include "llmutelist.h"
+#ifdef USE_3D_STREAM
 #include "llocclusiongeometrymgr.h"
+#endif
 #include "llparcel.h"
+#ifdef USE_3D_STREAM
 #include "llpositionalstreammgr.h"
+#endif
 #include "llnotificationsutil.h"
 #include "llsidepaneltaskinfo.h"
 #include "llslurl.h"
@@ -6224,8 +6228,10 @@ void LLSelectMgr::processObjectProperties(LLMessageSystem* msg, void** user_data
         std::string desc;
         msg->getStringFast(_PREHASH_ObjectData, _PREHASH_Description, desc, i);
 
+#ifdef USE_3D_STREAM
         LLPositionalStreamMgr::instance().onObjectPropertiesReceived(id, desc, name, owner_id);
         LLOcclusionGeometryMgr::instance().onObjectPropertiesReceived(id, desc);
+#endif
 
         std::string touch_name;
         msg->getStringFast(_PREHASH_ObjectData, _PREHASH_TouchName, touch_name, i);
@@ -6439,8 +6445,10 @@ void LLSelectMgr::processObjectPropertiesFamily(LLMessageSystem* msg, void** use
     std::string desc;
     msg->getStringFast(_PREHASH_ObjectData, _PREHASH_Description, desc);
 
+#ifdef USE_3D_STREAM
     LLPositionalStreamMgr::instance().onObjectPropertiesReceived(id, desc, name, owner_id);
     LLOcclusionGeometryMgr::instance().onObjectPropertiesReceived(id, desc);
+#endif
 
     // the reporter widget askes the server for info about picked objects
     if (request_flags & COMPLAINT_REPORT_REQUEST )

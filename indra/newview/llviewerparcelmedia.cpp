@@ -1727,6 +1727,7 @@ LLViewerParcelMedia::MediaFilterResult LLViewerParcelMedia::classifyMediaFilterU
     return MediaFilterResult::Allow;
 }
 
+#ifdef USE_3D_STREAM
 void LLViewerParcelMedia::promptStream3DUrl(
     const std::string& media_url,
     const std::string& object_name,
@@ -1740,6 +1741,7 @@ void LLViewerParcelMedia::promptStream3DUrl(
 
     callback(true);
 }
+#endif
 
 // TODO: observer
 /*

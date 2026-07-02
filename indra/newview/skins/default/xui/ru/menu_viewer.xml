@@ -332,13 +332,6 @@
 	<!-- Help Menu -->
 	<menu label="Помощь" name="Help">
 		<menu_item_check label="Включить подсказки интерфейса клиента" name="Enable Hints"/>
-		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
-		<menu_item_call label="Поиск решения Проблем" name="Troubleshooting"/>
-		<menu_item_call label="Вступить в группу поддержки Firestorm" name="firestorm_support_group"/>
-		<menu_item_call label="Расписание обучений Firestorm" name="Firestorm Classes Schedule"/>
-		<menu_item_call label="Календарь Событий Firestorm" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Обучение" name="How To"/>
-		<!-- <menu_item_call label="Second Life Help" name="Second Life Help"/> -->
 		<menu_item_call label="[CURRENT_GRID] помощь" name="current_grid_help"/>
 		<menu_item_call label="О [CURRENT_GRID]" name="current_grid_about"/>
 		<!-- <menu_item_call label="Tutorial" name="Tutorial"/>
@@ -347,10 +340,8 @@
 		<menu_item_call label="Community Forums" name="Community Forums"/>
 		<menu_item_call label="Support portal" name="Support portal"/>
 		<menu_item_call label="[SECOND_LIFE] Blogs" name="Second Life Blogs"/> -->
-		<menu_item_call name="whitelist_folders" label="Советник Белого Списка"/>
 		<menu_item_call label="Проверка статуса сети (Grid Status)" name="Grid Status"/>
 		<menu_item_call label="Пожаловаться" name="Report Abuse"/>
-		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
 		<menu_item_call label="Удары, толчки и попадания" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Включить кнопку системной информации" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Информация о [APP_NAME]" name="About Second Life"/>

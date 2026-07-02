@@ -129,7 +129,6 @@
 #include "rlvinventory.h"
 #include "rlvui.h"
 // [/RLVa:KB]
-
 #include "llnotificationmanager.h" //
 #include "llexperiencecache.h"
 
@@ -3151,7 +3150,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
                 }
                 // </FS:KC>
 
-// [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
+                // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
                 // TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
                 if ( (rlv_handler_t::isEnabled()) && (mesg.length() > 3) && (RLV_CMD_PREFIX == mesg[0]) && (CHAT_TYPE_OWNER == chat.mChatType) &&
                      ((!chatter) || (!chatter->isAttachment()) || (!chatter->isTempAttachment()) || (RlvSettings::getEnableTemporaryAttachments())) )

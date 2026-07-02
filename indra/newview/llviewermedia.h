@@ -231,7 +231,9 @@ public:
     void setMute(bool mute);
     void updateVolume();
     F32 getVolume();
+#ifdef USE_3D_STREAM
     F32 getStream3DAudioGain() const;
+#endif
     void focus(bool focus);
     // True if the impl has user focus.
     bool hasFocus() const;
@@ -277,9 +279,11 @@ public:
     void doMediaTexUpdate(LLViewerMediaTexture* media_tex, U8* data, S32 data_width, S32 data_height, S32 x_pos, S32 y_pos, S32 width, S32 height, bool sync);
     void updateImagesMediaStreams();
     LLUUID getMediaTextureID() const;
+#ifdef USE_3D_STREAM
     LLPluginAudioRingHeader* getAudioRingForStream3D() const;
     void setStream3DAudioRedirected(bool redirected);
     bool isStream3DAudioRedirected() const { return mStream3DAudioRedirected; }
+#endif
 
     void suspendUpdates(bool suspend) { mSuspendUpdates = suspend; }
     void setVisible(bool visible);
@@ -493,7 +497,9 @@ private:
     F64 mPreviousMediaTime;
     bool mIsDisabled;
     bool mIsParcelMedia;
+#ifdef USE_3D_STREAM
     bool mStream3DAudioRedirected;
+#endif
     S32 mProximity;
     F64 mProximityDistance;
     F64 mProximityCamera;

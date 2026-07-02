@@ -285,18 +285,10 @@
 	</menu>
 	<menu label="Aiuto" name="Help">
 		<menu_item_check label="Abilita i suggerimenti" name="Enable Hints"/>
-		<menu_item_call label="Wiki di Firestorm" name="Firestorm Wiki"/>
-		<menu_item_call label="Risoluzione dei problemi" name="Troubleshooting"/>
-		<menu_item_call label="Gruppi di supporto di Firestorm" name="firestorm_support_group"/>
-		<menu_item_call label="Calendario lezioni su Firestorm" name="Firestorm Classes Schedule"/>
-		<menu_item_call label="Calendario eventi Firestorm" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Guida in linea" name="How To"/>
 		<menu_item_call label="Aiuto su [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Informazioni su [CURRENT_GRID]" name="current_grid_about"/>
-		<menu_item_call label="Whitelist File e Cartelle" name="whitelist_folders"/>
 		<menu_item_check label="Controlla stato della grid" name="Grid Status"/>
 		<menu_item_call label="Segnala un abuso" name="Report Abuse"/>
-		<menu_item_call label="Segnala un bug" name="Report Bug"/>
 		<menu_item_call label="Urti, spinte, contatti" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Abilita tasto Info di sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informazioni su [APP_NAME]" name="About Second Life"/>

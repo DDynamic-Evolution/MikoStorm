@@ -7,17 +7,12 @@
 		<menu_item_call label="Sair do [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Ajuda" name="Help">
-		<menu_item_call label="Wiki do Firestorm" name="Firestorm Wiki"/>
-		<menu_item_call label="Solução de problemas" name="Troubleshooting"/>
-		<menu_item_call label="Guia..." name="How To"/>
 		<menu_item_call label="Base de conhecimento" name="Knowledge Base"/>
 		<menu_item_call label="Wiki" name="Wiki"/>
 		<menu_item_call label="Fóruns da comunidade" name="Community Forums"/>
 		<menu_item_call label="Portal de suporte" name="Support portal"/>
 		<menu_item_call label="Notícias do [SECOND_LIFE]" name="Second Life News"/>
 		<menu_item_call label="Blogs do [SECOND_LIFE]" name="Second Life Blogs"/>
-		<menu_item_call label="Assistente da lista de permissões" name="whitelist_folders"/>
-		<menu_item_call label="Reportar problema" name="Report Bug"/>
 		<menu_item_call label="Ajuda do [APP_NAME]" name="Second Life Help"/>
 		<menu_item_call label="Sobre o [APP_NAME]" name="About Second Life"/>
 	</menu>

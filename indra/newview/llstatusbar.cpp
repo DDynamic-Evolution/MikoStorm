@@ -42,7 +42,9 @@
 #include "llpanelpresetscamerapulldown.h"
 #include "llpanelpresetspulldown.h"
 #include "llpanelvolumepulldown.h"
+#ifdef USE_3D_STREAM
 #include "llpositionalstreammgr.h"
+#endif
 #include "llfloatermarketplace.h"
 #include "llfloaterregioninfo.h"
 #include "llfloaterscriptdebug.h"
@@ -202,7 +204,9 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
     mIconPresetsGraphic(NULL),
     mIconPresetsCamera(NULL),
     mMediaToggle(NULL),
+#ifdef USE_3D_STREAM
     m3DStreamToggle(NULL),
+#endif
     mMouseEnterPresetsConnection(),
     mMouseEnterPresetsCameraConnection(),
     mMouseEnterVolumeConnection(),
@@ -350,8 +354,10 @@ bool LLStatusBar::postBuild()
     }
     // </FS: KC> FIRE-19697: Add setting to disable status bar icon menu popup on mouseover
 
+#ifdef USE_3D_STREAM
     m3DStreamToggle = getChild<LLButton>("3dstream_toggle_btn");
     m3DStreamToggle->setClickedCallback(&LLStatusBar::onClick3DStreamToggle, this);
+#endif
 
     LLHints::getInstance()->registerHintTarget("linden_balance", getChild<LLView>("balance_bg")->getHandle());
 
@@ -781,8 +787,10 @@ void LLStatusBar::refresh()
                               media_inst->isParcelMediaPlaying());
     mMediaToggle->setValue(!any_media_playing);
 
+#ifdef USE_3D_STREAM
     m3DStreamToggle->setEnabled(true);
     m3DStreamToggle->setValue(!LLPositionalStreamMgr::instance().isAnyStreamPlaying());
+#endif
 
     // <FS:Zi> Media/Stream separation
     static LLCachedControl<bool> audio_streaming_music(gSavedSettings, "AudioStreamingMusic");
@@ -817,7 +825,9 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
     mBtnVolume->setVisible(visible && FSEnableVolumeControls);
     mStreamToggle->setVisible(visible && FSEnableVolumeControls); // ## Zi: Media/Stream separation
     mMediaToggle->setVisible(visible && FSEnableVolumeControls);
+#ifdef USE_3D_STREAM
     m3DStreamToggle->setVisible(visible && FSEnableVolumeControls);
+#endif
     // </FS:PP>
     bool showNetStats = gSavedSettings.getBOOL("ShowNetStats");
     mSGBandwidth->setVisible(visible && showNetStats);
@@ -1172,6 +1182,7 @@ void LLStatusBar::toggleMedia(bool enable)
     LLViewerMedia::getInstance()->setAllMediaEnabled(enable);
 }
 
+#ifdef USE_3D_STREAM
 // static
 void LLStatusBar::onClick3DStreamToggle(void* data)
 {
@@ -1184,6 +1195,7 @@ void LLStatusBar::toggle3DStream(bool enable)
 {
     gSavedSettings.setBOOL("Stream3DEnabled", enable);
 }
+#endif
 
 // <FS:Zi> Media/Stream separation
 // static

@@ -1967,6 +1967,8 @@ void LLPositionalStreamMgr::evaluateLinkset(LLUUID root_id)
     // behavior). Read once at start and pushed via setter so the resolve
     // path stays self-contained inside llaudio.
     stream->setUrlPreResolveEnabled(gSavedSettings.getS32("Stream3DUrlPreResolve") != 0);
+    // Swap left/right channels on 2ch source streams.
+    stream->setSwapChannels(gSavedSettings.getBOOL("Stream3DSwapChannels"));
 
     std::vector<LLPositionalStreamMulti::SpeakerConfig> configs;
     configs.reserve(binding.speakers.size());

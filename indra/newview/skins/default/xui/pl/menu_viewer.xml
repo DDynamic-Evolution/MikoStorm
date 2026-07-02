@@ -297,13 +297,6 @@
 	</menu>
 	<menu label="Pomoc" name="Help">
 		<menu_item_check label="Włącz podpowiedzi" name="Enable Hints"/>
-		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
-		<menu_item_call label="Rozwiązywanie problemów" name="Troubleshooting"/>
-		<menu_item_call label="Dołącz do Grupy Wsparcia Firestorma" name="firestorm_support_group"/>
-		<menu_item_call label="Harmonogram lekcji Firestorma" name="Firestorm Classes Schedule"/>
-		<menu_item_call label="Kalendarz wydarzeń Firestorma" name="Firestorm Events Calendar"/>
-		<menu_item_check label="Samouczek" name="How To"/>
-		<!-- <menu_item_call label="Pomoc Second Life" name="Second Life Help"/> -->
 		<menu_item_call label="Pomoc: [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Na temat [CURRENT_GRID]" name="current_grid_about"/>
 		<!-- <menu_item_call label="Samouczek" name="Tutorial"/>
@@ -312,10 +305,8 @@
 		<menu_item_call label="Forum społecznościowe" name="Community Forums"/>
 		<menu_item_call label="Portal wsparcia" name="Support portal"/>
 		<menu_item_call label="Blogi: [SECOND_LIFE]" name="Second Life Blogs"/> -->
-		<menu_item_call name="whitelist_folders" label="Doradca wykluczeń" />
 		<menu_item_check label="Sprawdź stan świata" name="Grid Status"/>
 		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse"/>
-		<menu_item_call label="Zgłoś problem" name="Report Bug"/>
 		<menu_item_call label="Zderzenia, popchnięcia i uderzenia" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Włącz przycisk Sysinfo" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informacje o [APP_NAME]" name="About Second Life"/>
