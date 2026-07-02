@@ -30,8 +30,8 @@ The client codebase has been open source since 2007 and is available under the L
 ## Build Instructions
 
 - [Windows](doc/building_windows.md)
-- I cant support Mac
 - [Linux](doc/building_linux.md)
+- No Support for Mac/Darwin
 
 
 
