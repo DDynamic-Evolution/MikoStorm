@@ -13804,6 +13804,23 @@ Error in the regular expression:
 ♫ Now Playing:
   [TITLE] ♫
     </notification>
+    <notification
+        icon="notifytip.tga"
+        name="Stream3DMetadata"
+        log_to_chat="false"
+        type="notifytip">
+        <tag>Stream3D</tag>
+♫ [PRIM_NAME]: [TITLE]
+  [ARTIST] ♫
+    </notification>
+    <notification
+        icon="notifytip.tga"
+        name="Stream3DMetadataNoArtist"
+        log_to_chat="false"
+        type="notifytip">
+        <tag>Stream3D</tag>
+♫ [PRIM_NAME]: [TITLE] ♫
+    </notification>
     
     <notification
         icon="notifytip.tga"

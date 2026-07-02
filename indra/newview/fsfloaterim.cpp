@@ -76,6 +76,7 @@
 #include "lltransientfloatermgr.h"
 #include "llversioninfo.h"
 #include "llviewerchat.h"
+#include "llviewercontrol.h"    // <FS:AYA> Phase 3
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 #include "llvoicechannel.h"
@@ -964,7 +965,6 @@ bool FSFloaterIM::postBuild()
                 getChild<LLLayoutPanel>("pay_panel")->setVisible(false);
                 getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
                 getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-
                 LL_DEBUGS("FSFloaterIM") << "LLIMModel::LLIMSession::ADHOC_SESSION end" << LL_ENDL;
                 break;
             }
@@ -972,7 +972,6 @@ bool FSFloaterIM::postBuild()
                 LL_DEBUGS("FSFloaterIM") << "default buttons start" << LL_ENDL;
                 getChild<LLLayoutPanel>("end_call_btn_panel")->setVisible(false);
                 getChild<LLLayoutPanel>("voice_ctrls_btn_panel")->setVisible(false);
-
                 LL_DEBUGS("FSFloaterIM") << "default buttons end" << LL_ENDL;
                 break;
         }
@@ -1061,7 +1060,6 @@ bool FSFloaterIM::postBuild()
     childSetVisible("testing_panel", isFSTestingGroup);
     //But we cannot with the support group button, because testing groups are also support groups
     childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
-
 
     // <FS:Zi> Viewer version popup
     if (isFSSupportGroup || isFSTestingGroup)
@@ -1568,7 +1566,9 @@ void FSFloaterIM::updateMessages()
     if (messages.size())
     {
         LLSD chat_args;
-        chat_args["use_plain_text_chat_history"] = gSavedSettings.getBOOL("PlainTextChatHistory");
+        // <FS:AYA> Phase 3: V1 style = plain text mode
+        chat_args["use_plain_text_chat_history"] = gSavedSettings.getS32("AYAChatWindowStyle") == 0;
+        // </FS:AYA>
         chat_args["show_names_for_p2p_conv"] = gSavedSettings.getBOOL("IMShowNamesForP2PConv");
         chat_args["show_time"] = gSavedSettings.getBOOL("FSShowTimestampsIM");
 

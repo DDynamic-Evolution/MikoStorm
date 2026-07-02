@@ -27,8 +27,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "llfloaterimsessiontab.h"
 
 #include "llagent.h"
@@ -50,8 +48,11 @@
 #include "llfloaterimnearbychat.h"
 #include "llgroupiconctrl.h"
 #include "lllayoutstack.h"
+#include "lltabcontainer.h" // <FS:PandaView r22>
 #include "llpanelemojicomplete.h"
 #include "lltoolbarview.h"
+#include "llspeakers.h"         // <FS:AYA> Phase 3
+#include "llviewercontrol.h"    // <FS:AYA> Phase 3
 
 const F32 REFRESH_INTERVAL = 1.0f;
 const std::string ICN_GROUP("group_chat_icon");
@@ -155,7 +156,7 @@ void LLFloaterIMSessionTab::setVisible(bool visible)
         mHasVisibleBeenInitialized = true;
         if (!gAgentCamera.cameraMouselook())
         {
-            LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("im_container")->setVisible(true);
+            LLFloaterReg::getTypedInstance<LLFloaterIMContainer>("ll_im_container")->setVisible(true);
         }
         LLFloaterIMSessionTab::addToHost(mSessionID);
         LLFloaterIMSessionTab* conversp = LLFloaterIMSessionTab::getConversation(mSessionID);
@@ -312,6 +313,31 @@ bool LLFloaterIMSessionTab::postBuild()
     mParticipantListPanel->addChild(mScroller);
 
     mChatHistory = getChild<LLChatHistory>("chat_history");
+    mChatHistoryObject = findChild<LLChatHistory>("chat_history_object"); // <FS:PandaView r22>
+
+    // <FS:PandaView r22> Snapshot FSChatHumanObjectTabs at postBuild — see
+    // FSFloaterNearbyChat::postBuild for rationale. Hides the tab strip
+    // and Object panel when disabled so the floater looks unsplit.
+    if (!gSavedSettings.getBOOL("FSChatHumanObjectTabs"))
+    {
+        if (LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container"))
+        {
+            tabs->setTabsHidden(true);
+            if (LLPanel* p = findChild<LLPanel>("tab_object")) tabs->setTabVisibility(p, false);
+        }
+        mChatHistoryObject = nullptr;
+    }
+    else if (LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container"))
+    {
+        // Clear the unread badge when the user switches to that tab.
+        tabs->setCommitCallback([this](LLUICtrl* ctrl, const LLSD&) {
+            if (LLTabContainer* t = dynamic_cast<LLTabContainer*>(ctrl))
+            {
+                resetUnreadBadge(t->getCurrentPanel());
+            }
+        });
+    }
+    // </FS:PandaView r22>
 
     mInputEditor = getChild<LLChatEntry>("chat_editor");
 
@@ -661,15 +687,128 @@ void LLFloaterIMSessionTab::appendMessage(const LLChat& chat, const LLSD& args)
     tmp_chat.mFromName = chat.mFromName;
 
     LLSD chat_args = args;
-    chat_args["use_plain_text_chat_history"] =
-            gSavedSettings.getBOOL("PlainTextChatHistory");
+    // <FS:AYA> Phase 3: LL style uses its own compact/expanded setting; FS uses AYAChatWindowStyle
+    {
+        S32 style = gSavedSettings.getS32("AYAChatWindowStyle");
+        chat_args["use_plain_text_chat_history"] =
+            (style == 2) ? gSavedSettings.getBOOL("AYALLChatCompactView")
+                         : (style == 0);
+    }
+    // </FS:AYA>
     chat_args["show_time"] = gSavedSettings.getBOOL("IMShowTime");
     chat_args["show_names_for_p2p_conv"] = !mIsP2PChat ||
             gSavedSettings.getBOOL("IMShowNamesForP2PConv");
 
     static const LLStyle::Params input_append_params = LLStyle::Params();
-    mChatHistory->appendMessage(chat, chat_args, input_append_params);
+    // <FS:PandaView r22> Route non-Human chat to the System & Object tab when split is enabled.
+    // OBJECT / SYSTEM / TELEPORT / REGION → System & Object tab.
+    // AGENT / UNKNOWN → Human tab (UNKNOWN is the default-safe fallback).
+    static LLCachedControl<bool> human_object_tabs(gSavedSettings, "FSChatHumanObjectTabs", true);
+    LLChatHistory* target = mChatHistory;
+    if (human_object_tabs && mChatHistoryObject)
+    {
+        const bool to_sys_object =
+            chat.mSourceType == CHAT_SOURCE_OBJECT   ||
+            chat.mSourceType == CHAT_SOURCE_SYSTEM   ||
+            chat.mSourceType == CHAT_SOURCE_TELEPORT ||
+            chat.mSourceType == CHAT_SOURCE_REGION;
+        if (to_sys_object)
+        {
+            target = mChatHistoryObject;
+        }
+    }
+    target->appendMessage(chat, chat_args, input_append_params);
+    // Bump per-tab unread badge when the chat lands in a non-active tab.
+    // is_replay marks history reload paths so we don't accumulate counts for messages
+    // the user has already seen. do_not_log alone is NOT a replay signal — the TP
+    // arrival separator uses do_not_log=true for fresh runtime events that should bump.
+    const bool log_active = human_object_tabs && mChatHistoryObject && !args["is_replay"].asBoolean();
+    if (log_active)
+    {
+        bumpUnreadBadge(target);
+    }
+
+    // Friend online/offline exception (spec change 2026-05-16):
+    // also append to the Human tab so users notice when a friend they want to talk to comes online.
+    static LLCachedControl<bool> friend_online_to_human(gSavedSettings, "FSFriendOnlineToHumanTab", true);
+    if (human_object_tabs && mChatHistoryObject
+        && chat.mFriendOnlineNotification && friend_online_to_human
+        && target == mChatHistoryObject)
+    {
+        mChatHistory->appendMessage(chat, chat_args, input_append_params);
+        if (log_active)
+        {
+            bumpUnreadBadge(mChatHistory);
+        }
+    }
+    // </FS:PandaView r22>
 }
+
+// <FS:PandaView r22>
+void LLFloaterIMSessionTab::bumpUnreadBadge(LLChatHistory* target)
+{
+    LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container");
+    if (!tabs) return;
+
+    LLPanel* target_panel = nullptr;
+    S32*     counter      = nullptr;
+    std::string base_title;
+    if (target == mChatHistoryObject)
+    {
+        target_panel = findChild<LLPanel>("tab_object");
+        counter      = &mUnreadObject;
+        base_title   = "System & Object";
+    }
+    else
+    {
+        target_panel = findChild<LLPanel>("tab_human");
+        counter      = &mUnreadHuman;
+        base_title   = "Human";
+    }
+    if (!target_panel || !counter) return;
+    if (tabs->getCurrentPanel() == target_panel) return;
+
+    (*counter)++;
+    const S32 idx = tabs->getIndexForPanel(target_panel);
+    if (idx >= 0)
+    {
+        tabs->setPanelTitle(idx, llformat("%s (%d)", base_title.c_str(), *counter));
+    }
+}
+
+void LLFloaterIMSessionTab::resetUnreadBadge(LLPanel* selected_panel)
+{
+    if (!selected_panel) return;
+    LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container");
+    if (!tabs) return;
+
+    const std::string name = selected_panel->getName();
+    std::string base_title;
+    S32* counter = nullptr;
+    if (name == "tab_object")
+    {
+        counter    = &mUnreadObject;
+        base_title = "System & Object";
+    }
+    else if (name == "tab_human")
+    {
+        counter    = &mUnreadHuman;
+        base_title = "Human";
+    }
+    else
+    {
+        return;
+    }
+
+    if (*counter == 0) return;
+    *counter = 0;
+    const S32 idx = tabs->getIndexForPanel(selected_panel);
+    if (idx >= 0)
+    {
+        tabs->setPanelTitle(idx, base_title);
+    }
+}
+// </FS:PandaView r22>
 
 void LLFloaterIMSessionTab::updateUsedEmojis(LLWStringView text)
 {
@@ -803,7 +942,16 @@ void LLFloaterIMSessionTab::refreshConversation()
         if (widget_it->second->getViewModelItem())
         {
             widget_it->second->refresh();
-            widget_it->second->setVisible(true);
+            // <FS:AYA> Phase 3: Hide out-of-range participants in nearby chat
+            bool should_show = true;
+            if (mIsNearbyChat)
+            {
+                LLPointer<LLSpeaker> speakerp = LLLocalSpeakerMgr::getInstance()->findSpeaker(widget_it->first);
+                if (speakerp.notNull() && speakerp->mStatus == LLSpeaker::STATUS_NOT_IN_CHANNEL)
+                    should_show = false;
+            }
+            widget_it->second->setVisible(should_show);
+            // </FS:AYA>
         }
         ++widget_it;
     }
@@ -886,7 +1034,13 @@ void LLFloaterIMSessionTab::onIMSessionMenuItemClicked(const LLSD& userdata)
 
     if (item == "compact_view" || item == "expanded_view")
     {
-        gSavedSettings.setBOOL("PlainTextChatHistory", item == "compact_view");
+        bool compact = (item == "compact_view");
+        // <FS:AYA> Phase 3: LL style has its own compact/expanded setting
+        if (pandaview_is_ll_style())
+            gSavedSettings.setBOOL("AYALLChatCompactView", compact);
+        else
+            gSavedSettings.setBOOL("PlainTextChatHistory", compact);
+        // </FS:AYA>
     }
     else
     {
@@ -900,8 +1054,11 @@ void LLFloaterIMSessionTab::onIMSessionMenuItemClicked(const LLSD& userdata)
 bool LLFloaterIMSessionTab::onIMCompactExpandedMenuItemCheck(const LLSD& userdata)
 {
     std::string item = userdata.asString();
-    bool is_plain_text_mode = gSavedSettings.getBOOL("PlainTextChatHistory");
-
+    // <FS:AYA> Phase 3: LL style uses its own compact/expanded setting
+    bool is_plain_text_mode = pandaview_is_ll_style()
+        ? gSavedSettings.getBOOL("AYALLChatCompactView")
+        : gSavedSettings.getBOOL("PlainTextChatHistory");
+    // </FS:AYA>
     return is_plain_text_mode? item == "compact_view" : item == "expanded_view";
 }
 
@@ -915,7 +1072,11 @@ bool LLFloaterIMSessionTab::onIMShowModesMenuItemCheck(const LLSD& userdata)
 bool LLFloaterIMSessionTab::onIMShowModesMenuItemEnable(const LLSD& userdata)
 {
     std::string item = userdata.asString();
-    bool plain_text = gSavedSettings.getBOOL("PlainTextChatHistory");
+    // <FS:AYA> Phase 3: LL style uses its own compact/expanded setting
+    bool plain_text = pandaview_is_ll_style()
+        ? gSavedSettings.getBOOL("AYALLChatCompactView")
+        : gSavedSettings.getBOOL("PlainTextChatHistory");
+    // </FS:AYA>
     bool is_not_names = (item != "IMShowNamesForP2PConv");
     return (plain_text && (is_not_names || mIsP2PChat));
 }
@@ -1220,7 +1381,7 @@ void LLFloaterIMSessionTab::onTearOffClicked()
     mSaveRect = isTornOff();
     initRectControl();
     LLFloater::onClickTearOff(this);
-    LLFloaterIMContainer* container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("im_container");
+    LLFloaterIMContainer* container = LLFloaterReg::findTypedInstance<LLFloaterIMContainer>("ll_im_container");
 
     if (isTornOff())
     {
@@ -1419,5 +1580,3 @@ bool LLFloaterIMSessionTab::handleKeyHere(KEY key, MASK mask )
     }
     return handled;
 }
-
-#endif

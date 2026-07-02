@@ -29,6 +29,7 @@
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
 #include "lllitehrtfdsp.h"
+#include "llmetadatatags.h"
 #include "llpluginaudio.h"
 #include "llstream3durlresolve.h"
 #include "llstring.h"
@@ -502,8 +503,7 @@ bool LLPositionalStreamMulti::openSourceStream(const std::string& url)
     }
 
     const FMOD_MODE source_mode = FMOD_2D
-                                | FMOD_NONBLOCKING
-                                | FMOD_IGNORETAGS;
+                                | FMOD_NONBLOCKING;
 
     if (checkFmod(system->createStream(url.c_str(), source_mode, nullptr, &mSourceSound),
                   "createStream(source)"))
@@ -2005,6 +2005,27 @@ void LLPositionalStreamMulti::update()
                                       << mSpeakers.size() << ")" << LL_ENDL;
             }
             mLastUnderrunLogTime = now;
+        }
+
+        // Poll metadata from FMOD tags (URL sources only)
+        if (mSourceKind == SourceKind::Url && mSourceSound)
+        {
+            S32 tagcount = 0, numtagsupdated = 0;
+            if (!checkFmod(mSourceSound->getNumTags(&tagcount, &numtagsupdated), "Sound::getNumTags") && numtagsupdated > 0)
+            {
+                mMetadata.clear();
+                for (S32 i = 0; i < tagcount; ++i)
+                {
+                    FMOD_TAG tag;
+                    if (checkFmod(mSourceSound->getTag(nullptr, i, &tag), "Sound::getTag")) continue;
+                    if (!tag.data) continue;
+
+                    std::string name = LLMetadataTags::normaliseName(tag);
+                    if (name.empty()) continue;
+
+                    mMetadata[name] = LLMetadataTags::convertValue(tag);
+                }
+            }
         }
     }
 }

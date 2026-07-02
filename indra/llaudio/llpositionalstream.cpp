@@ -29,6 +29,7 @@
 #include "llaudioengine.h"
 #include "llaudioengine_fmodstudio.h"
 #include "llfasttimer.h"
+#include "llmetadatatags.h"
 #include "llstring.h"
 #include "lltimer.h"
 
@@ -120,8 +121,7 @@ bool LLPositionalStream::start(const std::string& url, const LLVector3& world_po
 
     const FMOD_MODE mode = FMOD_3D
                          | FMOD_3D_LINEARSQUAREROLLOFF
-                         | FMOD_NONBLOCKING
-                         | FMOD_IGNORETAGS;
+                         | FMOD_NONBLOCKING;
 
     if (checkFmod(system->createStream(clean_url.c_str(), mode, nullptr, &mSound), "createStream"))
     {
@@ -261,6 +261,30 @@ void LLPositionalStream::update()
             releaseSound();
             mState = State::Failed;
             mStarvingSince = 0.0;
+        }
+        else
+        {
+            // Poll metadata from FMOD tags
+            FMOD::Sound* sound = nullptr;
+            if (!checkFmod(mChannel->getCurrentSound(&sound), "Channel::getCurrentSound") && sound)
+            {
+                S32 tagcount = 0, numtagsupdated = 0;
+                if (!checkFmod(sound->getNumTags(&tagcount, &numtagsupdated), "Sound::getNumTags") && numtagsupdated > 0)
+                {
+                    mMetadata.clear();
+                    for (S32 i = 0; i < tagcount; ++i)
+                    {
+                        FMOD_TAG tag;
+                        if (checkFmod(sound->getTag(nullptr, i, &tag), "Sound::getTag")) continue;
+                        if (!tag.data) continue;
+
+                        std::string name = LLMetadataTags::normaliseName(tag);
+                        if (name.empty()) continue;
+
+                        mMetadata[name] = LLMetadataTags::convertValue(tag);
+                    }
+                }
+            }
         }
         return;
     }
