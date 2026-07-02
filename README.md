@@ -28,13 +28,6 @@ The client codebase has been open source since 2007 and is available under the L
 - Custom and definable login page (Done!)
 - Latest original code merged.
 - Removed Social Links
-- **NotecardWriter** — Schreibt Text per `~Name~Inhalt`-Kommando via `llOwnerSay` in eine Notecard im Inventar.
-  - **Existierende Notecard:** Inhalt wird **angehängt** (append).
-  - **Neue Notecard:** Wird automatisch erstellt.
-  - **Rotation:** Bei Überlauf (>64k) wird `Name_1`, `Name_2`, … angelegt.
-  - **Stumm:** Das Kommando erscheint nicht im Chat.
-  - **Usage:** `llOwnerSay("~Einkaufsliste~Milch, Brot, Butter");`
-  - **Dateien:** `indra/newview/fsnotecardwriter.h/.cpp`
 
 
 ## Build Instructions
