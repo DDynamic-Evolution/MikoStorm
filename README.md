@@ -18,9 +18,6 @@ The client codebase has been open source since 2007 and is available under the L
   - **Activate:** Preferences > Sound > `3D Stream Enabled`
   - **Debug:** Console: `Stream3DDebugUrl "http://..."` + `Stream3DDebugPlay TRUE`
   - Alter Prefix `[ayastream:...]` funktioniert auch
-- (planned) Rendering Controls — A unified floater for rendering toggles (SSAO, SSR, DoF, Motion Blur, Volumetric Lighting, Skin SSS, and more)
-- (planned) Selectable Tone Mappers — Choose between Khronos Neutral, ACES, Filmic, and others
-- (planned) Color Grading & LUT Loading — Adjust saturation, contrast, color temperature, and load custom .cube LUTs
 - URL Phishing / Scam Link Detection — Warns before opening suspicious URLs; toggle in Firestorm → Protection tab 
 - Removed discord and Flickr support.
 - Removed velo updater
