@@ -25,6 +25,7 @@
 #ifndef LL_POSITIONAL_STREAM_H
 #define LL_POSITIONAL_STREAM_H
 
+#include "llsd.h"
 #include "stdtypes.h"
 #include "v3math.h"
 #include <string>
@@ -64,6 +65,9 @@ public:
 
     const std::string& getUrl() const { return mUrl; }
 
+    // Current stream metadata (TITLE, ARTIST, etc.) extracted via FMOD tags.
+    const LLSD& getMetadata() const { return mMetadata; }
+
     void setPosition(const LLVector3& world_pos);
     void setVolume(F32 volume);
     void setRolloffDistances(F32 min_distance, F32 max_distance);
@@ -89,6 +93,9 @@ private:
     // during playback. 0 = not currently starving. Used to debounce transient
     // network blips before declaring the stream Failed.
     F64 mStarvingSince;
+
+    LLSD mMetadata;
+    LLSD mPrevMetadata;
 };
 
 #endif // LL_POSITIONAL_STREAM_H

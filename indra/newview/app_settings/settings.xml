@@ -718,6 +718,83 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>Stream3DShowToast</key>
+    <map>
+      <key>Comment</key>
+      <string>Show a toast notification when a 3D stream reports new title/artist metadata.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>Stream3DChatNotify</key>
+    <map>
+      <key>Comment</key>
+      <string>Send 3D stream title/artist metadata to a script channel.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>Stream3DChatChannel</key>
+    <map>
+      <key>Comment</key>
+      <string>Chat channel for 3D stream metadata notifications (used when Stream3DChatNotify is enabled).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>AYAChatWindowStyle</key>
+    <map>
+      <key>Comment</key>
+      <string>Chat window style: 0=FS V1 (plain text), 1=FS V7 (modern headers), 2=LL Style</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>AYALLChatCompactView</key>
+    <map>
+      <key>Comment</key>
+      <string>LL Style chat window: true=Compact View, false=Expanded View (independent from FS PlainTextChatHistory)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>FSChatHumanObjectTabs</key>
+    <map>
+      <key>Comment</key>
+      <string>PandaView r22: split Nearby Chat / IM history into Human and System &amp; Object tabs. System / Object / Teleport / Region messages are routed to the System &amp; Object tab.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSFriendOnlineToHumanTab</key>
+    <map>
+      <key>Comment</key>
+      <string>PandaView r22: also show friend online/offline notifications in the Human tab. They always appear in the System &amp; Object tab regardless.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>StreamMetadataAnnounceToChat</key>
   <map>
     <key>Comment</key>

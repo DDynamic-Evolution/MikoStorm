@@ -57,6 +57,7 @@
 #include "llfloaterreg.h"
 #include "llfloatersearchreplace.h"
 #include "llfocusmgr.h"
+#include "lltabcontainer.h" // <FS:PandaView r22>
 #include "llgesturemgr.h"
 #include "lliconctrl.h"
 #include "rlvactions.h"
@@ -216,6 +217,31 @@ bool FSFloaterNearbyChat::postBuild()
 
     mChatHistory = getChild<FSChatHistory>("chat_history");
     mChatHistoryMuted = getChild<FSChatHistory>("chat_history_muted");
+    mChatHistoryObject = findChild<FSChatHistory>("chat_history_object"); // <FS:PandaView r22>
+
+    // <FS:PandaView r22> Snapshot FSChatHumanObjectTabs at postBuild so the
+    // setting genuinely requires a restart. When false, hide the tab strip
+    // and the Object panel so the floater looks unsplit (vanilla layout).
+    if (!gSavedSettings.getBOOL("FSChatHumanObjectTabs"))
+    {
+        if (LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container"))
+        {
+            tabs->setTabsHidden(true);
+            if (LLPanel* p = findChild<LLPanel>("tab_object")) tabs->setTabVisibility(p, false);
+        }
+        mChatHistoryObject = nullptr;
+    }
+    else if (LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container"))
+    {
+        // Hook tab selection so switching to a tab clears its unread badge.
+        tabs->setCommitCallback([this](LLUICtrl* ctrl, const LLSD&) {
+            if (LLTabContainer* t = dynamic_cast<LLTabContainer*>(ctrl))
+            {
+                resetUnreadBadge(t->getCurrentPanel());
+            }
+        });
+    }
+    // </FS:PandaView r22>
 
     mUnreadMessagesNotificationPanel = getChild<LLLayoutPanel>("unread_messages_holder");
     mUnreadMessagesNotificationTextBox = getChild<LLTextBox>("unread_messages_text");
@@ -280,7 +306,9 @@ static std::string appendTime()
 void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
     LLChat& tmp_chat = const_cast<LLChat&>(chat);
-    bool use_plain_text_chat_history = gSavedSettings.getBOOL("PlainTextChatHistory");
+    // <FS:AYA> Phase 3: V1 style = plain text mode
+    bool use_plain_text_chat_history = gSavedSettings.getS32("AYAChatWindowStyle") == 0;
+    // </FS:AYA>
     bool show_timestamps_nearby_chat = gSavedSettings.getBOOL("FSShowTimestampsNearbyChat");
     // [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - add Timestamp when show_timestamps_nearby_chat is true
     if (show_timestamps_nearby_chat)
@@ -300,7 +328,49 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
     mChatHistoryMuted->appendMessage(chat, chat_args, input_append_params);
     if (!chat.mMuted)
     {
-        mChatHistory->appendMessage(chat, chat_args, input_append_params);
+        // <FS:PandaView r22> Route non-Human chat to the System & Object tab when split is enabled.
+        // OBJECT / SYSTEM / TELEPORT / REGION → System & Object tab.
+        // AGENT / UNKNOWN → Human tab (UNKNOWN is the default-safe fallback).
+        static LLCachedControl<bool> human_object_tabs(gSavedSettings, "FSChatHumanObjectTabs", true);
+        FSChatHistory* target = mChatHistory;
+        if (human_object_tabs && mChatHistoryObject)
+        {
+            const bool to_sys_object =
+                chat.mSourceType == CHAT_SOURCE_OBJECT   ||
+                chat.mSourceType == CHAT_SOURCE_SYSTEM   ||
+                chat.mSourceType == CHAT_SOURCE_TELEPORT ||
+                chat.mSourceType == CHAT_SOURCE_REGION;
+            if (to_sys_object)
+            {
+                target = mChatHistoryObject;
+            }
+        }
+        target->appendMessage(chat, chat_args, input_append_params);
+        // Bump per-tab unread badge when the chat lands in a non-active tab.
+        // is_replay marks history reload paths (reloadMessages / updateChatHistoryStyle / loadHistory)
+        // so we don't accumulate counts for messages the user has already seen.
+        // do_not_log alone is NOT a replay signal — e.g. the TP arrival separator uses do_not_log=true
+        // for fresh runtime events that should still bump the badge.
+        const bool log_active = human_object_tabs && mChatHistoryObject && !args["is_replay"].asBoolean();
+        if (log_active)
+        {
+            bumpUnreadBadge(target);
+        }
+
+        // Friend online/offline exception (spec change 2026-05-16):
+        // also append to the Human tab so users notice when a friend they want to talk to comes online.
+        static LLCachedControl<bool> friend_online_to_human(gSavedSettings, "FSFriendOnlineToHumanTab", true);
+        if (human_object_tabs && mChatHistoryObject
+            && chat.mFriendOnlineNotification && friend_online_to_human
+            && target == mChatHistoryObject)
+        {
+            mChatHistory->appendMessage(chat, chat_args, input_append_params);
+            if (log_active)
+            {
+                bumpUnreadBadge(mChatHistory);
+            }
+        }
+        // </FS:PandaView r22>
     }
 
     if (archive)
@@ -377,7 +447,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
                 return;
             }
             // </FS:TS> FIRE-23123
-            LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
+            LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText, chat.mSourceType); // <FS:PandaView r22> tag source type
         }
     }
 }
@@ -550,7 +620,76 @@ void FSFloaterNearbyChat::clearChatHistory()
 {
     mChatHistory->clear();
     mChatHistoryMuted->clear();
+    if (mChatHistoryObject) { mChatHistoryObject->clear(); } // <FS:PandaView r22>
 }
+
+// <FS:PandaView r22>
+void FSFloaterNearbyChat::bumpUnreadBadge(FSChatHistory* target)
+{
+    LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container");
+    if (!tabs) return;
+
+    LLPanel* target_panel = nullptr;
+    S32*     counter      = nullptr;
+    std::string base_title;
+    if (target == mChatHistoryObject)
+    {
+        target_panel = findChild<LLPanel>("tab_object");
+        counter      = &mUnreadObject;
+        base_title   = "System & Object";
+    }
+    else
+    {
+        target_panel = findChild<LLPanel>("tab_human");
+        counter      = &mUnreadHuman;
+        base_title   = "Human";
+    }
+    if (!target_panel || !counter) return;
+
+    // Don't badge the active tab — the user is already looking at it.
+    if (tabs->getCurrentPanel() == target_panel) return;
+
+    (*counter)++;
+    const S32 idx = tabs->getIndexForPanel(target_panel);
+    if (idx >= 0)
+    {
+        tabs->setPanelTitle(idx, llformat("%s (%d)", base_title.c_str(), *counter));
+    }
+}
+
+void FSFloaterNearbyChat::resetUnreadBadge(LLPanel* selected_panel)
+{
+    if (!selected_panel) return;
+    LLTabContainer* tabs = findChild<LLTabContainer>("chat_tab_container");
+    if (!tabs) return;
+
+    const std::string name = selected_panel->getName();
+    std::string base_title;
+    S32* counter = nullptr;
+    if (name == "tab_object")
+    {
+        counter    = &mUnreadObject;
+        base_title = "System & Object";
+    }
+    else if (name == "tab_human")
+    {
+        counter    = &mUnreadHuman;
+        base_title = "Human";
+    }
+    else
+    {
+        return;
+    }
+
+    if (*counter == 0) return;
+    *counter = 0;
+    const S32 idx = tabs->getIndexForPanel(selected_panel);
+    if (idx >= 0)
+    {
+        tabs->setPanelTitle(idx, base_title);
+    }
+}
+// </FS:PandaView r22>
 
 void FSFloaterNearbyChat::updateChatHistoryStyle()
 {
@@ -558,6 +697,7 @@ void FSFloaterNearbyChat::updateChatHistoryStyle()
 
     LLSD do_not_log;
     do_not_log["do_not_log"] = true;
+    do_not_log["is_replay"] = true; // <FS:PandaView r22> Mark archive replay so unread badge logic skips it.
     for(std::vector<LLChat>::iterator it = mMessageArchive.begin();it!=mMessageArchive.end();++it)
     {
         // Update the messages without re-writing them to a log file.
@@ -611,9 +751,11 @@ void FSFloaterNearbyChat::reloadMessages(bool clean_messages/* = false*/)
 
     mChatHistory->clear();
     mChatHistoryMuted->clear();
+    if (mChatHistoryObject) { mChatHistoryObject->clear(); } // <FS:PandaView r22>
 
     LLSD do_not_log;
     do_not_log["do_not_log"] = true;
+    do_not_log["is_replay"] = true; // <FS:PandaView r22> Mark archive replay so unread badge logic skips it.
     for(std::vector<LLChat>::iterator it = mMessageArchive.begin();it!=mMessageArchive.end();++it)
     {
         // Update the messages without re-writing them to a log file.
@@ -625,6 +767,7 @@ void FSFloaterNearbyChat::loadHistory()
 {
     LLSD do_not_log;
     do_not_log["do_not_log"] = true;
+    do_not_log["is_replay"] = true; // <FS:PandaView r22> Mark history file replay so unread badge logic skips it.
 
     std::list<LLSD> history;
     LLLogChat::loadChatHistory("chat", history);
@@ -711,6 +854,14 @@ void FSFloaterNearbyChat::loadHistory()
         {
             chat.mSourceType = isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
         }
+
+        // <FS:PandaView r22> If the saved line carried an explicit source-type marker
+        // (M2 plumbing), trust it over the legacy from-name heuristic above.
+        if (msg.has(LL_IM_SOURCE_TYPE))
+        {
+            chat.mSourceType = (EChatSourceType)msg[LL_IM_SOURCE_TYPE].asInteger();
+        }
+        // </FS:PandaView r22>
 
         addMessage(chat, true, do_not_log);
 

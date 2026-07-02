@@ -25,8 +25,6 @@
  * $/LicenseInfo$
  */
 
-#if 0
-
 #ifndef LL_FLOATERIMSESSIONTAB_H
 #define LL_FLOATERIMSESSIONTAB_H
 
@@ -40,9 +38,11 @@
 #include "llconversationview.h"
 #include "lltexteditor.h"
 
+// <FS:AYA> Phase 1 Step2: LLChatHistory needs complete type for getChild<> template
+#include "llchathistory.h"
+// </FS:AYA>
 class LLPanelChatControlPanel;
 class LLChatEntry;
-class LLChatHistory;
 class LLPanelEmojiComplete;
 
 class LLFloaterIMSessionTab
@@ -194,6 +194,14 @@ protected:
     LLScrollContainer* mScroller;
 
     LLChatHistory* mChatHistory;
+    LLChatHistory* mChatHistoryObject{ nullptr }; // <FS:PandaView r22> Object tab
+    // <FS:PandaView r22> Per-tab unread counters for the chat tab badge.
+    // See FSFloaterNearbyChat for the mirroring implementation.
+    S32 mUnreadHuman{ 0 };
+    S32 mUnreadObject{ 0 };
+    void bumpUnreadBadge(LLChatHistory* target);
+    void resetUnreadBadge(LLPanel* selected_panel);
+    // </FS:PandaView r22>
     LLChatEntry* mInputEditor;
     LLLayoutPanel* mChatLayoutPanel;
     LLLayoutStack* mInputPanels;
@@ -260,5 +268,3 @@ private:
 
 
 #endif /* LL_FLOATERIMSESSIONTAB_H */
-
-#endif

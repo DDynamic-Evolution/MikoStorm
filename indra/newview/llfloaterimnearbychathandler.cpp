@@ -52,7 +52,6 @@
 // [/RLVa:KB]
 
 #include "fsconsoleutils.h"
-#include "fschattts.h"
 #include "fsfloaternearbychat.h"
 #include "llviewernetwork.h"
 
@@ -532,8 +531,6 @@ LLFloaterIMNearbyChatHandler::LLFloaterIMNearbyChatHandler()
 
     LLChannelManager::getInstance()->addChannel(channel);
 
-    addNewChatCallback(boost::bind(&FSChatTTS::onChatMessage, &FSChatTTS::instance(), _1));
-
     mChannel = channel->getHandle();
 }
 
@@ -559,6 +556,17 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     {
         FSFloaterNearbyChat* nearby_chat = ::LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
         nearby_chat->addMessage(chat_msg, true, args);
+        // <FS:AYA> Phase 3: Forward to LL Chat Window only when LL style is selected.
+        // Use getTypedInstance so the floater is auto-created (hidden) on first
+        // chat receive — otherwise messages arriving while the floater has never
+        // been opened (or has been closed) are dropped on the floor and never
+        // appear in mMessageArchive when the user later opens the window.
+        if (pandaview_is_ll_style())
+        {
+            LLFloaterIMNearbyChat* ll_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+            if (ll_chat) ll_chat->addMessage(chat_msg, true, args);
+        }
+        // </FS:AYA>
         return;
     }
     // </FS:Ansariel> Optional muted chat history
@@ -683,6 +691,17 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     }
     // </FS:Beq>
     nearby_chat->addMessage(chat_msg, true, args);
+    // <FS:AYA> Phase 3: Forward to LL Chat Window only when LL style is selected.
+    // Use getTypedInstance so the floater is auto-created (hidden) on first
+    // chat receive — otherwise messages arriving while the floater has never
+    // been opened (or has been closed) are dropped on the floor and never
+    // appear in mMessageArchive when the user later opens the window.
+    if (pandaview_is_ll_style())
+    {
+        LLFloaterIMNearbyChat* ll_chat = LLFloaterReg::getTypedInstance<LLFloaterIMNearbyChat>("nearby_chat");
+        if (ll_chat) ll_chat->addMessage(chat_msg, true, args);
+    }
+    // </FS:AYA>
 
     if (chat_msg.mSourceType == CHAT_SOURCE_AGENT
         && chat_msg.mFromID.notNull()

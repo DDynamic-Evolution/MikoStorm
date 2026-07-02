@@ -547,76 +547,7 @@
              function="Pref.updateMediaAutoPlayCheckbox"/>
         -->
         </check_box>
-        <slider
-         control_name="Stream3DVolumeMaster"
-         disabled_control="MuteAudio"
-         follows="left|top"
-         height="16"
-         increment="0.025"
-         initial_value="0.5"
-         label="3D Stream"
-         label_width="120"
-         layout="topleft"
-         left="0"
-         top_pad="2"
-         name="Stream3D Volume"
-         show_text="false"
-         slider_label.halign="right"
-         volume="true"
-         width="300">
-            <slider.commit_callback
-             function="Pref.setControlFalse"
-             parameter="MuteStream3D" />
-        </slider>
-        <button
-         control_name="MuteStream3D"
-         disabled_control="MuteAudio"
-         follows="top|left"
-         height="16"
-         image_selected="AudioMute_Off"
-         image_unselected="Audio_Off"
-         is_toggle="true"
-         layout="topleft"
-         left_pad="5"
-         name="mute_audio"
-         tab_stop="false"
-         width="16" />
-        <check_box
-         label_text.halign="left"
-         follows="left|top"
-         height="16"
-         control_name="Stream3DEnabled"
-         label="Enabled"
-         layout="topleft"
-         top_delta="2"
-         left_pad="5"
-         name="enable_stream3d_check_volume"
-         tool_tip="Enable 3D Stream. External stream URLs ask before playback."
-         width="110"/>
-         <check_box
-          label_text.halign="left"
-          follows="left|top"
-          height="16"
-          control_name="Stream3DRoutingDiagnostic"
-          label="Show channel routing diagnostics in chat"
-          layout="topleft"
-          left="146"
-          top_pad="2"
-          name="stream3d_routing_diagnostic_check"
-          tool_tip="When a 3D Stream's source channel count doesn't match the prim layout (e.g. a 6ch source playing on stereo prims, or a stereo source on a 5.1 placement), show one chat line per fallback case. Useful while placing speakers; turn off in production."
-          width="340"/>
-         <check_box
-          label_text.halign="left"
-          follows="left|top"
-          height="16"
-          control_name="Stream3DSwapChannels"
-          label="Swap left/right channels"
-          layout="topleft"
-          left="146"
-          top_pad="2"
-          name="stream3d_swap_channels_check"
-          tool_tip="Swap left and right audio channels on 3D streams. Useful when your headset is on backwards or the stream's channel assignment is reversed."
-          width="200"/>
+
          <slider
           control_name="AudioLevelVoice"
          disabled_control="MuteAudio"
@@ -1701,6 +1632,131 @@ Hover your mouse cursor over UUID field to show its default value.
           <combo_box.commit_callback
            function="Pref.CommitUISoundPlayCombo" />
         </combo_box>
+
+    </panel>
+
+    <!-- 3D Stream -->
+    <panel
+     label="3D Stream"
+     name="3D Stream tab"
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all">
+
+        <slider
+         control_name="Stream3DVolumeMaster"
+         disabled_control="MuteAudio"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="0.5"
+         label="Volume"
+         label_width="120"
+         layout="topleft"
+         left="10"
+         top="15"
+         name="Stream3D Volume"
+         show_text="false"
+         slider_label.halign="right"
+         volume="true"
+         width="300">
+            <slider.commit_callback
+             function="Pref.setControlFalse"
+             parameter="MuteStream3D" />
+        </slider>
+        <button
+         control_name="MuteStream3D"
+         disabled_control="MuteAudio"
+         follows="top|left"
+         height="16"
+         image_selected="AudioMute_Off"
+         image_unselected="Audio_Off"
+         is_toggle="true"
+         layout="topleft"
+         left_pad="5"
+         name="mute_audio"
+         tab_stop="false"
+         width="16" />
+        <check_box
+         control_name="Stream3DEnabled"
+         label="Enabled"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         top_pad="2"
+         name="enable_stream3d_check_volume"
+         tool_tip="Enable 3D Stream. External stream URLs ask before playback."
+         width="110"/>
+        <check_box
+         control_name="Stream3DSwapChannels"
+         label="Swap left/right channels"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="140"
+         top_pad="2"
+         name="stream3d_swap_channels_check"
+         tool_tip="Swap left and right audio channels on 3D streams. Useful when your headset is on backwards or the stream's channel assignment is reversed."
+         width="200"/>
+        <check_box
+         control_name="Stream3DRoutingDiagnostic"
+         label="Show channel routing diagnostics in chat"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         top_pad="10"
+         name="stream3d_routing_diagnostic_check"
+         tool_tip="When a 3D Stream's source channel count doesn't match the prim layout (e.g. a 6ch source playing on stereo prims, or a stereo source on a 5.1 placement), show one chat line per fallback case. Useful while placing speakers; turn off in production."
+         width="340"/>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="10"
+         top_pad="25"
+         name="Stream3DMetadataLabel">
+         Metadata notifications
+        </text>
+        <check_box
+         control_name="Stream3DShowToast"
+         label="Show toast notification on title change"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="25"
+         top_pad="5"
+         name="stream3d_show_toast_check"
+         tool_tip="Show a toast notification when the stream title or artist changes."
+         width="340"/>
+        <check_box
+         control_name="Stream3DChatNotify"
+         label="Forward title changes to script channel"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="25"
+         top_pad="2"
+         name="stream3d_chat_notify_check"
+         tool_tip="Send title/artist changes as chat to a script channel."
+         width="340"/>
+        <spinner
+         control_name="Stream3DChatChannel"
+         label="Channel:"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="25"
+         top_pad="2"
+         name="stream3d_chat_channel_spinner"
+         decimal_digits="0"
+         increment="1"
+         width="160"/>
 
     </panel>
 
