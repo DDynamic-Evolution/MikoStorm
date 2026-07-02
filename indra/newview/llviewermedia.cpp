@@ -2261,6 +2261,7 @@ void LLViewerMediaImpl::updateVolume()
     return mRequestedVolume;
 }
 
+#ifdef USE_3D_STREAM
 F32 LLViewerMediaImpl::getStream3DAudioGain() const
 {
     if (!mMediaSource)
@@ -2276,6 +2277,7 @@ F32 LLViewerMediaImpl::getStream3DAudioGain() const
     const F32 global = std::clamp(LLViewerMedia::getInstance()->getVolume(), 0.f, 1.f);
     return requested * global;
 }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void LLViewerMediaImpl::focus(bool focus)
@@ -3250,6 +3252,7 @@ LLViewerMediaTexture* LLViewerMediaImpl::updateMediaImage()
     return mTextureId;
 }
 
+#ifdef USE_3D_STREAM
 LLPluginAudioRingHeader* LLViewerMediaImpl::getAudioRingForStream3D() const
 {
     return nullptr;
@@ -3259,6 +3262,7 @@ void LLViewerMediaImpl::setStream3DAudioRedirected(bool redirected)
 {
     mStream3DAudioRedirected = redirected;
 }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////////////////
 void LLViewerMediaImpl::setVisible(bool visible)

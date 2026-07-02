@@ -41,23 +41,8 @@ Versão do servidor de voz: [VOICE_VERSION]
 	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="Info" name="support_panel">
-			<text name="support_intro">    
-For the latest information about Firestorm, visit    
-https://www.firestormviewer.org
-    		</text>
 			<button label="Copiar" name="copy_btn"/>
 			<button label="Verificar atualizações" name="update_btn"/>
-		</panel>
-		<panel label="Créditos" name="credits_panel">
-			<text name="linden_intro">
-				Firestorm would not be possible without the decision from Linden Lab to make their Second Life viewer source code available.
-
-O Second Life é trazido a você pela Lindens,
-com contribuições de código aberto de:
-			</text>
-			<text_editor name="contrib_names">
-				Dummy Name substituído durante a execução
-			</text_editor>
 		</panel>
 		<panel label="Licenças" name="licenses_panel" />
 	</tab_container>

@@ -45,8 +45,6 @@ Voice Server Version: [VOICE_VERSION]
 		<panel label="Info" name="support_panel">
 			<button label="Kopiér til udklipsholder" name="copy_btn"/>
 		</panel>
-		<panel label="Tak til" name="credits_panel">
-		</panel>
 		<panel label="Licenser" name="licenses_panel">
 		</panel>
 	</tab_container>

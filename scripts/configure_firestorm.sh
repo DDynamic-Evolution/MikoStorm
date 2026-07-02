@@ -46,13 +46,14 @@ WANTS_TRACY=$FALSE
 WANTS_BUILD=$FALSE
 WANTS_CRASHREPORTING=$FALSE
 WANTS_CACHE=$FALSE
-TARGET_PLATFORM="darwin" # darwin, windows, linux
+TARGET_PLATFORM="linux" # linux, windows
 BTYPE="Release"
 CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
 LL_ARGS_PASSTHRU=""
 JOBS="0"
 WANTS_NINJA=$FALSE
 WANTS_VSCODE=$FALSE
+WANTS_3D_STREAM=$TRUE
 TESTBUILD_PERIOD="0"
 SINGLEGRID_URI=""
 
@@ -78,6 +79,8 @@ showUsage()
     echo "  --no-package             : Build without installer (Overrides --package)"
     echo "  --fmodstudio             : Build with FMOD Studio"
     echo "  --openal                 : Build with OpenAL"
+    echo "  --3dstream               : Build with 3D Stream (PandaView) support (default)"
+    echo "  --no-3dstream            : Build without 3D Stream (PandaView) support"
     echo "  --opensim                : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim             : Build without OpenSim support (Overrides --opensim)"
     echo "  --singlegrid <login_uri> : Build for single grid usage (Requires --opensim)"
@@ -87,11 +90,11 @@ showUsage()
     echo "  --tracy                  : Build with Tracy Profiler support"
     echo "  --crashreporting         : Build with crash reporting enabled (Windows only)"
     echo "  --testbuild <days>       : Create time-limited test build (build date + <days>)"
-    echo "  --platform <platform>    : Build for specified platform (darwin | windows | linux)"
-    echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux and Darwin only)"
+    echo "  --platform <platform>    : Build for specified platform (linux | windows)"
+    echo "  --jobs <num>             : Build with <num> jobs in parallel (Linux only)"
     echo "  --ninja                  : Build using Ninja"
     echo "  --vscode                 : Exports compile commands for VSCode (Linux only)"
-    echo "  --compiler-cache         : Try to detect and use compiler cache (needs also --ninja for OSX and Windows)"
+    echo "  --compiler-cache         : Try to detect and use compiler cache (needs also --ninja for Windows)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build."
     echo
@@ -101,7 +104,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package velopack no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while       getoptex "clean build config version package velopack no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim 3dstream no-3dstream singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -121,6 +124,8 @@ getArgs()
           kdu)            WANTS_KDU=$TRUE;;
           fmodstudio)     WANTS_FMODSTUDIO=$TRUE;;
           openal)         WANTS_OPENAL=$TRUE;;
+          3dstream)       WANTS_3D_STREAM=$TRUE;;
+          no-3dstream)    WANTS_3D_STREAM=$FALSE;;
           opensim)        WANTS_OPENSIM=$TRUE;;
           no-opensim)     WANTS_OPENSIM=$FALSE;;
           singlegrid)     WANTS_SINGLEGRID=$TRUE
@@ -326,6 +331,7 @@ echo -e "          HAVOK: `b2a $WANTS_HAVOK`"                                  |
 echo -e "            AVX: `b2a $WANTS_AVX`"                                    | tee -a "$LOG"
 echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a "$LOG"
 echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a "$LOG"
+echo -e "      3D STREAM: `b2a $WANTS_3D_STREAM`"                              | tee -a "$LOG"
 echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a "$LOG"
 if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
     echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD` ($TESTBUILD_PERIOD days)" | tee -a "$LOG"
@@ -342,7 +348,7 @@ echo -e "         VSCODE: `b2a $WANTS_VSCODE`"                                 |
 echo -e " COMPILER CACHE: `b2a $WANTS_CACHE`"                                  | tee -a "$LOG"
 echo -e "       PASSTHRU: $LL_ARGS_PASSTHRU"                                   | tee -a "$LOG"
 echo -e "          BTYPE: $BTYPE"                                              | tee -a "$LOG"
-if [ $TARGET_PLATFORM == "linux" -o $TARGET_PLATFORM == "darwin" ] ; then
+if [ $TARGET_PLATFORM == "linux" ] ; then
     echo -e "           JOBS: $JOBS"                                           | tee -a "$LOG"
 fi
 echo -e "       Logging to $LOG"
@@ -386,11 +392,7 @@ fi
 
 CHANNEL_SIMPLE="$CHANNEL"
 if [ -z $CHANNEL ] ; then
-    if [ $TARGET_PLATFORM == "darwin" ] ; then
-        CHANNEL="private-`hostname -s` "
-    else
-        CHANNEL="private-`hostname`"
-    fi
+    CHANNEL="private-`hostname`"
 else
     CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
 fi
@@ -401,17 +403,7 @@ if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
     wdir=`pwd`
     pushd ..
 
-    if [ $TARGET_PLATFORM == "darwin" ] ; then
-        if [ "${AUTOBUILD_ADDRSIZE}" == "64" ]
-        then
-           rm -rf build-darwin-x86_64/*
-           mkdir -p build-darwin-x86_64/logs
-        else
-           rm -rf build-darwin-i386/*
-           mkdir -p build-darwin-i386/logs
-        fi
-
-    elif [ $TARGET_PLATFORM == "windows" ] ; then
+    if [ $TARGET_PLATFORM == "windows" ] ; then
         rm -rf build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}
         mkdir -p build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}/logs
 
@@ -497,7 +489,13 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         TRACY_PROFILER="-DUSE_TRACY:BOOL=ON"
     else
         TRACY_PROFILER="-DUSE_TRACY:BOOL=OFF"
-    fi   
+    fi
+    if [ $WANTS_3D_STREAM -eq $TRUE ] ; then
+        USE_3D_STREAM="-DUSE_3D_STREAM:BOOL=ON"
+    else
+        USE_3D_STREAM="-DUSE_3D_STREAM:BOOL=OFF"
+    fi
+
     if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
         TESTBUILD="-DTESTBUILD:BOOL=ON -DTESTBUILDPERIOD:STRING=$TESTBUILD_PERIOD"
     else
@@ -554,9 +552,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     CMAKE_ARCH=""
 
-    if [ $TARGET_PLATFORM == "darwin" ] ; then
-        TARGET="Xcode"
-    elif [ \( $TARGET_PLATFORM == "linux" \) ] ; then
+    if [ \( $TARGET_PLATFORM == "linux" \) ] ; then
         TARGET="Unix Makefiles"
         if [ $WANTS_VSCODE -eq $TRUE ] ; then
             VSCODE_FLAGS="-DCMAKE_EXPORT_COMPILE_COMMANDS=On"
@@ -597,7 +593,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
-    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $TESTBUILD $PACKAGE $VELOPACK \
+    cmake -G "$TARGET" $CMAKE_ARCH ../indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $USE_3D_STREAM $TESTBUILD $PACKAGE $VELOPACK \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
     configure_status=${PIPESTATUS[0]}
@@ -611,15 +607,7 @@ fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $TARGET_PLATFORM..."
     build_status=0
-    if [ $TARGET_PLATFORM == "darwin" ] ; then
-        if [ $JOBS == "0" ] ; then
-            JOBS=""
-        else
-            JOBS="-jobs $JOBS"
-        fi
-        xcodebuild -configuration $BTYPE -project MikoStorm.xcodeproj $JOBS 2>&1 | tee -a "$LOG"
-        build_status=${PIPESTATUS[0]}
-    elif [ $TARGET_PLATFORM == "linux" ] ; then
+    if [ $TARGET_PLATFORM == "linux" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
             echo $JOBS

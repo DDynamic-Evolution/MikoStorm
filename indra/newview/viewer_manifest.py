@@ -296,6 +296,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
             channel_type='manual'
         elif channel_qualifier.startswith('profiling'):
             channel_type='profiling'
+        elif channel_qualifier.startswith('experimental'):
+            channel_type='experimental'
         else:
             channel_type='private'
         return channel_type
@@ -321,7 +323,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
         global CHANNEL_VENDOR_BASE
         # a standard map of strings for replacing in the templates
         #<FS:TS> tag "OS" after CHANNEL_VENDOR_BASE and before any suffix
-        channel_base = "Phoenix-" + CHANNEL_VENDOR_BASE
+        channel_base = CHANNEL_VENDOR_BASE
         if self.fs_is_opensim():
             channel_base = channel_base + "OS"
         #</FS:TS>
@@ -380,7 +382,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
     def icon_path(self):
         # <FS:ND> Add -os for oss builds
         chan = self.channel_type()
-        if chan in ['alpha', 'nightly','manual', 'profiling']:
+        if chan in ['alpha', 'nightly','manual', 'profiling', 'experimental']:
             chan = 'test'
 
         if self.fs_is_opensim():

@@ -292,6 +292,11 @@ public:
     // start() to take effect on the next stream open.
     void setUrlPreResolveEnabled(bool on) { mUrlPreResolveEnabled = on; }
 
+    // Swap left and right channels on 2ch sources so audio intended for the
+    // left speaker plays from the right and vice versa.
+    void setSwapChannels(bool on) { mSwapChannels = on; }
+    bool isSwapChannels() const { return mSwapChannels; }
+
     // Per-frame: drives source state, transitions opening→buffering→playing.
     void update();
 
@@ -510,6 +515,8 @@ private:
     // that forgets to call the setter still gets the redirect-following
     // behavior (matches the settings.xml sentinel default of "enabled").
     bool mUrlPreResolveEnabled = true;
+    // Swap left/right channels on 2ch source streams.
+    bool mSwapChannels = false;
     // r13 C: id of the in-flight async resolve, kInvalidRequestId when
     // none is pending. Set in start() when we transition to State::
     // Resolving, cleared in update()/stop() when the result is consumed

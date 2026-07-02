@@ -593,20 +593,32 @@
          name="enable_stream3d_check_volume"
          tool_tip="Enable 3D Stream. External stream URLs ask before playback."
          width="110"/>
-        <check_box
-         label_text.halign="left"
-         follows="left|top"
-         height="16"
-         control_name="Stream3DRoutingDiagnostic"
-         label="Show channel routing diagnostics in chat"
-         layout="topleft"
-         left="146"
-         top_pad="2"
-         name="stream3d_routing_diagnostic_check"
-         tool_tip="When a 3D Stream's source channel count doesn't match the prim layout (e.g. a 6ch source playing on stereo prims, or a stereo source on a 5.1 placement), show one chat line per fallback case. Useful while placing speakers; turn off in production."
-         width="340"/>
-        <slider
-         control_name="AudioLevelVoice"
+         <check_box
+          label_text.halign="left"
+          follows="left|top"
+          height="16"
+          control_name="Stream3DRoutingDiagnostic"
+          label="Show channel routing diagnostics in chat"
+          layout="topleft"
+          left="146"
+          top_pad="2"
+          name="stream3d_routing_diagnostic_check"
+          tool_tip="When a 3D Stream's source channel count doesn't match the prim layout (e.g. a 6ch source playing on stereo prims, or a stereo source on a 5.1 placement), show one chat line per fallback case. Useful while placing speakers; turn off in production."
+          width="340"/>
+         <check_box
+          label_text.halign="left"
+          follows="left|top"
+          height="16"
+          control_name="Stream3DSwapChannels"
+          label="Swap left/right channels"
+          layout="topleft"
+          left="146"
+          top_pad="2"
+          name="stream3d_swap_channels_check"
+          tool_tip="Swap left and right audio channels on 3D streams. Useful when your headset is on backwards or the stream's channel assignment is reversed."
+          width="200"/>
+         <slider
+          control_name="AudioLevelVoice"
          disabled_control="MuteAudio"
          follows="left|top"
          height="16"

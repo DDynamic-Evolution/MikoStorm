@@ -47,15 +47,6 @@ Ses Sunucusu Sürümü: [VOICE_VERSION]
 			<button label="Panoya Kopyala" name="copy_btn"/>
 			<button label="Güncellemeleri kontrol et" name="update_btn"/>
 		</panel>
-		<panel label="Katkıda Bulunanlar" name="credits_panel">
-			<text name="linden_intro">
-				Second Life, Linden&apos;lar tarafından geliştirilmiştir,
-açık kaynak kod katkısında bulunanlar:
-			</text>
-			<text_editor name="contrib_names">
-				Geçici Ad çalıştırma sırasında değiştirilir
-			</text_editor>
-		</panel>
 		<panel label="Lisanslar" name="licenses_panel">
 			<text_editor name="licenses_editor">
 				3Dconnexion SDK Telif Hakkı (C) 1992-2009 3Dconnexion

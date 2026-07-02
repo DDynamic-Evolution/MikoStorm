@@ -570,8 +570,6 @@ set(viewer_SOURCE_FILES
     lloutfitslist.cpp
     lloutfitobserver.cpp
     lloutputmonitorctrl.cpp
-    llocclusiongeometrymgr.cpp
-    llpositionalstreammgr.cpp
     llpanelappearancetab.cpp
     llpanelavatar.cpp
     llpanelavatartag.cpp
@@ -916,6 +914,13 @@ set(viewer_SOURCE_FILES
     NACLantispam.cpp
     NACLfloaterexploresounds.cpp
     )
+
+if (USE_3D_STREAM)
+    list(APPEND viewer_SOURCE_FILES
+        llpositionalstreammgr.cpp
+        llocclusiongeometrymgr.cpp
+        )
+endif ()
 
 # <FS:Ansariel> Group GLTF files into their subfolders
 set(viewer_GLTF_SOURCE_FILES
@@ -1435,8 +1440,6 @@ set(viewer_HEADER_FILES
     lloutfitslist.h
     lloutfitobserver.h
     lloutputmonitorctrl.h
-    llocclusiongeometrymgr.h
-    llpositionalstreammgr.h
     llpanelappearancetab.h
     llpanelavatar.h
     llpanelavatartag.h
@@ -1786,6 +1789,13 @@ set(viewer_HEADER_FILES
     NACLantispam.h
     NACLfloaterexploresounds.h
     )
+
+if (USE_3D_STREAM)
+    list(APPEND viewer_HEADER_FILES
+        llpositionalstreammgr.h
+        llocclusiongeometrymgr.h
+        )
+endif ()
 
   list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
   list(APPEND viewer_HEADER_FILES llperfstats.h)
@@ -2685,7 +2695,7 @@ set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
 # </FS:Ansariel>
 
 if (LINUX)
-  set(product Firestorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
+  set(product MikoStorm-${ARCH}-${VIEWER_SHORT_VERSION}.${VIEWER_VERSION_REVISION})
 
   # These are the generated targets that are copied to package/
   set(COPY_INPUT_DEPENDENCIES

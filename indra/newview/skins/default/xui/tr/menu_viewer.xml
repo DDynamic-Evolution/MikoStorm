@@ -149,7 +149,6 @@
 		<menu_item_call label="Yinele" name="Redo"/>
 	</menu>
 	<menu label="Yardım" name="Help">
-		<menu_item_check label="Nasıl yapılır..." name="How To"/>
 		<menu_item_call label="Hızlı Başlangıç" name="Quickstart"/>
 		<menu_item_call label="Bilgi Bankası" name="Knowledge Base"/>
 		<menu_item_call label="Wiki" name="Wiki"/>
@@ -158,7 +157,6 @@
 		<menu_item_call label="[SECOND_LIFE] Haberleri" name="Second Life News"/>
 		<menu_item_call label="[SECOND_LIFE] Blogları" name="Second Life Blogs"/>
 		<menu_item_call label="Kötüye Kullanımı Bildir" name="Report Abuse"/>
-		<menu_item_call label="Hata Bildir" name="Report Bug"/>
         <menu_item_call label="Toslamalar, İtmeler ve Vurmalar" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="[APP_NAME] Hakkında" name="About Second Life"/>
 	</menu>

@@ -115,6 +115,16 @@ else (USE_AVX_OPTIMIZATION)
 endif (USE_AVX_OPTIMIZATION)
 # </FS:Ansariel> [AVX Optimization]
 
+# <FS:AYA> [3D Stream / PandaView]
+option(USE_3D_STREAM "3D Stream (PandaView) support" ON)
+if (USE_3D_STREAM)
+  add_compile_definitions(USE_3D_STREAM)
+  message(STATUS "Compiling with 3D Stream (PandaView) support")
+else (USE_3D_STREAM)
+  message(STATUS "Compiling without 3D Stream (PandaView) support")
+endif (USE_3D_STREAM)
+# </FS:AYA>
+
 add_subdirectory(cmake)
 
 # <FS:Beq> Tracy Profiler support

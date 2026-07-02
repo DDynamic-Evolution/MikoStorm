@@ -207,7 +207,7 @@ wrote  C:\firestorm\3p-fmodstudio\fmodstudio-{version#}-windows64-{build_id}.tar
 where {version#} is the version of FMOD Studio (like 2.01.02) and {build_id} is an internal build id of the package. Additionally, a file `result.txt` has been created containing the md5 hash value of the package file, which you will need in the next step.
 
 ```
-cd \firestorm\phoenix-firestorm
+cd \firestorm\MikoStorm
 cp autobuild.xml my_autobuild.xml
 set AUTOBUILD_CONFIG_FILE=my_autobuild.xml
 ```

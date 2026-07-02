@@ -281,18 +281,10 @@
 	</menu>
 	<menu label="幫助" name="Help">
 		<menu_item_check label="啟用瀏覽器UI提示" name="Enable Hints" />
-		<menu_item_call label="Firestorm 維基" name="Firestorm Wiki" />
-		<menu_item_call label="除錯" name="Troubleshooting" />
-		<menu_item_call label="加入 Firestorm 支援小組" name="firestorm_support_group" />
-		<menu_item_call label="Firestorm 課程" name="Firestorm Classes Schedule" />
-		<menu_item_call label="Firestorm 活動日曆" name="Firestorm Events Calendar" />
-		<menu_item_check label="指南" name="How To" />
 		<menu_item_call label="[CURRENT_GRID] 幫助" name="current_grid_help" />
 		<menu_item_call label="關於 [CURRENT_GRID]" name="current_grid_about" />
-		<menu_item_call name="whitelist_folders" label="白名單顧問" />
 		<menu_item_check label="檢查網路狀態" name="Grid Status" />
 		<menu_item_call label="違規檢舉" name="Report Abuse" />
-		<menu_item_call label="報告問題" name="Report Bug" />
 		<menu_item_call label="碰撞、推擠與打擊" name="Bumps, Pushes &amp;amp; Hits" />
 		<menu_item_check label="啟用系統資訊按鈕" name="Enable Sysinfo Button" />
 		<menu_item_call label="關於 [APP_NAME]" name="About Second Life" />

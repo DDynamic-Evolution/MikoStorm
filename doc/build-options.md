@@ -4,7 +4,7 @@
 
 ```bash
 export AUTOBUILD_VARIABLES_FILE=$HOME/src/fs-build-variables/variables
-cd ~/src/phoenix-firestorm
+cd ~/src/MikoStorm
 
 # Konfigurieren (einmalig, --clean für Komplett-Neubau)
 autobuild configure -A 64 -c ReleaseFS_open -- --avx2 --fmodstudio --no-opensim

@@ -61,13 +61,15 @@ public:
         Deny,
         Ask,
     };
+#ifdef USE_3D_STREAM
     typedef std::function<void(bool allowed)> stream3d_url_callback_t;
-    MediaFilterResult classifyMediaFilterUrl(const std::string& media_url,
-                                             bool require_prompt_if_unknown = false);
     void promptStream3DUrl(const std::string& media_url,
                            const std::string& object_name,
                            const LLUUID& owner_id,
                            stream3d_url_callback_t callback);
+#endif
+    MediaFilterResult classifyMediaFilterUrl(const std::string& media_url,
+                                             bool require_prompt_if_unknown = false);
     std::string extractDomain(std::string url);
     // helper function to extract domain from url and conve
     void loadDomainFilterList();

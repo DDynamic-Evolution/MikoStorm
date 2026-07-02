@@ -32,7 +32,9 @@
 
 #include "llaudioengine_fmodstudio.h"
 #include "lllistener_fmodstudio.h"
+#ifdef USE_3D_STREAM
 #include "llstream3durlresolve.h"
+#endif
 
 #include "llerror.h"
 #include "llmath.h"
@@ -588,7 +590,9 @@ void LLAudioEngine_FMODSTUDIO::shutdown()
 {
     stopInternetStream();
 
+#ifdef USE_3D_STREAM
     LLStream3DUrlResolve::shutdown();
+#endif
 
     LL_INFOS("FMOD") << "About to LLAudioEngine::shutdown()" << LL_ENDL;
     LLAudioEngine::shutdown();

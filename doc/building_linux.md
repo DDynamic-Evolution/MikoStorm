@@ -75,13 +75,13 @@ cd ~/src
 git clone https://codeberg.org/mikostorm/MikoStorm.git
 ```
 
-This will create a folder called phoenix-firestorm and add all the source files. If you desire, you can choose a different folder name by adding the name to the end of the command:
+This will create a folder called MikoStorm and add all the source files. If you desire, you can choose a different folder name by adding the name to the end of the command:
 
 ```
 git clone https://codeberg.org/mikostorm/MikoStorm.git NewDestinationDirectory
 ```
  
-The rest of this document will assume the default directory, `phoenix-firestorm`
+The rest of this document will assume the default directory, `MikoStorm`
 
 ### Clone the Autobuild build variables
 
@@ -128,7 +128,7 @@ wrote  !/home/username/src/3p-fmodstudio/fmodstudio-2.01.02-linux64-202161533.ta
 Additionally, a file `result.txt` has been created containing the md5 hash value of the package file, which you will need in the next steps.
 
 ```
-cd ~/src/phoenix-firestorm
+cd ~/src/MikoStorm
 ```
 
 Copy the FMOD Studio path and md5 value from the package process into this command:
@@ -159,7 +159,7 @@ export AUTOBUILD_VARIABLES_FILE=$HOME/src/fs-build-variables/variables
 You can add that to `~/.bashrc` or `~/.profile` so they execute automatically, or execute them before you run autobuild.
 
 ```
-cd ~/src/phoenix-firestorm
+cd ~/src/MikoStorm
 autobuild configure -A 64 -c ReleaseFS_open
 ```
 
@@ -237,18 +237,18 @@ If you build the viewer using a virtual machine (guest), you will need to copy t
 The build process created a ready-to-use viewer as well as a compressed archive. The archive can be copied or moved to any shared filesystem, such as a flash or cloud drive, and it could be installed or extracted in the same manner as is the official release.
 
 ```
-cp ~/src/phoenix-firestorm/build-linux-x86_64/newview/Phoenix*.tar.* /path/to/shared/drive
+cp ~/src/MikoStorm/build-linux-x86_64/newview/Phoenix*.tar.* /path/to/shared/drive
 ```
 
 or
 ```
-mv ~/src/phoenix-firestorm/build-linux-x86_64/newview/Phoenix*.tar.* /path/to/shared/drive
+mv ~/src/MikoStorm/build-linux-x86_64/newview/Phoenix*.tar.* /path/to/shared/drive
 ```
 
 When copying the ready-to-run folders and files, use
 
 ```
-rsync -rptgoDLK --update --progress ~/src/phoenix-firestorm/build-linux-x86_64/newview/packaged/* /path/to/destination
+rsync -rptgoDLK --update --progress ~/src/MikoStorm/build-linux-x86_64/newview/packaged/* /path/to/destination
 ```
 
 Using rsync has the advantage of updating the destination, replacing only those files that changed or are missing, which takes much less time than copying and replacing every file.
