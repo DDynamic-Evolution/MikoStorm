@@ -26,6 +26,7 @@
 #define LL_POSITIONAL_STREAM_MULTI_H
 
 #include "llmultichanneldownmix.h"
+#include "llsd.h"
 #include "llstereoupmix.h"
 #include "llstream3durlresolve.h"
 #include "stdtypes.h"
@@ -209,6 +210,9 @@ public:
     // having to know about LL_WARNS / chat / settings gating itself.
     int sourceChannels() const { return mSourceChannels; }
     const char* sourceFormatName() const;
+
+    // Current stream metadata (TITLE, ARTIST, etc.) extracted via FMOD tags.
+    const LLSD& getMetadata() const { return mMetadata; }
 
     // Update one speaker's 3D position (caller is responsible for indexing
     // the same way it set up the speaker vector in start()).
@@ -524,6 +528,9 @@ private:
     LLStream3DUrlResolve::RequestId mResolveRequestId
         = LLStream3DUrlResolve::kInvalidRequestId;
     std::string mUrl;
+
+    LLSD mMetadata;
+    LLSD mPrevMetadata;
 
     std::atomic<State> mState;
 

@@ -279,7 +279,25 @@ static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
     {
         // <FS:Ansariel> [FS communication UI]
         //LLFloaterIMContainer::getInstance()->showConversation(session_id);
-        FSFloaterIM::show(session_id);
+        // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+        if (pandaview_is_ll_style())
+        {
+            // For an existing LLIMModel session, addSession() above only fires
+            // sessionActivated (which does not create the list item or the
+            // hosted tab), so explicitly call sessionAdded() before showing —
+            // addConversationListItem and addToHost are both idempotent.
+            LLFloaterIMContainer* ll_container = LLFloaterIMContainer::getInstance();
+            if (ll_container)
+            {
+                ll_container->sessionAdded(session_id, name, agent_id, false);
+                ll_container->showConversation(session_id);
+            }
+        }
+        else
+        {
+            FSFloaterIM::show(session_id);
+        }
+        // </FS:AYA>
         // </FS:Ansariel> [FS communication UI]
     }
     make_ui_sound("UISndStartIM");
@@ -454,7 +472,25 @@ const LLUUID LLAvatarActions::startConference(const uuid_vec_t& ids, const LLUUI
 
     // <FS:Ansariel> [FS communication UI]
     //FSFloaterIMContainer::getInstance()->showConversation(session_id);
-    FSFloaterIM::show(session_id);
+    // <FS:AYA> Phase 3: Route to LL or FS based on AYAChatWindowStyle
+    if (pandaview_is_ll_style())
+    {
+        // See on_avatar_name_cache_start_im(): for an existing LLIMModel
+        // session, addSession() only fires sessionActivated, leaving the LL
+        // container without a tab. Call sessionAdded() explicitly (idempotent)
+        // before showing so the conference becomes addressable.
+        LLFloaterIMContainer* ll_container = LLFloaterIMContainer::getInstance();
+        if (ll_container)
+        {
+            ll_container->sessionAdded(session_id, title, ids[0], false);
+            ll_container->showConversation(session_id);
+        }
+    }
+    else
+    {
+        FSFloaterIM::show(session_id);
+    }
+    // </FS:AYA>
     // </FS:Ansariel> [FS communication UI]
 
     make_ui_sound("UISndStartIM");

@@ -39,6 +39,7 @@
 
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llcinematicoverlay.h" // <FS:AYA r30 P5 R2> applyRecommendedSettings 後の BD overlay 再適用
 #include "llcommandhandler.h"
 #include "llcommunicationchannel.h"
 #include "llfloaterreg.h"
@@ -157,6 +158,7 @@
 #include "lltexturecache.h"
 #include "lltexturefetch.h"
 #include "lltextureview.h"
+#include "lllayoutstack.h" // <FS:AYA r30 P3.9> LLLayoutPanel for BD Machinima Sidebar programmatic mount
 #include "lltoast.h"
 #include "lltool.h"
 #include "lltoolbarview.h"
@@ -2144,6 +2146,18 @@ LLViewerWindow::LLViewerWindow(const Params& p)
     {
         LLFeatureManager::getInstance()->applyRecommendedSettings();
         gSavedSettings.setBOOL("ProbeHardwareOnStartup", false);
+        // <FS:AYA r30 P5 R2> applyRecommendedSettings は featuretable preset を経由して
+        // RenderShadowDetail / RenderFSAAType / RenderFarClip / RenderTreeLODFactor 等を
+        // 上書きするため、initConfiguration 段階で乗せた Cinematic BD overlay が消える。
+        // Cinematic mode の場合はここで強制再適用して preset を BD baseline で潰す。
+        // 通常起動 (ProbeHardwareOnStartup==false かつ LastFeatureVersion 一致) では
+        // 本ブロックに入らないので user tuning は安全。詳細:
+        // docs/specs/pandaview-r30-p5-bd-ui-binding-audit-spec.md §3.4
+        if (gSavedSettings.getU32("AYAVisualRealismEnabled") == 2)
+        {
+            LLCinematicOverlay::applyCinematicOverlay();
+        }
+        // </FS:AYA>
     }
 
     // If we crashed while initializng GL stuff last time, disable certain features
@@ -2276,6 +2290,29 @@ void LLViewerWindow::initBase()
     //mNavBarContainer = mStatusBarContainer->getChild<LLView>("nav_bar_container");
     //mTopInfoContainer = main_view->getChild<LLPanel>("topinfo_bar_container");
 
+    // <FS:AYA> Phase 3: Register AYA callbacks before toolbar XMLs are loaded
+    {
+        auto& commit_reg = LLUICtrl::CommitCallbackRegistry::defaultRegistrar();
+        auto& enable_reg = LLUICtrl::EnableCallbackRegistry::defaultRegistrar();
+
+        // Used by panel_toolbar_view.xml local chat button
+        commit_reg.add("AYA.NearbyChat.Toggle", [](LLUICtrl*, const LLSD&) {
+            if (pandaview_is_ll_style())
+                LLFloaterReg::toggleInstanceOrBringToFront("ll_im_container");
+            else
+                LLFloaterReg::toggleInstanceOrBringToFront("fs_nearby_chat");
+        });
+
+        // Used by commands.xml "chat" toolbar command
+        commit_reg.add("AYA.Conversations.Toggle", [](LLUICtrl*, const LLSD&) {
+            LLFloaterReg::toggleInstanceOrBringToFront(pandaview_im_container_name());
+        });
+        enable_reg.add("AYA.Conversations.IsOpen", [](LLUICtrl*, const LLSD&) -> bool {
+            return LLFloaterReg::instanceVisible(pandaview_im_container_name());
+        });
+    }
+    // </FS:AYA>
+
     // Create the toolbar view
     // Get a pointer to the toolbar view holder
     LLPanel* panel_holder = main_view->getChild<LLPanel>("toolbar_view_holder");
@@ -2399,6 +2436,13 @@ void LLViewerWindow::initWorldUI()
         mChicletContainer->addChild(chiclet_bar);
         mChicletContainer->setVisible(true);
     }
+
+    // 元 Phase 4 hardcoded BD-parity pinning ブロック (RenderDepthOfField/
+    // RenderMotionBlur/RenderScreenSpaceReflections/RenderFSAAType + Camera
+    // DoF 6 件) は 2026-05-22 に settings_cinematic_bd.xml overlay へ移管。
+    // 毎起動 setBOOL/setF32 が user の floater customize を潰す bug の根本因
+    // だったため、sentinel-driven な overlay 機構 (一度焼き → user 改変
+    // survive) に統一。
 
     LLRect morph_view_rect = full_window;
     morph_view_rect.stretch( -STATUS_BAR_HEIGHT );
@@ -2784,14 +2828,10 @@ void LLViewerWindow::reshape(S32 width, S32 height)
         // round up when converting coordinates to make sure there are no gaps at edge of window
         LLView::sForceReshape = display_scale_changed;
         mRootView->reshape(llceil((F32)width / mDisplayScale.mV[VX]), llceil((F32)height / mDisplayScale.mV[VY]));
-        if (display_scale_changed)
-        {
-            // Needs only a 'scale change' update, everything else gets handled by LLLayoutStack::updateClass()
-            // <FS:Ansariel> [FS Login Panel]
-            //LLPanelLogin::reshapePanel();
-            FSPanelLogin::reshapePanel();
-            // </FS:Ansariel> [FS Login Panel]
-        }
+        // <FS:Ansariel> [FS Login Panel]
+        //LLPanelLogin::reshapePanel();
+        FSPanelLogin::reshapePanel();
+        // </FS:Ansariel> [FS Login Panel]
         LLView::sForceReshape = false;
 
         // clear font width caches

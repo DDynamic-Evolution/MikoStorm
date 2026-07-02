@@ -482,8 +482,14 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("hud", "floater_hud.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHUD>);
 
     // <FS:Ansariel> [FS communication UI]
-    //LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMSession>);
+    // <FS:AYA> Phase 1: LLFloaterIMContainer requires "impanel" for IM sessions
+    LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMSession>);
+    // </FS:AYA>
     //LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMContainer>);
+    // <FS:AYA> Phase 1 Step5: Use real LLFloaterIMContainer under "ll_im_container" key
+    LLFloaterReg::add("ll_im_container", "floater_im_container.xml",
+        (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterIMContainer>);
+    // </FS:AYA>
     LLFloaterReg::add("fs_impanel", "floater_fs_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIM>);
     LLFloaterReg::add("fs_im_container", "floater_fs_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIMContainer>);
     // <FS:Ansariel> [FS communication UI]

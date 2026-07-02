@@ -62,6 +62,7 @@ if (TARGET ll::fmodstudio)
              llpositionalstreamstereo.cpp
              llpositionalstreammulti.cpp
              llstream3durlresolve.cpp
+             llmetadatatags.cpp
              )
 
         list(APPEND llaudio_HEADER_FILES
@@ -69,6 +70,7 @@ if (TARGET ll::fmodstudio)
              llpositionalstreamstereo.h
              llpositionalstreammulti.h
              llstream3durlresolve.h
+             llmetadatatags.h
              )
     endif ()
 

@@ -254,6 +254,11 @@ public:
 
     void setTabVisibility( LLPanel const *aPanel, bool );
 
+    // <FS:PandaView r22> Promote to public so floaters can suppress the tab strip at runtime
+    // (e.g. when FSChatHumanObjectTabs is disabled, make the chat floater look unsplit).
+    void setTabsHidden(bool hidden) { mTabsHidden = hidden; }
+    // </FS:PandaView r22>
+
     void        startDragAndDropDelayTimer() { mDragAndDropDelayTimer.start(); }
 
     void onTabBtn( const LLSD& data, LLPanel* panel );
@@ -293,7 +298,7 @@ private:
     S32 getScrollPosPixels() const      { return mScrollPosPixels; }
     void setScrollPosPixels(S32 pixels) { mScrollPosPixels = pixels; }
 
-    void setTabsHidden(bool hidden)     { mTabsHidden = hidden; }
+    // setTabsHidden moved to public above. <FS:PandaView r22>
     bool getTabsHidden() const          { return mTabsHidden; }
 
     void scrollPrev() { mScrollPos = llmax(0, mScrollPos-1); } // No wrap

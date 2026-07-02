@@ -40,9 +40,15 @@
 
 // For Listeners
 #include "llaudioengine.h"
+#ifdef LL_FMODSTUDIO
+#include "llaudioengine_fmodstudio.h" // r12.x: FSParcelStreamQuality live setter
+#endif
+#include "llpositionalstreammgr.h"
 #include "llagent.h"
+#include "llcinematicoverlay.h" // <FS:AYA r30 P5 R2> sentinel reset on mode switch
 #include "llagentcamera.h"
 #include "llconsole.h"
+#include "lldrawable.h"
 #include "lldrawpoolbump.h"
 #include "lldrawpoolterrain.h"
 #include "llflexibleobject.h"
@@ -63,9 +69,6 @@
 #include "llvlcomposition.h"
 #include "pipeline.h"
 #include "llviewerjoystick.h"
-#ifdef USE_3D_STREAM
-#include "llpositionalstreammgr.h"
-#endif
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llparcel.h"
@@ -105,6 +108,9 @@
 #include "fsfloatercontacts.h"
 #include "fsfloaterim.h"
 #include "fsfloaternearbychat.h"
+#include "llfloaterimsessiontab.h"  // <FS:AYA> Phase 3
+#include "llfloaterimcontainer.h"   // <FS:AYA> Phase 3 - backfill on LL switch
+#include "llimview.h"               // <FS:AYA> Phase 3 - backfill on LL switch
 #include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
 #include "fslslbridge.h"
@@ -327,7 +333,6 @@ bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
     return true;
 }
 
-
 static bool handleShadowsResized(const LLSD& newvalue)
 {
     gPipeline.requestResizeShadowTexture();
@@ -353,6 +358,25 @@ static bool handleReleaseGLBufferChanged(const LLSD& newvalue)
 static bool handleEnableEmissiveChanged(const LLSD& newvalue)
 {
     return handleReleaseGLBufferChanged(newvalue) && handleSetShaderChanged(newvalue);
+}
+
+static bool handleRenderEnableFullbrightChanged(const LLSD& newvalue)
+{
+    for (S32 i = 0, count = gObjectList.getNumObjects(); i < count; ++i)
+    {
+        LLViewerObject* objectp = gObjectList.getObject(i);
+        LLDrawable* drawablep = objectp ? objectp->mDrawable.get() : nullptr;
+        if (drawablep && !drawablep->isDead())
+        {
+            if (LLVOVolume* volume = drawablep->getVOVolume())
+            {
+                volume->updateFaceFlags();
+                volume->markForUpdate();
+            }
+        }
+    }
+
+    return true;
 }
 
 static bool handleDisableVintageMode(const LLSD& newvalue)
@@ -531,7 +555,6 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
     audio_update_volume(true);
 }
 
-#ifdef USE_3D_STREAM
 // <FS:AYA> [PositionalStream]
 static void handleStream3DRolloffChanged(const LLSD&)
 {
@@ -554,6 +577,12 @@ static void handleStream3DEnabledChanged(const LLSD& newvalue)
     }
     else
     {
+        // r7: without this, the manager would wait up to Stream3DPollInterval
+        // (default 30 s) before re-issuing ObjectPropertiesFamily requests for
+        // any prim it had recently polled before the toggle, so users see a
+        // long silence after re-enabling. forceRescan() zeroes last_polled so
+        // the next 0.5 s scan tick re-requests in-range prims at the existing
+        // budget (no extra server load — same 10 req/s cap).
         LLPositionalStreamMgr::instance().forceRescan();
     }
 }
@@ -565,8 +594,91 @@ static void handleStream3DDescriptionScanChanged(const LLSD& newvalue)
         LLPositionalStreamMgr::instance().shutdownPrimBindings();
     }
 }
-// </FS:AYA> [PositionalStream]
+
+static void handleStream3DDebugPlayChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        if (!gSavedSettings.getBOOL("Stream3DEnabled"))
+        {
+            LL_WARNS("Stream3D") << "Stream3DEnabled is false; refusing to start debug stream." << LL_ENDL;
+            return;
+        }
+        const std::string url = gSavedSettings.getString("Stream3DDebugUrl");
+        if (url.empty())
+        {
+            LL_WARNS("Stream3D") << "Stream3DDebugUrl is empty; not starting." << LL_ENDL;
+            return;
+        }
+
+        LLVector3 forward = gAgent.getAtAxis();
+        forward.normalize();
+        LLVector3d agent_global = gAgent.getPositionGlobal();
+        LLVector3d source_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3 source_f;
+        source_f.setVec(source_global);
+
+        LLPositionalStreamMgr::instance().startDebug(url, source_f);
+    }
+    else
+    {
+        LLPositionalStreamMgr::instance().stopDebug();
+    }
+}
+
+static void handleStream3DDebugStereoPlayChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        if (!gSavedSettings.getBOOL("Stream3DEnabled"))
+        {
+            LL_WARNS("Stream3D") << "Stream3DEnabled is false; refusing to start debug stereo stream." << LL_ENDL;
+            return;
+        }
+        const std::string url = gSavedSettings.getString("Stream3DDebugUrl");
+        if (url.empty())
+        {
+            LL_WARNS("Stream3D") << "Stream3DDebugUrl is empty; not starting stereo." << LL_ENDL;
+            return;
+        }
+
+        // M5-b: L and R anchored 5m in front of the agent and offset 5m
+        // along the agent's left/right axes respectively. Lets the listener
+        // verify true L/R deinterleave + 3D positioning in one shot.
+        LLVector3 forward = gAgent.getAtAxis();
+        forward.normalize();
+        LLVector3 left = gAgent.getLeftAxis();
+        left.normalize();
+        LLVector3d agent_global = gAgent.getPositionGlobal();
+        LLVector3d anchor_global = agent_global + LLVector3d(forward) * 5.0;
+        LLVector3d l_global = anchor_global + LLVector3d(left) * 5.0;
+        LLVector3d r_global = anchor_global - LLVector3d(left) * 5.0;
+        LLVector3 l_f, r_f;
+        l_f.setVec(l_global);
+        r_f.setVec(r_global);
+
+        LLPositionalStreamMgr::instance().startDebugStereo(url, l_f, r_f);
+    }
+    else
+    {
+        LLPositionalStreamMgr::instance().stopDebugStereo();
+    }
+}
+// </FS:AYA>
+
+// r12.x: FSParcelStreamQuality live setter. Buffer hint applies on next
+// stream start; gain curve applies live. Resampler is locked at System
+// init, so a viewer restart is required to swap that piece.
+static void handleParcelStreamQualityChanged(const LLSD& newvalue)
+{
+#ifdef LL_FMODSTUDIO
+    if (LLAudioEngine_FMODSTUDIO* fmod_engine =
+            dynamic_cast<LLAudioEngine_FMODSTUDIO*>(gAudiop))
+    {
+        fmod_engine->setParcelStreamQuality(static_cast<U32>(newvalue.asInteger()));
+    }
 #endif
+}
 
 static bool handleJoystickChanged(const LLSD& newvalue)
 {
@@ -1338,6 +1450,59 @@ void setting_setup_signal_listener(LLControlGroup& group, const std::string& set
     });
 }
 
+// <FS:AYA> [PandaView-r5] Settings-key migration for the r5 naming refactor.
+// r4 used AYAStream* / FSRenderHideOutsideParcel* keys. r5 declares only the
+// renamed keys (Stream3D* / ParcelHide*). When a user upgrades from r4, the
+// old keys arrive via user settings as undeclared persisted controls; we copy
+// their value onto the new declared key (only when the new key is still at
+// its compile-time default) and then suppress old-key persistence so the
+// stale name disappears from saved settings on the next write. After one
+// successful run there is no old key, so this becomes a no-op.
+void migrate_legacy_settings()
+{
+    static const std::pair<const char*, const char*> kMigrations[] = {
+        // 3D Stream (r4 AYAStream* -> r5 Stream3D*)
+        { "AYAStreamDebugUrl",            "Stream3DDebugUrl"            },
+        { "AYAStreamDebugPlay",           "Stream3DDebugPlay"           },
+        { "AYAStreamDebugStereoPlay",     "Stream3DDebugStereoPlay"     },
+        { "AYAStreamRolloffMin",          "Stream3DRolloffMin"          },
+        { "AYAStreamRolloffMax",          "Stream3DRolloffMax"          },
+        { "AYAStreamMaxDistance",         "Stream3DMaxDistance"         },
+        { "AYAStreamPollInterval",        "Stream3DPollInterval"        },
+        { "AYAStreamVolumeMaster",        "Stream3DVolumeMaster"        },
+        { "AYAStreamReconnectAttempts",   "Stream3DReconnectAttempts"   },
+        { "AYAStreamEnabled",             "Stream3DEnabled"             },
+        { "AYAStreamDescriptionScan",     "Stream3DDescriptionScan"     },
+        { "AYAStreamMaxConcurrent",       "Stream3DMaxConcurrent"       },
+        // Parcel Hide (r4 FSRenderHideOutsideParcel* -> r5 ParcelHide*)
+        { "FSRenderHideOutsideParcel",            "ParcelHideEnabled"      },
+        { "FSRenderHideOutsideParcelKeepAvatars", "ParcelHideKeepAvatars" },
+        { "FSRenderHideOutsideParcelKeepOwn",     "ParcelHideKeepOwn"     },
+    };
+
+    for (const auto& [old_key, new_key] : kMigrations)
+    {
+        if (!gSavedSettings.controlExists(old_key))
+        {
+            continue;
+        }
+        LLControlVariablePtr old_ctrl = gSavedSettings.getControl(old_key);
+        LLControlVariablePtr new_ctrl = gSavedSettings.getControl(new_key);
+        if (!old_ctrl || !new_ctrl)
+        {
+            continue;
+        }
+        if (new_ctrl->isDefault())
+        {
+            new_ctrl->setValue(old_ctrl->getValue());
+            LL_INFOS("Settings") << "PandaView r5: migrated '" << old_key
+                                 << "' -> '" << new_key << "'" << LL_ENDL;
+        }
+        old_ctrl->setPersist(LLControlVariable::PERSIST_NO);
+    }
+}
+// </FS:AYA>
+
 void settings_setup_listeners()
 {
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
@@ -1363,6 +1528,18 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
+    // <PandaView r30 P4 step 5> BD DoF chain permutation cvars trigger shader rebuild.
+    // RenderChromaStrength is a uniform (no rebuild) so it's intentionally not listed.
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldHighQuality", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldChroma",      handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldFront",       handleSetShaderChanged);
+    // </PandaView r30 P4 step 5>
+    // <PandaView r30 P5> Cinematic floater 即時反映の wire ギャップ補填。
+    // RenderMotionBlur: mVelocityMap allocation を createGLBuffers() で再走させる。
+    // RenderVolumetricLightingDirectional: GODRAYS_FADE permutation を shader rebuild で反映。
+    setting_setup_signal_listener(gSavedSettings, "RenderMotionBlur",                    handleReleaseGLBufferChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderVolumetricLightingDirectional", handleSetShaderChanged);
+    // </PandaView r30 P5>
     setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowHDR", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderEnableEmissiveBuffer", handleEnableEmissiveChanged);
@@ -1370,6 +1547,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderHDREnabled", handleEnableHDR);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowNoise", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderEnableFullbright", handleRenderEnableFullbrightChanged);
     setting_setup_signal_listener(gSavedSettings, "FSOverrideVRAMDetection", handleOverrideVRAMDetectionChanged); // <FS:Beq/> Override VRAM detection support
     setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarComplexityMode", handleUserImpostorByDistEnabledChanged);
@@ -1421,14 +1599,6 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
-#ifdef USE_3D_STREAM
-    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);
-    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMax", handleStream3DRolloffChanged);
-    setting_setup_signal_listener(gSavedSettings, "Stream3DVolumeMaster", handleStream3DVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "MuteStream3D", handleStream3DVolumeChanged);
-    setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
-    setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
-#endif
     setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);
@@ -1507,6 +1677,16 @@ void settings_setup_listeners()
     // <FS:Ansariel> Show start location setting has no effect on login
     setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
     setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDebugPlay", handleStream3DDebugPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDebugStereoPlay", handleStream3DDebugStereoPlayChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMax", handleStream3DRolloffChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DVolumeMaster", handleStream3DVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteStream3D", handleStream3DVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
+    setting_setup_signal_listener(gSavedSettings, "FSParcelStreamQuality", handleParcelStreamQualityChanged);
+    // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "SpellCheckDictionary", handleSpellCheckChanged);
     setting_setup_signal_listener(gSavedSettings, "LoginLocation", handleLoginLocationChanged);
@@ -1578,9 +1758,113 @@ void settings_setup_listeners()
     // <FS:Ansariel> [FS communication UI]
     setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterIM::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
+    // <FS:AYA> Phase 3: AYALLChatCompactView is a live-apply compact toggle within LL style.
+    setting_setup_signal_listener(gSavedSettings, "AYALLChatCompactView", []() { LLFloaterIMSessionTab::processChatHistoryStyleUpdate(); });
+    // Mirror PlainTextChatHistory live-apply onto LL-style chat (FS-only listeners above
+    // leave the LL container/IM tabs stale until next message arrives).
+    setting_setup_signal_listener(gSavedSettings, "PlainTextChatHistory", []() { LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true); });
+    // </FS:AYA>
+    // <FS:PandaView r22> AYAChatWindowStyle live-apply dropped (per memory: 2 attempts, bugs).
+    // The toggle now strictly requires a restart, surfaced via the (requires restart) label
+    // in panel_preferences_chat.xml. Do not re-add live-apply listeners here.
+    // Fire the modal "ChangeChatLayoutSetting" notification on toggle so the user sees an
+    // explicit restart prompt (matches FS's ChangeLanguage UX). Guarded by STATE_STARTED so
+    // the signal doesn't fire during the initial settings load on app boot.
+    setting_setup_signal_listener(gSavedSettings, "AYAChatWindowStyle", []() {
+        if (LLStartUp::getStartupState() >= STATE_STARTED)
+        {
+            // The Nearby Chat is normally docked inside its style's IM container
+            // (ll_im_container for LL, fs_im_container for FS), so what the user
+            // sees as the "chat window" is actually the container. Close the
+            // now-unselected style's container (and its Nearby Chat floater in
+            // case it has been torn off) so we don't end up with both FS and LL
+            // chat windows open at once, and so the stale window doesn't
+            // auto-restore on the next launch.
+            const S32 new_style = gSavedSettings.getS32("AYAChatWindowStyle");
+            const std::vector<std::string> stale_names = (new_style == 2)
+                ? std::vector<std::string>{ "fs_im_container", "fs_nearby_chat" }
+                : std::vector<std::string>{ "ll_im_container", "nearby_chat" };
+            for (const std::string& name : stale_names)
+            {
+                if (LLFloater* stale = LLFloaterReg::findInstance(name))
+                {
+                    if (stale->getVisible())
+                    {
+                        stale->closeFloater();
+                    }
+                }
+                const std::string vis_key = "floater_vis_" + name;
+                if (gSavedSettings.controlExists(vis_key))
+                {
+                    gSavedSettings.setBOOL(vis_key, false);
+                }
+            }
+            LLNotificationsUtil::add("ChangeChatLayoutSetting");
+        }
+    });
+    setting_setup_signal_listener(gSavedSettings, "FSChatHumanObjectTabs", []() {
+        if (LLStartUp::getStartupState() >= STATE_STARTED)
+        {
+            LLNotificationsUtil::add("ChangeChatLayoutSetting");
+        }
+    });
+    // </FS:PandaView r22>
+    // <FS:PandaView r30 P1> AYAVisualRealismEnabled (View Mode) restart-required.
+    // Per pandaview-r30-cinematic-chapter.md, all 3 modes (Firestorm View / PandaView View /
+    // Cinematic) unify on restart-switch to avoid r17 Kelvin-gate maintenance hell and to
+    // make the pipeline build-once at startup. The combo_box stays control_name-bound
+    // (immediate cvar write) but we surface the modal "ChangeViewMode" notification so the
+    // user knows a restart is needed for the new mode to actually take effect.
+    // <FS:PandaView r30 cleanup> Guard at STATE_LOGIN_SHOW (not STATE_STARTED) so a
+    //   pre-login Preferences mode change also fires the restart prompt. Otherwise the
+    //   user changes View Mode on the login screen, logs in, and finds the viewer still
+    //   running the boot-time mode (shaders / overlay are locked at startup) — observed
+    //   2026-05-22, AYA selected PandaView View pre-login but got Cinematic in-world.
+    setting_setup_signal_listener(gSavedSettings, "AYAVisualRealismEnabled", []() {
+        // <FS:AYA r30 P5 C' / A6> Keep helper Boolean shadows in sync so XUI
+        // enabled_control bindings update immediately on combo_box change. Fires
+        // unconditionally (also during pre-STATE_STARTED settings load) so the
+        // UI is correct before the user sees Preferences.
+        //   - AYACinematicModeActive  = (mode == 2): BD-X1 cvar widgets grey out in mode 0/1
+        //   - AYAR20SSSEffective       = (mode &gt; 0): SSS Preferences panel active in
+        //     PandaView View (mode 1) AND Cinematic (mode 2). r20 consolidation
+        //     merged the InCinematic cvar into AYAR20AvatarSkinSSSEnabled, so the
+        //     SSS tuning UI must follow.
+        const U32 mode_v = gSavedSettings.getU32("AYAVisualRealismEnabled");
+        gSavedSettings.setBOOL("AYACinematicModeActive", mode_v == 2);
+        gSavedSettings.setBOOL("AYAR20SSSEffective",     mode_v > 0);
+        // </FS:AYA>
+        if (LLStartUp::getStartupState() >= STATE_LOGIN_SHOW)
+        {
+            // <FS:AYA r30 P5 R2> Reset overlay sentinel when leaving mode 2 so the
+            // next entry into Cinematic force-applies a fresh BD baseline. The
+            // forward transition (-> 2) is left to the next startup since all 3
+            // modes require restart per r30 P1.
+            if (mode_v != 2)
+            {
+                LLCinematicOverlay::clearOverlaySentinel();
+            }
+            // </FS:AYA>
+            LLNotificationsUtil::add("ChangeViewMode");
+        }
+    });
+    // <FS:AYA r30 P5 C' / A6> Initial sync at startup: signal listener does not fire on
+    // registration, so seed both helper Boolean shadows from the loaded U32 value here.
+    {
+        const U32 mode_v = gSavedSettings.getU32("AYAVisualRealismEnabled");
+        gSavedSettings.setBOOL("AYACinematicModeActive", mode_v == 2);
+        gSavedSettings.setBOOL("AYAR20SSSEffective",     mode_v > 0);
+    }
+    // </FS:AYA>
+    // </FS:PandaView r30 P1>
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);
+    // <FS:AYA> Mirror ChatFontSize live-apply onto LL-style chat (the FS listeners above
+    // only refresh FSFloaterIM/FSFloaterNearbyChat; LL container stays at the old size
+    // until the next chat message triggers a redraw).
+    setting_setup_signal_listener(gSavedSettings, "ChatFontSize", []() { LLFloaterIMSessionTab::processChatHistoryStyleUpdate(true); });
+    // </FS:AYA>
     // </FS:Ansariel> [FS communication UI]
 
     setting_setup_signal_listener(gSavedPerAccountSettings, "GlobalOnlineStatusToggle", handleGlobalOnlineStatusChanged);
@@ -1677,3 +1961,14 @@ void test_cached_control()
 }
 #endif // TEST_CACHED_CONTROL
 
+// <FS:AYA> Phase 3: Chat window style helpers
+bool pandaview_is_ll_style()
+{
+    return gSavedSettings.getS32("AYAChatWindowStyle") == 2;
+}
+
+std::string pandaview_im_container_name()
+{
+    return pandaview_is_ll_style() ? "ll_im_container" : "fs_im_container";
+}
+// </FS:AYA>

@@ -403,6 +403,8 @@ private:
         // Sentinel NaN means "never pushed", so the first push always goes.
         F32 last_pushed_volume = std::numeric_limits<F32>::quiet_NaN();
         std::unique_ptr<LLPositionalStream> stream;
+        // MikoStorm: last-seen metadata snapshot to detect title/artist changes.
+        LLSD last_metadata;
     };
 
     // r8 F2-a: one entry per speaker prim that participates in a distributed
@@ -523,6 +525,8 @@ private:
         // faces can continue using the normal media volume slider.
         bool media_source_uses_viewer_volume = true;
         F32 last_pushed_volume = std::numeric_limits<F32>::quiet_NaN();
+        // MikoStorm: last-seen metadata snapshot to detect title/artist changes.
+        LLSD last_metadata;
     };
 
     // r10 P5 / r10.x P2: routing-diagnostic emitter. Called from update()

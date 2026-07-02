@@ -26,8 +26,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
 #include "message.h"
 
 #include "lliconctrl.h"
@@ -46,6 +44,9 @@
 #include "llviewermenu.h" // for gMenuHolder
 #include "llfloaterimnearbychathandler.h"
 #include "llchannelmanager.h"
+// <FS:AYA> r12: console suppression while the chat window is visible
+#include "llconsole.h"
+// </FS:AYA>
 #include "llchathistory.h"
 #include "llstylemap.h"
 #include "llavatarnamecache.h"
@@ -79,7 +80,9 @@
 
 S32 LLFloaterIMNearbyChat::sLastSpecialChatChannel = 0;
 
-static LLFloaterIMNearbyChatListener sChatListener;
+// <FS:AYA> Phase 1: LLChatBar LLEventAPI already registered by fsnearbychatbarlistener.cpp
+// static LLFloaterIMNearbyChatListener sChatListener;
+// </FS:AYA>
 
 constexpr S32 EXPANDED_HEIGHT = 266;
 constexpr S32 COLLAPSED_HEIGHT = 60;
@@ -128,7 +131,7 @@ LLFloaterIMNearbyChat::LLFloaterIMNearbyChat(const LLSD& llsd)
 //static
 LLFloaterIMNearbyChat* LLFloaterIMNearbyChat::buildFloater(const LLSD& key)
 {
-    LLFloaterReg::getInstance("im_container");
+    LLFloaterReg::getInstance("ll_im_container");
     return new LLFloaterIMNearbyChat(key);
 }
 
@@ -213,9 +216,11 @@ void LLFloaterIMNearbyChat::reloadMessages(bool clean_messages/* = false*/)
     }
 
     mChatHistory->clear();
+    if (mChatHistoryObject) { mChatHistoryObject->clear(); } // <FS:PandaView r22>
 
     LLSD do_not_log;
     do_not_log["do_not_log"] = true;
+    do_not_log["is_replay"] = true; // <FS:PandaView r22> Mark archive replay so unread badge logic skips it.
     for(std::vector<LLChat>::iterator it = mMessageArchive.begin();it!=mMessageArchive.end();++it)
     {
         // Update the messages without re-writing them to a log file.
@@ -227,6 +232,7 @@ void LLFloaterIMNearbyChat::loadHistory()
 {
     LLSD do_not_log;
     do_not_log["do_not_log"] = true;
+    do_not_log["is_replay"] = true; // <FS:PandaView r22> Mark history file replay so unread badge logic skips it.
 
     std::list<LLSD> history;
     LLLogChat::loadChatHistory("chat", history);
@@ -266,6 +272,14 @@ void LLFloaterIMNearbyChat::loadHistory()
             chat.mSourceType = isWordsName(from) ? CHAT_SOURCE_UNKNOWN : CHAT_SOURCE_OBJECT;
         }
 
+        // <FS:PandaView r22> Trust an explicit source-type marker (M2 plumbing)
+        // over the legacy from-name heuristic when reloading saved lines.
+        if (msg.has(LL_IM_SOURCE_TYPE))
+        {
+            chat.mSourceType = (EChatSourceType)msg[LL_IM_SOURCE_TYPE].asInteger();
+        }
+        // </FS:PandaView r22>
+
         addMessage(chat, true, do_not_log);
 
         it++;
@@ -291,7 +305,44 @@ void LLFloaterIMNearbyChat::setVisible(bool visible)
     {
         removeScreenChat();
     }
+
+    // <FS:AYA> r12: mirror FSFloaterNearbyChat::setVisible — suppress the
+    // on-screen console's nearby chat session while this floater is visible
+    // so users selecting the LL chat path via AYAChatWindowStyle don't see
+    // nearby chat duplicated in the console overlay.
+    if (gConsole)
+    {
+        if (visible && isInVisibleChain())
+        {
+            gConsole->addSession(LLUUID::null);
+        }
+        else
+        {
+            gConsole->removeSession(LLUUID::null);
+        }
+    }
+    // </FS:AYA>
 }
+
+// <FS:AYA> r12: mirror FSFloaterNearbyChat::setMinimized so the console
+// suppression follows minimize/un-minimize transitions too.
+void LLFloaterIMNearbyChat::setMinimized(bool b)
+{
+    if (gConsole)
+    {
+        if (b)
+        {
+            gConsole->removeSession(LLUUID::null);
+        }
+        else
+        {
+            gConsole->addSession(LLUUID::null);
+        }
+    }
+
+    LLFloaterIMSessionTab::setMinimized(b);
+}
+// </FS:AYA>
 
 
 void LLFloaterIMNearbyChat::setVisibleAndFrontmost(bool take_focus, const LLSD& key)
@@ -677,7 +728,7 @@ void LLFloaterIMNearbyChat::addMessage(const LLChat& chat,bool archive,const LLS
             }
         }
 
-        LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText);
+        LLLogChat::saveHistory("chat", from_name, chat.mFromID, chat.mText, chat.mSourceType); // <FS:PandaView r22> tag source type
     }
 }
 
@@ -882,6 +933,8 @@ LLWString LLFloaterIMNearbyChat::stripChannelNumber(const LLWString &mesg, S32* 
     }
 }
 
+// <FS:AYA> Phase 1: send_chat_from_viewer already defined in fsnearbychathub.cpp
+#if 0
 //void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0b) | Modified: RLVa-0.2.2a
 void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
@@ -965,6 +1018,7 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
     gAgent.sendReliableMessage();
     add(LLStatViewer::CHAT_COUNT, 1);
 }
+#endif // </FS:AYA>
 
 class LLChatCommandHandler : public LLCommandHandler
 {
@@ -1006,6 +1060,6 @@ public:
 };
 
 // Creating the object registers with the dispatcher.
-LLChatCommandHandler gChatHandler;
-
-#endif
+// <FS:AYA> Phase 1: gChatHandler already defined in fsnearbychathub.cpp
+// LLChatCommandHandler gChatHandler;
+// </FS:AYA>

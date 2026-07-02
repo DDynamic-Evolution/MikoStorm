@@ -33,6 +33,7 @@
 #include "fmodstudio/fmod.hpp"
 #include "fmodstudio/fmod_errors.h"
 
+#include "llmetadatatags.h"
 #include "llstreamingaudio_fmodstudio.h"
 
 inline bool Check_FMOD_Error(FMOD_RESULT result, const char *string)
@@ -294,96 +295,21 @@ void LLStreamingAudio_FMODSTUDIO::update()
 
                     LL_DEBUGS("StreamMetadata") << "Tag name: " << tag.name << " - Tag type: " << tag.type << " - Tag data type: " << tag.datatype << LL_ENDL;
 
-                    std::string name = tag.name;
-                    switch (tag.type)
+                    std::string name = LLMetadataTags::normaliseName(tag);
+                    if (name.empty())
                     {
-                        case FMOD_TAGTYPE_ID3V2:
+                        // FMOD internal tag (e.g. "Sample Rate Change")
+                        if (std::string(tag.name) == "Sample Rate Change")
                         {
-                            if (name == "TIT2")
-                                name = "TITLE";
-                            else if (name == "TPE1")
-                                name = "ARTIST";
-                            break;
+                            LL_INFOS() << "Stream forced changing sample rate to " << *((float*)tag.data) << LL_ENDL;
+                            mFMODInternetStreamChannelp->setFrequency(*((float*)tag.data));
                         }
-                        case FMOD_TAGTYPE_ASF:
-                        {
-                            if (name == "Title")
-                                name = "TITLE";
-                            else if (name == "WM/AlbumArtist")
-                                name = "ARTIST";
-                            break;
-                        }
-                        case FMOD_TAGTYPE_VORBISCOMMENT:
-                        {
-                            if (name == "title")
-                                name = "TITLE";
-                            else if (name == "artist")
-                                name = "ARTIST";
-                            break;
-                        }
-                        case FMOD_TAGTYPE_FMOD:
-                        {
-                            if (name == "Sample Rate Change")
-                            {
-                                LL_INFOS() << "Stream forced changing sample rate to " << *((float*)tag.data) << LL_ENDL;
-                                mFMODInternetStreamChannelp->setFrequency(*((float*)tag.data));
-                            }
-                            continue;
-                        }
-                        default:
-                            break;
+                        continue;
                     }
 
-                    switch (tag.datatype)
-                    {
-                        case FMOD_TAGDATATYPE_INT:
-                        {
-                            mMetadata[name] = *(LLSD::Integer*)(tag.data);
-                            LL_DEBUGS("StreamMetadata") << tag.name << ": " << *(int*)(tag.data) << LL_ENDL;
-                            break;
-                        }
-                        case FMOD_TAGDATATYPE_FLOAT:
-                        {
-                            mMetadata[name] = *(LLSD::Real*)(tag.data);
-                            LL_DEBUGS("StreamMetadata") << tag.name << ": " << *(float*)(tag.data) << LL_ENDL;
-                            break;
-                        }
-                        case FMOD_TAGDATATYPE_STRING:
-                        {
-                            std::string out = rawstr_to_utf8(std::string((char*)tag.data, tag.datalen));
-                            mMetadata[name] = out;
-                            LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
-                            break;
-                        }
-                        case FMOD_TAGDATATYPE_STRING_UTF8:
-                        {
-                            std::string out((char*)tag.data);
-                            mMetadata[name] = out;
-                            LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
-                            break;
-                        }
-                        case FMOD_TAGDATATYPE_STRING_UTF16:
-                        {
-                            std::string out = utf16str_to_utf8str((U16*)tag.data, tag.datalen / 2);
-                            mMetadata[name] = out;
-                            LL_DEBUGS("StreamMetadata") << tag.name << ": " << out << LL_ENDL;
-                            break;
-                        }
-                        case FMOD_TAGDATATYPE_STRING_UTF16BE:
-                        {
-                            // UTF-16 Big Endian encoded; swap high & low bytes first
-                            U16* buffer = (U16*)tag.data;
-                            for (U32 j = 0; j < tag.datalen / 2; ++j)
-                                buffer[j] = (((buffer[j] & 0xff) << 8) | ((buffer[j] & 0xff00) >> 8));
-
-                            std::string out = utf16str_to_utf8str((U16*)tag.data, tag.datalen / 2);
-                            mMetadata[name] = out;
-                            LL_DEBUGS("StreamMetadata") << name << ": " << out << LL_ENDL;
-                            break;
-                        }
-                        default:
-                            break;
-                    }
+                    mMetadata[name] = LLMetadataTags::convertValue(tag);
+                    LL_DEBUGS("StreamMetadata") << tag.name << " -> " << name << ": "
+                                                 << mMetadata[name] << LL_ENDL;
                 }
 
                 mMetadataUpdateSignal(mMetadata);

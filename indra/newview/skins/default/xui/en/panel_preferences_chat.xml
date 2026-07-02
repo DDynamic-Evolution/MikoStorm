@@ -321,6 +321,26 @@
          label="Chat Windows"
          name="ChatWindows">
 
+            <!-- <FS:AYA> Wrap content in a scroll container so the panel
+                 stays usable as new options are added. -->
+            <scroll_container
+             follows="all"
+             layout="topleft"
+             left="0"
+             top="0"
+             bottom="-1"
+             right="-1"
+             name="chat_windows_scroll">
+                <panel
+                 background_visible="false"
+                 border="false"
+                 height="565"
+                 layout="topleft"
+                 left="0"
+                 top="0"
+                 width="520"
+                 name="chat_windows_scroll_content">
+
             <text
              top="10"
              follows="left|top"
@@ -386,21 +406,47 @@
              top_pad="5"
              height="16"
              width="400" />
-            <check_box
-             control_name="PlainTextChatHistory"
-             enabled="true"
-             height="16"
-             label="Use V1 style chat headers"
+            <!-- <FS:AYA> Phase 3: Chat window style radio group -->
+            <radio_group
+             control_name="AYAChatWindowStyle"
+             height="54"
              layout="topleft"
-             name="plain_text_chat_history"
+             left="20"
+             name="chat_window_style"
+             top_pad="5"
+             width="400">
+                <radio_item
+                 label="FS V1 style (plain text)"
+                 name="style_v1"
+                 value="0" />
+                <radio_item
+                 label="FS V7 style (modern headers)"
+                 name="style_v7"
+                 value="1" />
+                <radio_item
+                 label="LL style"
+                 name="style_ll"
+                 value="2" />
+            </radio_group>
+            <!-- <FS:PandaView r22> Chat window style toggle now strictly requires restart. -->
+            <text
+             name="req_restart_chat_window_style"
+             follows="left|top"
+             layout="topleft"
+             left="20"
              top_pad="1"
-             width="400" />
+             text_color="White_50"
+             height="16"
+             width="200">
+                 (requires restart)
+            </text>
+            <!-- </FS:PandaView r22> -->
+            <!-- </FS:AYA> -->
             <check_box
-             disabled_control="PlainTextChatHistory"
              control_name="ShowChatMiniIcons"
              height="16"
              initial_value="false"
-             label="When using [SHORT_VIEWER_GENERATION] style chat headers, show mini icons"
+             label="Show mini icons in chat"
              layout="topleft"
              name="ShowChatMiniIcons"
              top_pad="1"
@@ -553,6 +599,43 @@
              width="100">
                  (requires restart)
             </text>
+
+            <!-- <FS:PandaView r22> Human / System & Object tab split -->
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="6"
+             left="20"
+             width="370"
+             height="20"
+             control_name="FSChatHumanObjectTabs"
+             name="FSChatHumanObjectTabs"
+             label="Split Nearby Chat / IM into Human and System &amp; Object tabs"
+             tool_tip="Separate human avatar speech from system / script messages into two tabs. Keeps human conversations free of notifications." />
+            <text
+             name="req_restart_human_object_tabs"
+             follows="left|top"
+             layout="topleft"
+             left_pad="10"
+             top_delta="2"
+             text_color="White_50"
+             height="16"
+             width="100">
+                 (requires restart)
+            </text>
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="3"
+             left="40"
+             width="370"
+             height="20"
+             control_name="FSFriendOnlineToHumanTab"
+             enabled_control="FSChatHumanObjectTabs"
+             name="FSFriendOnlineToHumanTab"
+             label="Show friend online/offline in Human tab"
+             tool_tip="Also show friend online/offline notifications in the Human tab. They always appear in the System &amp; Object tab regardless." />
+            <!-- </FS:PandaView r22> -->
 
             <check_box
              layout="topleft"
@@ -863,6 +946,9 @@
              name="FSEnablePerGroupSnoozeDuration"
              control_name="FSEnablePerGroupSnoozeDuration"
              label="Set group chat snooze duration individually per group"/>
+                </panel>
+            </scroll_container>
+            <!-- </FS:AYA> -->
         </panel>
 
         <!-- Chat: Typing -->
@@ -2106,6 +2192,7 @@
 		</button>
 		 
 	</panel>
+
   <!-- Chat: CmdLine -->
   <panel
 	  top_pad="3"
@@ -2115,16 +2202,6 @@
 	  follows="all"
 	  label="CmdLine"
 	  name="tab-CmdLine" >
-	<text
-	  bottom="5"
-	  halign="right"
-	  follows="right|bottom"
-	  height="14"
-	  right="-10"
-	  name="FSCmdLineDoc_txt"
-	  width="150">
-	  [https://wiki.firestormviewer.org/preferences_chat_tab#cmdline_tab Documentation]
-	</text>
 	<check_box
 	  top="10"
 	  follows="left|top"
@@ -2210,25 +2287,6 @@
 	  name="FSCmdLineCopyCam"
 	  tool_tip=""
 	  control_name="FSCmdLineCopyCam"
-	  width="200"/>
-	<!--pstcampos-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLinePasteCam_txt"
-	  width="235">
-	  Set cam params (cmd pos|focus|roll)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLinePasteCam"
-	  tool_tip=""
-	  control_name="FSCmdLinePasteCam"
 	  width="200"/>
 	<!--cao-->
 	<text
@@ -2392,25 +2450,6 @@
 	  name="FSCmdLineRollDice"
 	  control_name="FSCmdLineRollDice"
 	  width="200"/>
-	<!--trkpos-->
-	<text
-	  top_pad="3"
-	  follows="left|top"
-	  height="14"
-	  name="FSCmdLineTrackPos_txt"
-	  width="280">
-	  Track position or avatar (cmd pos or name)
-	</text>
-	<line_editor
-	  enabled_control="FSCmdLine"
-	  top_pad="-2"
-	  follows="left|top"
-	  height="18"
-	  max_length_chars="256"
-	  name="FSCmdLineTrackPos"
-	  tool_tip="Sets a world map beacon at a position (cpcampos format) or partial avatar name"
-	  control_name="FSCmdLineTrackPos"
-	  width="200"/>
 	<!--gtp-->
 	<text
 	  top_pad="3"
@@ -2572,36 +2611,7 @@
 	  name="toggle"
 	  width="270"
 	  control_name="FSCmdLineMapToKeepPos"/>
-	<check_box
-	  bottom="-30"
-	  enabled_control="FSCmdLine"
-	  follows="left|bottom"
-	  height="16"
-	  label="Send commands output to channel:"
-	  left="5"
-	  name="FSCmdLineAnnounceToChannel"
-	  control_name="FSCmdLineAnnounceToChannel"
-	  width="280"/>
-	<spinner
-	  top_pad="2"
-	  control_name="FSCmdLineAnnounceChannel"
-	  decimal_digits="0"
-	  enabled_control="FSCmdLineAnnounceToChannel"
-	  follows="left|bottom"
-	  height="15"
-	  increment="1"
-	  initial_value="362395"
-	  max_val="2147483647"
-	  min_val="1"
-	  name="FSCmdLineAnnounceChannel"
-	  width="90"/>
   </panel>
-
-        <panel
-         class="panel_preference"
-         filename="panel_preferences_voicebox.xml"
-         label="VoiceBox TTS"
-         name="voicebox" />
 
 </tab_container>
 </panel>

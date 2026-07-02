@@ -53,6 +53,7 @@
 #include "llselectmgr.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
+#include "fscommon.h"
 #include "message.h"
 
 #include <cmath>
@@ -383,6 +384,47 @@ namespace
 
         // PandaView forwarded to LLFloaterIMNearbyChat for LL-style users;
         // MikoStorm (Firestorm-based) uses FSFloaterNearbyChat instead.
+    }
+
+    void notifyStream3DMetadata(const std::string& prim_name, const LLSD& metadata)
+    {
+        if (!gSavedSettings.getBOOL("Stream3DShowToast"))
+            return;
+
+        LLSD args;
+        args["PRIM_NAME"] = prim_name;
+        args["TITLE"] = metadata["TITLE"].asString();
+        args["ARTIST"] = metadata["ARTIST"].asString();
+
+        if (args["TITLE"].asString().empty() && args["ARTIST"].asString().empty())
+            return;
+
+        if (!args["ARTIST"].asString().empty())
+            LLNotificationsUtil::add("Stream3DMetadata", args);
+        else
+            LLNotificationsUtil::add("Stream3DMetadataNoArtist", args);
+    }
+
+    void chatStream3DMetadata(const std::string& prim_name, const LLSD& metadata)
+    {
+        if (!gSavedSettings.getBOOL("Stream3DChatNotify"))
+            return;
+
+        const S32 channel = gSavedSettings.getS32("Stream3DChatChannel");
+
+        const std::string title = metadata["TITLE"].asString();
+        const std::string artist = metadata["ARTIST"].asString();
+
+        if (title.empty() && artist.empty())
+            return;
+
+        std::string msg;
+        if (!artist.empty())
+            msg = llformat("%s - %s - %s", prim_name.c_str(), artist.c_str(), title.c_str());
+        else
+            msg = llformat("%s - %s", prim_name.c_str(), title.c_str());
+
+        FSCommon::send_message_to_script_channel(msg, channel);
     }
 }
 
@@ -2755,6 +2797,27 @@ void LLPositionalStreamMgr::update()
             }
         }
         b.stream->update();
+
+        // MikoStorm: detect title/artist metadata changes and notify.
+        if (b.stream->isPlaying())
+        {
+            const LLSD& cur = b.stream->getMetadata();
+            if (!cur.isUndefined() &&
+                (!cur["TITLE"].asString().empty() || !cur["ARTIST"].asString().empty()))
+            {
+                if (b.last_metadata["TITLE"].asString() != cur["TITLE"].asString() ||
+                    b.last_metadata["ARTIST"].asString() != cur["ARTIST"].asString())
+                {
+                    auto cache_it = mDescriptionCache.find(id);
+                    const std::string prim_name = (cache_it != mDescriptionCache.end() && !cache_it->second.object_name.empty())
+                        ? cache_it->second.object_name : "(unknown)";
+                    notifyStream3DMetadata(prim_name, cur);
+                    chatStream3DMetadata(prim_name, cur);
+                    b.last_metadata = cur;
+                }
+            }
+        }
+
         ++it;
     }
 
@@ -3054,6 +3117,26 @@ void LLPositionalStreamMgr::update()
             }
         }
         b.stream->update();
+
+        // MikoStorm: detect title/artist metadata changes on distributed streams.
+        if (b.stream->isPlaying())
+        {
+            const LLSD& cur = b.stream->getMetadata();
+            if (!cur.isUndefined() &&
+                (!cur["TITLE"].asString().empty() || !cur["ARTIST"].asString().empty()))
+            {
+                if (b.last_metadata["TITLE"].asString() != cur["TITLE"].asString() ||
+                    b.last_metadata["ARTIST"].asString() != cur["ARTIST"].asString())
+                {
+                    auto cache_it = mDescriptionCache.find(root_id);
+                    const std::string prim_name = (cache_it != mDescriptionCache.end() && !cache_it->second.object_name.empty())
+                        ? cache_it->second.object_name : "(unknown)";
+                    notifyStream3DMetadata(prim_name, cur);
+                    chatStream3DMetadata(prim_name, cur);
+                    b.last_metadata = cur;
+                }
+            }
+        }
 
         // r13: per-frame OBB occlusion eval. The shipped libfmod
         // (2.03.07) returns FMOD_ERR_INTERNAL from System::createGeometry
