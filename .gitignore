@@ -131,3 +131,6 @@ firestorm.code-workspace
 .github/release.yaml
 
 checks.json
+
+# Hermes agent files
+AGENTS.md
