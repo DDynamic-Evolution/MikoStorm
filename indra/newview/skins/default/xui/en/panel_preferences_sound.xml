@@ -1760,5 +1760,425 @@ Hover your mouse cursor over UUID field to show its default value.
 
     </panel>
 
+    <!-- TTS (VoiceBox / eSpeak) -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="TTS"
+     name="TTS tab">
+
+        <check_box
+         control_name="FSVoiceBoxTTSEnabled"
+         follows="left|top"
+         height="16"
+         label="Enable Chat TTS"
+         layout="topleft"
+         left="20"
+         top="15"
+         name="voicebox_tts_enable"
+         width="450" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="tts_engine_label"
+         width="200"
+         top_pad="10">
+           TTS Engine:
+        </text>
+        <combo_box
+         control_name="FSChatTTSEngine"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="20"
+         name="tts_engine_combo"
+         top_pad="-2"
+         width="300">
+           <combo_box.item
+            name="voicebox"
+            label="VoiceBox (remote server)"
+            value="voicebox" />
+           <combo_box.item
+            name="espeak"
+            label="eSpeak (local, Linux only)"
+            value="espeak" />
+        </combo_box>
+
+        <!-- eSpeak settings -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="espeak_voice_label"
+         width="200"
+         top_pad="15">
+           Voice:
+        </text>
+        <combo_box
+         control_name="FSChatTTSEspeakVoice"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="20"
+         name="espeak_voice_combo"
+         top_pad="-2"
+         width="300">
+           <combo_box.item
+            name="de"
+            label="German"
+            value="de" />
+           <combo_box.item
+            name="en"
+            label="English (Great Britain)"
+            value="en" />
+           <combo_box.item
+            name="en-us"
+            label="English (America)"
+            value="en-us" />
+           <combo_box.item
+            name="en-gb-scotland"
+            label="English (Scotland)"
+            value="en-gb-scotland" />
+           <combo_box.item
+            name="en-gb-x-rp"
+            label="English (Received Pronunciation)"
+            value="en-gb-x-rp" />
+           <combo_box.item
+            name="fr-fr"
+            label="French (France)"
+            value="fr-fr" />
+           <combo_box.item
+            name="es"
+            label="Spanish (Spain)"
+            value="es" />
+           <combo_box.item
+            name="it"
+            label="Italian"
+            value="it" />
+           <combo_box.item
+            name="nl"
+            label="Dutch"
+            value="nl" />
+           <combo_box.item
+            name="pl"
+            label="Polish"
+            value="pl" />
+           <combo_box.item
+            name="ru"
+            label="Russian"
+            value="ru" />
+           <combo_box.item
+            name="zh"
+            label="Chinese (Mandarin)"
+            value="zh" />
+           <combo_box.item
+            name="ja"
+            label="Japanese"
+            value="ja" />
+           <combo_box.item
+            name="ko"
+            label="Korean"
+            value="ko" />
+        </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="espeak_speed_label"
+         width="200"
+         top_pad="10">
+           Speed (words per minute):
+        </text>
+        <spinner
+         control_name="FSChatTTSEspeakSpeed"
+         follows="left|top"
+         height="20"
+         increment="5"
+         layout="topleft"
+         left="20"
+         max_val="450"
+         min_val="80"
+         name="espeak_speed_spinner"
+         top_pad="-2"
+         width="100" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="140"
+         height="15"
+         name="espeak_pitch_label"
+         width="200"
+         top_delta="0">
+           Pitch (0-99):
+        </text>
+        <spinner
+         control_name="FSChatTTSEspeakPitch"
+         follows="left|top"
+         height="20"
+         increment="1"
+         layout="topleft"
+         left="140"
+         max_val="99"
+         min_val="0"
+         name="espeak_pitch_spinner"
+         top_pad="-2"
+         width="100" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="espeak_amplitude_label"
+         width="200"
+         top_pad="10">
+           Amplitude (0-200):
+        </text>
+        <spinner
+         control_name="FSChatTTSEspeakAmplitude"
+         follows="left|top"
+         height="20"
+         increment="5"
+         layout="topleft"
+         left="20"
+         max_val="200"
+         min_val="0"
+         name="espeak_amplitude_spinner"
+         top_pad="-2"
+         width="100" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="140"
+         height="15"
+         name="espeak_wordgap_label"
+         width="200"
+         top_delta="0">
+           Word gap (10ms units):
+        </text>
+        <spinner
+         control_name="FSChatTTSEspeakWordGap"
+         follows="left|top"
+         height="20"
+         increment="1"
+         layout="topleft"
+         left="140"
+         max_val="100"
+         min_val="0"
+         name="espeak_wordgap_spinner"
+         top_pad="-2"
+         width="100" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="40"
+         height="15"
+         name="voicebox_read_label"
+         width="100"
+         top_pad="15">
+           Read:
+        </text>
+        <check_box
+         control_name="FSVoiceBoxTTSReadWhisper"
+         follows="left|top"
+         height="16"
+         label="Whisper"
+         layout="topleft"
+         left_pad="5"
+         name="voicebox_read_whisper"
+         top_delta="-1"
+         width="80" />
+        <check_box
+         control_name="FSVoiceBoxTTSReadNormal"
+         follows="left|top"
+         height="16"
+         label="Normal"
+         layout="topleft"
+         left_pad="5"
+         name="voicebox_read_normal"
+         top_delta="0"
+         width="80" />
+        <check_box
+         control_name="FSVoiceBoxTTSReadShout"
+         follows="left|top"
+         height="16"
+         label="Shout"
+         layout="topleft"
+         left_pad="5"
+         name="voicebox_read_shout"
+         top_delta="0"
+         width="80" />
+        <check_box
+         control_name="FSVoiceBoxTTSReadIMs"
+         follows="left|top"
+         height="16"
+         label="IMs"
+         layout="topleft"
+         left_pad="5"
+         name="voicebox_tts_read_ims"
+         top_delta="0"
+         width="80" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="voicebox_endpoint_label"
+         width="200"
+         top_pad="15">
+           VoiceBox API endpoint:
+        </text>
+        <line_editor
+         control_name="FSVoiceBoxEndpoint"
+         follows="left|top"
+         height="20"
+         layout="topleft"
+         left="20"
+         max_length_chars="256"
+         name="voicebox_endpoint"
+         top_pad="-2"
+         width="480" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="voicebox_profile_label"
+         width="200"
+         top_pad="5">
+           TTS Profile:
+        </text>
+        <line_editor
+         control_name="FSVoiceBoxProfileID"
+         follows="left|top"
+         height="20"
+         layout="topleft"
+         left="20"
+         max_length_chars="256"
+         name="voicebox_profile"
+         top_pad="-2"
+         width="300" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="voicebox_language_label"
+         width="200"
+         top_pad="5">
+           Language:
+        </text>
+        <line_editor
+         control_name="FSVoiceBoxTTSLanguage"
+         follows="left|top"
+         height="20"
+         layout="topleft"
+         left="20"
+         max_length_chars="10"
+         name="voicebox_language"
+         top_pad="-2"
+         width="80" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="15"
+         layout="topleft"
+         left_pad="3"
+         name="voicebox_language_hint"
+         top_delta="4"
+         width="200">
+           e.g. en, de
+        </text>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="voicebox_name_format_label"
+         width="200"
+         top_pad="10">
+           Name format:
+        </text>
+        <combo_box
+         control_name="FSVoiceBoxTTSNameFormat"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="20"
+         name="voicebox_name_format"
+         top_pad="-2"
+         width="300">
+           <combo_box.item
+            name="full_name"
+            label="Full Name (John Doe says ...)"
+            value="full" />
+           <combo_box.item
+            name="first_name"
+            label="First Name Only (John says ...)"
+            value="first" />
+           <combo_box.item
+            name="no_name"
+            label="No Name (just the text)"
+            value="none" />
+        </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         font="SansSerifSmall"
+         height="45"
+         layout="topleft"
+         left="20"
+         name="voicebox_tts_note"
+         top_pad="15"
+         width="480">
+           Reads nearby chat and IMs aloud.
+           VoiceBox: Requires a running VoiceBox backend at the endpoint URL.
+           eSpeak: Local TTS via espeak-ng command (Linux only, install espeak-ng package).
+        </text>
+
+    </panel>
+
 </tab_container>
 </panel>
