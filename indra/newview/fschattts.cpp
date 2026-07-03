@@ -197,6 +197,20 @@ std::string FSChatTTS::sanitizeText(const std::string& text)
 
 void FSChatTTS::doTTS(const std::string& text)
 {
+    std::string engine = gSavedPerAccountSettings.getString("FSChatTTSEngine");
+    
+    if (engine == "espeak")
+    {
+        doEspeakTTS(text);
+    }
+    else
+    {
+        doVoiceBoxTTS(text);
+    }
+}
+
+void FSChatTTS::doVoiceBoxTTS(const std::string& text)
+{
     std::string endpoint = gSavedPerAccountSettings.getString("FSVoiceBoxEndpoint");
     std::string profile_id = gSavedPerAccountSettings.getString("FSVoiceBoxProfileID");
     std::string language = gSavedPerAccountSettings.getString("FSVoiceBoxTTSLanguage");
@@ -341,4 +355,69 @@ void FSChatTTS::doTTS(const std::string& text)
     {
         LL_WARNS("VoiceBoxTTS") << "Failed to create audio data" << LL_ENDL;
     }
+}
+
+void FSChatTTS::doEspeakTTS(const std::string& text)
+{
+#ifdef LL_LINUX
+    std::string voice = gSavedPerAccountSettings.getString("FSChatTTSEspeakVoice");
+    S32 speed = gSavedPerAccountSettings.getS32("FSChatTTSEspeakSpeed");
+    S32 pitch = gSavedPerAccountSettings.getS32("FSChatTTSEspeakPitch");
+    S32 amplitude = gSavedPerAccountSettings.getS32("FSChatTTSEspeakAmplitude");
+    S32 wordgap = gSavedPerAccountSettings.getS32("FSChatTTSEspeakWordGap");
+    
+    // Generate temporary WAV file path
+    LLUUID temp_uuid;
+    temp_uuid.generate();
+    std::string uuid_str;
+    temp_uuid.toString(uuid_str);
+    std::string wav_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, uuid_str) + ".wav";
+    
+    // Build espeak-ng command with all parameters
+    std::string cmd = "espeak-ng -v " + voice + 
+                      " -s " + std::to_string(speed) +
+                      " -p " + std::to_string(pitch) +
+                      " -a " + std::to_string(amplitude) +
+                      " -g " + std::to_string(wordgap) +
+                      " -w " + wav_path + " " + 
+                      "\"" + text + "\" 2>/dev/null";
+    
+    LL_INFOS("VoiceBoxTTS") << "Running espeak: " << cmd << LL_ENDL;
+    
+    int result = system(cmd.c_str());
+    if (result != 0)
+    {
+        LL_WARNS("VoiceBoxTTS") << "espeak-ng command failed with code " << result << LL_ENDL;
+        return;
+    }
+    
+    // Check if file was created
+    if (!LLFile::isfile(wav_path))
+    {
+        LL_WARNS("VoiceBoxTTS") << "espeak-ng did not create output file" << LL_ENDL;
+        return;
+    }
+    
+    // Copy the WAV file to the sound cache where the audio engine expects it
+    LLUUID audio_uuid;
+    audio_uuid.generate();
+    audio_uuid.toString(uuid_str);
+    std::string cache_path = gDirUtilp->getExpandedFilename(LL_PATH_FS_SOUND_CACHE, uuid_str) + ".dsf";
+    
+    // Copy the generated WAV to the sound cache as .dsf
+    LLFile::copy(wav_path, cache_path);
+    
+    // Preload and trigger the sound
+    if (gAudiop->preloadSound(audio_uuid))
+    {
+        gAudiop->triggerSound(audio_uuid, gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+        LL_INFOS("VoiceBoxTTS") << "Playing eSpeak audio from " << cache_path << LL_ENDL;
+    }
+    else
+    {
+        LL_WARNS("VoiceBoxTTS") << "Failed to preload eSpeak audio" << LL_ENDL;
+    }
+#else
+    LL_WARNS("VoiceBoxTTS") << "eSpeak TTS is only supported on Linux" << LL_ENDL;
+#endif
 }
