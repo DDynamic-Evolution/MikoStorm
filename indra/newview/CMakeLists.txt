@@ -258,6 +258,7 @@ set(viewer_SOURCE_FILES
     llchatmsgbox.cpp
     llchiclet.cpp
     llchicletbar.cpp
+    llcinematicoverlay.cpp
     llclassifiedinfo.cpp
     llcofwearables.cpp
     llcolorswatch.cpp
@@ -1136,6 +1137,7 @@ set(viewer_HEADER_FILES
     llchatmsgbox.h
     llchiclet.h
     llchicletbar.h
+    llcinematicoverlay.h
     llclassifiedinfo.h
     llcofwearables.h
     llcolorswatch.h

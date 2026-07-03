@@ -360,24 +360,25 @@ static bool handleEnableEmissiveChanged(const LLSD& newvalue)
     return handleReleaseGLBufferChanged(newvalue) && handleSetShaderChanged(newvalue);
 }
 
-static bool handleRenderEnableFullbrightChanged(const LLSD& newvalue)
-{
-    for (S32 i = 0, count = gObjectList.getNumObjects(); i < count; ++i)
-    {
-        LLViewerObject* objectp = gObjectList.getObject(i);
-        LLDrawable* drawablep = objectp ? objectp->mDrawable.get() : nullptr;
-        if (drawablep && !drawablep->isDead())
-        {
-            if (LLVOVolume* volume = drawablep->getVOVolume())
-            {
-                volume->updateFaceFlags();
-                volume->markForUpdate();
-            }
-        }
-    }
-
-    return true;
-}
+// FIXME: RenderEnableFullbright setting not defined in settings.xml - function commented out to prevent unused-function error
+// static bool handleRenderEnableFullbrightChanged(const LLSD& newvalue)
+// {
+//     for (S32 i = 0, count = gObjectList.getNumObjects(); i < count; ++i)
+//     {
+//         LLViewerObject* objectp = gObjectList.getObject(i);
+//         LLDrawable* drawablep = objectp ? objectp->mDrawable.get() : nullptr;
+//         if (drawablep && !drawablep->isDead())
+//         {
+//             if (LLVOVolume* volume = drawablep->getVOVolume())
+//             {
+//                 volume->updateFaceFlags();
+//                 volume->markForUpdate();
+//             }
+//         }
+//     }
+// 
+//     return true;
+// }
 
 static bool handleDisableVintageMode(const LLSD& newvalue)
 {
@@ -1530,15 +1531,17 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
     // <PandaView r30 P4 step 5> BD DoF chain permutation cvars trigger shader rebuild.
     // RenderChromaStrength is a uniform (no rebuild) so it's intentionally not listed.
-    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldHighQuality", handleSetShaderChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldChroma",      handleSetShaderChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldFront",       handleSetShaderChanged);
+    // FIXME: These settings are not defined in settings.xml - commented out to prevent crash
+    // setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldHighQuality", handleSetShaderChanged);
+    // setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldChroma",      handleSetShaderChanged);
+    // setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldFront",       handleSetShaderChanged);
     // </PandaView r30 P4 step 5>
     // <PandaView r30 P5> Cinematic floater 即時反映の wire ギャップ補填。
     // RenderMotionBlur: mVelocityMap allocation を createGLBuffers() で再走させる。
     // RenderVolumetricLightingDirectional: GODRAYS_FADE permutation を shader rebuild で反映。
-    setting_setup_signal_listener(gSavedSettings, "RenderMotionBlur",                    handleReleaseGLBufferChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderVolumetricLightingDirectional", handleSetShaderChanged);
+    // FIXME: These settings are not defined in settings.xml - commented out to prevent crash
+    // setting_setup_signal_listener(gSavedSettings, "RenderMotionBlur",                    handleReleaseGLBufferChanged);
+    // setting_setup_signal_listener(gSavedSettings, "RenderVolumetricLightingDirectional", handleSetShaderChanged);
     // </PandaView r30 P5>
     setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowHDR", handleReleaseGLBufferChanged);
@@ -1547,7 +1550,8 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderHDREnabled", handleEnableHDR);
     setting_setup_signal_listener(gSavedSettings, "RenderGlowNoise", handleSetShaderChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGammaFull", handleSetShaderChanged);
-    setting_setup_signal_listener(gSavedSettings, "RenderEnableFullbright", handleRenderEnableFullbrightChanged);
+    // FIXME: This setting is not defined in settings.xml - commented out to prevent crash
+    // setting_setup_signal_listener(gSavedSettings, "RenderEnableFullbright", handleRenderEnableFullbrightChanged);
     setting_setup_signal_listener(gSavedSettings, "FSOverrideVRAMDetection", handleOverrideVRAMDetectionChanged); // <FS:Beq/> Override VRAM detection support
     setting_setup_signal_listener(gSavedSettings, "RenderVolumeLODFactor", handleVolumeLODChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderAvatarComplexityMode", handleUserImpostorByDistEnabledChanged);
@@ -1820,41 +1824,43 @@ void settings_setup_listeners()
     //   user changes View Mode on the login screen, logs in, and finds the viewer still
     //   running the boot-time mode (shaders / overlay are locked at startup) — observed
     //   2026-05-22, AYA selected PandaView View pre-login but got Cinematic in-world.
-    setting_setup_signal_listener(gSavedSettings, "AYAVisualRealismEnabled", []() {
-        // <FS:AYA r30 P5 C' / A6> Keep helper Boolean shadows in sync so XUI
-        // enabled_control bindings update immediately on combo_box change. Fires
-        // unconditionally (also during pre-STATE_STARTED settings load) so the
-        // UI is correct before the user sees Preferences.
-        //   - AYACinematicModeActive  = (mode == 2): BD-X1 cvar widgets grey out in mode 0/1
-        //   - AYAR20SSSEffective       = (mode &gt; 0): SSS Preferences panel active in
-        //     PandaView View (mode 1) AND Cinematic (mode 2). r20 consolidation
-        //     merged the InCinematic cvar into AYAR20AvatarSkinSSSEnabled, so the
-        //     SSS tuning UI must follow.
-        const U32 mode_v = gSavedSettings.getU32("AYAVisualRealismEnabled");
-        gSavedSettings.setBOOL("AYACinematicModeActive", mode_v == 2);
-        gSavedSettings.setBOOL("AYAR20SSSEffective",     mode_v > 0);
-        // </FS:AYA>
-        if (LLStartUp::getStartupState() >= STATE_LOGIN_SHOW)
-        {
-            // <FS:AYA r30 P5 R2> Reset overlay sentinel when leaving mode 2 so the
-            // next entry into Cinematic force-applies a fresh BD baseline. The
-            // forward transition (-> 2) is left to the next startup since all 3
-            // modes require restart per r30 P1.
-            if (mode_v != 2)
-            {
-                LLCinematicOverlay::clearOverlaySentinel();
-            }
-            // </FS:AYA>
-            LLNotificationsUtil::add("ChangeViewMode");
-        }
-    });
+    // FIXME: AYAVisualRealismEnabled is not defined in settings.xml - commented out to prevent crash
+    // setting_setup_signal_listener(gSavedSettings, "AYAVisualRealismEnabled", []() {
+    //     // <FS:AYA r30 P5 C' / A6> Keep helper Boolean shadows in sync so XUI
+    //     // enabled_control bindings update immediately on combo_box change. Fires
+    //     // unconditionally (also during pre-STATE_STARTED settings load) so the
+    //     // UI is correct before the user sees Preferences.
+    //     //   - AYACinematicModeActive  = (mode == 2): BD-X1 cvar widgets grey out in mode 0/1
+    //     //   - AYAR20SSSEffective       = (mode > 0): SSS Preferences panel active in
+    //     //     PandaView View (mode 1) AND Cinematic (mode 2). r20 consolidation
+    //     //     merged the InCinematic cvar into AYAR20AvatarSkinSSSEnabled, so the
+    //     //     SSS tuning UI must follow.
+    //     const U32 mode_v = gSavedSettings.getU32("AYAVisualRealismEnabled");
+    //     gSavedSettings.setBOOL("AYACinematicModeActive", mode_v == 2);
+    //     gSavedSettings.setBOOL("AYAR20SSSEffective",     mode_v > 0);
+    //     // </FS:AYA>
+    //     if (LLStartUp::getStartupState() >= STATE_LOGIN_SHOW)
+    //     {
+    //         // <FS:AYA r30 P5 R2> Reset overlay sentinel when leaving mode 2 so the
+    //         // next entry into Cinematic force-applies a fresh BD baseline. The
+    //         // forward transition (-> 2) is left to the next startup since all 3
+    //         // modes require restart per r30 P1.
+    //         if (mode_v != 2)
+    //         {
+    //             LLCinematicOverlay::clearOverlaySentinel();
+    //         }
+    //         // </FS:AYA>
+    //         LLNotificationsUtil::add("ChangeViewMode");
+    //     }
+    // });
     // <FS:AYA r30 P5 C' / A6> Initial sync at startup: signal listener does not fire on
     // registration, so seed both helper Boolean shadows from the loaded U32 value here.
-    {
-        const U32 mode_v = gSavedSettings.getU32("AYAVisualRealismEnabled");
-        gSavedSettings.setBOOL("AYACinematicModeActive", mode_v == 2);
-        gSavedSettings.setBOOL("AYAR20SSSEffective",     mode_v > 0);
-    }
+    // FIXME: AYAVisualRealismEnabled not defined - commented out
+    // {
+    //     const U32 mode_v = gSavedSettings.getU32("AYAVisualRealismEnabled");
+    //     gSavedSettings.setBOOL("AYACinematicModeActive", mode_v == 2);
+    //     gSavedSettings.setBOOL("AYAR20SSSEffective",     mode_v > 0);
+    // }
     // </FS:AYA>
     // </FS:PandaView r30 P1>
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
