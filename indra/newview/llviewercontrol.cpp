@@ -1603,6 +1603,8 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "MuteVoice", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteAmbient", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "MuteUI", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "AudioLevelTTS", handleAudioVolumeChanged);
+    setting_setup_signal_listener(gSavedSettings, "MuteTTS", handleAudioVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "WLSkyDetail", handleWLSkyDetailChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis0", handleJoystickChanged);
     setting_setup_signal_listener(gSavedSettings, "JoystickAxis1", handleJoystickChanged);
@@ -1863,6 +1865,21 @@ void settings_setup_listeners()
     // }
     // </FS:AYA>
     // </FS:PandaView r30 P1>
+    // <PandaView> Force Away toggle: tick locks Away on (clearAFK is guarded by
+    // the cvar in llagent.cpp); untick clears it (cvar is already false when
+    // clearAFK runs, so the guard passes)
+    setting_setup_signal_listener(gSavedSettings, "PVForceAway", []() {
+        if (LLStartUp::getStartupState() < STATE_STARTED) return;
+        if (gSavedSettings.getBOOL("PVForceAway"))
+        {
+            gAgent.setAFK();
+        }
+        else
+        {
+            gAgent.clearAFK();
+        }
+    });
+    // </PandaView>
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterIM::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", FSFloaterNearbyChat::processChatHistoryStyleUpdate);
     setting_setup_signal_listener(gSavedSettings, "ChatFontSize", LLViewerChat::signalChatFontChanged);

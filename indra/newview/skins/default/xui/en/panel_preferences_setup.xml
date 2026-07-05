@@ -733,5 +733,99 @@
 
     </panel>
 
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="MCP Server"
+     name="tab-mcp">
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="15"
+         name="mcp_intro_text"
+         mouse_opaque="false"
+         top_pad="15"
+         width="500">
+            MCP (Model Context Protocol) allows AI assistants to control the viewer.
+        </text>
+
+        <check_box
+         control_name="MCPEnabled"
+         height="16"
+         label="Enable MCP Server"
+         layout="topleft"
+         left="15"
+         name="mcp_enabled"
+         top_pad="20"
+         width="300" />
+
+        <spinner
+         control_name="MCPPort"
+         decimal_digits="0"
+         follows="left|top"
+         height="23"
+         increment="1"
+         initial_value="13231"
+         label="Port:"
+         label_width="40"
+         layout="topleft"
+         max_val="65535"
+         min_val="1024"
+         top_pad="10"
+         left="15"
+         name="mcp_port"
+         width="150" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="15"
+         name="mcp_auth_label"
+         mouse_opaque="false"
+         top_pad="15"
+         width="500">
+            Auth Token (optional, leave empty for no auth):
+        </text>
+
+        <line_editor
+         control_name="MCPAuthToken"
+         border_style="line"
+         border_thickness="1"
+         follows="left|top"
+         font="SansSerif"
+         height="23"
+         layout="topleft"
+         left="15"
+         max_length_chars="256"
+         name="mcp_auth_token"
+         top_pad="5"
+         width="400" />
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="15"
+         name="mcp_hint"
+         mouse_opaque="false"
+         top_pad="20"
+         width="500">
+            Connection: http://localhost:${MCPPort}/mcp  (local AI tools only)
+        </text>
+
+    </panel>
+
     </tab_container>
 </panel>

@@ -504,10 +504,12 @@ void audio_update_volume(bool force_update)
         static LLCachedControl<bool> mute_ui(gSavedSettings, "MuteUI");
         static LLCachedControl<bool> mute_ambient(gSavedSettings, "MuteAmbient");
         static LLCachedControl<bool> mute_music(gSavedSettings, "MuteMusic");
+        static LLCachedControl<bool> mute_tts(gSavedSettings, "MuteTTS");
         static LLCachedControl<F32> al_sfx(gSavedSettings, "AudioLevelSFX");
         static LLCachedControl<F32> al_ui(gSavedSettings, "AudioLevelUI");
         static LLCachedControl<F32> al_ambient(gSavedSettings, "AudioLevelAmbient");
         static LLCachedControl<F32> al_music(gSavedSettings, "AudioLevelMusic");
+        static LLCachedControl<F32> al_tts(gSavedSettings, "AudioLevelTTS");
         // handle secondary gains
         gAudiop->setSecondaryGain(LLAudioEngine::AUDIO_TYPE_SFX,
                                   mute_sounds() ? 0.f : al_sfx());
@@ -515,6 +517,8 @@ void audio_update_volume(bool force_update)
                                   mute_ui() ? 0.f : al_ui());
         gAudiop->setSecondaryGain(LLAudioEngine::AUDIO_TYPE_AMBIENT,
                                   mute_ambient() ? 0.f : al_ambient());
+        gAudiop->setSecondaryGain(LLAudioEngine::AUDIO_TYPE_TTS,
+                                  mute_tts() ? 0.f : al_tts());
 
         // Streaming Music
 

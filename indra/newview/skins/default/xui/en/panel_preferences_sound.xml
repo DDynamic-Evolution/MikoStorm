@@ -595,6 +595,41 @@
          name="enable_voice_check_volume"
          width="110"/>
 
+        <slider
+         control_name="AudioLevelTTS"
+         disabled_control="MuteAudio"
+         follows="left|top"
+         height="15"
+         increment="0.025"
+         initial_value="0.5"
+         label="Text-to-Speech (eSpeak)"
+         label_width="120"
+         layout="topleft"
+         left="0"
+         name="TTS Volume"
+         show_text="false"
+         slider_label.halign="right"
+         top_pad="2"
+         volume="true"
+         width="300">
+            <slider.commit_callback
+             function="Pref.setControlFalse"
+             parameter="MuteTTS" />
+        </slider>
+        <button
+         control_name="MuteTTS"
+         disabled_control="MuteAudio"
+         follows="top|left"
+         height="16"
+         image_selected="AudioMute_Off"
+         image_unselected="Audio_Off"
+         is_toggle="true"
+         layout="topleft"
+         left_pad="5"
+         name="mute_audio"
+         tab_stop="false"
+         width="16" />
+
         <text
          type="string"
          length="1"
@@ -1760,7 +1795,7 @@ Hover your mouse cursor over UUID field to show its default value.
 
     </panel>
 
-    <!-- TTS (VoiceBox / eSpeak) -->
+    <!-- TTS (eSpeak) -->
     <panel
      top_pad="5"
      bottom="-1"
@@ -1780,37 +1815,6 @@ Hover your mouse cursor over UUID field to show its default value.
          top="15"
          name="voicebox_tts_enable"
          width="450" />
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="15"
-         name="tts_engine_label"
-         width="200"
-         top_pad="10">
-           TTS Engine:
-        </text>
-        <combo_box
-         control_name="FSChatTTSEngine"
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left="20"
-         name="tts_engine_combo"
-         top_pad="-2"
-         width="300">
-           <combo_box.item
-            name="voicebox"
-            label="VoiceBox (remote server)"
-            value="voicebox" />
-           <combo_box.item
-            name="espeak"
-            label="eSpeak (local, Linux only)"
-            value="espeak" />
-        </combo_box>
 
         <!-- eSpeak settings -->
         <text
@@ -1854,10 +1858,10 @@ Hover your mouse cursor over UUID field to show its default value.
             name="en-gb-x-rp"
             label="English (Received Pronunciation)"
             value="en-gb-x-rp" />
-           <combo_box.item
-            name="fr-fr"
-            label="French (France)"
-            value="fr-fr" />
+            <combo_box.item
+             name="fr"
+             label="French"
+             value="fr" />
            <combo_box.item
             name="es"
             label="Spanish (Spain)"
@@ -1878,10 +1882,10 @@ Hover your mouse cursor over UUID field to show its default value.
             name="ru"
             label="Russian"
             value="ru" />
-           <combo_box.item
-            name="zh"
-            label="Chinese (Mandarin)"
-            value="zh" />
+            <combo_box.item
+             name="cmn"
+             label="Chinese (Mandarin)"
+             value="cmn" />
            <combo_box.item
             name="ja"
             label="Japanese"
@@ -1890,7 +1894,122 @@ Hover your mouse cursor over UUID field to show its default value.
             name="ko"
             label="Korean"
             value="ko" />
-        </combo_box>
+         </combo_box>
+
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         layout="topleft"
+         left="20"
+         height="15"
+         name="espeak_variant_label"
+         width="200"
+         top_pad="10">
+            Voice variant:
+        </text>
+        <combo_box
+         control_name="FSChatTTSEspeakVariant"
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="20"
+         name="espeak_variant_combo"
+         top_pad="-2"
+         width="200">
+            <combo_box.item
+             name="none"
+             label="(none)"
+             value="" />
+            <combo_box.item
+             name="f1"
+             label="Female 1"
+             value="f1" />
+            <combo_box.item
+             name="f2"
+             label="Female 2"
+             value="f2" />
+            <combo_box.item
+             name="f3"
+             label="Female 3"
+             value="f3" />
+            <combo_box.item
+             name="f4"
+             label="Female 4"
+             value="f4" />
+            <combo_box.item
+             name="whisperf"
+             label="Female Whisper"
+             value="whisperf" />
+            <combo_box.item
+             name="anika"
+             label="Anika (female)"
+             value="anika" />
+            <combo_box.item
+             name="m1"
+             label="Male 1"
+             value="m1" />
+            <combo_box.item
+             name="m2"
+             label="Male 2"
+             value="m2" />
+            <combo_box.item
+             name="m3"
+             label="Male 3"
+             value="m3" />
+            <combo_box.item
+             name="m4"
+             label="Male 4"
+             value="m4" />
+            <combo_box.item
+             name="whisper"
+             label="Whisper (male)"
+             value="whisper" />
+            <combo_box.item
+             name="alex"
+             label="Alex"
+             value="alex" />
+            <combo_box.item
+             name="edward"
+             label="Edward"
+             value="edward" />
+            <combo_box.item
+             name="adam"
+             label="Adam"
+             value="adam" />
+            <combo_box.item
+             name="klatt"
+             label="Klatt"
+             value="klatt" />
+            <combo_box.item
+             name="croak"
+             label="Croak"
+             value="croak" />
+            <combo_box.item
+             name="fast"
+             label="Fast"
+             value="fast" />
+            <combo_box.item
+             name="robosoft"
+             label="RoboSoft"
+             value="robosoft" />
+            <combo_box.item
+             name="demonic"
+             label="Demonic"
+             value="demonic" />
+            <combo_box.item
+             name="storm"
+             label="Storm"
+             value="storm" />
+            <combo_box.item
+             name="grandma"
+             label="Grandma"
+             value="grandma" />
+            <combo_box.item
+             name="grandpa"
+             label="Grandpa"
+             value="grandpa" />
+         </combo_box>
 
         <text
          type="string"
@@ -1902,7 +2021,7 @@ Hover your mouse cursor over UUID field to show its default value.
          name="espeak_speed_label"
          width="200"
          top_pad="10">
-           Speed (words per minute):
+            Speed (words per minute):
         </text>
         <spinner
          control_name="FSChatTTSEspeakSpeed"
@@ -2045,87 +2164,7 @@ Hover your mouse cursor over UUID field to show its default value.
          top_delta="0"
          width="80" />
 
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="15"
-         name="voicebox_endpoint_label"
-         width="200"
-         top_pad="15">
-           VoiceBox API endpoint:
-        </text>
-        <line_editor
-         control_name="FSVoiceBoxEndpoint"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         left="20"
-         max_length_chars="256"
-         name="voicebox_endpoint"
-         top_pad="-2"
-         width="480" />
 
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="15"
-         name="voicebox_profile_label"
-         width="200"
-         top_pad="5">
-           TTS Profile:
-        </text>
-        <line_editor
-         control_name="FSVoiceBoxProfileID"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         left="20"
-         max_length_chars="256"
-         name="voicebox_profile"
-         top_pad="-2"
-         width="300" />
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="15"
-         name="voicebox_language_label"
-         width="200"
-         top_pad="5">
-           Language:
-        </text>
-        <line_editor
-         control_name="FSVoiceBoxTTSLanguage"
-         follows="left|top"
-         height="20"
-         layout="topleft"
-         left="20"
-         max_length_chars="10"
-         name="voicebox_language"
-         top_pad="-2"
-         width="80" />
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         font="SansSerifSmall"
-         height="15"
-         layout="topleft"
-         left_pad="3"
-         name="voicebox_language_hint"
-         top_delta="4"
-         width="200">
-           e.g. en, de
-        </text>
 
         <text
          type="string"
@@ -2167,16 +2206,14 @@ Hover your mouse cursor over UUID field to show its default value.
          length="1"
          follows="left|top"
          font="SansSerifSmall"
-         height="45"
+         height="30"
          layout="topleft"
          left="20"
          name="voicebox_tts_note"
-         top_pad="15"
+         top_pad="10"
          width="480">
            Reads nearby chat and IMs aloud.
-           VoiceBox: Requires a running VoiceBox backend at the endpoint URL.
-           eSpeak: Local TTS via espeak-ng command (Linux only, install espeak-ng package).
-        </text>
+         </text>
 
     </panel>
 

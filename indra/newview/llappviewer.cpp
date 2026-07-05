@@ -41,6 +41,7 @@
 #include "llgroupmgr.h"
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llanimationstates.h"  // <PandaView> ANIM_AGENT_AWAY for Force Away re-assert
 #include "llagentlanguage.h"
 #include "llagentui.h"
 #include "llagentwearables.h"
@@ -126,6 +127,7 @@
 #include "lllocalbitmaps.h"
 #include "llperfstats.h"
 #include "llgltfmateriallist.h"
+#include "llmcpserver.h"
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -510,6 +512,34 @@ void idle_afk_check()
     {
         return;
     }
+
+    // <PandaView> Force Away: re-assert Away if anything knocked it off while
+    // the lock is on. Covers both the control flag being cleared AND the
+    // server stopping the away *animation* on movement (the name tag reads the
+    // signaled animation, not the flag). Throttled to once per 2 seconds so we
+    // don't spam animation requests while moving.
+    static LLCachedControl<bool> pv_force_away(gSavedSettings, "PVForceAway", false);
+    if (pv_force_away)
+    {
+        static LLFrameTimer pv_force_away_timer;
+        if (pv_force_away_timer.getElapsedTimeF32() > 2.f)
+        {
+            pv_force_away_timer.reset();
+            if (!gAgent.getAFK())
+            {
+                gAgent.setAFK();
+            }
+            else if (isAgentAvatarValid()
+                && (gAgentAvatarp->mSignaledAnimations.find(ANIM_AGENT_AWAY) == gAgentAvatarp->mSignaledAnimations.end()))
+            {
+                // flag still set but the server stopped the away anim (the
+                // name tag reads the anim) — setAFK() would early-out here,
+                // so restart the animation directly
+                gAgent.sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_START);
+            }
+        }
+    }
+    // </PandaView>
 
     // check idle timers
     F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
@@ -1465,6 +1495,12 @@ bool LLAppViewer::init()
     LL::GLTFSceneManager::createInstance();
 
     gSavedSettings.setU32("DebugQualityPerformance", gSavedSettings.getU32("RenderQualityPerformance"));
+
+    // Start MCP server if enabled
+    if (gSavedSettings.getBOOL("MCPEnabled"))
+    {
+        LLMCPServer::instance().start();
+    }
 
 #if LL_WINDOWS
     if (!mSecondInstance)
@@ -2561,6 +2597,12 @@ bool LLAppViewer::cleanup()
     // all cleanup will get subsumed into the generic call. So the calls you
     // still see above are calls that MUST happen before the generic cleanup
     // kicks in.
+
+    // Stop MCP server before singletons are destroyed
+    if (LLMCPServer::instanceExists())
+    {
+        LLMCPServer::instance().stop();
+    }
 
     // This calls every remaining LLSingleton's cleanupSingleton() and
     // deleteSingleton() methods.

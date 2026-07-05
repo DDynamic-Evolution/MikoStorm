@@ -59,6 +59,7 @@ JOBS="0"
 WANTS_NINJA=$FALSE
 WANTS_VSCODE=$FALSE
 WANTS_3D_STREAM=$TRUE
+WANTS_ESPEAK_NG=$TRUE
 TESTBUILD_PERIOD="0"
 SINGLEGRID_URI=""
 
@@ -84,8 +85,10 @@ showUsage()
     echo "  --no-package             : Build without installer (Overrides --package)"
     echo "  --fmodstudio             : Build with FMOD Studio"
     echo "  --openal                 : Build with OpenAL"
-    echo "  --3dstream               : Build with 3D Stream (PandaView) support (default)"
-    echo "  --no-3dstream            : Build without 3D Stream (PandaView) support"
+  echo "  --3dstream               : Build with 3D Stream (PandaView) support (default)"
+  echo "  --no-3dstream            : Build without 3D Stream (PandaView) support"
+  echo "  --espeak                 : Build with eSpeak-NG TTS support (default)"
+  echo "  --no-espeak              : Build without eSpeak-NG TTS support"
     echo "  --opensim                : Build with OpenSim support (Disables Havok features)"
     echo "  --no-opensim             : Build without OpenSim support (Overrides --opensim)"
     echo "  --singlegrid <login_uri> : Build for single grid usage (Requires --opensim)"
@@ -109,7 +112,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while       getoptex "clean build config version package velopack no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim 3dstream no-3dstream singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
+      while       getoptex "clean build config version package velopack no-package fmodstudio openal ninja vscode compiler-cache jobs: platform: kdu opensim no-opensim 3dstream no-3dstream espeak no-espeak singlegrid: havok avx avx2 tracy crashreporting testbuild: help chan: btype:" "$@" ; do
 
           #ensure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -120,6 +123,8 @@ getArgs()
           case "$OPTOPT" in
           clean)          WANTS_CLEAN=$TRUE;;
           config)         WANTS_CONFIG=$TRUE;;
+          espeak)         WANTS_ESPEAK_NG=$TRUE;;
+          no-espeak)      WANTS_ESPEAK_NG=$FALSE;;
           version)        WANTS_VERSION=$TRUE;;
           chan)           CHANNEL="$OPTARG";;
           btype)          if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) ] ; then
@@ -337,6 +342,7 @@ echo -e "            AVX: `b2a $WANTS_AVX`"                                    |
 echo -e "           AVX2: `b2a $WANTS_AVX2`"                                   | tee -a "$LOG"
 echo -e "          TRACY: `b2a $WANTS_TRACY`"                                  | tee -a "$LOG"
 echo -e "      3D STREAM: `b2a $WANTS_3D_STREAM`"                              | tee -a "$LOG"
+echo -e "     ESPEAK NG: `b2a $WANTS_ESPEAK_NG`"                              | tee -a "$LOG"
 echo -e " CRASHREPORTING: `b2a $WANTS_CRASHREPORTING`"                         | tee -a "$LOG"
 if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
     echo -e "      TESTBUILD: `b2a $WANTS_TESTBUILD` ($TESTBUILD_PERIOD days)" | tee -a "$LOG"
@@ -484,6 +490,11 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     else
         USE_3D_STREAM="-DUSE_3D_STREAM:BOOL=OFF"
     fi
+    if [ $WANTS_ESPEAK_NG -eq $TRUE ] ; then
+        ESPEAK_NG="-DUSE_ESPEAK_NG:BOOL=ON"
+    else
+        ESPEAK_NG="-DUSE_ESPEAK_NG:BOOL=OFF"
+    fi
 
     if [ $WANTS_TESTBUILD -eq $TRUE ] ; then
         TESTBUILD="-DTESTBUILD:BOOL=ON -DTESTBUILDPERIOD:STRING=$TESTBUILD_PERIOD"
@@ -595,7 +606,7 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
     fi
 
     mkdir -p build-linux-x86_64
-    cmake -G "$TARGET" $CMAKE_ARCH -B build-linux-x86_64 -S $PWD/indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $USE_3D_STREAM $TESTBUILD $PACKAGE $VELOPACK \
+    cmake -G "$TARGET" $CMAKE_ARCH -B build-linux-x86_64 -S $PWD/indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $USE_3D_STREAM $ESPEAK_NG $TESTBUILD $PACKAGE $VELOPACK \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
     configure_status=${PIPESTATUS[0]}

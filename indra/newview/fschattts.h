@@ -28,7 +28,6 @@ private:
 
     void processQueue();
     void doTTS(const std::string& text);
-    void doVoiceBoxTTS(const std::string& text);
     void doEspeakTTS(const std::string& text);
     static std::string sanitizeText(const std::string& text);
 
