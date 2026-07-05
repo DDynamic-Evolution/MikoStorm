@@ -134,3 +134,6 @@ checks.json
 
 # Hermes agent files
 AGENTS.md
+packages/
+.git-rewrite/
+README_mcp.md

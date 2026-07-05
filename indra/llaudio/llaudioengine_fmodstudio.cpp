@@ -385,6 +385,7 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
         Check_FMOD_Error(mSystem->createChannelGroup("SFX", &mChannelGroups[AUDIO_TYPE_SFX]), "FMOD::System::createChannelGroup");
         Check_FMOD_Error(mSystem->createChannelGroup("UI", &mChannelGroups[AUDIO_TYPE_UI]), "FMOD::System::createChannelGroup");
         Check_FMOD_Error(mSystem->createChannelGroup("Ambient", &mChannelGroups[AUDIO_TYPE_AMBIENT]), "FMOD::System::createChannelGroup");
+        Check_FMOD_Error(mSystem->createChannelGroup("TTS", &mChannelGroups[AUDIO_TYPE_TTS]), "FMOD::System::createChannelGroup");
     }
 
     Check_FMOD_Error(mSystem->createChannelGroup("Stream3D", &mStream3DGroup),

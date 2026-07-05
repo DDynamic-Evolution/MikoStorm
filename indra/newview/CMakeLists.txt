@@ -16,6 +16,7 @@ include(CubemapToEquirectangularJS)
 include(GLIB)
 include(DragDrop)
 include(EXPAT)
+include(ESPEAK_NG)
 include(FMODSTUDIO)
 include(GLOD) # <FS:Beq/> restore GLOD
 include(Hunspell)
@@ -537,6 +538,8 @@ set(viewer_SOURCE_FILES
     llfloatermarketplace.cpp
     llmarketplacefunctions.cpp
     llmarketplacenotifications.cpp
+    llmcpserver.cpp
+    llmcphttp.cpp
     llmaterialeditor.cpp
     llmaterialmgr.cpp
     llmediactrl.cpp
@@ -2399,6 +2402,7 @@ if (WINDOWS)
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
         "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=$<CONFIG>
         "--channel=${VIEWER_CHANNEL}"
@@ -2441,6 +2445,7 @@ if (WINDOWS)
             "--openal=${USE_OPENAL}"
             "--tracy=${USE_TRACY}"
             "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"
             --build=${CMAKE_CURRENT_BINARY_DIR}
             --buildtype=$<IF:$<BOOL:${LL_GENERATOR_IS_MULTI_CONFIG}>,$<CONFIG>,${CMAKE_BUILD_TYPE}>
             "--channel=${VIEWER_CHANNEL}"
@@ -2510,6 +2515,7 @@ if (WINDOWS)
               "--tracy=${USE_TRACY}"
 
               "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"
               --build=${CMAKE_CURRENT_BINARY_DIR}
               --buildtype=$<CONFIG>
               "--channel=${VIEWER_CHANNEL}"
@@ -2667,6 +2673,10 @@ if (LINUX)
     )
 endif (LINUX)
 
+if (TARGET ll::espeak-ng)
+    target_link_libraries(${VIEWER_BINARY_NAME} ll::espeak-ng)
+endif ()
+
 set(ARTWORK_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH
     "Path to artwork files.")
 
@@ -2723,7 +2733,8 @@ if (LINUX)
         "--fmodstudio=${USE_FMODSTUDIO}"
         "--openal=${USE_OPENAL}"
         "--tracy=${USE_TRACY}"
-        "--avx2=${USE_AVX2_OPTIMIZATION}"        
+        "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"        
         --build=${CMAKE_CURRENT_BINARY_DIR}
         --buildtype=${CMAKE_BUILD_TYPE}
         "--channel=${VIEWER_CHANNEL}"
@@ -2752,7 +2763,8 @@ if (LINUX)
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
-      "--avx2=${USE_AVX2_OPTIMIZATION}"      
+      "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"      
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=${CMAKE_BUILD_TYPE}
       "--channel=${VIEWER_CHANNEL}"
@@ -2847,7 +2859,8 @@ if (DARWIN)
       "--fmodstudio=${USE_FMODSTUDIO}"
       "--openal=${USE_OPENAL}"
       "--tracy=${USE_TRACY}"
-      "--avx2=${USE_AVX2_OPTIMIZATION}"      
+      "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"      
       --build=${CMAKE_CURRENT_BINARY_DIR}
       --buildtype=$<CONFIG>
       --bundleid=${MACOSX_BUNDLE_GUI_IDENTIFIER}
@@ -2884,7 +2897,8 @@ if (DARWIN)
           "--fmodstudio=${USE_FMODSTUDIO}"
           "--openal=${USE_OPENAL}"
           "--tracy=${USE_TRACY}"
-          "--avx2=${USE_AVX2_OPTIMIZATION}"          
+          "--avx2=${USE_AVX2_OPTIMIZATION}"
+        "--espeak=${USE_ESPEAK_NG}"          
           --build=${CMAKE_CURRENT_BINARY_DIR}
           --buildtype=${CMAKE_BUILD_TYPE}
           "--channel=${VIEWER_CHANNEL}"
