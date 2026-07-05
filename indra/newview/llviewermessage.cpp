@@ -147,6 +147,7 @@
 #include "fslslbridge.h"
 #include "fsrestartavoid.h"
 #include "fsmoneytracker.h"
+#include "fschattts.h"
 #include "llattachmentsmgr.h"
 #include "lleconomy.h"
 #include "llfloaterbump.h"
@@ -3446,6 +3447,19 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
                 make_ui_sound("UISndNearbyChat");
             }
             // </FS:PP>
+
+            // <FS:TS> Text-to-Speech for nearby chat
+            if (chat.mFromID.notNull() && chat.mFromID != gAgentID && !chat.mMuted)
+            {
+                LLSD tts_chat;
+                tts_chat["message"] = mesg;
+                tts_chat["from"] = from_name;
+                tts_chat["from_id"] = chat.mFromID;
+                tts_chat["source"] = (S32)chat.mSourceType;
+                tts_chat["chat_type"] = (S32)chat.mChatType;
+                FSChatTTS::instance().onChatMessage(tts_chat);
+            }
+            // </FS:TS>
 
             LLSD msg_notify = LLSD(LLSD::emptyMap());
             msg_notify["session_id"] = LLUUID();

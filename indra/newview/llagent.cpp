@@ -1793,6 +1793,16 @@ void LLAgent::setAFK()
 //-----------------------------------------------------------------------------
 void LLAgent::clearAFK()
 {
+    // <PandaView> Force Away: while the toggle is on, activity must not clear
+    // Away. The prefs checkbox handler sets the cvar to false BEFORE calling
+    // clearAFK(), so unticking still clears through this same path.
+    static LLCachedControl<bool> pv_force_away(gSavedSettings, "PVForceAway", false);
+    if (pv_force_away)
+    {
+        return;
+    }
+    // </PandaView>
+
     gAwayTriggerTimer.reset();
 
     // Gods can sometimes get into away state (via gestures)

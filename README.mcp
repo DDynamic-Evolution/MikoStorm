@@ -1,0 +1,159 @@
+# MCP Server — MikoStorm AI Control Interface
+
+The MCP (Model Context Protocol) Server allows AI assistants like Claude,
+ChatGPT, Cursor or VS Code to control the MikoStorm Viewer.
+
+## Activation
+
+1. Start the viewer
+2. Preferences → **Network & Files** → **MCP Server**
+3. Check "Enable MCP Server"
+4. Adjust port if needed (Default: **13231**)
+5. Restart the viewer
+
+## Connection
+
+The server runs on `http://localhost:13231/mcp` and speaks
+JSON-RPC 2.0 (MCP Streamable HTTP Transport).
+
+### Claude Desktop
+
+In `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "mikostorm": {
+      "url": "http://localhost:13231/mcp"
+    }
+  }
+}
+```
+
+### Cursor / VS Code
+
+In `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "mikostorm": {
+      "type": "url",
+      "url": "http://localhost:13231/mcp"
+    }
+  }
+}
+```
+
+### Custom Script (Python)
+
+```python
+from mcp import ClientSession
+from mcp.client.http import HttpConnection
+
+async with HttpConnection("http://localhost:13231/mcp") as session:
+    tools = await session.list_tools()
+    for tool in tools:
+        print(f"{tool.name}: {tool.description}")
+```
+
+## Available Tools
+
+### Movement
+| Tool | Parameters | Description |
+|------|-----------|--------------|
+| `avatar_sit` | — | Sit down / Stand up |
+| `avatar_stand` | — | Stand up |
+| `avatar_walk_to` | x, y, z | Walk to a position |
+| `avatar_teleport` | region, x, y, z | Teleport |
+| `avatar_fly` | enabled (bool) | Toggle flying |
+
+### Chat / Communication
+| Tool | Parameters | Description |
+|------|-----------|--------------|
+| `chat_say` | message, channel (optional) | Say in local chat |
+| `chat_shout` | message, channel (optional) | Shout (100m) |
+
+### World / Info
+| Tool | Parameters | Description |
+|------|-----------|--------------|
+| `get_position` | — | Current position + region (JSON) |
+| `get_region_info` | — | Current region info (JSON) |
+| `get_nearby_agents` | — | Nearby avatars (JSON) |
+
+### Inventory
+| Tool | Parameters | Description |
+|------|-----------|--------------|
+| `inventory_list` | — | List root inventory (JSON) |
+| `notecard_write` | name, content | Create a notecard with text content |
+
+### Planned
+- `chat_im` — Send IM
+- `inventory_search` — Search inventory
+- `attachment_list` — Currently worn attachments
+
+## Resources
+
+| URI | Description |
+|-----|-------------|
+| `mikostorm://position` | Current position (JSON) |
+| `mikostorm://region` | Region info (JSON) |
+| `mikostorm://nearby` | Nearby agents (JSON) |
+
+## Security
+
+- The server runs **on localhost only** (127.0.0.1)
+- Optional bearer token via `Authorization: Bearer <token>` header
+- Port is freely configurable (1024–65535)
+- Server is **disabled by default**
+- Only outgoing viewer functions — no filesystem access
+
+## Architecture
+
+```
+┌─────────────────┐     HTTP/JSON-RPC     ┌──────────────────────────────┐
+│  Claude Desktop  │◄─────────────────────►│  MikoStorm Viewer           │
+│  (MCP Host)      │     localhost:13231   │                              │
+│                  │                       │  ┌────────────────────────┐  │
+│  Cursor/VS Code  │                       │  │ LLMCPServer (Singleton)│  │
+│  (MCP Host)      │                       │  │  - Tool Registry       │  │
+│                  │                       │  │  - JSON-RPC 2.0        │  │
+│  Custom Script   │                       │  │  - Session Management  │  │
+│  (MCP Client)    │                       │  └───────┬────────────────┘  │
+└─────────────────┘                       │          │                   │
+                                           │  ┌───────▼────────────────┐  │
+                                           │  │ LLMCPHttpServer        │  │
+                                           │  │  - POSIX Sockets       │  │
+                                           │  │  - HTTP Parser         │  │
+                                           │  │  - Background Thread   │  │
+                                           │  └───────┬────────────────┘  │
+                                           │          │                   │
+                                           │  ┌───────▼────────────────┐  │
+                                           │  │ Viewer APIs (Main Td)  │  │
+                                           │  │ - Chat, Movement,     │  │
+                                           │  │   Inventory, Region   │  │
+                                           │  │   Notecard Writing    │  │
+                                           │  └────────────────────────┘  │
+                                           └──────────────────────────────┘
+```
+
+## Implementation
+
+| File | Purpose |
+|------|---------|
+| `indra/newview/llmcpserver.h` | MCP protocol core (JSON-RPC 2.0, tool registry) |
+| `indra/newview/llmcpserver.cpp` | Implementation: session handling, tools, resources |
+| `indra/newview/llmcphttp.h` | HTTP transport (POSIX sockets, background thread) |
+| `indra/newview/llmcphttp.cpp` | HTTP server: request parsing, response, CORS |
+| `README.mcp` | This file |
+
+### Build Integration
+
+The files are included via `indra/newview/CMakeLists.txt`
+and compiled with the viewer. No external dependencies other than
+Boost.JSON (already available via `llsdjson.h`).
+
+## MCP Protocol
+
+The server implements the MCP protocol (JSON-RPC 2.0) with
+Streamable HTTP Transport. Details: https://modelcontextprotocol.io

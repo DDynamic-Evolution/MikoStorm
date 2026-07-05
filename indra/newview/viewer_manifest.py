@@ -2038,6 +2038,25 @@ class LinuxManifest(ViewerManifest):
             self.path("libsndfile*")
             self.path("*.crt")
 
+        if self.args['espeak'].lower() == 'on':
+            espeak_data_build = os.path.join(self.args['build'], os.pardir, 'espeak-ng', 'espeak-ng-data')
+            if os.path.isdir(espeak_data_build):
+                with self.prefix(src=espeak_data_build, dst="espeak-ng-data"):
+                    self.path("*")
+                # Create language symlinks in voices/ (required by espeak_SetVoiceByName)
+                # Names must be lowercase because espeak-ng lowercases the input before searching.
+                lang_root = os.path.join(self.get_dst_prefix(), "espeak-ng-data", "lang")
+                voice_root = os.path.join(self.get_dst_prefix(), "espeak-ng-data", "voices")
+                if os.path.isdir(lang_root):
+                    for root, dirs, files in os.walk(lang_root):
+                        for f in files:
+                            link_name = f.lower()
+                            link_path = os.path.join(voice_root, link_name)
+                            if not os.path.lexists(link_path):
+                                rel = os.path.relpath(os.path.join(root, f), lang_root)
+                                target = os.path.join("..", "lang", rel)
+                                os.symlink(target, link_path)
+
     def package_finish(self):
         # a standard map of strings for replacing in the templates
 
@@ -2266,6 +2285,7 @@ if __name__ == "__main__":
         dict(name='openal', description="""Indication openal libraries are needed""", default='OFF'),
         dict(name='tracy', description="""Indication tracy profiler is enabled""", default='OFF'),
         dict(name='avx2', description="""Indication avx2 instruction set is enabled""", default='OFF'),
+        dict(name='espeak', description="""Indication espeak-ng TTS support is enabled""", default='OFF'),
         ]
     try:
         main(extra=extra_arguments)

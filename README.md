@@ -4,7 +4,7 @@ MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer
 The client codebase has been open source since 2007 and is available under the LGPL license
 
 ## Experimental features
-- [Voicebox TTS](https://voicebox.sh/linux-install) support. Reads your IMs and chat aloud if you run a voicebox server. I am planning on a wrapper for other TTS.
+- **eSpeak-NG TTS** — Embedded text-to-speech reads your IMs and chat aloud. Supports multiple languages and voices.
 - **LL-style Chat Window** — Ported Linden Lab chat UI with mini profile icons and range filtering
   - Three chat window styles: FS V1 (plain text), FS V7 (modern headers), LL Style
   - Mini profile icons next to speaker names in nearby chat

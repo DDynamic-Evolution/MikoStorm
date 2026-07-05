@@ -7,7 +7,7 @@
  border="false"
  chrome="true"
  follows="bottom"
- height="155"
+ height="175"
  layout="topleft"
  name="volumepulldown_floater"
  width="210">
@@ -126,6 +126,39 @@
      name="mute_audio"
      tab_stop="false"
      width="16" />
+    <slider
+        control_name="AudioLevelTTS"
+        disabled_control="MuteAudio"
+        follows="left|top"
+        height="15"
+        increment="0.025"
+        initial_value="0.5"
+        label="TTS"
+        label_width="50"
+        left="10"
+        width="150"
+        layout="topleft"
+        name="TTS Volume"
+        show_text="false"
+        top_pad="4"
+        volume="true">
+    <slider.commit_callback
+        function="Pref.setControlFalse"
+        parameter="MuteTTS" />
+    </slider>
+    <button
+        control_name="MuteTTS"
+        disabled_control="MuteAudio"
+        follows="top|left"
+        height="16"
+        image_selected="AudioMute_Off"
+        image_unselected="Audio_Off"
+        is_toggle="true"
+        layout="topleft"
+        left_pad="5"
+        name="mute_audio"
+        tab_stop="false"
+        width="16" />
   <check_box
     name="collisions_audio_play_btn"
     control_name="EnableCollisionSounds"
