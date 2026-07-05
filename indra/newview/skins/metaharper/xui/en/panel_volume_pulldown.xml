@@ -7,7 +7,7 @@
  border="false"
  chrome="true"
  follows="bottom"
- height="175"
+ height="240"
  layout="topleft"
  name="volumepulldown_floater"
  width="210">
