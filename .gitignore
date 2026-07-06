@@ -132,6 +132,9 @@ firestorm.code-workspace
 
 checks.json
 
+# Build artifacts at project root
+newview/
+
 # Hermes agent files
 AGENTS.md
 packages/
