@@ -51,6 +51,7 @@
 		<text name="HUD Size:" width="95">
 			HUD-Skalierung:
 		</text>
+		<slider can_edit_text="false" decimal_digits="2" increment="0.01" label_width="200" label="Fenster-Transparenz:" max_val="1.00" min_val="0.00" name="FloaterTransparency" show_text="true" top_pad="10"/>
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
 		</text>

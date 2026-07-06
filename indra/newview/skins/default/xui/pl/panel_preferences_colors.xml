@@ -203,8 +203,7 @@
 			<text name="floater_opacity">
 				Przezroczystość okna:
 			</text>
-			<slider label="Aktywne:" name="active"/>
-			<slider label="Nieaktywne:" name="inactive"/>
+			<slider label="Przezroczystość:" name="floater_transparency"/>
 			<slider label="Kamera / ruch:" name="camera_movement" />
 			<slider label="Rozmowy:" name="conversations" />
 			<check_box name="override_im_active_opacity_checkbox" label="Użyj wartości 'aktywne' dla okna rozmów, gdy jest na pierwszym planie" />

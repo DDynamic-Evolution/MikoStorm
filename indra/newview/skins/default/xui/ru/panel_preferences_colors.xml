@@ -205,8 +205,7 @@
 			<text name="floater_opacity">
 				Прозрачность окон:
 			</text>
-			<slider label="Активных:" name="active"/>
-			<slider label="Неактивных:" name="inactive"/>
+			<slider label="Прозрачность:" name="floater_transparency"/>
 			<slider label="Камера / Движение:" name="camera_movement"/>
 			<slider label="Разговоры:" name="conversations"/>
 			<check_box name="override_im_active_opacity_checkbox" width="450" label="Использовать значение «Активных» когда окно «Разговоры» активно." />

@@ -193,8 +193,7 @@
 			<text name="floater_opacity">
 				Pəncərə şəffaflığı:
 			</text>
-			<slider label="Aktiv:" name="active"/>
-			<slider label="Passiv:" name="inactive"/>
+			<slider label="Şəffaflıq:" name="floater_transparency"/>
 			<slider label="Kamera/Hərəkət:" name="camera_movement"/>
 			<text name="console_opacity">
 				Konsol şəffaflığı:

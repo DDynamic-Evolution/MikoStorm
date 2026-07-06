@@ -2102,17 +2102,7 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>ActiveFloaterTransparency</key>
-    <map>
-      <key>Comment</key>
-      <string>Transparency of active floaters (floaters that have focus)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>1.0</real>
-    </map>
+
     <key>AdvanceSnapshot</key>
     <map>
       <key>Comment</key>
@@ -5945,6 +5935,17 @@
         <integer>0</integer>
       </array>
     </map>
+    <key>FloaterTransparency</key>
+    <map>
+      <key>Comment</key>
+      <string>Transparency of all floaters (0=fully transparent, 1=fully opaque)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
     <key>FlycamAbsolute</key>
     <map>
       <key>Comment</key>
@@ -6641,17 +6642,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
-    </map>
-    <key>InactiveFloaterTransparency</key>
-    <map>
-      <key>Comment</key>
-      <string>Transparency of inactive floaters (floaters that have no focus)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>0.95</real>
     </map>
     <key>InBandwidth</key>
     <map>

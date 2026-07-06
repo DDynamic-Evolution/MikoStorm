@@ -466,7 +466,6 @@ private:
     void            layoutDragHandle();     // repair layout
 
     static void     updateActiveFloaterTransparency();
-    static void     updateInactiveFloaterTransparency();
     void            updateTransparency(LLView* view, ETypeTransparency transparency_type);
 
 public:

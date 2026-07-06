@@ -98,8 +98,7 @@
 			<text name="effects_color_textbox">選擇游標：</text>
 			<text left="240" name="ScriptDialogFgLabel" width="300">指令碼彈窗的前景和背景：</text>
 			<text name="floater_opacity">視窗透明度：</text>
-			<slider label="活躍視窗：" name="active" />
-			<slider label="非活躍視窗：" name="inactive" />
+			<slider label="透明度：" name="floater_transparency" />
 			<slider label="相機 / 移動：" name="camera_movement" />
 			<slider label="聊天視窗：" name="conversations"/>
 			<check_box name="override_im_active_opacity_checkbox" label="當聊天視窗獲得焦點時使用活躍視窗透明度"/>
