@@ -7327,13 +7327,6 @@ SecondLife.com網站的「支援」部分
 		警告：由於指令碼文字過長，前處理器輸出中斷，這個指令碼可能未起作用。
 	</string>
 	<!-- </FS:Cron> -->
-	<!-- <FS:Zi> Notify user about preferences settings changes to skin defaults -->
-	<string name="skin_defaults_starlight_location">
-		因為Starlight皮膚系列的預設設定，已禁用在選單欄中顯示你的當前位置。
-	</string>
-	<string name="skin_defaults_starlight_navbar">
-		為Starlight皮膚系列的預設設定，已啟用導航欄。
-	</string>
 	<!-- Animation Explorer -->
 	<string name="animation_explorer_seconds_ago">
 		[SECONDS] 秒前

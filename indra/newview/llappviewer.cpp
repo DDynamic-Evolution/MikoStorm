@@ -127,7 +127,9 @@
 #include "lllocalbitmaps.h"
 #include "llperfstats.h"
 #include "llgltfmateriallist.h"
+#ifdef USE_MCP
 #include "llmcpserver.h"
+#endif
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -1497,10 +1499,12 @@ bool LLAppViewer::init()
     gSavedSettings.setU32("DebugQualityPerformance", gSavedSettings.getU32("RenderQualityPerformance"));
 
     // Start MCP server if enabled
+#ifdef USE_MCP
     if (gSavedSettings.getBOOL("MCPEnabled"))
     {
         LLMCPServer::instance().start();
     }
+#endif
 
 #if LL_WINDOWS
     if (!mSecondInstance)
@@ -2599,10 +2603,12 @@ bool LLAppViewer::cleanup()
     // kicks in.
 
     // Stop MCP server before singletons are destroyed
+#ifdef USE_MCP
     if (LLMCPServer::instanceExists())
     {
         LLMCPServer::instance().stop();
     }
+#endif
 
     // This calls every remaining LLSingleton's cleanupSingleton() and
     // deleteSingleton() methods.
