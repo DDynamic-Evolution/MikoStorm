@@ -41,7 +41,7 @@ The client codebase has been open source since 2007 and is available under the L
 - Removed Social Links
 - **Version System** — Manual version control via VIEWER_VERSION_FS.txt (no automatic git commit count)
 - **Custom Icon** — MikoStorm_icon.png replaces all default viewer icons
-- **MCP Server (linus only) buildflag --mcp** — Model Context Protocol (JSON-RPC 2.0) HTTP server on `localhost:13231` for AI assistants (Claude Desktop, Cursor, etc.)
+- **MCP Server (linux only) buildflag --mcp** — Model Context Protocol (JSON-RPC 2.0) HTTP server on `localhost:13231` for AI assistants (Claude Desktop, Cursor, etc.)
   - Tools: `chat_say`, `chat_shout`, `avatar_sit/stand`, `avatar_walk_to`, `avatar_teleport`, `avatar_fly`, `get_position`, `get_region_info`, `get_nearby_agents`, `notecard_write`, `inventory_list`
   - Resources: `mikostorm://position`, `mikostorm://region`, `mikostorm://nearby`
   - Optional Bearer token auth, localhost-only binding, disabled by default
