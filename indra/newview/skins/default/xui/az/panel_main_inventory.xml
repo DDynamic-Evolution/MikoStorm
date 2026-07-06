@@ -59,14 +59,6 @@
 		<panel name="new_inventory_panel">
 			<button name="new_inv_btn" tool_tip="Əlavə avadanlıq siyahısı pəncərəsi"/>
 		</panel>
-		<!-- Used by StarLight skins -->
-		<panel name="collapse_panel">
-			<button label="Minimallaşdır" name="collapse_btn" tool_tip="Bütün qovluqları yığışdır" />
-		</panel>
-		<panel name="expand_panel">
-			<button label="Genişləndir" name="expand_btn" tool_tip="Bütün qovluqları aç" />
-		</panel>
-		<!-- / Used by StarLight skins -->
 		<panel name="dummy_panel">
 			<text name="ItemcountText">
 				Element

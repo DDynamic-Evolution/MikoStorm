@@ -125,6 +125,16 @@ else (USE_3D_STREAM)
 endif (USE_3D_STREAM)
 # </FS:AYA>
 
+# <FS:MCP> MCP (Model Context Protocol) server
+option(USE_MCP "MCP server for AI control" ON)
+if (USE_MCP)
+  add_compile_definitions(USE_MCP)
+  message(STATUS "Compiling with MCP support")
+else ()
+  message(STATUS "Compiling without MCP support")
+endif ()
+# </FS:MCP>
+
 add_subdirectory(cmake)
 
 # <FS:Beq> Tracy Profiler support

@@ -216,11 +216,8 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                     self.path("*/themes/*/colors.xml")
                     with self.prefix(src_dst="*/themes/*/textures"):
                         self.path("*/*.tga")
-                        self.path("*/*.jpg")
                         self.path("*/*.png")
                         self.path("*.tga")
-                        self.path("*.j2c")
-                        self.path("*.png")
                     self.path("*/*.xml")
 
                     # Update: 2017-11-01 CP Now we store app code in the html folder

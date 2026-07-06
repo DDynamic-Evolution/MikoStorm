@@ -6514,12 +6514,6 @@ Sua posição atual: [AVATAR_POS]
 	<string name="fs_preprocessor_truncated">
 		Atenção: A saída do pré-processador foi reduzida devido ao comprimento excessivo do texto. O script provavelmente não funcionará.
 	</string>
-	<string name="skin_defaults_starlight_location">
-		A exibição da posição atual na barra de menu foi desativada como padrão para os temas da interface starlight.
-	</string>
-	<string name="skin_defaults_starlight_navbar">
-		Uma exibição da barra de navegação foi habilitada como padrão para os testes da interface Starlight.
-	</string>
 	<string name="animation_explorer_seconds_ago">
 		Há [SECONDS] segundos
 	</string>

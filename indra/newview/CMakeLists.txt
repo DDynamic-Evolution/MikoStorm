@@ -538,8 +538,6 @@ set(viewer_SOURCE_FILES
     llfloatermarketplace.cpp
     llmarketplacefunctions.cpp
     llmarketplacenotifications.cpp
-    llmcpserver.cpp
-    llmcphttp.cpp
     llmaterialeditor.cpp
     llmaterialmgr.cpp
     llmediactrl.cpp
@@ -923,6 +921,13 @@ if (USE_3D_STREAM)
     list(APPEND viewer_SOURCE_FILES
         llpositionalstreammgr.cpp
         llocclusiongeometrymgr.cpp
+        )
+endif ()
+
+if (USE_MCP)
+    list(APPEND viewer_SOURCE_FILES
+        llmcpserver.cpp
+        llmcphttp.cpp
         )
 endif ()
 

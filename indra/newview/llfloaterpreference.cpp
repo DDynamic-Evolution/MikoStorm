@@ -5270,34 +5270,7 @@ void LLPanelPreferenceSkins::apply()
             gSavedSettings.setBOOL("ResetToolbarSettings", true);
         }
 
-        if (m_Skin == "starlight" || m_Skin == "starlightcui")
-        {
-            std::string noteMessage;
 
-            if (gSavedSettings.getBOOL("ShowMenuBarLocation"))
-            {
-                noteMessage = LLTrans::getString("skin_defaults_starlight_location");
-                gSavedSettings.setBOOL("ShowMenuBarLocation", false);
-            }
-
-            if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-            {
-                if (!noteMessage.empty())
-                {
-                    noteMessage += "\n";
-                }
-                noteMessage += LLTrans::getString("skin_defaults_starlight_navbar");
-                gSavedSettings.setBOOL("ShowNavbarNavigationPanel", true);
-            }
-
-            if (!noteMessage.empty())
-            {
-                LLSD args;
-                args["MESSAGE"] = noteMessage;
-                LLNotificationsUtil::add("SkinDefaultsChangeSettings", args, LLSD(), boost::bind(&LLPanelPreferenceSkins::showSkinChangeNotification, this));
-                return;
-            }
-        }
         // </FS:AO>
 
         showSkinChangeNotification();
