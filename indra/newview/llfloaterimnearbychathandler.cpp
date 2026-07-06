@@ -703,6 +703,11 @@ void LLFloaterIMNearbyChatHandler::processChat(const LLChat& chat_msg,
     }
     // </FS:AYA>
 
+    if (gSavedSettings.getBOOL("FSHideLocalChat"))
+    {
+        return;
+    }
+
     if (chat_msg.mSourceType == CHAT_SOURCE_AGENT
         && chat_msg.mFromID.notNull()
         && chat_msg.mFromID != gAgentID)

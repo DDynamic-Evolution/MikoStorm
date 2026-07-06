@@ -183,6 +183,18 @@
     <integer>1</integer>
   </map>
 
+  <key>FSHideLocalChat</key>
+  <map>
+    <key>Comment</key>
+    <string>When enabled, incoming local chat messages are not shown in the nearby chat floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
   <key>EnableGroupChatPopups</key>
   <map>
     <key>Comment</key>

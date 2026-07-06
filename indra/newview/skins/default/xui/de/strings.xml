@@ -6946,6 +6946,9 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="QP Color Under Cursor">
 		Farbe unter Cursor
 	</string>
+	<string name="QP Hide Local Chat">
+		Lokalen Chat ausblenden
+	</string>
 	
 	<!-- <FS:Ansariel> Posestand animation names -->
 	<string name="PS_T_Pose">

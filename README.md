@@ -32,6 +32,7 @@ The client codebase has been open source since 2007 and is available under the L
   - **Debug:** Console: `Stream3DDebugUrl "http://..."` + `Stream3DDebugPlay TRUE`
   - Alter Prefix `[ayastream:...]` also working
 - URL Phishing / Scam Link Detection — Warns before opening suspicious URLs; toggle in Firestorm → Protection tab 
+- **Hide Local Chat** — Toggle in Schnelleinstellungen (Quick Preferences) blendet ein-/ausgehenden Nah-Chat aus. IMs bleiben unberührt. Das Nearby-Chat-Fenster wird beim Aktivieren geschlossen.
 - Removed discord and Flickr support.
 - Removed velo updater
 - Hides your data

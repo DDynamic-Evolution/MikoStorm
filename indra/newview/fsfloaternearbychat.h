@@ -87,6 +87,7 @@ public:
     bool focusFirstItem(bool prefer_text_fields = false, bool focus_flash = true) override;
 
     void        updateFSUseNearbyChatConsole(const LLSD& data);
+    void        updateFSHideLocalChat(const LLSD& data);
     static bool isWordsName(const std::string& name);
 
     LLChatEntry* getChatBox() { return mInputEditor; }
