@@ -141,6 +141,14 @@ void FSFloaterNearbyChat::updateFSUseNearbyChatConsole(const LLSD &data)
     }
 }
 
+void FSFloaterNearbyChat::updateFSHideLocalChat(const LLSD &data)
+{
+    if (data.asBoolean())
+    {
+        closeFloater();
+    }
+}
+
 
 bool FSFloaterNearbyChat::postBuild()
 {
@@ -253,6 +261,8 @@ bool FSFloaterNearbyChat::postBuild()
 
     gSavedSettings.getControl("FSShowMutedChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateShowMutedChatHistory, this, _2));
 
+    gSavedSettings.getControl("FSHideLocalChat")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSHideLocalChat, this, _2));
+
     return LLFloater::postBuild();
 }
 
@@ -305,6 +315,12 @@ static std::string appendTime()
 
 void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
+    static LLCachedControl<bool> fsHideLocalChat(gSavedSettings, "FSHideLocalChat");
+    if (fsHideLocalChat)
+    {
+        return;
+    }
+
     LLChat& tmp_chat = const_cast<LLChat&>(chat);
     // <FS:AYA> Phase 3: V1 style = plain text mode
     bool use_plain_text_chat_history = gSavedSettings.getS32("AYAChatWindowStyle") == 0;

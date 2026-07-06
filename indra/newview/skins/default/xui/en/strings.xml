@@ -3164,6 +3164,7 @@ Your current position: [AVATAR_POS]
   <string name="QP Name Tags">Name Tags</string>
   <string name="QP LookAt Target">LookAt Target</string>
   <string name="QP Color Under Cursor">Color Under Cursor</string>
+  <string name="QP Hide Local Chat">Hide Local Chat</string>
 
   <!-- <FS:Ansariel> Posestand animation names -->
   <string name="PS_T_Pose">T-Pose</string>
