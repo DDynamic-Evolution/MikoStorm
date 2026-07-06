@@ -39,6 +39,5 @@
 	<text name="floater_opacity">
 		Gezdirici Geçirgenliği:
 	</text>
-	<slider label="Etkin:" name="active"/>
-	<slider label="Etkin değil:" name="inactive"/>
+	<slider label="Opaklık:" name="floater_transparency"/>
 </panel>

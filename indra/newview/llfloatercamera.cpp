@@ -637,7 +637,7 @@ F32 LLFloaterCamera::getCurrentTransparency()
 {
 
     static LLCachedControl<F32> camera_opacity(gSavedSettings, "CameraOpacity");
-    static LLCachedControl<F32> active_floater_transparency(gSavedSettings, "ActiveFloaterTransparency");
+    static LLCachedControl<F32> active_floater_transparency(gSavedSettings, "FloaterTransparency");
     return llmin(camera_opacity(), active_floater_transparency());
 
 }

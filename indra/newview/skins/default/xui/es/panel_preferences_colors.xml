@@ -174,8 +174,7 @@
 			<text name="floater_opacity">
 				Opacidad de ventana flotante:
 			</text>
-			<slider label="Activa:" name="active"/>
-			<slider label="Inactiva:" name="inactive"/>
+			<slider label="Opacidad:" name="floater_transparency"/>
 			<text name="console_opacity">
 				Opacidad de la consola:
 			</text>

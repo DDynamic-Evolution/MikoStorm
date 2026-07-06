@@ -39,6 +39,5 @@
 	<text name="floater_opacity">
 		Floater gennemsigtighed:
 	</text>
-	<slider label="Aktiv:" name="active"/>
-	<slider label="Inaktiv:" name="inactive"/>
+	<slider label="Gennemsigtighed:" name="floater_transparency"/>
 </panel>

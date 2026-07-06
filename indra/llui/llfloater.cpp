@@ -237,18 +237,11 @@ void LLFloater::initClass()
         sButtonToolTips[i] = LLTrans::getString( sButtonToolTipsIndex[i] );
     }
 
-    LLControlVariable* ctrl = LLUI::getInstance()->mSettingGroups["config"]->getControl("ActiveFloaterTransparency").get();
+    LLControlVariable* ctrl = LLUI::getInstance()->mSettingGroups["config"]->getControl("FloaterTransparency").get();
     if (ctrl)
     {
         ctrl->getSignal()->connect(boost::bind(&LLFloater::updateActiveFloaterTransparency));
         updateActiveFloaterTransparency();
-    }
-
-    ctrl = LLUI::getInstance()->mSettingGroups["config"]->getControl("InactiveFloaterTransparency").get();
-    if (ctrl)
-    {
-        ctrl->getSignal()->connect(boost::bind(&LLFloater::updateInactiveFloaterTransparency));
-        updateInactiveFloaterTransparency();
     }
 
 }
@@ -420,15 +413,9 @@ void LLFloater::layoutDragHandle()
 // static
 void LLFloater::updateActiveFloaterTransparency()
 {
-    static LLCachedControl<F32> active_transparency(*LLUI::getInstance()->mSettingGroups["config"], "ActiveFloaterTransparency", 1.f);
-    sActiveControlTransparency = active_transparency;
-}
-
-// static
-void LLFloater::updateInactiveFloaterTransparency()
-{
-    static LLCachedControl<F32> inactive_transparency(*LLUI::getInstance()->mSettingGroups["config"], "InactiveFloaterTransparency", 0.95f);
-    sInactiveControlTransparency = inactive_transparency;
+    static LLCachedControl<F32> floater_transparency(*LLUI::getInstance()->mSettingGroups["config"], "FloaterTransparency", 1.f);
+    sActiveControlTransparency = floater_transparency;
+    sInactiveControlTransparency = floater_transparency;
 }
 
 void LLFloater::addResizeCtrls()

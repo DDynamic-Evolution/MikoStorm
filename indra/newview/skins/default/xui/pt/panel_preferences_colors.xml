@@ -203,8 +203,7 @@
 			<text name="floater_opacity">
 				Opacidade da janela:
 			</text>
-			<slider label="Ativo:" name="active" />
-			<slider label="Inativo:" name="inactive" />
+			<slider label="Opacidade:" name="floater_transparency" />
 			<slider label="câmera / Bewegung:" name="camera_movement" />
 			<slider label="Conversas:" name="conversations" />
 			<check_box name="override_im_active_opacity_checkbox" label="Use a opacidade ativa quando a janela Conversas estiver em foco" />

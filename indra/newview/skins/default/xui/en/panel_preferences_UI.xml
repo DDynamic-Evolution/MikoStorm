@@ -359,10 +359,29 @@
          top_pad="-14"
          width="390" />
 
+        <slider
+         can_edit_text="false"
+         control_name="FloaterTransparency"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="1.0"
+         layout="topleft"
+         label="Floater Opacity:"
+         label_width="120"
+         left="10"
+         max_val="1.00"
+         min_val="0.00"
+         name="floater_transparency"
+         show_text="true"
+         top_pad="15"
+         width="390" />
+
       <text
        type="string"
        left="10"
-       top_pad="15"
+       top_pad="10"
        width="140"
        follows="left|top"
        height="16"

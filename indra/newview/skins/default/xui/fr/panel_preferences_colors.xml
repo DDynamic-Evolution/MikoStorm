@@ -106,8 +106,7 @@
 			<text name="effects_color_textbox">Faisceau de sélection :</text>
 			<text left="240" name="ScriptDialogFgLabel" width="300">Avant et arrière-plan des dialogues de scripts :</text>
 			<text name="floater_opacity">Opacité des fenêtres :</text>
-			<slider label="Actives :" name="active"/>
-			<slider label="Inactives :" name="inactive"/>
+			<slider label="Opacité :" name="floater_transparency"/>
 			<slider label="Caméra/Mouvement :" name="camera_movement"/>
 			<check_box name="override_im_active_opacity_checkbox" label="Utiliser la valeur d'opacité active lorsque la fenêtre « Conversations » est active"/>
 			<text name="console_opacity">Opacité de la console :</text>
