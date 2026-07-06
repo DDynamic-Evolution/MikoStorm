@@ -7,7 +7,7 @@
  left="1"
  top="1"
  width="540"
- label="Firestorm"
+ label="MikoStorm"
  name="firestorm">
  
 <panel.string name="BeamsOffLabel">
@@ -24,7 +24,7 @@
 	</string>
 
 <tab_container
- label="Firestorm Prefs"
+ label="MikoStorm Prefs"
  layout="topleft"
  follows="all"
  top="5"
@@ -136,7 +136,7 @@
 		 label="Enable progressive draw distance stepping"
 		 layout="topleft"
 		 name="FSRenderFarClipStepping"
-		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
+		 tool_tip="If enabled, MikoStorm will use a progressive draw distance stepping after teleporting."
 		 initial_value="true"
 		 top_pad="10"
 		 width="250" />
@@ -2060,6 +2060,27 @@
        top_pad="10"
        width="200"
        follows="left|top" />
+    </panel>
+
+    <!--Poser-->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Poser"
+     name="PoserTab">
+       <check_box
+        control_name="FSPoserStopPosingWhenClosed"
+        layout="topleft"
+        follows="left|top"
+        top_pad="6"
+        left="10"
+        width="400"
+        height="20"
+        name="chkStopPosingOnClose"
+        label="Stop avatar posing when closing the poser" />
     </panel>
 </tab_container>
 </panel>

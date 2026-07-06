@@ -84,7 +84,7 @@
 			<combo_box.item label="Alta" name="1" />
 			<combo_box.item label="Ultra" name="0" />
 		</combo_box>
-		<check_box label="Modo Tela Cheia" name="Fullscreen Mode" tool_tip="Executa o Firestorm em modo de tela cheia. É necessário reiniciar para alterar o modo." />
+		<check_box label="Modo Tela Cheia" name="Fullscreen Mode" tool_tip="Executa o MikoStorm em modo de tela cheia. É necessário reiniciar para alterar o modo." />
 		<slider label="Distância de visão" name="DrawDistance" />
 		<text name="DrawDistanceMeterText2">
 			m

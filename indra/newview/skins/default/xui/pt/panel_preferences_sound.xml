@@ -183,7 +183,7 @@
 <panel.string name="textFSWindowOpen">
 	Abrir janela:
 </panel.string>
-<tab_container label="Preferências do Firestorm" name="tabs">
+<tab_container label="Preferências do MikoStorm" name="tabs">
 	<!-- Sounds -->
 	<panel label="Sons" name="Media Sounds Panel">
 		<slider label="Volume mestre" name="System Volume"/>

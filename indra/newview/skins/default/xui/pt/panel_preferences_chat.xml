@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Bate-papo de texto" name="chat">
-	<tab_container name="tabs" label="Preferências do Firestorm">
+	<tab_container name="tabs" label="Preferências do MikoStorm">
 		<panel label="Anúncio" name="ChatVisuals">
 			<text name="console_font_size" width="180">
 				Tamanho da fonte do console:
@@ -205,7 +205,7 @@
 				Ocultar texto de IM do plano de fundo do histórico de bate-papo
 			</text>
 			<spinner tool_tip="0,25-1,0, 0,25 para fade out máximo para 1 para sem fade out" name="FSIMChatHistoryFade" />
-			<check_box name="FSShowMessageCountInWindowTitle" label="Exibir o número de mensagens não lidas no título da janela do Firestorm" />
+			<check_box name="FSShowMessageCountInWindowTitle" label="Exibir o número de mensagens não lidas no título da janela do MikoStorm" />
 			<check_box name="FSAnnounceIncomingIM" label="Notificar mensagens recebidas assim que o remetente começar a escrever" />
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Guias de mensagens instantâneas piscando quando amigos fazem login ou logout" />
 			<check_box name="FSNotifyNearbyChatFlash" label="Piscar o botão de bate-papo ao receber nova mensagem local" tool_tip="O botão de bate-papo na barra de ferramentas pisca quando um novo bate-papo chega nas proximidades. A janela de bate-papo deve estar encaixada na janela de conversas e a janela de conversas não deve estar visível para que o botão pisque." />
