@@ -179,7 +179,7 @@ LLViewerFolderDictionary::LLViewerFolderDictionary()
     addEntry(LLFolderType::FT_NONE,                 new ViewerFolderEntry("New Folder",             "Inv_FolderOpen",       "Inv_FolderClosed",     false,     false, "default"));
 
     // <FS:Ansariel> Special MikoStorm folder
-    addEntry(LLFolderType::FT_FIRESTORM,            new ViewerFolderEntry("MikoStorm",              "Inv_MikoStormOpen",    "Inv_MikoStormClosed",  false,     true));
+    addEntry(LLFolderType::FT_FIRESTORM,            new ViewerFolderEntry("Firestorm",              "Inv_MikoStormOpen",    "Inv_MikoStormClosed",  false,     true));
     addEntry(LLFolderType::FT_PHOENIX,              new ViewerFolderEntry("Phoenix",                "Inv_PhoenixOpen",      "Inv_PhoenixClosed",    false,     true));
     addEntry(LLFolderType::FT_RLV,                  new ViewerFolderEntry("RLV",                    "Inv_RLVOpen",          "Inv_RLVClosed",        false,     true));
     // </FS:Ansariel> Special MikoStorm folder
