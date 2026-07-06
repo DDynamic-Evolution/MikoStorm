@@ -176,7 +176,7 @@ std::string LLVersionInfo::getChannel() const
 
 std::string LLVersionInfo::getServerChannel() const
 {
-    return "Firestorm-Releasex64";
+    return "MikoStorm-Releasex64";
 }
 
 void LLVersionInfo::resetChannel(const std::string& channel)

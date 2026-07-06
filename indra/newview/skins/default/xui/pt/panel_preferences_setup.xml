@@ -65,7 +65,7 @@
 			<button label="Abrir" label_selected="Abrir" name="open_sound_cache"/>
 			<button label="Definir" label_selected="Definir" name="set_sound_cache" width="45"/>
 			<button label="Redefinir" label_selected="Redefinir" name="reset_sound_cache" width="82"/>
-			<check_box label="Não excluir arquivos de cache DSF (som) ao desconectar" tool_tip="Se ativado, arquivos de som descompactados não serão removidos do cache ao sair, o que pode melhorar a reprodução de sons. ATENÇÃO: isso pode aumentar rapidamente o uso do cache e o limite de tamanho pode não ser respeitado nesse caso, podendo ocupar mais de 10 GB de disco. Esta opção vem desativada por padrão no Firestorm." name="keep_unpacked_cache"/>
+			<check_box label="Não excluir arquivos de cache DSF (som) ao desconectar" tool_tip="Se ativado, arquivos de som descompactados não serão removidos do cache ao sair, o que pode melhorar a reprodução de sons. ATENÇÃO: isso pode aumentar rapidamente o uso do cache e o limite de tamanho pode não ser respeitado nesse caso, podendo ocupar mais de 10 GB de disco. Esta opção vem desativada por padrão no MikoStorm." name="keep_unpacked_cache"/>
 			<text name="log_path_desc">
 				Local dos logs e históricos de chat:
 			</text>

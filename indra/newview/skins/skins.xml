@@ -79,6 +79,46 @@
 
     <map>
       <key>name</key>
+      <string>MikoStorm</string>
+      <key>folder</key>
+      <string>mikostorm</string>
+      <key>themes</key>
+      <array>
+        <map>
+          <key>name</key>
+          <string>Grey</string>
+          <key>folder</key>
+          <string/>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Dark</string>
+          <key>folder</key>
+          <string>dark</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Blue</string>
+          <key>folder</key>
+          <string>blue</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>High Contrast</string>
+          <key>folder</key>
+          <string>highcontrast</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>CtrlAltStudio</string>
+          <key>folder</key>
+          <string>ctrlaltstudio</string>
+        </map>
+      </array>
+    </map>
+
+    <map>
+      <key>name</key>
       <string>Vintage</string>
       <key>folder</key>
       <string>vintage</string>

@@ -88,12 +88,12 @@
 		<text name="GroupTopRightRequiresRestart" left_pad="8" top_pad="-14" width="195">
 			(Requer reinicialização)
 		</text>
-		<check_box label="Desative chiclets para mensagens instantâneas e bate-papos em grupo" name="FSDisableIMChiclets" tool_tip="Se ativado, o Firestorm não exibirá chiclets para mensagens instantâneas e bate-papos em grupo (os ícones de mensagens de grupo e o número de mensagens instantâneas não lidas ainda serão exibidos)." />
-		<check_box label="Use a exibição de lista antiga para janelas de notificação" name="FSLegacyNotificationWell" tool_tip="Se ativado, o Firestorm usa a visualização de lista original para exibir notificações salvas." width="355" />
+		<check_box label="Desative chiclets para mensagens instantâneas e bate-papos em grupo" name="FSDisableIMChiclets" tool_tip="Se ativado, o MikoStorm não exibirá chiclets para mensagens instantâneas e bate-papos em grupo (os ícones de mensagens de grupo e o número de mensagens instantâneas não lidas ainda serão exibidos)." />
+		<check_box label="Use a exibição de lista antiga para janelas de notificação" name="FSLegacyNotificationWell" tool_tip="Se ativado, o MikoStorm usa a visualização de lista original para exibir notificações salvas." width="355" />
 		<text name="FSLegacyNotificationWellRequiresRestart">
 			(Requer reinicialização)
 		</text>
-		<check_box label="Redimensione automaticamente as conversas e a janela de notificações antigas" name="FSLegacyNotificationWellAutoResize" tool_tip="Se ativado, o Firestorm redimensiona automaticamente as janelas de conversa e de notificação clássica à medida que as mensagens são adicionadas ou removidas." />
+		<check_box label="Redimensione automaticamente as conversas e a janela de notificações antigas" name="FSLegacyNotificationWellAutoResize" tool_tip="Se ativado, o MikoStorm redimensiona automaticamente as janelas de conversa e de notificação clássica à medida que as mensagens são adicionadas ou removidas." />
 		<check_box label="Personalizar atalhos usados pelo Linux (somente Linux; requer reinicialização)" name="FSRemapLinuxShortcuts" tool_tip="Habilita a redefinição dos atalhos já utilizados pelo sistema operacional Linux, por exemplo CTRL-ALT-Fx." />
 		<check_box label="Impedir que a janela de estatísticas receba foco" name="FSStatisticsNoFocus" tool_tip="Se ativado, evita que a janela Estatísticas receba foco quando outra janela for fechada (ações como alterar o layout ainda são possíveis)." />
 		<check_box label="Mostrar imagens de itens de inventário em dicas de ferramentas" name="FSShowInventoryThumbnailTooltips" tool_tip="Se ativado, as imagens dos objetos do inventário serão exibidas em dicas de ferramentas." />
@@ -114,7 +114,7 @@
 			Barra de status:
 		</text>
 		<check_box name="ShowNetStats" label="Ativar indicador de transferência de dados" tool_tip="Ativa o indicador de transferência de dados na barra de menu" />
-		<check_box label="Use média periódica para indicador de transferência de dados" name="FSStatbarLegacyMeanPerSec" tool_tip="Se ativado, o Firestorm usa o cálculo original para o indicador de transferência de dados e mostra a média periódica em vez do valor medido atualmente." />
+		<check_box label="Use média periódica para indicador de transferência de dados" name="FSStatbarLegacyMeanPerSec" tool_tip="Se ativado, o MikoStorm usa o cálculo original para o indicador de transferência de dados e mostra a média periódica em vez do valor medido atualmente." />
 		<check_box name="FSUseStatsInsteadOfLagMeter" label="Clicar no indicador de dados abre Estatísticas em vez do medidor de atraso" />
 		<check_box label="Mostrar controles de mídia na barra de menu" name="FSEnableVolumeControls" tool_tip="Se ativado, os ícones de controle de mídia serão exibidos na barra de menu no canto superior direito da tela. Útil se o design da interface já tiver seus próprios ícones para controle de mídia." />
 		<check_box label="Mostrar posição na barra de menu" name="ShowMenuBarLocation" />
