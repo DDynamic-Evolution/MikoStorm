@@ -2540,6 +2540,11 @@ void FSFloaterPoser::onAvatarSelect()
     {
         FSToolCompPose::getInstance()->setAvatar(avatar);
         FSToolCompPoseTranslate::getInstance()->setAvatar(avatar);
+        // MikoStorm: Sync the manipulator joint with the UI selection when switching
+        // avatars. Without this, mJoint in FSManipRotateJoint stays stale/nullptr
+        // and anchor points + gimbal don't appear.
+        auto selectedJoints = getUiSelectedPoserJoints();
+        updateManipWithFirstSelectedJoint(selectedJoints);
     }
     else
     {
