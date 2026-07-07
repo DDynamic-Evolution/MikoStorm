@@ -704,46 +704,53 @@ void FSManipRotateJoint::renderCenterSphere(const F32 radius, const LLColor4& no
  */
 void FSManipRotateJoint::render()
 {
+    // MikoStorm: Render joint markers (anchor points) even without an active joint selection.
+    //
+    // Problem: isAvatarJointSafeToUse() requires both mJoint AND mAvatar. When switching
+    // between avatars (onAvatarSelect), mJoint is often nullptr because no joint is
+    // selected in the UI list. The render function would bail out early and hide markers.
+    //
+    // Fix: Marker spheres (static + pulsing highlight) now render whenever a valid
+    // avatar (mAvatar) exists, regardless of mJoint. The full manipulator (rings/axes)
+    // still requires mJoint via isAvatarJointSafeToUse().
+    if (mAvatar && !mAvatar->isDead() && mAvatar->isFullyLoaded())
+    {
+        LLGLSUIDefault gls_ui;
+        gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
+        LLGLDepthTest gls_depth(GL_TRUE);
+        LLGLEnable gl_blend(GL_BLEND);
+
+        LLCachedControl<bool> show_joint_markers(gSavedSettings, "FSManipShowJointMarkers", true);
+        LLVector3             jointLocation;
+        for (const auto& entry : getSelectableJoints())
+        {
+            LLJoint* joint = mAvatar->getJoint(std::string(entry));
+            if (!joint)
+                continue;
+
+            joint->updateWorldMatrixParent();
+            joint->updateWorldMatrix();
+
+            if (mJoint && joint == mJoint)
+                continue;
+
+            jointLocation = joint->getWorldPosition();
+            if (joint == mHighlightedJoint)
+            {
+                renderPulsingSphere(jointLocation);
+                continue;
+            }
+
+            if (show_joint_markers)
+                renderStaticSphere(jointLocation, LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
+        }
+    }
+
+    // Full manipulator (rings, axes, labels) requires a selected joint
     if (!isAvatarJointSafeToUse())
         return;
 
-    // update visibility and rotation center.
     bool activeJointVisible = updateVisiblity();
-
-    // Setup GL state.
-    LLGLSUIDefault gls_ui;
-    gGL.getTexUnit(0)->bind(LLViewerFetchedTexture::sWhiteImagep);
-    LLGLDepthTest gls_depth(GL_TRUE);
-    LLGLEnable gl_blend(GL_BLEND);
-
-    // Iterate through the avatar's joint map.
-    // If a joint other than the currently selected is highlighted, render a pulsing sphere.
-    // otherwise a small static sphere
-    LLCachedControl<bool> show_joint_markers(gSavedSettings, "FSManipShowJointMarkers", true);
-    LLVector3             jointLocation;
-    for (const auto& entry : getSelectableJoints())
-    {
-        LLJoint* joint = mAvatar->getJoint(std::string(entry));  
-        if (!joint)
-            continue;
-
-        // Update the joint's world matrix to ensure its position is current.
-        joint->updateWorldMatrixParent();
-        joint->updateWorldMatrix();
-
-        if (joint == mJoint)
-            continue;
-
-        jointLocation = joint->getWorldPosition();
-        if (joint == mHighlightedJoint)
-        {
-            renderPulsingSphere(jointLocation);
-            continue;
-        }
-
-        if (show_joint_markers)
-            renderStaticSphere(jointLocation, LLColor4(1.f, 0.5f, 0.f, 0.5f), 0.01f);
-    }
 
     if (!activeJointVisible)
         return;
