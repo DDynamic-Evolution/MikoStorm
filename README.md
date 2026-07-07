@@ -4,6 +4,7 @@ MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer
 The client codebase has been open source since 2007 and is available under the LGPL license
 
 ## Experimental features
+- **Poser Bone Anchor Points** — Joint markers (spheres at bone positions) in the Animation Poser now remain visible when switching between avatars, even without a specific joint selected. This makes bone positions visible at all times while posing.
 - **eSpeak-NG TTS** — Embedded text-to-speech reads your IMs and chat aloud. Supports multiple languages and voices.
 - **LL-style Chat Window** — Ported Linden Lab chat UI with mini profile icons and range filtering
   - Three chat window styles: FS V1 (plain text), FS V7 (modern headers), LL Style
