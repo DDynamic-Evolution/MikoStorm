@@ -10,9 +10,12 @@
 #include "llaudioengine.h"
 #include "llviewercontrol.h"
 #include "llcoros.h"
+#include "fscorehttputil.h"
+#include "llhttpconstants.h"
 
 #include <queue>
 #include <vector>
+#include <boost/json.hpp>
 
 #ifdef LL_ESPEAK_NG
 # include <espeak-ng/speak_lib.h>
@@ -203,7 +206,7 @@ std::string FSChatTTS::sanitizeText(const std::string& text)
 
 void FSChatTTS::doTTS(const std::string& text)
 {
-    doEspeakTTS(text);
+    doVoiceboxTTS(text);
 }
 
 #ifdef LL_ESPEAK_NG
@@ -254,6 +257,81 @@ static bool init_espeak()
 }
 
 #endif
+
+std::string FSChatTTS::jsonEscape(const std::string& text)
+{
+    std::string result;
+    result.reserve(text.size() + 16);
+    for (char c : text)
+    {
+        switch (c)
+        {
+        case '"':  result += "\\\""; break;
+        case '\\': result += "\\\\"; break;
+        case '\b': result += "\\b";  break;
+        case '\f': result += "\\f";  break;
+        case '\n': result += "\\n";  break;
+        case '\r': result += "\\r";  break;
+        case '\t': result += "\\t";  break;
+        default:
+            if (static_cast<unsigned char>(c) < 0x20)
+            {
+                char buf[8];
+                snprintf(buf, sizeof(buf), "\\u%04x", c);
+                result += buf;
+            }
+            else
+            {
+                result += c;
+            }
+        }
+    }
+    return result;
+}
+
+void FSChatTTS::doVoiceboxTTS(const std::string& text)
+{
+    std::string server_url = gSavedPerAccountSettings.getString("FSVoiceBoxServerURL");
+    std::string voice = gSavedPerAccountSettings.getString("FSVoiceBoxVoiceName");
+
+    if (server_url.empty())
+    {
+        server_url = "http://127.0.0.1:17493";
+    }
+
+    if (server_url.back() == '/')
+    {
+        server_url.pop_back();
+    }
+
+    std::string url = server_url + "/speak";
+
+    std::string json = "{\"text\":\"" + jsonEscape(text) + "\"";
+    if (!voice.empty())
+    {
+        json += ",\"profile\":\"" + jsonEscape(voice) + "\"";
+    }
+    json += "}";
+
+    LLCore::HttpHeaders::ptr_t headers = std::make_shared<LLCore::HttpHeaders>();
+    headers->append(HTTP_OUT_HEADER_ACCEPT, HTTP_CONTENT_JSON);
+    headers->append(HTTP_OUT_HEADER_CONTENT_TYPE, HTTP_CONTENT_JSON);
+    headers->append("X-Voicebox-Client-Id", "mikostorm-viewer");
+
+    LLCore::HttpOptions::ptr_t opts = std::make_shared<LLCore::HttpOptions>();
+    opts->setTimeout(10);
+
+    FSCoreHttpUtil::callbackHttpPostRaw(url, json,
+        [](const LLSD& result)
+        {
+            LL_INFOS("TTS") << "Voicebox speak request sent" << LL_ENDL;
+        },
+        [](const LLSD& result)
+        {
+            LL_WARNS("TTS") << "Voicebox speak request failed" << LL_ENDL;
+        },
+        headers, opts);
+}
 
 void FSChatTTS::doEspeakTTS(const std::string& text)
 {

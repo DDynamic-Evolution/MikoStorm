@@ -44,7 +44,9 @@
 #include "fmodstudio/fmod_errors.h"
 #include "lldir.h"
 #include "llapr.h"
+#if LL_OPUS_FOUND
 #include "fmod_codec_ogg.h"
+#endif
 
 #include "sound_ids.h"
 
@@ -408,6 +410,7 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
         }
     }
 
+#if LL_OPUS_FOUND
     if (mOpusCodecEnable)
     {
         const unsigned int opus_codec_priority = mOpusCodecPriority;
@@ -426,6 +429,7 @@ bool LLAudioEngine_FMODSTUDIO::init(void* userdata, const std::string &app_title
     {
         LL_WARNS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() Ogg Opus/Vorbis codec registration disabled for validation" << LL_ENDL;
     }
+#endif
 
     LL_INFOS("AppInit") << "LLAudioEngine_FMODSTUDIO::init() FMOD Studio initialized correctly" << LL_ENDL;
 

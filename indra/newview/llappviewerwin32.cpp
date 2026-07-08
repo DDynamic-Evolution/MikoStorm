@@ -494,9 +494,6 @@ int APIENTRY WINMAIN(HINSTANCE hInstance,
     // Drop install related settings
     gDirUtilp->initAppDirs("SecondLife");
 
-    return 0;
-    }
-
     // Call Tracy first thing to have it allocate memory
     // https://github.com/wolfpld/tracy/issues/196
     LL_PROFILER_FRAME_END;

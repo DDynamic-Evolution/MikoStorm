@@ -40,21 +40,39 @@ if (TARGET ll::fmodstudio)
          llfftconvolver.cpp
          llirloader.cpp
          llvenuereverbdsp.cpp
-         fmod_codec_ogg.cpp
-         )
+          )
+    
+    find_path(OPUS_INCLUDE_DIR "opus.h" PATHS
+        ${CMAKE_BINARY_DIR}/packages/include
+        ${CMAKE_BINARY_DIR}/packages/include/webrtc/third_party/opus/src/include
+        NO_DEFAULT_PATH)
+    find_library(OPUS_LIBRARY opus PATHS
+        ${CMAKE_BINARY_DIR}/packages/lib/release
+        ${CMAKE_BINARY_DIR}/packages/lib/debug
+        NO_DEFAULT_PATH)
+    
+    if(OPUS_INCLUDE_DIR AND OPUS_LIBRARY)
+        list(APPEND llaudio_SOURCE_FILES fmod_codec_ogg.cpp)
+        target_compile_definitions(llaudio PRIVATE LL_OPUS_FOUND=1)
+    else()
+        message(STATUS "opus not found - excluding fmod_codec_ogg.cpp")
+    endif()
 
-    list(APPEND llaudio_HEADER_FILES
-         llaudioengine_fmodstudio.h
-         lllistener_fmodstudio.h
-         llstreamingaudio_fmodstudio.h
-         llmultichanneldownmix.h
-         llstereoupmix.h
-         lllitehrtfdsp.h
-         llfftconvolver.h
-         llirloader.h
-         llvenuereverbdsp.h
-         fmod_codec_ogg.h
-         )
+     list(APPEND llaudio_HEADER_FILES
+          llaudioengine_fmodstudio.h
+          lllistener_fmodstudio.h
+          llstreamingaudio_fmodstudio.h
+          llmultichanneldownmix.h
+          llstereoupmix.h
+          lllitehrtfdsp.h
+          llfftconvolver.h
+          llirloader.h
+          llvenuereverbdsp.h
+          )
+    
+    if(OPUS_INCLUDE_DIR AND OPUS_LIBRARY)
+        list(APPEND llaudio_HEADER_FILES fmod_codec_ogg.h)
+    endif()
 
     if (USE_3D_STREAM)
         list(APPEND llaudio_SOURCE_FILES
@@ -109,12 +127,17 @@ if( TARGET ll::openal )
 endif()
 if( TARGET ll::fmodstudio )
     target_link_libraries( llaudio ll::fmodstudio )
-    find_package(PkgConfig)
-    if(PkgConfig_FOUND)
-        pkg_check_modules(OPUS opus)
-        if(OPUS_FOUND)
-            target_include_directories(llaudio PRIVATE ${OPUS_INCLUDE_DIRS})
-            target_link_libraries(llaudio ${OPUS_LIBRARIES})
+    if(OPUS_INCLUDE_DIR AND OPUS_LIBRARY)
+        target_include_directories(llaudio PRIVATE ${OPUS_INCLUDE_DIR})
+        target_link_libraries(llaudio ${OPUS_LIBRARY})
+    else()
+        find_package(PkgConfig)
+        if(PkgConfig_FOUND)
+            pkg_check_modules(OPUS opus)
+            if(OPUS_FOUND)
+                target_include_directories(llaudio PRIVATE ${OPUS_INCLUDE_DIRS})
+                target_link_libraries(llaudio ${OPUS_LIBRARIES})
+            endif()
         endif()
     endif()
 endif()

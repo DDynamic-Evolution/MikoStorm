@@ -1816,7 +1816,7 @@ Hover your mouse cursor over UUID field to show its default value.
          name="voicebox_tts_enable"
          width="450" />
 
-        <!-- eSpeak settings -->
+        <!-- Voicebox settings -->
         <text
          type="string"
          length="1"
@@ -1824,77 +1824,20 @@ Hover your mouse cursor over UUID field to show its default value.
          layout="topleft"
          left="20"
          height="15"
-         name="espeak_voice_label"
+         name="voicebox_server_label"
          width="200"
          top_pad="15">
-           Voice:
+           Voicebox Server URL:
         </text>
-        <combo_box
-         control_name="FSChatTTSEspeakVoice"
+        <line_editor
+         control_name="FSVoiceBoxServerURL"
          follows="left|top"
-         height="23"
+         height="20"
          layout="topleft"
          left="20"
-         name="espeak_voice_combo"
+         name="voicebox_server_url"
          top_pad="-2"
-         width="300">
-           <combo_box.item
-            name="de"
-            label="German"
-            value="de" />
-           <combo_box.item
-            name="en"
-            label="English (Great Britain)"
-            value="en" />
-           <combo_box.item
-            name="en-us"
-            label="English (America)"
-            value="en-us" />
-           <combo_box.item
-            name="en-gb-scotland"
-            label="English (Scotland)"
-            value="en-gb-scotland" />
-           <combo_box.item
-            name="en-gb-x-rp"
-            label="English (Received Pronunciation)"
-            value="en-gb-x-rp" />
-            <combo_box.item
-             name="fr"
-             label="French"
-             value="fr" />
-           <combo_box.item
-            name="es"
-            label="Spanish (Spain)"
-            value="es" />
-           <combo_box.item
-            name="it"
-            label="Italian"
-            value="it" />
-           <combo_box.item
-            name="nl"
-            label="Dutch"
-            value="nl" />
-           <combo_box.item
-            name="pl"
-            label="Polish"
-            value="pl" />
-           <combo_box.item
-            name="ru"
-            label="Russian"
-            value="ru" />
-            <combo_box.item
-             name="cmn"
-             label="Chinese (Mandarin)"
-             value="cmn" />
-           <combo_box.item
-            name="ja"
-            label="Japanese"
-            value="ja" />
-           <combo_box.item
-            name="ko"
-            label="Korean"
-            value="ko" />
-         </combo_box>
+         width="350" />
 
         <text
          type="string"
@@ -1903,213 +1846,20 @@ Hover your mouse cursor over UUID field to show its default value.
          layout="topleft"
          left="20"
          height="15"
-         name="espeak_variant_label"
+         name="voicebox_voice_label"
          width="200"
          top_pad="10">
-            Voice variant:
+            Voice profile name:
         </text>
-        <combo_box
-         control_name="FSChatTTSEspeakVariant"
-         follows="left|top"
-         height="23"
-         layout="topleft"
-         left="20"
-         name="espeak_variant_combo"
-         top_pad="-2"
-         width="200">
-            <combo_box.item
-             name="none"
-             label="(none)"
-             value="" />
-            <combo_box.item
-             name="f1"
-             label="Female 1"
-             value="f1" />
-            <combo_box.item
-             name="f2"
-             label="Female 2"
-             value="f2" />
-            <combo_box.item
-             name="f3"
-             label="Female 3"
-             value="f3" />
-            <combo_box.item
-             name="f4"
-             label="Female 4"
-             value="f4" />
-            <combo_box.item
-             name="whisperf"
-             label="Female Whisper"
-             value="whisperf" />
-            <combo_box.item
-             name="anika"
-             label="Anika (female)"
-             value="anika" />
-            <combo_box.item
-             name="m1"
-             label="Male 1"
-             value="m1" />
-            <combo_box.item
-             name="m2"
-             label="Male 2"
-             value="m2" />
-            <combo_box.item
-             name="m3"
-             label="Male 3"
-             value="m3" />
-            <combo_box.item
-             name="m4"
-             label="Male 4"
-             value="m4" />
-            <combo_box.item
-             name="whisper"
-             label="Whisper (male)"
-             value="whisper" />
-            <combo_box.item
-             name="alex"
-             label="Alex"
-             value="alex" />
-            <combo_box.item
-             name="edward"
-             label="Edward"
-             value="edward" />
-            <combo_box.item
-             name="adam"
-             label="Adam"
-             value="adam" />
-            <combo_box.item
-             name="klatt"
-             label="Klatt"
-             value="klatt" />
-            <combo_box.item
-             name="croak"
-             label="Croak"
-             value="croak" />
-            <combo_box.item
-             name="fast"
-             label="Fast"
-             value="fast" />
-            <combo_box.item
-             name="robosoft"
-             label="RoboSoft"
-             value="robosoft" />
-            <combo_box.item
-             name="demonic"
-             label="Demonic"
-             value="demonic" />
-            <combo_box.item
-             name="storm"
-             label="Storm"
-             value="storm" />
-            <combo_box.item
-             name="grandma"
-             label="Grandma"
-             value="grandma" />
-            <combo_box.item
-             name="grandpa"
-             label="Grandpa"
-             value="grandpa" />
-         </combo_box>
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="15"
-         name="espeak_speed_label"
-         width="200"
-         top_pad="10">
-            Speed (words per minute):
-        </text>
-        <spinner
-         control_name="FSChatTTSEspeakSpeed"
+        <line_editor
+         control_name="FSVoiceBoxVoiceName"
          follows="left|top"
          height="20"
-         increment="5"
          layout="topleft"
          left="20"
-         max_val="450"
-         min_val="80"
-         name="espeak_speed_spinner"
+         name="voicebox_voice_name"
          top_pad="-2"
-         width="100" />
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="140"
-         height="15"
-         name="espeak_pitch_label"
-         width="200"
-         top_delta="0">
-           Pitch (0-99):
-        </text>
-        <spinner
-         control_name="FSChatTTSEspeakPitch"
-         follows="left|top"
-         height="20"
-         increment="1"
-         layout="topleft"
-         left="140"
-         max_val="99"
-         min_val="0"
-         name="espeak_pitch_spinner"
-         top_pad="-2"
-         width="100" />
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="20"
-         height="15"
-         name="espeak_amplitude_label"
-         width="200"
-         top_pad="10">
-           Amplitude (0-200):
-        </text>
-        <spinner
-         control_name="FSChatTTSEspeakAmplitude"
-         follows="left|top"
-         height="20"
-         increment="5"
-         layout="topleft"
-         left="20"
-         max_val="200"
-         min_val="0"
-         name="espeak_amplitude_spinner"
-         top_pad="-2"
-         width="100" />
-
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         layout="topleft"
-         left="140"
-         height="15"
-         name="espeak_wordgap_label"
-         width="200"
-         top_delta="0">
-           Word gap (10ms units):
-        </text>
-        <spinner
-         control_name="FSChatTTSEspeakWordGap"
-         follows="left|top"
-         height="20"
-         increment="1"
-         layout="topleft"
-         left="140"
-         max_val="100"
-         min_val="0"
-         name="espeak_wordgap_spinner"
-         top_pad="-2"
-         width="100" />
+         width="200" />
 
         <text
          type="string"
@@ -2212,7 +1962,7 @@ Hover your mouse cursor over UUID field to show its default value.
          name="voicebox_tts_note"
          top_pad="10"
          width="480">
-           Reads nearby chat and IMs aloud.
+           Reads nearby chat and IMs aloud via Voicebox. Start Voicebox with: voicebox serve
          </text>
 
     </panel>

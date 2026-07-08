@@ -1474,6 +1474,30 @@
             <integer>0</integer>
         </map>
 
+    <key>FSVoiceBoxServerURL</key>
+        <map>
+            <key>Comment</key>
+            <string>Voicebox server URL (e.g. http://127.0.0.1:17493)</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>String</string>
+            <key>Value</key>
+            <string>http://127.0.0.1:17493</string>
+        </map>
+
+    <key>FSVoiceBoxVoiceName</key>
+        <map>
+            <key>Comment</key>
+            <string>Voicebox voice profile name (leave empty for default)</string>
+            <key>Persist</key>
+            <integer>1</integer>
+            <key>Type</key>
+            <string>String</string>
+            <key>Value</key>
+            <string></string>
+        </map>
+
     <key>FSChatTTSEspeakVoice</key>
         <map>
             <key>Comment</key>
