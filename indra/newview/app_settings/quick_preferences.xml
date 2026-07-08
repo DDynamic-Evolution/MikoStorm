@@ -65,7 +65,7 @@
      translation_id="QP Name Tags" />
     <entries
      control_name="FSHideLocalChat"
-     control_type="0"
+     control_type="4"
      increment="0"
      integer="0"
      label="Hide Local Chat"
