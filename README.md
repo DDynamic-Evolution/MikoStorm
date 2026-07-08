@@ -1,4 +1,6 @@
 ### MikoStorm - A Second Life Viewer 
+[Download v1.0.15.5 (Installer)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.0.15.5/MikoStorm-MikoStorm-Release_AVX2-1-0-15-5_Setup.exe)
+
 This is an experimental and privacy focused viewer.
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life.
 The client codebase has been open source since 2007 and is available under the LGPL license

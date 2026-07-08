@@ -595,40 +595,7 @@
          name="enable_voice_check_volume"
          width="110"/>
 
-        <slider
-         control_name="AudioLevelTTS"
-         disabled_control="MuteAudio"
-         follows="left|top"
-         height="15"
-         increment="0.025"
-         initial_value="0.5"
-         label="Text-to-Speech (eSpeak)"
-         label_width="120"
-         layout="topleft"
-         left="0"
-         name="TTS Volume"
-         show_text="false"
-         slider_label.halign="right"
-         top_pad="2"
-         volume="true"
-         width="300">
-            <slider.commit_callback
-             function="Pref.setControlFalse"
-             parameter="MuteTTS" />
-        </slider>
-        <button
-         control_name="MuteTTS"
-         disabled_control="MuteAudio"
-         follows="top|left"
-         height="16"
-         image_selected="AudioMute_Off"
-         image_unselected="Audio_Off"
-         is_toggle="true"
-         layout="topleft"
-         left_pad="5"
-         name="mute_audio"
-         tab_stop="false"
-         width="16" />
+
 
         <text
          type="string"
