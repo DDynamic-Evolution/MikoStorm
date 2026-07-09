@@ -29,6 +29,10 @@ out vec4 frag_color;
 
 uniform sampler2D diffuseRect;
 
+uniform sampler3D color_grading_lut;
+uniform float color_grading_lut_intensity;
+uniform int color_grading_lut_enabled;
+
 in vec2 vary_fragcoord;
 
 #ifdef GAMMA_CORRECT
@@ -60,6 +64,16 @@ void main()
 #else
     diff.rgb = clamp(diff.rgb, vec3(0.0), vec3(1.0));
 #endif
+
+    if (color_grading_lut_enabled != 0)
+    {
+        float lut_size = 33.0;
+        float scale = (lut_size - 1.0) / lut_size;
+        float offset = 0.5 / lut_size;
+        vec3 coord = clamp(diff.rgb, 0.0, 1.0) * scale + offset;
+        vec3 lut_color = texture(color_grading_lut, coord).rgb;
+        diff.rgb = mix(diff.rgb, lut_color, color_grading_lut_intensity);
+    }
 
 #ifdef GAMMA_CORRECT
     diff.rgb = linear_to_srgb(diff.rgb);

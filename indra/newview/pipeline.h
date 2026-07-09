@@ -107,6 +107,9 @@ public:
     void releaseGLBuffers();
     void releaseLUTBuffers();
     void releaseScreenBuffers();
+    void releaseColorGradingLUT();
+    void createColorGradingLUTBuffers();
+    bool loadColorGradingLUT(const std::string& filename);
     void releaseShadowBuffers();
 
     void createGLBuffers();
@@ -819,6 +822,11 @@ public:
     static const U32 MAX_PREVIEW_WIDTH;
     static const U32 MAX_PREVIEW_HEIGHT; // <FS:Beq/> dedicated render target for previews
 
+    // color grading 3D LUT
+    U32                         mColorGradingLUT = 0;
+    std::string                 mCurrentLUTName;
+    bool                        mColorGradingEnabled;
+
     //texture for making the glow
     LLRenderTarget              mGlow[3];
 
@@ -1120,6 +1128,8 @@ public:
     static bool RenderGlowNoise;
     static bool RenderDepthOfField;
     static bool RenderDepthOfFieldInEditMode;
+    static bool RenderDepthOfFieldFront;
+    static bool RenderDepthOfFieldChroma;
     // <FS:Beq> FIRE-16728
     static bool FSFocusPointLocked;
     static bool FSFocusPointFollowsPointer;
@@ -1145,6 +1155,7 @@ public:
     static F32 RenderEdgeNormCutoff;
     static LLVector3 RenderShadowGaussian;
     static F32 RenderShadowBlurDistFactor;
+    static F32 RenderShadowSoftness;
     static bool RenderDeferredAtmospheric;
     static F32 RenderHighlightFadeTime;
     static F32 RenderFarClip;

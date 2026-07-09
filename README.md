@@ -57,3 +57,10 @@ The client codebase has been open source since 2007 and is available under the L
 - [Linux](doc/building_linux.md)
 - [Windows](doc/building_windows.md)
 - No Support for Mac/Darwin
+
+## Changelog
+
+### v1.0.15.7 - Rendering Features
+- **DoF Extras** — Added `RenderDepthOfFieldFront` (foreground blur) and `RenderDepthOfFieldChroma` (DoF-coupled chromatic aberration) settings. Toggle in Advanced Graphics or settings.xml.
+- **Shadow Softness** — New `RenderShadowSoftness` setting (F32, default 1.0). Scales PCF shadow sample tap radius; values > 1.0 produce softer shadows.
+- **3D Color Grading LUT** — Load .cube LUT files from `app_settings/luts/` via `RenderColorGradingLUTName` and blend with `RenderColorGradingLUTIntensity`. 7 bundled LUTs: cinematic, cold_war, cool, film_noir, sepia, teal_orange, warm.
