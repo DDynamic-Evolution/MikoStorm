@@ -12509,6 +12509,29 @@ Change of this parameter will affect the layout of buttons in notification toast
       <real>1.0</real>
   </map>
 
+  <key>AYAVisualRealismEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>View Mode (2 = Cinematic/BD engine). Used by the cinematic overlay to apply BD-parity defaults.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
+  <key>AYACinematicOverlayApplied</key>
+  <map>
+    <key>Comment</key>
+    <string>Sentinel: settings_cinematic_bd.xml has been applied this session.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
   <key>RenderDeferred</key>
   <map>
     <key>Comment</key>

@@ -64,6 +64,7 @@
 #include "llurlfloaterdispatchhandler.h"
 #include "llviewerjoystick.h"
 #include "llcalc.h"
+#include "llcinematicoverlay.h"
 #include "llconversationlog.h"
 #if LL_WINDOWS
 #include "lldxhardware.h"
@@ -3284,6 +3285,12 @@ bool LLAppViewer::initConfiguration()
     // <FS:AO> Re-read user settings again. This is a Firestorm hack to get user settings to override modes
     //Todo, find a cleaner way of doing this via the various set_default arguments.
     loadSettingsFromDirectory("User");
+
+    // <FS:AYA> Apply BD-parity overlay after all settings layers are loaded
+    // (Default -> Session -> User). Only fires when AYAVisualRealismEnabled == 2
+    // and AYACinematicOverlayApplied sentinel is unset.
+    LLCinematicOverlay::applyCinematicOverlayIfNeeded();
+    // </FS:AYA>
 
     // <FS:Ansariel> Debug setting to disable log throttle
     nd::logging::setThrottleEnabled(gSavedSettings.getBOOL("FSEnableLogThrottle"));
