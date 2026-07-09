@@ -28,6 +28,7 @@
 #include "fsposeranimator.h"
 #include "fsvirtualtrackpad.h"
 #include "llagent.h"
+#include "llagentui.h"
 #include "llappviewer.h"
 #include "llavatarnamecache.h"
 #include "llcheckboxctrl.h"
@@ -40,15 +41,18 @@
 #include "llnotificationsutil.h"
 #include "llscrolllistctrl.h"
 #include "llsdserialize.h"
+#include "llslurl.h"
 #include "llsliderctrl.h"
 #include "llstring.h"
 #include "lltabcontainer.h"
 #include "lltoolcomp.h"
 #include "llviewercontrol.h"
+#include "llviewermessage.h"
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwindow.h"
 #include "v4color.h"
+#include "lltrans.h"
 
 namespace
 {
@@ -71,6 +75,7 @@ constexpr std::string_view POSER_UNLOCKPELVISINBVH_SAVE_KEY    = "FSPoserPelvisU
 constexpr std::string_view POSER_SHOWBONEHIGHLIGHTS_SAVE_KEY   = "FSManipShowJointMarkers";
 constexpr char             ICON_SAVE_OK[]                      = "icon_rotation_is_own_work";
 constexpr char             ICON_SAVE_FAILED[]                  = "icon_save_failed_button";
+constexpr std::string_view POSER_PERMISSIONS_SAVE_FILE         = "poser_permissions.xml";
 
 }  // namespace
 
@@ -82,6 +87,8 @@ constexpr F32 NormalTrackpadRangeInRads = F_PI;
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
+    loadPermissionMap();
+
     // Bind requests, other controls are find-and-binds, see postBuild()
     mCommitCallbackRegistrar.add("Poser.RefreshAvatars", [this](LLUICtrl*, const LLSD&) { onAvatarsRefresh(); });
     mCommitCallbackRegistrar.add("Poser.StartStopAnimating", [this](LLUICtrl*, const LLSD&) { onPoseStartStop(); });
@@ -405,6 +412,7 @@ void FSFloaterPoser::onClose(bool app_quitting)
         stopPosingAllAvatars();
     }
 
+    savePermissionMap();
     disableVisualManipulators();
     delete mLoadPoseTimer;
     LLFloater::onClose(app_quitting);
@@ -1510,7 +1518,127 @@ bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar* avatar) cons
     if (!avatar || avatar->isDead())
         return false;
 
-    return true;
+    if (avatar->isSelf())
+        return true;
+
+    return isPermissionGranted(avatar->getID());
+}
+
+bool FSFloaterPoser::isPermissionGranted(const LLUUID& avatarId) const
+{
+    auto it = mPermissionMap.find(avatarId);
+    return it != mPermissionMap.end() && it->second;
+}
+
+bool FSFloaterPoser::hasPendingRequest(const LLUUID& avatarId) const
+{
+    return mPendingRequestId == avatarId;
+}
+
+void FSFloaterPoser::sendAnimationRequest(const LLUUID& targetId)
+{
+    if (targetId.isNull())
+        return;
+
+    LLAvatarName av_name;
+    if (!LLAvatarNameCache::get(targetId, &av_name))
+        return;
+
+    mPendingRequestId = targetId;
+
+    std::string requesterName;
+    LLAgentUI::buildFullname(requesterName);
+
+    std::string msg = llformat("[AnimationRequest] %s wants to animate you. Reply 'yes' to allow or 'no' to deny.",
+                               requesterName.c_str());
+
+    send_simple_im(targetId, msg);
+
+    mRightStartStopBtn->setLabel(tryGetString("CancelRequestLabel"));
+
+    populateRightAvatarList();
+}
+
+void FSFloaterPoser::cancelAnimationRequest()
+{
+    if (mPendingRequestId.isNull())
+        return;
+
+    mPendingRequestId.setNull();
+    mRightStartStopBtn->setLabel(tryGetString("StartPoseLabel"));
+    populateRightAvatarList();
+}
+
+void FSFloaterPoser::handleIMReply(const LLUUID& fromId, const std::string& message)
+{
+    if (mPendingRequestId != fromId)
+        return;
+
+    mPendingRequestId.setNull();
+
+    std::string lower = message;
+    LLStringUtil::toLower(lower);
+    LLStringUtil::trim(lower);
+
+    if (lower == "yes" || lower == "y" || lower == "ja")
+    {
+        mPermissionMap[fromId] = true;
+        mRightStartStopBtn->setLabel(tryGetString("StartPoseLabel"));
+
+        LLVOAvatar* avatar = getAvatarByUuid(fromId);
+        if (avatar)
+        {
+            mPoserAnimator.tryPosingAvatar(avatar);
+            mRightStartStopBtn->setValue(true);
+        }
+
+        savePermissionMap();
+        populateRightAvatarList();
+    }
+    else if (lower == "no" || lower == "n" || lower == "nein")
+    {
+        LLSD args;
+        args["NAME"] = LLSLURL("agent", fromId, "completename").getSLURLString();
+        LLNotificationsUtil::add("AnimationPermissionDenied", args);
+        mRightStartStopBtn->setLabel(tryGetString("StartPoseLabel"));
+        populateRightAvatarList();
+    }
+}
+
+void FSFloaterPoser::loadPermissionMap()
+{
+    mPermissionMap.clear();
+    std::string path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSER_PERMISSIONS_SAVE_FILE));
+    llifstream file(path.c_str());
+    if (!file.is_open())
+        return;
+
+    LLSD data;
+    if (LLSDParser::PARSE_FAILURE != LLSDSerialize::fromXML(data, file))
+    {
+        for (LLSD::map_const_iterator it = data.beginMap(); it != data.endMap(); ++it)
+        {
+            LLUUID id(it->first);
+            mPermissionMap[id] = it->second.asBoolean();
+        }
+    }
+}
+
+void FSFloaterPoser::savePermissionMap() const
+{
+    LLSD data;
+    for (const auto& entry : mPermissionMap)
+    {
+        data[entry.first.asString()] = entry.second;
+    }
+
+    std::string path = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, std::string(POSER_PERMISSIONS_SAVE_FILE));
+    llofstream file(path.c_str());
+    if (file.is_open())
+    {
+        LLSDSerialize::toPrettyXML(data, file);
+        file.close();
+    }
 }
 
 void FSFloaterPoser::poseControlsEnable(bool enable)
@@ -2753,6 +2881,13 @@ void FSFloaterPoser::onRightAvatarSelect()
     mRightStartStopBtn->setEnabled(true);
     mRightStartStopBtn->setValue(isPosing);
 
+    if (hasPendingRequest(mRightSelectedAvatarId))
+        mRightStartStopBtn->setLabel(tryGetString("CancelRequestLabel"));
+    else if (isPosing)
+        mRightStartStopBtn->setLabel(tryGetString("StopPoseLabel"));
+    else
+        mRightStartStopBtn->setLabel(tryGetString("StartPoseLabel"));
+
     FSToolCompPose::getInstance()->setAvatar(avatar);
     FSToolCompPoseTranslate::getInstance()->setAvatar(avatar);
     setVisualManipulators(avatar);
@@ -2780,8 +2915,21 @@ void FSFloaterPoser::onRightStartStopPose()
     }
     else
     {
-        mPoserAnimator.tryPosingAvatar(avatar);
-        mRightStartStopBtn->setValue(true);
+        if (hasPendingRequest(mRightSelectedAvatarId))
+        {
+            cancelAnimationRequest();
+            return;
+        }
+
+        if (isPermissionGranted(mRightSelectedAvatarId))
+        {
+            mPoserAnimator.tryPosingAvatar(avatar);
+            mRightStartStopBtn->setValue(true);
+        }
+        else
+        {
+            sendAnimationRequest(mRightSelectedAvatarId);
+        }
     }
 }
 
@@ -2804,6 +2952,9 @@ void FSFloaterPoser::populateRightAvatarList()
         if (avatar->isControlAvatar())
             continue;
 
+        if (avatar->isSelf())
+            continue;
+
         if (LLMuteList::getInstance()->isMuted(avatar->getID()))
             continue;
 
@@ -2818,16 +2969,23 @@ void FSFloaterPoser::populateRightAvatarList()
         if (!LLAvatarNameCache::get(avatar->getID(), &av_name))
             continue;
 
+        LLUUID id = avatar->getID();
+        std::string icon = "";
+        if (isPermissionGranted(id))
+            icon = tryGetString("icon_permission_granted");
+        else if (hasPendingRequest(id))
+            icon = tryGetString("icon_permission_pending");
+
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
-        row["columns"][COL_ICON]["value"]  = "";
+        row["columns"][COL_ICON]["value"]  = icon;
         row["columns"][COL_NAME]["column"] = "name";
         row["columns"][COL_NAME]["value"]  = av_name.getDisplayName();
         row["columns"][COL_UUID]["column"] = "uuid";
-        row["columns"][COL_UUID]["value"]  = avatar->getID();
+        row["columns"][COL_UUID]["value"]  = id;
         row["columns"][COL_SAVE]["column"] = "saveFileName";
         row["columns"][COL_SAVE]["value"]  = "";
-        row["value"]                       = avatar->getID();
+        row["value"]                       = id;
         mRightAvatarList->addElement(row, ADD_BOTTOM);
     }
 

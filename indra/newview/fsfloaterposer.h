@@ -559,6 +559,17 @@ public:
     LLButton* mRightStartStopBtn{ nullptr };
     LLUUID mRightSelectedAvatarId;
 
+    // Animation permission system
+    void sendAnimationRequest(const LLUUID& targetId);
+    void cancelAnimationRequest();
+    void handleIMReply(const LLUUID& fromId, const std::string& message);
+    bool isPermissionGranted(const LLUUID& avatarId) const;
+    bool hasPendingRequest(const LLUUID& avatarId) const;
+    void loadPermissionMap();
+    void savePermissionMap() const;
+    std::map<LLUUID, bool> mPermissionMap;
+    LLUUID mPendingRequestId;
+
     LLLineEditor* mPoseSaveNameEditor{ nullptr };
 
     FSLoadPoseTimer* mLoadPoseTimer;

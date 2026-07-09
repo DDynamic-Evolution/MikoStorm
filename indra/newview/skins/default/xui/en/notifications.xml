@@ -14956,6 +14956,15 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
   </notification>
 
   <notification
+   name="AnimationPermissionDenied"
+   type="alertmodal">
+    <unique/>
+    [NAME] has denied your animation request.
+    <tag>confirm</tag>
+    <usetemplate name="okbuttons"/>
+  </notification>
+
+  <notification
    icon="notifytip.tga"
    name="FSLargeOutfitsWarningInThisSession"
    type="alertmodal">
