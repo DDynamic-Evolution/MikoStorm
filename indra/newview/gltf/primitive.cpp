@@ -721,7 +721,7 @@ void Primitive::createOctree()
 
     else
     {
-        LL_ERRS() << "Unsupported Primitive mode" << LL_ENDL;
+        LL_WARNS() << "Unsupported Primitive mode" << LL_ENDL;
     }
 
     //remove unneeded octree layers

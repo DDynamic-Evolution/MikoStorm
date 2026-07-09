@@ -114,14 +114,17 @@ void main()
 		float PI = 3.14159265358979323846264;
   //int its = 64;
 		// sample quite uniformly spaced points within a circle, for a circular 'bokeh'
+	// GPU-TDR safety: cap scatter circle to prevent excessive iterations on high max_cof values
+	float sample_sc = min(abs(sc), 64.0);
 #if FRONT_BLUR
 		if (sc > 0.5)
 		{
+			sc = min(sc, 64.0);
 			// Apple Silicon Metal safety: bound the loop in case sc becomes NaN
 			// (NaN > 0.5 is always false on conformant GL but undefined under Metal emulation).
 			for (int safety = 0; safety < 32 && sc > 0.5; ++safety)
 			{
-				int its = int(max(1.0,(sc*3.7)));
+				int its = int(max(1.0, min(sc*3.7, 128.0)));
 				for (int i=0; i<its; ++i)
 				{
 					float ang = sc+i*2*PI/its; // sc is added for rotary perturbance
@@ -139,10 +142,11 @@ void main()
 #endif
 		{
 			sc = abs(sc);
+			sc = min(sc, 64.0);
 			// Apple Silicon Metal safety: bounded loop (see comment above).
 			for (int safety = 0; safety < 32 && sc > 0.5; ++safety)
 			{
-				int its = int(max(1.0,(sc*3.7)));
+				int its = int(max(1.0, min(sc*3.7, 128.0)));
 				for (int i=0; i<its; ++i)
 				{
 					float ang = sc+i*2*PI/its; // sc is added for rotary perturbance
