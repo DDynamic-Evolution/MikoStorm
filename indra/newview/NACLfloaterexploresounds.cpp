@@ -14,7 +14,7 @@
 #include "llviewerregion.h"
 #include "fsassetblacklist.h"
 #include "fscommon.h"
-#include "pvextras.h"
+#include "pvassets.h"
 #include "rlvhandler.h"
 
 constexpr size_t num_collision_sounds = 28;
@@ -106,7 +106,7 @@ void NACLFloaterExploreSounds::handleSelection()
     childSetEnabled("block_avatar_worn_sounds_btn", num_selected);
     childSetEnabled("block_avatar_rezzed_sounds_btn", num_selected);
     childSetEnabled("block_avatar_gesture_sounds_btn", num_selected);
-    childSetEnabled("copy_uuid_btn", (num_selected && !multiple) && pv_check_flag(PV_BYPASS_EXPORT_PERMS));
+    childSetEnabled("copy_uuid_btn", (num_selected && !multiple));
 }
 
 LLSoundHistoryItem NACLFloaterExploreSounds::getItem(const LLUUID& itemID) const
