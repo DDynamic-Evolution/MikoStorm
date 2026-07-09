@@ -1363,7 +1363,6 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("shadow_clip");
     mReservedUniforms.push_back("sun_wash");
     mReservedUniforms.push_back("shadow_noise");
-    mReservedUniforms.push_back("shadow_softness");
     mReservedUniforms.push_back("blur_size");
     mReservedUniforms.push_back("ssao_radius");
     mReservedUniforms.push_back("ssao_max_radius");
@@ -1383,8 +1382,9 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("depth_cutoff");
     mReservedUniforms.push_back("norm_cutoff");
     mReservedUniforms.push_back("shadow_target_width");
+    mReservedUniforms.push_back("shadow_softness");
 
-    llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_SHADOW_TARGET_WIDTH + 1);
+    llassert(mReservedUniforms.size() == LLShaderMgr::DEFERRED_SHADOW_SOFTNESS + 1);
 
     mReservedUniforms.push_back("iterationCount");
     mReservedUniforms.push_back("rayStep");
@@ -1411,6 +1411,10 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("res_scale");
     mReservedUniforms.push_back("dof_width");
     mReservedUniforms.push_back("dof_height");
+    mReservedUniforms.push_back("chroma_str");
+    mReservedUniforms.push_back("color_grading_lut");
+    mReservedUniforms.push_back("color_grading_lut_intensity");
+    mReservedUniforms.push_back("color_grading_lut_enabled");
 
     mReservedUniforms.push_back("depthMap");
     mReservedUniforms.push_back("shadowMap0");
@@ -1561,12 +1565,6 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("border_thickness");
     mReservedUniforms.push_back("frame_rect");
     // </FS:Beq>
-
-    // <FS:AYA> 3D color grading LUT
-    mReservedUniforms.push_back("color_grading_lut");
-    mReservedUniforms.push_back("color_grading_lut_intensity");
-    mReservedUniforms.push_back("color_grading_lut_enabled");
-    // </FS:AYA>
 
     llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

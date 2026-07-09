@@ -209,6 +209,8 @@ public:
         DOF_WIDTH,                          //  "dof_width"
         DOF_HEIGHT,                         //  "dof_height"
 
+        DOF_CHROMA_STRENGTH,                //  "chroma_str"
+
         COLOR_GRADING_LUT,                  //  "color_grading_lut"
         COLOR_GRADING_LUT_INTENSITY,        //  "color_grading_lut_intensity"
         COLOR_GRADING_LUT_ENABLED,          //  "color_grading_lut_enabled"
