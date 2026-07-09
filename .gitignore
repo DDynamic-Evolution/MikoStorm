@@ -132,8 +132,9 @@ firestorm.code-workspace
 
 checks.json
 
-# Build artifacts at project root
-newview/
+# newview/ — removed because it also ignores tracked files under
+# indra/newview/app_settings/luts/ and shaders/. Specific ignores
+# for generated files are listed above under "indra/newview/...".
 
 # Hermes agent files
 AGENTS.md
