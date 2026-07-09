@@ -2815,7 +2815,21 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         gDeferredPostProgram.mFeatures.isDeferred = true;
         gDeferredPostProgram.mShaderFiles.clear();
         gDeferredPostProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER));
-        gDeferredPostProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredF.glsl", GL_FRAGMENT_SHADER));
+        gDeferredPostProgram.clearPermutations();
+
+        static LLCachedControl<bool> hq_dof(gSavedSettings, "RenderDepthOfFieldHighQuality", true);
+        gDeferredPostProgram.mShaderFiles.push_back(make_pair(
+            hq_dof ? "deferred/postDeferredHQDoFF.glsl" : "deferred/postDeferredF.glsl",
+            GL_FRAGMENT_SHADER));
+
+        static LLCachedControl<bool> dof_chroma(gSavedSettings, "RenderDepthOfFieldChroma", true);
+        if (dof_chroma)
+            gDeferredPostProgram.addPermutation("HAS_DOF_CHROMA", "1");
+
+        static LLCachedControl<bool> dof_front(gSavedSettings, "RenderDepthOfFieldFront", true);
+        if (dof_front)
+            gDeferredPostProgram.addPermutation("FRONT_BLUR", "1");
+
         gDeferredPostProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
         success = gDeferredPostProgram.createShader();
         llassert(success);
@@ -2850,8 +2864,14 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         gDeferredPostNoDoFProgram.mName = "Deferred Post NoDoF Shader";
         gDeferredPostNoDoFProgram.mFeatures.isDeferred = true;
         gDeferredPostNoDoFProgram.mShaderFiles.clear();
+        gDeferredPostNoDoFProgram.clearPermutations();
         gDeferredPostNoDoFProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER));
         gDeferredPostNoDoFProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoDoFF.glsl", GL_FRAGMENT_SHADER));
+
+        static LLCachedControl<bool> dof_chroma_nodof(gSavedSettings, "RenderDepthOfFieldChroma", true);
+        if (dof_chroma_nodof)
+            gDeferredPostNoDoFProgram.addPermutation("HAS_DOF_CHROMA", "1");
+
         gDeferredPostNoDoFProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
         success = gDeferredPostNoDoFProgram.createShader();
         llassert(success);
@@ -2867,6 +2887,10 @@ bool LLViewerShaderMgr::loadShadersDeferred()
 
         gDeferredPostNoDoFNoiseProgram.clearPermutations();
         gDeferredPostNoDoFNoiseProgram.addPermutation("HAS_NOISE", "1");
+
+        static LLCachedControl<bool> dof_chroma_noise(gSavedSettings, "RenderDepthOfFieldChroma", true);
+        if (dof_chroma_noise)
+            gDeferredPostNoDoFNoiseProgram.addPermutation("HAS_DOF_CHROMA", "1");
 
         gDeferredPostNoDoFNoiseProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
         success = gDeferredPostNoDoFNoiseProgram.createShader();
