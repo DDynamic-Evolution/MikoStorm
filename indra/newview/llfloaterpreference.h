@@ -153,6 +153,8 @@ protected:
     void onAvatarImpostorsEnable();
     // <FS:AO> callback for local lights toggle
     void onLocalLightsEnable();
+    // callback to reset a setting to its default value
+    void onResetSetting(const LLSD& data);
 
     // callback for commit in the "Single click on land" and "Double click on land" comboboxes.
     void onClickActionChange();
