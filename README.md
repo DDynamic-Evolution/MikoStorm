@@ -1,7 +1,7 @@
 # MikoStorm - A Second Life Viewer 
 [Download v1.0.15.7 (Installer)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.0.15.7/MikoStorm-MikoStorm-Release_AVX2-1-0-15-7_Setup.exe)
 
-This is an experimental and privacy focused viewer.
+This is an experimental viewer.
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life.
 The client codebase has been open source since 2007 and is available under the LGPL license
 
@@ -22,6 +22,7 @@ The client codebase has been open source since 2007 and is available under the L
   - Prim name included in notifications
   - Settings: Stream3DShowToast, Stream3DChatNotify, Stream3DChatChannel
   - New "3D Stream" preferences subtab with all controls
+  - LL Servers are not influenced by this
 - **Script bulk upload** Specially made for scripter who want to upload their script repositories to SL.
 - **Automated Photogrammetry Capture** Orbits the camera around the focus target (avatar, object, or another avatar) and saves PNG images for photogrammetry reconstruction. Access via the dock button (camera+gear icon) or command `photogrammetry`.
 - **Open Source3D Stream Audio** Positional streaming audio from prims with multi-speaker / 5.1ch support
@@ -42,9 +43,7 @@ The client codebase has been open source since 2007 and is available under the L
 - Custom and definable login page (Done!)
 - Latest original code merged.
 - Removed Social Links
-- **Version System** — Manual version control via VIEWER_VERSION_FS.txt (no automatic git commit count)
-- **Custom Icon** — MikoStorm_icon.png replaces all default viewer icons
-- **MCP Server (linux only) buildflag --mcp** — Model Context Protocol (JSON-RPC 2.0) HTTP server on `localhost:13231` for AI assistants (Claude Desktop, Cursor, etc.)
+- **MCP Server buildflag --mcp** — Model Context Protocol (JSON-RPC 2.0) HTTP server on `localhost:13231` for AI assistants (Claude Desktop, Cursor, etc.)
   - Tools: `chat_say`, `chat_shout`, `avatar_sit/stand`, `avatar_walk_to`, `avatar_teleport`, `avatar_fly`, `get_position`, `get_region_info`, `get_nearby_agents`, `notecard_write`, `inventory_list`
   - Resources: `mikostorm://position`, `mikostorm://region`, `mikostorm://nearby`
   - Optional Bearer token auth, localhost-only binding, disabled by default
