@@ -2,6 +2,8 @@
 <panel label="Grafik" name="Display panel">
 <tab_container label="Graphics Prefs" name="tabs">
 	<panel label="Allgemein" name="General">
+		<scroll_container follows="all" name="allgemein_tab_scroll" bottom="-1" right="-1">
+		<panel height="1700" width="524">
 		<text name="preset_label">
 			Aktuelle Voreinstellung:
 		</text>
@@ -135,6 +137,8 @@
 		<button label="Laden" left_pad="5" name="PrefLoadButton" width="72"/>
 		<button label="Löschen" left_pad="5" name="PrefDeleteButton" width="72"/>
 		<button tool_tip="Standardeinstellungen neu laden" name="Defaults"/>
+		</panel>
+		</scroll_container>
 	</panel>
 
 	<panel label="Hardware" name="Hardware Settings">
@@ -188,6 +192,8 @@
 	</panel>
 
 	<panel label="Darstellung" name="Rendering">
+		<scroll_container follows="all" name="darstellung_tab_scroll" bottom="-1" right="-1">
+		<panel height="1700" width="524">
 		<text name="World Updating">
 			Welt-Aktualisierung:
 		</text>
@@ -265,6 +271,8 @@
 			<combo_box.item label="ACES" name="1"/>
 		</combo_box>
 		<slider label="Tone Mapping Mix:" tool_tip="Mix zwischen linearen und tone-gemappten Farben" name="TonemapMix"/>
+		</panel>
+		</scroll_container>
 	</panel>
 	
 	<panel label="Schärfentiefe" name="DOF panel">

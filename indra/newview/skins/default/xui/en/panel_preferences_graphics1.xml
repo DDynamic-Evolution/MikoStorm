@@ -28,8 +28,22 @@
      left="1"
      right="-1"
      follows="all"
-     label="General"
-     name="General" >
+      label="General"
+      name="General" >
+      <scroll_container
+         follows="all"
+         layout="topleft"
+         left="0"
+         top="0"
+         name="general_tab_scroll"
+         bottom="-1"
+         right="-1">
+        <panel
+         height="1700"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="524">
   <text
     follows="top|left|right"
     height="16"
@@ -940,7 +954,9 @@
          <button.commit_callback
           function="Pref.PrefDelete"
           parameter="graphic" />
-        </button>
+         </button>
+        </panel>
+      </scroll_container>
     </panel>
 
 <!--Hardware Settings-->
@@ -1389,8 +1405,22 @@ If you do not understand the distinction then leave this control alone."
      left="1"
      right="-1"
      follows="all"
-     label="Rendering"
-     name="Rendering" >
+      label="Rendering"
+      name="Rendering" >
+      <scroll_container
+         follows="all"
+         layout="topleft"
+         left="0"
+         top="0"
+         name="rendering_tab_scroll"
+         bottom="-1"
+         right="-1">
+        <panel
+         height="1700"
+         layout="topleft"
+         left="0"
+         top="0"
+         width="524">
       <!-- world pauser -->
       <text
          type="string"
@@ -1908,6 +1938,8 @@ If you do not understand the distinction then leave this control alone."
          top_pad="5"
          width="310"/>
         <!-- End of Tone Mapping Settings-->
+        </panel>
+      </scroll_container>
     </panel>
 
 <!--Depth of Field-->
