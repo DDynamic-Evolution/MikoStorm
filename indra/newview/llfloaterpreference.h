@@ -298,6 +298,11 @@ public:
     void setRecommendedSettings();
     void resetAutotuneSettings();
 
+    void onBrowseLUT();
+    void onRemoveLUT();
+    void onLUTFileSelected(const std::vector<std::string>& filenames);
+    void onLUTComboChanged(LLUICtrl* ctrl, const LLSD& value);
+
 private:
 
     void onDeleteTranscripts();
