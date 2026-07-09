@@ -182,6 +182,7 @@ public:
         DEFERRED_NORM_CUTOFF,               //  "norm_cutoff"
         DEFERRED_SHADOW_TARGET_WIDTH,       //  "shadow_target_width"
 
+        DEFERRED_SHADOW_SOFTNESS,            //  "shadow_softness"
         DEFERRED_SSR_ITR_COUNT,             //  "iterationCount"
         DEFERRED_SSR_RAY_STEP,              //  "rayStep"
         DEFERRED_SSR_DIST_BIAS,             //  "distanceBias"
@@ -207,6 +208,10 @@ public:
         DOF_RES_SCALE,                      //  "res_scale"
         DOF_WIDTH,                          //  "dof_width"
         DOF_HEIGHT,                         //  "dof_height"
+
+        COLOR_GRADING_LUT,                  //  "color_grading_lut"
+        COLOR_GRADING_LUT_INTENSITY,        //  "color_grading_lut_intensity"
+        COLOR_GRADING_LUT_ENABLED,          //  "color_grading_lut_enabled"
 
         DEFERRED_DEPTH,                     //  "depthMap"
         DEFERRED_SHADOW0,                   //  "shadowMap0"

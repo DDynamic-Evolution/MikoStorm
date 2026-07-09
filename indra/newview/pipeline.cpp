@@ -190,6 +190,8 @@ F32 LLPipeline::RenderGlowStrength;
 bool LLPipeline::RenderGlowNoise;
 bool LLPipeline::RenderDepthOfField;
 bool LLPipeline::RenderDepthOfFieldInEditMode;
+bool LLPipeline::RenderDepthOfFieldFront;
+bool LLPipeline::RenderDepthOfFieldChroma;
 // <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
 bool LLPipeline::FSFocusPointLocked;
 bool LLPipeline::FSFocusPointFollowsPointer;
@@ -215,6 +217,7 @@ F32 LLPipeline::RenderEdgeDepthCutoff;
 F32 LLPipeline::RenderEdgeNormCutoff;
 LLVector3 LLPipeline::RenderShadowGaussian;
 F32 LLPipeline::RenderShadowBlurDistFactor;
+F32 LLPipeline::RenderShadowSoftness;
 bool LLPipeline::RenderDeferredAtmospheric;
 F32 LLPipeline::RenderHighlightFadeTime;
 F32 LLPipeline::RenderFarClip;
@@ -429,7 +432,8 @@ LLPipeline::LLPipeline() :
     mResetVertexBuffers(false),
     mLastRebuildPool(NULL),
     mLightMask(0),
-    mLightMovingMask(0)
+    mLightMovingMask(0),
+    mColorGradingEnabled(false)
 {
     mNoiseMap = 0;
     mTrueNoiseMap = 0;
@@ -618,6 +622,8 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderGlowNoise");
     connectRefreshCachedSettingsSafe("RenderDepthOfField");
     connectRefreshCachedSettingsSafe("RenderDepthOfFieldInEditMode");
+    connectRefreshCachedSettingsSafe("RenderDepthOfFieldFront");
+    connectRefreshCachedSettingsSafe("RenderDepthOfFieldChroma");
     connectRefreshCachedSettingsSafe("CameraFocusTransitionTime");
     connectRefreshCachedSettingsSafe("CameraFNumber");
     connectRefreshCachedSettingsSafe("CameraFocalLength");
@@ -638,6 +644,7 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderEdgeNormCutoff");
     connectRefreshCachedSettingsSafe("RenderShadowGaussian");
     connectRefreshCachedSettingsSafe("RenderShadowBlurDistFactor");
+    connectRefreshCachedSettingsSafe("RenderShadowSoftness");
     connectRefreshCachedSettingsSafe("RenderDeferredAtmospheric");
     connectRefreshCachedSettingsSafe("RenderHighlightFadeTime");
     connectRefreshCachedSettingsSafe("RenderFarClip");
@@ -661,6 +668,8 @@ void LLPipeline::init()
     connectRefreshCachedSettingsSafe("RenderHeroProbeConservativeUpdateMultiplier");
     connectRefreshCachedSettingsSafe("RenderAvatarCloth");
     connectRefreshCachedSettingsSafe("FSRenderVignette");   // <FS:CR> Import Vignette from Exodus
+    connectRefreshCachedSettingsSafe("RenderColorGradingLUTName");
+    connectRefreshCachedSettingsSafe("RenderColorGradingLUTIntensity");
     // <FS:Ansariel> Make change to RenderAttachedLights & RenderAttachedParticles instant
     connectRefreshCachedSettingsSafe("RenderAttachedLights");
     connectRefreshCachedSettingsSafe("RenderAttachedParticles");
@@ -1229,6 +1238,8 @@ void LLPipeline::refreshCachedSettings()
     RenderGlowNoise = gSavedSettings.getBOOL("RenderGlowNoise");
     RenderDepthOfField = gSavedSettings.getBOOL("RenderDepthOfField");
     RenderDepthOfFieldInEditMode = gSavedSettings.getBOOL("RenderDepthOfFieldInEditMode");
+    RenderDepthOfFieldFront = gSavedSettings.getBOOL("RenderDepthOfFieldFront");
+    RenderDepthOfFieldChroma = gSavedSettings.getBOOL("RenderDepthOfFieldChroma");
     // <FS:Beq> FIRE-16728 Add free aim mouse and focus lock
     FSFocusPointLocked = gSavedSettings.getBOOL("FSFocusPointLocked");
     FSFocusPointFollowsPointer = gSavedSettings.getBOOL("FSFocusPointFollowsPointer");
@@ -1253,6 +1264,7 @@ void LLPipeline::refreshCachedSettings()
     RenderEdgeNormCutoff = gSavedSettings.getF32("RenderEdgeNormCutoff");
     RenderShadowGaussian = gSavedSettings.getVector3("RenderShadowGaussian");
     RenderShadowBlurDistFactor = gSavedSettings.getF32("RenderShadowBlurDistFactor");
+    RenderShadowSoftness = gSavedSettings.getF32("RenderShadowSoftness");
     RenderDeferredAtmospheric = gSavedSettings.getBOOL("RenderDeferredAtmospheric");
     RenderHighlightFadeTime = gSavedSettings.getF32("RenderHighlightFadeTime");
     RenderFarClip = gSavedSettings.getF32("RenderFarClip");
@@ -1322,6 +1334,7 @@ void LLPipeline::releaseGLBuffers()
     }
 
     releaseLUTBuffers();
+    releaseColorGradingLUT();
 
     mWaterDis.release();
 
@@ -1367,6 +1380,87 @@ void LLPipeline::releaseLUTBuffers()
     mLuminanceMap.release();
     mLastExposure.release();
 
+}
+
+void LLPipeline::releaseColorGradingLUT()
+{
+    if (mColorGradingLUT)
+    {
+        LLImageGL::deleteTextures(1, &mColorGradingLUT);
+        mColorGradingLUT = 0;
+    }
+    mCurrentLUTName.clear();
+}
+
+void LLPipeline::createColorGradingLUTBuffers()
+{
+    releaseColorGradingLUT();
+}
+
+bool LLPipeline::loadColorGradingLUT(const std::string& filename)
+{
+    releaseColorGradingLUT();
+
+    if (filename.empty())
+        return true;
+
+    std::string path = filename;
+    if (!gDirUtilp->fileExists(path))
+        path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "luts", filename);
+
+    llifstream file(path.c_str());
+    if (!file.is_open())
+    {
+        LL_WARNS("LUT") << "Failed to open LUT file: " << path << LL_ENDL;
+        return false;
+    }
+
+    int lut_size = 0;
+    std::vector<float> lut_data;
+    std::string line;
+
+    while (std::getline(file, line))
+    {
+        if (line.empty() || line[0] == '#') continue;
+        if (line.substr(0, 12) == "LUT_3D_SIZE ")
+        {
+            lut_size = std::stoi(line.substr(12));
+            lut_data.reserve((size_t)lut_size * lut_size * lut_size * 3);
+            continue;
+        }
+        if (lut_size > 0)
+        {
+            float r, g, b;
+            if (sscanf(line.c_str(), "%f %f %f", &r, &g, &b) == 3)
+            {
+                lut_data.push_back(r);
+                lut_data.push_back(g);
+                lut_data.push_back(b);
+            }
+        }
+    }
+
+    if (lut_size <= 0 || (int)lut_data.size() != lut_size * lut_size * lut_size * 3)
+    {
+        LL_WARNS("LUT") << "Invalid LUT file (size=" << lut_size
+            << " entries=" << lut_data.size() << "): " << path << LL_ENDL;
+        return false;
+    }
+
+    LLImageGL::generateTextures(1, &mColorGradingLUT);
+    gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE_3D, mColorGradingLUT);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F,
+        lut_size, lut_size, lut_size, 0, GL_RGB, GL_FLOAT, lut_data.data());
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE_3D);
+
+    mCurrentLUTName = filename;
+    LL_INFOS("LUT") << "Loaded color grading LUT: " << path << LL_ENDL;
+    return true;
 }
 
 void LLPipeline::releaseShadowBuffers()
@@ -1552,6 +1646,7 @@ void LLPipeline::createGLBuffers()
     }
 
     createLUTBuffers();
+    createColorGradingLUTBuffers();
 
     gBumpImageList.restoreGL();
 }
@@ -7888,9 +7983,25 @@ void LLPipeline::tonemap(LLRenderTarget* src, LLRenderTarget* dst, bool gamma_co
         shader->uniform1i(tonemap_type, tonemap_type_setting);
         shader->uniform1f(tonemap_mix, psky->getTonemapMix(should_auto_adjust()));
 
+        // Reload 3D LUT if setting changed
+        {
+            const std::string lut_name = gSavedSettings.getString("RenderColorGradingLUTName");
+            if (lut_name != mCurrentLUTName)
+                loadColorGradingLUT(lut_name);
+        }
+
+        S32 lut_channel = shader->enableTexture(LLShaderMgr::COLOR_GRADING_LUT, LLTexUnit::TT_TEXTURE_3D);
+        if (lut_channel > -1 && mColorGradingLUT)
+            gGL.getTexUnit(lut_channel)->bindManual(LLTexUnit::TT_TEXTURE_3D, mColorGradingLUT);
+        shader->uniform1i(LLShaderMgr::COLOR_GRADING_LUT_ENABLED, (mColorGradingLUT != 0) ? 1 : 0);
+        shader->uniform1f(LLShaderMgr::COLOR_GRADING_LUT_INTENSITY,
+            gSavedSettings.getF32("RenderColorGradingLUTIntensity"));
+
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
 
+        if (lut_channel > -1)
+            gGL.getTexUnit(lut_channel)->unbind(LLTexUnit::TT_TEXTURE_3D);
         gGL.getTexUnit(channel)->unbind(src->getUsage());
         shader->unbind();
     }
@@ -9280,6 +9391,7 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, LLRenderTarget* light_
     }
     shader.uniform1f(LLShaderMgr::DEFERRED_SUN_WASH, RenderDeferredSunWash);
     shader.uniform1f(LLShaderMgr::DEFERRED_SHADOW_NOISE, RenderShadowNoise);
+    shader.uniform1f(LLShaderMgr::DEFERRED_SHADOW_SOFTNESS, RenderShadowSoftness);
     shader.uniform1f(LLShaderMgr::DEFERRED_BLUR_SIZE, RenderShadowBlurSize);
 
 // <FS:WW> Compute scale factor to match AO appearance between view and snapshot.

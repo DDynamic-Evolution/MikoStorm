@@ -1363,6 +1363,7 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("shadow_clip");
     mReservedUniforms.push_back("sun_wash");
     mReservedUniforms.push_back("shadow_noise");
+    mReservedUniforms.push_back("shadow_softness");
     mReservedUniforms.push_back("blur_size");
     mReservedUniforms.push_back("ssao_radius");
     mReservedUniforms.push_back("ssao_max_radius");
@@ -1560,6 +1561,12 @@ void LLShaderMgr::initAttribsAndUniforms()
     mReservedUniforms.push_back("border_thickness");
     mReservedUniforms.push_back("frame_rect");
     // </FS:Beq>
+
+    // <FS:AYA> 3D color grading LUT
+    mReservedUniforms.push_back("color_grading_lut");
+    mReservedUniforms.push_back("color_grading_lut_intensity");
+    mReservedUniforms.push_back("color_grading_lut_enabled");
+    // </FS:AYA>
 
     llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 
