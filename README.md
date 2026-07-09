@@ -48,7 +48,6 @@ The client codebase has been open source since 2007 and is available under the L
   - Resources: `mikostorm://position`, `mikostorm://region`, `mikostorm://nearby`
   - Optional Bearer token auth, localhost-only binding, disabled by default
   - Settings in Preferences > Network & Files > MCP Server
-  - ** use --nomcp on Windows! **
 
 
 ## Build Instructions
