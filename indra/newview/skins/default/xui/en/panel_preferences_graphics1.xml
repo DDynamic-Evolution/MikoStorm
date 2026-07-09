@@ -338,6 +338,23 @@
            name="2"
            value="2"/>
         </combo_box>
+        <slider
+         control_name="RenderShadowSoftness"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         initial_value="1.0"
+         label="Shadow Softness:"
+         tool_tip="Softness of shadow edges (1.0 = sharp, 3.0 = soft)"
+         label_width="160"
+         layout="topleft"
+         left_delta="-5"
+         min_val="1.0"
+         max_val="3.0"
+         name="ShadowSoftness"
+         top_pad="5"
+         width="310"/>
         <text
          type="string"
          length="1"
@@ -1926,16 +1943,38 @@ If you do not understand the distinction then leave this control alone."
          name="RenderDepthOfFieldInEditMode"
          top_pad="4"
          width="256"/>
-        <check_box
-         control_name="FSFocusPointFollowsPointer"
-         enabled_control="RenderDepthOfField"
-         height="16"
-         label="Depth of Field focus follows pointer"
-         layout="topleft"
-         name="FSFocusPointFollowsPointer"
-         tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
-         top_pad="4"
-         width="256"/>
+         <check_box
+          control_name="FSFocusPointFollowsPointer"
+          enabled_control="RenderDepthOfField"
+          height="16"
+          label="Depth of Field focus follows pointer"
+          layout="topleft"
+          name="FSFocusPointFollowsPointer"
+          tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
+          top_pad="4"
+          width="256"/>
+         <check_box
+          control_name="RenderDepthOfFieldFront"
+          enabled_control="RenderDepthOfField"
+          height="16"
+          label="Front-of-focus blur"
+          layout="topleft"
+          left_delta="18"
+          name="RenderDepthOfFieldFront"
+          tool_tip="Allow objects in front of the focus plane to blur, not just behind. Toggling rebuilds the shader."
+          top_pad="4"
+          width="256"/>
+         <check_box
+          control_name="RenderDepthOfFieldChroma"
+          enabled_control="RenderDepthOfField"
+          height="16"
+          label="DoF chromatic aberration"
+          layout="topleft"
+          left_delta="18"
+          name="RenderDepthOfFieldChroma"
+          tool_tip="Couple chromatic aberration to DoF blur. When off, a screen-edge vignette chroma is used instead. Toggling rebuilds the shader."
+          top_pad="4"
+          width="256"/>
         <slider
          enabled_control="RenderDepthOfField"
          control_name="CameraFNumber"
@@ -2026,8 +2065,80 @@ If you do not understand the distinction then leave this control alone."
          tool_tip="Affects the quality of the blurring and the performance of rendering.  (higher = better quality, lower = better perforamce)"
          top_pad="5"
          width="477"/>
-    </panel>
+     </panel>
 </tab_container>
+
+<!-- Color Grading LUT -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Color Grading"
+     name="ColorGradingLUT panel" >
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="ColorLUTLabel"
+         top_pad="25"
+         width="150">
+            Color LUT:
+        </text>
+        <combo_box
+         follows="left|top"
+         height="23"
+         layout="topleft"
+         left="10"
+         name="ColorGradingLUTCombo"
+         top_pad="5"
+         width="230">
+        </combo_box>
+        <button
+         follows="left|top"
+         height="23"
+         label="Browse..."
+         layout="topleft"
+         left_pad="5"
+         name="BrowseLUTBtn"
+         top_delta="0"
+         width="100">
+            <button.commit_callback function="Pref.BrowseLUT"/>
+        </button>
+        <button
+         follows="left|top"
+         height="23"
+         label="Remove"
+         layout="topleft"
+         left_pad="5"
+         name="RemoveLUTBtn"
+         top_delta="0"
+         width="80">
+            <button.commit_callback function="Pref.RemoveLUT"/>
+        </button>
+        <slider
+         control_name="RenderColorGradingLUTIntensity"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.01"
+         initial_value="1.0"
+         label="LUT Intensity:"
+         tool_tip="Blend intensity of the color LUT (0.0=off, 1.0=full)"
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="ColorGradingLUTIntensity"
+         show_text="true"
+         top_pad="5"
+         width="490"/>
+     </panel>
 
 <!-- These two check boxes are dummies and will never be displayed.  They are here so the control variables
 are saved in a preset file. -->

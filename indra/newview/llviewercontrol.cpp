@@ -1529,13 +1529,12 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "RenderShadowResolutionScale", handleShadowsResized);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleReleaseGLBufferChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderGlow", handleSetShaderChanged);
-    // <PandaView r30 P4 step 5> BD DoF chain permutation cvars trigger shader rebuild.
+    // <FS:AYA r30 P4 step 5> BD DoF chain permutation cvars trigger shader rebuild.
     // RenderChromaStrength is a uniform (no rebuild) so it's intentionally not listed.
-    // FIXME: These settings are not defined in settings.xml - commented out to prevent crash
-    // setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldHighQuality", handleSetShaderChanged);
-    // setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldChroma",      handleSetShaderChanged);
-    // setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldFront",       handleSetShaderChanged);
-    // </PandaView r30 P4 step 5>
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldHighQuality", handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldChroma",      handleSetShaderChanged);
+    setting_setup_signal_listener(gSavedSettings, "RenderDepthOfFieldFront",       handleSetShaderChanged);
+    // </FS:AYA r30 P4 step 5>
     // <PandaView r30 P5> Cinematic floater 即時反映の wire ギャップ補填。
     // RenderMotionBlur: mVelocityMap allocation を createGLBuffers() で再走させる。
     // RenderVolumetricLightingDirectional: GODRAYS_FADE permutation を shader rebuild で反映。
