@@ -41,6 +41,7 @@
 			<combo_box.item label="Sonne/Mond" name="1"/>
 			<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
 		</combo_box>
+		<slider label="Schatten-Weichheit:" tool_tip="Weichheit von Schattenkanten (1.0 = scharf, 3.0 = weich)" name="ShadowSoftness"/>
 		<text name="ReflectionDetailText">
 			Reflexionsdetail:
 		</text>
@@ -270,12 +271,24 @@
 		<check_box label="Schärfentiefe aktivieren (Bereiche außerhalb des Kamerafokus erscheinen unscharf)" name="UseDoF"/>
 		<check_box label="Im Editier-Modus aktivieren" name="RenderDepthOfFieldInEditMode"/>
 		<check_box label="Schärfentiefe-Fokus folgt Mauszeiger" name="FSFocusPointFollowsPointer" tool_tip="Der Fokus der Schärfentiefe folgt der Maus, ähnlich dem Verhalten bei der Verwendung einer Flycam. In Verbindung mit fixiertem Schärfentiefe-Fokus verwenden."/>
+		<check_box label="Front-Unschärfe" name="RenderDepthOfFieldFront" tool_tip="Ermöglicht das Unschärfen von Objekten vor der Fokusebene, nicht nur dahinter. Das Umschalten baut den Shader neu auf."/>
+		<check_box label="DoF-Chromatische Aberration" name="RenderDepthOfFieldChroma" tool_tip="Koppelt chromatische Aberration an die Schärfentiefe-Unschärfe. Wenn aus, wird stattdessen eine Bildrand-Vignette verwendet. Das Umschalten baut den Shader neu auf."/>
 		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="195" width="409"/>
 		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="195" width="409"/>
 		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="195" width="409"/>
 		<slider label="Kamera-Bildseitenverhältnis:" name="CameraAspectRatio" tool_tip="Kamera-Bildseitenverhältnis für die Schärfentiefe" label_width="195" width="409"/>
 		<slider label="Fokus-Übergangszeit:" name="CameraFocusTrans" tool_tip="Zeit, die benötigt wird, um den Focus neu einzustellen" label_width="195" width="409"/>
 		<slider label="Schärfentiefe-Darstellungsqualität:" name="CameraDoFResScale" tool_tip="Beeinflusst die Qualität der Unschärfe und Geschwindigkeit der Darstellung (höher = bessere Qualität, niedriger = höhere Geschwindigkeit" label_width="195" width="409"/>
+	</panel>
+	
+	<panel label="Farbkorrektur (LUT)" name="ColorGradingLUT panel">
+		<text name="ColorLUTLabel">
+			Farbe LUT:
+		</text>
+		<combo_box name="ColorGradingLUTCombo"/>
+		<button label="Durchsuchen..." name="BrowseLUTBtn"/>
+		<button label="Entfernen" name="RemoveLUTBtn"/>
+		<slider label="LUT-Intensität:" name="ColorGradingLUTIntensity" tool_tip="Überblendintensität der Farb-LUT (0.0=aus, 1.0=voll)" label_width="195" width="409"/>
 	</panel>
 	
 </tab_container>

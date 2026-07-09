@@ -60,7 +60,7 @@ The client codebase has been open source since 2007 and is available under the L
 
 ## Changelog
 
-### v1.0.15.7 - Rendering Features
-- **DoF Extras** — Added `RenderDepthOfFieldFront` (foreground blur) and `RenderDepthOfFieldChroma` (DoF-coupled chromatic aberration) settings. Toggle in Advanced Graphics or settings.xml.
-- **Shadow Softness** — New `RenderShadowSoftness` setting (F32, default 1.0). Scales PCF shadow sample tap radius; values > 1.0 produce softer shadows.
-- **3D Color Grading LUT** — Load .cube LUT files from `app_settings/luts/` via `RenderColorGradingLUTName` and blend with `RenderColorGradingLUTIntensity`. 7 bundled LUTs: cinematic, cold_war, cool, film_noir, sepia, teal_orange, warm.
+### v1.0.15.7 - Rendering Features + UI
+- **DoF Extras** — Added `RenderDepthOfFieldFront` (foreground blur) and `RenderDepthOfFieldChroma` (DoF-coupled chromatic aberration) settings. Toggle in Preferences > Graphics > Depth of Field panel. Toggling rebuilds the shader.
+- **Shadow Softness** — New `RenderShadowSoftness` setting (F32, default 1.0, range 1.0–3.0). Scales PCF shadow sample tap radius. Adjust via slider in Preferences > Graphics > Shadows.
+- **3D Color Grading LUT** — Load .cube LUT files from `app_settings/luts/` via combo box or Browse button in Preferences > Graphics > Color Grading. Intensity slider (0.0–1.0). 7 bundled LUTs: cinematic, cold_war, cool, film_noir, sepia, teal_orange, warm. Remove button for custom LUTs.
