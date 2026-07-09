@@ -2098,8 +2098,7 @@ If you do not understand the distinction then leave this control alone."
          tool_tip="Affects the quality of the blurring and the performance of rendering.  (higher = better quality, lower = better perforamce)"
          top_pad="5"
          width="477"/>
-     </panel>
-</tab_container>
+      </panel>
 
 <!-- Color Grading LUT -->
     <panel
@@ -2172,6 +2171,7 @@ If you do not understand the distinction then leave this control alone."
          top_pad="5"
          width="490"/>
      </panel>
+</tab_container>
 
 <!-- These two check boxes are dummies and will never be displayed.  They are here so the control variables
 are saved in a preset file. -->
