@@ -114,7 +114,7 @@ class ViewerManifest(LLManifest,FSViewerManifest):
                 self.path("windlight")
 
                 # ... and the 3D color grading LUT files
-                self.path("luts")
+                #self.path("luts")
 
                 # ... and the entire image filters directory
                 self.path("filters")
