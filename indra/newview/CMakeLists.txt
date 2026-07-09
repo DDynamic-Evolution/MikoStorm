@@ -136,8 +136,6 @@ set(viewer_SOURCE_FILES
     fsfloaterradar.cpp
     fsfloatersearch.cpp
     fsfloaterloginimagesettings.cpp
-    hwspoof_engine.cpp
-    floater_hwspoof.cpp
     fsfloatersplashscreensettings.cpp
     fsfloaterstatistics.cpp
     fsfloaterstreamtitle.cpp
@@ -1019,8 +1017,6 @@ set(viewer_HEADER_FILES
     fsfloaterradar.h
     fsfloatersearch.h
     fsfloaterloginimagesettings.h
-    hwspoof_engine.h
-    floater_hwspoof.h
     fsfloatersplashscreensettings.h
     fsfloaterstatistics.h
     fsfloaterstreamtitle.h

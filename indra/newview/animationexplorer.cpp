@@ -61,7 +61,6 @@
 #include "llviewermenufile.h"
 #include "llviewerinventory.h"
 
-#include "pvassets.h"
 #include "pvextras.h"
 
 constexpr S32 MAX_ANIMATIONS = 100;
@@ -189,17 +188,13 @@ bool AnimationExplorer::postBuild()
     mStopButton = getChild<LLButton>("stop_btn");
     mBlacklistButton = getChild<LLButton>("blacklist_btn");
     mStopAndRevokeButton = getChild<LLButton>("stop_and_revoke_btn");
-    mExportButton = getChild<LLButton>("export_btn");
     mNoOwnedAnimationsCheckBox = getChild<LLCheckBoxCtrl>("no_owned_animations_check");
 
     mAnimationScrollList->setCommitCallback(boost::bind(&AnimationExplorer::onSelectAnimation, this));
     mStopButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopPressed, this));
     mBlacklistButton->setCommitCallback(boost::bind(&AnimationExplorer::onBlacklistPressed, this));
     mStopAndRevokeButton->setCommitCallback(boost::bind(&AnimationExplorer::onStopAndRevokePressed, this));
-    mExportButton->setCommitCallback(boost::bind(&AnimationExplorer::onExportPressed, this));
     mNoOwnedAnimationsCheckBox->setCommitCallback(boost::bind(&AnimationExplorer::onOwnedCheckToggled, this));
-
-    mExportButton->setEnabled(false);
 
     mPreviewCtrl = findChild<LLView>("animation_preview");
     if (mPreviewCtrl)
@@ -238,7 +233,6 @@ void AnimationExplorer::onSelectAnimation()
     mCurrentObject = item->getColumn(column)->getValue().asUUID();
 
     startMotion(mCurrentAnimationID);
-    mExportButton->setEnabled(mCurrentAnimationID.notNull() && pv_check_flag(PV_BYPASS_EXPORT_PERMS));
 }
 
 void AnimationExplorer::onStopPressed()
@@ -279,11 +273,6 @@ void AnimationExplorer::onStopAndRevokePressed()
             gAgentAvatarp->revokePermissionsOnObject(vo);
         }
     }
-}
-
-void AnimationExplorer::onExportPressed()
-{
-    pv_save_asset(mCurrentAnimationID, LLAssetType::AT_ANIMATION);
 }
 
 void AnimationExplorer::onOwnedCheckToggled()
