@@ -8952,6 +8952,7 @@ void LLPipeline::renderDoF(LLRenderTarget* src, LLRenderTarget* dst)
                 gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_MAX_COF, adj_COF);
                 // </FS:Beq>
                 gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_RES_SCALE, CameraDoFResScale);
+                gDeferredPostProgram.uniform1f(LLShaderMgr::DOF_CHROMA_STRENGTH, 1.0f);
 
                 mScreenTriangleVB->setBuffer();
                 mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);

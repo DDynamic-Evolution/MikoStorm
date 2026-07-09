@@ -338,23 +338,6 @@
            name="2"
            value="2"/>
         </combo_box>
-        <slider
-         control_name="RenderShadowSoftness"
-         decimal_digits="1"
-         follows="left|top"
-         height="16"
-         increment="0.1"
-         initial_value="1.0"
-         label="Shadow Softness:"
-         tool_tip="Softness of shadow edges (1.0 = sharp, 3.0 = soft)"
-         label_width="160"
-         layout="topleft"
-         left_delta="-5"
-         min_val="1.0"
-         max_val="3.0"
-         name="ShadowSoftness"
-         top_pad="5"
-         width="310"/>
         <text
          type="string"
          length="1"
@@ -1765,23 +1748,40 @@ If you do not understand the distinction then leave this control alone."
          width="50">
             seconds
         </text>
-        <slider
-         control_name="RenderShadowResolutionScale"
-         decimal_digits="1"
-         follows="left|top"
-         height="16"
-         increment="0.1"
-         initial_value="1.0"
-         label="Quality of the Shadows"
-         tool_tip="What is the quality of the Shadows (default is 1)"
-         label_width="300"
-         layout="topleft"
-         left="10"
-         min_val="1.0"
-         max_val="4.0"
-         name="ShadowResolution"
-         top_pad="1"
-         width="408" />
+         <slider
+          control_name="RenderShadowResolutionScale"
+          decimal_digits="1"
+          follows="left|top"
+          height="16"
+          increment="0.1"
+          initial_value="1.0"
+          label="Quality of the Shadows"
+          tool_tip="What is the quality of the Shadows (default is 1)"
+          label_width="300"
+          layout="topleft"
+          left="10"
+          min_val="1.0"
+          max_val="4.0"
+          name="ShadowResolution"
+          top_pad="1"
+          width="408" />
+         <slider
+          control_name="RenderShadowSoftness"
+          decimal_digits="1"
+          follows="left|top"
+          height="16"
+          increment="0.1"
+          initial_value="1.0"
+          label="Shadow Softness:"
+          tool_tip="Softness of shadow edges (1.0 = sharp, 3.0 = soft)"
+          label_width="300"
+          layout="topleft"
+          left="10"
+          min_val="1.0"
+          max_val="3.0"
+          name="ShadowSoftness"
+          top_pad="1"
+          width="408" />
         <slider
          control_name="RenderTerrainScale"
          decimal_digits="0"
@@ -1943,16 +1943,17 @@ If you do not understand the distinction then leave this control alone."
          name="RenderDepthOfFieldInEditMode"
          top_pad="4"
          width="256"/>
-         <check_box
-          control_name="FSFocusPointFollowsPointer"
-          enabled_control="RenderDepthOfField"
-          height="16"
-          label="Depth of Field focus follows pointer"
-          layout="topleft"
-          name="FSFocusPointFollowsPointer"
-          tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
-          top_pad="4"
-          width="256"/>
+          <check_box
+           control_name="FSFocusPointFollowsPointer"
+           enabled_control="RenderDepthOfField"
+           height="16"
+           label="Depth of Field focus follows pointer"
+           layout="topleft"
+           left_delta="18"
+           name="FSFocusPointFollowsPointer"
+           tool_tip="Depth of Field (DoF) focus will follow your mouse, this behaviour matches that seen when using flycam. Use in conjunction with DoF focus lock"
+           top_pad="4"
+           width="256"/>
          <check_box
           control_name="RenderDepthOfFieldFront"
           enabled_control="RenderDepthOfField"
