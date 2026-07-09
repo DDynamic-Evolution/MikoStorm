@@ -4,12 +4,23 @@
 #include <cstring>
 #include <cerrno>
 #include <sstream>
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+typedef int socklen_t;
+typedef int ssize_t;
+#define SHUT_RDWR SD_BOTH
+#define close closesocket
+#else
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <poll.h>
+#endif
 
 LLMCPHttpServer* LLMCPHttpServer::sInstance = nullptr;
 
@@ -35,7 +46,7 @@ void LLMCPHttpServer::stop()
     if (sInstance->mListenFd >= 0)
     {
         ::shutdown(sInstance->mListenFd, SHUT_RDWR);
-        ::close(sInstance->mListenFd);
+        ::closesocket(sInstance->mListenFd);
         sInstance->mListenFd = -1;
     }
     if (sInstance->mThread.joinable())
@@ -57,7 +68,17 @@ void LLMCPHttpServer::serverThread(LLMCPHttpServer* self)
 
 void LLMCPHttpServer::run()
 {
-    mListenFd = ::socket(AF_INET, SOCK_STREAM, 0);
+#ifdef _WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+    {
+        LL_WARNS("MCP") << "WSAStartup failed" << LL_ENDL;
+        mRunning = false;
+        return;
+    }
+#endif
+
+    mListenFd = (int)::socket(AF_INET, SOCK_STREAM, 0);
     if (mListenFd < 0)
     {
         LL_WARNS("MCP") << "Failed to create socket" << LL_ENDL;
@@ -66,7 +87,11 @@ void LLMCPHttpServer::run()
     }
 
     int opt = 1;
+#ifdef _WIN32
+    ::setsockopt(mListenFd, SOL_SOCKET, SO_REUSEADDR, (const char*)&opt, sizeof(opt));
+#else
     ::setsockopt(mListenFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+#endif
 
     struct sockaddr_in addr;
     std::memset(&addr, 0, sizeof(addr));
@@ -77,7 +102,7 @@ void LLMCPHttpServer::run()
     if (::bind(mListenFd, (struct sockaddr*)&addr, sizeof(addr)) < 0)
     {
         LL_WARNS("MCP") << "Failed to bind to port " << mPort << LL_ENDL;
-        ::close(mListenFd);
+        ::closesocket(mListenFd);
         mListenFd = -1;
         mRunning = false;
         return;
@@ -86,7 +111,7 @@ void LLMCPHttpServer::run()
     if (::listen(mListenFd, 5) < 0)
     {
         LL_WARNS("MCP") << "Failed to listen on port " << mPort << LL_ENDL;
-        ::close(mListenFd);
+        ::closesocket(mListenFd);
         mListenFd = -1;
         mRunning = false;
         return;
@@ -96,14 +121,28 @@ void LLMCPHttpServer::run()
 
     while (mRunning)
     {
+#ifdef _WIN32
+        fd_set readfds;
+        FD_ZERO(&readfds);
+        FD_SET(mListenFd, &readfds);
+        struct timeval tv;
+        tv.tv_sec = 0;
+        tv.tv_usec = 500000; // 500ms
+        int ret = ::select(0, &readfds, nullptr, nullptr, &tv);
+#else
         struct pollfd pfd;
         pfd.fd = mListenFd;
         pfd.events = POLLIN;
         int ret = ::poll(&pfd, 1, 500);
+#endif
 
         if (ret < 0)
         {
+#ifdef _WIN32
+            if (WSAGetLastError() == WSAEINTR) continue;
+#else
             if (errno == EINTR) continue;
+#endif
             break;
         }
 
@@ -111,15 +150,20 @@ void LLMCPHttpServer::run()
 
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
-        int client_fd = ::accept(mListenFd, (struct sockaddr*)&client_addr, &client_len);
+        int client_fd = (int)::accept(mListenFd, (struct sockaddr*)&client_addr, &client_len);
         if (client_fd < 0) continue;
 
         handleClient(client_fd);
-        ::close(client_fd);
+        ::closesocket(client_fd);
     }
 
-    ::close(mListenFd);
+    ::closesocket(mListenFd);
     mListenFd = -1;
+
+#ifdef _WIN32
+    WSACleanup();
+#endif
+
     LL_INFOS("MCP") << "HTTP server thread exiting" << LL_ENDL;
 }
 
@@ -222,7 +266,7 @@ void LLMCPHttpServer::handleClient(int client_fd)
             "Access-Control-Max-Age: 3600\r\n"
             "Content-Length: 0\r\n";
         std::string response = "HTTP/1.1 204 No Content\r\n" + cors_headers + "\r\n";
-        ssize_t written = ::write(client_fd, response.c_str(), response.size());
+        ssize_t written = ::send(client_fd, response.c_str(), (int)response.size(), 0);
         (void)written;
     }
     else
@@ -241,13 +285,23 @@ std::string LLMCPHttpServer::readHttpRequest(int fd)
 
     while (true)
     {
+#ifdef _WIN32
+        fd_set readfds;
+        FD_ZERO(&readfds);
+        FD_SET(fd, &readfds);
+        struct timeval tv;
+        tv.tv_sec = 5;
+        tv.tv_usec = 0;
+        int ret = ::select(0, &readfds, nullptr, nullptr, &tv);
+#else
         struct pollfd pfd;
         pfd.fd = fd;
         pfd.events = POLLIN;
         int ret = ::poll(&pfd, 1, 5000);
+#endif
         if (ret <= 0) break;
 
-        ssize_t n = ::read(fd, buf, sizeof(buf) - 1);
+        ssize_t n = ::recv(fd, buf, sizeof(buf) - 1, 0);
         if (n <= 0) break;
 
         buf[n] = '\0';
@@ -307,6 +361,6 @@ void LLMCPHttpServer::sendHttpResponse(int fd, int status, const std::string& st
              << body;
 
     std::string resp_str = response.str();
-    ssize_t written = ::write(fd, resp_str.c_str(), resp_str.size());
+    ssize_t written = ::send(fd, resp_str.c_str(), (int)resp_str.size(), 0);
     (void)written;
 }
