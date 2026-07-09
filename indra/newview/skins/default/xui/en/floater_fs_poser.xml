@@ -23,6 +23,11 @@
 	<string name="icon_save_button" translate="false">Icon_Dock_Foreground</string>
 	<string name="icon_save_failed_button" translate="false">Parcel_Exp_Color</string>
 	<string name="icon_save_query" translate="false">Info</string>
+	<string name="icon_permission_granted" translate="false">Check_Mark</string>
+	<string name="icon_permission_pending" translate="false">Info</string>
+	<string name="StartPoseLabel" translate="false">Start Posing</string>
+	<string name="StopPoseLabel" translate="false">Stop Posing</string>
+	<string name="CancelRequestLabel" translate="false">Cancel Request</string>
 
 	<!-- Provides for axis-swapping per joint for slider/trackpad control -->
 	<!-- Begins with joint_transform_ then has an internal joint name, ONE swap choice of:

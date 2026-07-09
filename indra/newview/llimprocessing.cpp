@@ -75,6 +75,7 @@
 #include "fscommon.h"
 #include "fsdata.h"
 #include "fskeywords.h"
+#include "fsfloaterposer.h"
 #include "lggcontactsets.h" // <FS:PP> FIRE-17006 Autoresponse based on Contact Set
 #include "llagentui.h"
 #include "llavataractions.h"
@@ -966,6 +967,16 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 // Eat the message and do nothing
             }
 // [/RLVa:KB]
+            // MikoStorm: Check if this is a reply to an animation permission request
+            else if (from_id.notNull() && offline == IM_ONLINE)
+            {
+                FSFloaterPoser* poser = LLFloaterReg::findTypedInstance<FSFloaterPoser>("fs_poser");
+                if (poser && poser->hasPendingRequest(from_id))
+                {
+                    poser->handleIMReply(from_id, message);
+                    break;
+                }
+            }
 //          else if (offline == IM_ONLINE
 //                      && is_do_not_disturb
 //                      && from_id.notNull() //not a system message
