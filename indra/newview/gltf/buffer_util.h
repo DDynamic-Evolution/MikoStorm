@@ -49,49 +49,49 @@ namespace LL
         template<class S, class T>
         inline void copyScalar(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         // copy one vec2 from src to dst
         template<class S, class T>
         inline void copyVec2(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         // copy one vec3 from src to dst
         template<class S, class T>
         inline void copyVec3(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         // copy one vec4 from src to dst
         template<class S, class T>
         inline void copyVec4(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         // copy one mat2 from src to dst
         template<class S, class T>
         inline void copyMat2(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         // copy one mat3 from src to dst
         template<class S, class T>
         inline void copyMat3(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         // copy one mat4 from src to dst
         template<class S, class T>
         inline void copyMat4(S* src, T& dst)
         {
-            LL_ERRS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
+            LL_WARNS() << "TODO: implement " << LL_FUNCSIG << LL_ENDL;
         }
 
         //=========================================================================================================
@@ -373,7 +373,7 @@ namespace LL
             }
             else
             {
-                LL_ERRS("GLTF") << "Unsupported accessor type" << LL_ENDL;
+                LL_WARNS("GLTF") << "Unsupported accessor type" << LL_ENDL;
             }
         }
 
@@ -417,7 +417,7 @@ namespace LL
                 copy(asset, accessor, (const U8*)src, dst, bufferView.mByteStride);
                 break;
             default:
-                LL_ERRS("GLTF") << "Invalid component type" << LL_ENDL;
+                LL_WARNS("GLTF") << "Invalid component type" << LL_ENDL;
                 break;
             }
         }

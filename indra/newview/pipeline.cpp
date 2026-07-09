@@ -1451,6 +1451,13 @@ bool LLPipeline::loadColorGradingLUT(const std::string& filename)
     gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE_3D, mColorGradingLUT);
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGB16F,
         lut_size, lut_size, lut_size, 0, GL_RGB, GL_FLOAT, lut_data.data());
+    GLenum lut_err = glGetError();
+    if (lut_err != GL_NO_ERROR)
+    {
+        LL_WARNS("LUT") << "OpenGL error after glTexImage3D: " << std::hex << lut_err << std::dec << LL_ENDL;
+        releaseColorGradingLUT();
+        return false;
+    }
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -9006,6 +9013,15 @@ void LLPipeline::renderFinalize()
 
     LL_RECORD_BLOCK_TIME(FTM_RENDER_BLOOM);
     LL_PROFILE_GPU_ZONE("renderFinalize");
+
+    {
+        GLenum err = glGetError();
+        while (err != GL_NO_ERROR)
+        {
+            LL_DEBUGS("GLTRACE") << "renderFinalize: accumulated GL error: " << std::hex << err << std::dec << LL_ENDL;
+            err = glGetError();
+        }
+    }
 
     gGL.color4f(1, 1, 1, 1);
     LLGLDepthTest depth(GL_FALSE);
