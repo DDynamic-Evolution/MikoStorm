@@ -789,13 +789,13 @@
      reference="White_25" />
     <color
      name="SliderThumbCenterColor"
-     reference="White" />
+     reference="AccentColor" />
     <color
      name="SliderThumbOutlineColor"
-     reference="White" />
+     reference="SchemeLightest" />
     <color
      name="SliderTrackColor"
-     reference="Unused?" />
+     reference="EmphasisColor_35" />
     <color
      name="SpeakingColor"
      reference="FrogGreen" />
