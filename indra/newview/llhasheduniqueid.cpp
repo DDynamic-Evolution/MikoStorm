@@ -26,19 +26,12 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llhasheduniqueid.h"
-#include "hwspoof_engine.h"
 #include "llviewernetwork.h"
 #include "lluuid.h"
 #include "llmachineid.h"
 
 bool llHashedUniqueID(unsigned char id[MD5HEX_STR_SIZE])
 {
-    if (hwspoof_is_initialized())
-    {
-        const std::string& macid = hwspoof_get_macid();
-        memcpy(id, macid.c_str(), std::min<size_t>(macid.size() + 1, MD5HEX_STR_SIZE));
-        return true;
-    }
     bool idIsUnique = true;
     LLMD5 hashed_unique_id;
     unsigned char unique_id[MAC_ADDRESS_BYTES];

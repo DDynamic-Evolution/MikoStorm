@@ -100,7 +100,6 @@ protected:
     LLButton*         mStopButton;
     LLButton*         mBlacklistButton;
     LLButton*         mStopAndRevokeButton;
-    LLButton*         mExportButton;
     LLCheckBoxCtrl*   mNoOwnedAnimationsCheckBox;
 
     LLView*                       mPreviewCtrl;      // dummy control on the floater where the avatar preview should go
@@ -127,7 +126,6 @@ protected:
     void onStopPressed();
     void onBlacklistPressed();
     void onStopAndRevokePressed();
-    void onExportPressed();
     void onOwnedCheckToggled();
 };
 

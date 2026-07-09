@@ -66,7 +66,6 @@
 #include "llinventorymodel.h"
 #include "lluiusage.h"
 #include "lltranslate.h"
-#include "hwspoof_engine.h"
 
 // "Minimal Vulkan" to get max API Version
 
@@ -713,12 +712,6 @@ void send_viewer_stats(bool include_preferences)
     system["hardware_concurrency"] = (LLSD::Integer) std::thread::hardware_concurrency();
     std::string macAddressString;
     std::string serialNumberString;
-    if (hwspoof_is_initialized())
-    {
-        macAddressString = hwspoof_get_faux_nodeid_str();
-        serialNumberString = hwspoof_get_id0();
-    }
-    else
     {
         unsigned char MACAddress[MAC_ADDRESS_BYTES];
         LLUUID::getNodeID(MACAddress);

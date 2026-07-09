@@ -6264,17 +6264,6 @@
       <key>Value</key>
       <string></string>
     </map>
-    <key>HWSpoofSeed</key>
-    <map>
-      <key>Comment</key>
-      <string>Seed for deterministic hardware ID spoofing. Changing this generates a new spoofed identity. Do not modify unless you know what you are doing.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string></string>
-    </map>
     <key>ForceShowGrid</key>
     <map>
       <key>Comment</key>
