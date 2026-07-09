@@ -781,18 +781,18 @@
     <color
      name="SilhouetteParentColor"
      reference="Yellow" />
-    <color
-     name="SliderDisabledThumbColor"
-     reference="White_25" />
-    <color
-     name="SliderThumbCenterColor"
-     reference="White" />
-    <color
-     name="SliderThumbOutlineColor"
-     reference="White" />
-    <color
-     name="SliderTrackColor"
-     reference="Unused?" />
+     <color
+      name="SliderDisabledThumbColor"
+      reference="White_25" />
+     <color
+      name="SliderThumbCenterColor"
+      reference="AccentColor" />
+     <color
+      name="SliderThumbOutlineColor"
+      reference="SchemeLightest" />
+     <color
+      name="SliderTrackColor"
+      reference="EmphasisColor_35" />
     <color
      name="SpeakingColor"
      reference="FrogGreen" />

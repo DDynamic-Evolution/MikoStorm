@@ -520,6 +520,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     mCommitCallbackRegistrar.add("Pref.Advanced",               boost::bind(&LLFloaterPreference::onClickAdvanced, this));
     mCommitCallbackRegistrar.add("Pref.BrowseLUT",              boost::bind(&LLFloaterPreference::onBrowseLUT, this));
     mCommitCallbackRegistrar.add("Pref.RemoveLUT",              boost::bind(&LLFloaterPreference::onRemoveLUT, this));
+    mCommitCallbackRegistrar.add("Pref.ResetSetting",          boost::bind(&LLFloaterPreference::onResetSetting, this, _2));
 
     // <FS:Zi> Support preferences search SLURLs
     mCommitCallbackRegistrar.add("Pref.CopySearchAsSLURL",      boost::bind(&LLFloaterPreference::onCopySearch, this));
@@ -3140,6 +3141,15 @@ void LLFloaterPreference::onRemoveLUT()
     // Reset to None
     combo->setValue(LLSD(""));
     gSavedSettings.setString("RenderColorGradingLUTName", "");
+}
+
+void LLFloaterPreference::onResetSetting(const LLSD& data)
+{
+    std::string control_name = data.asString();
+    if (!control_name.empty())
+    {
+        gSavedSettings.getControl(control_name)->resetToDefault(true);
+    }
 }
 
 void LLFloaterPreference::onClickActionChange()

@@ -513,15 +513,15 @@
     <color
      name="SilhouetteParentColor"
      reference="Yellow" />
-    <color
-     name="SliderDisabledThumbColor"
-     reference="White_25" />
-    <color
-     name="SliderThumbCenterColor"
-     reference="White" />
-    <color
-     name="SliderThumbOutlineColor"
-     reference="White" />
+     <color
+      name="SliderDisabledThumbColor"
+      reference="White_25" />
+     <color
+      name="SliderThumbCenterColor"
+      reference="AccentColor" />
+     <color
+      name="SliderThumbOutlineColor"
+      reference="SchemeLightest" />
     <color
      name="SpeakingColor"
      reference="FrogGreen" />
