@@ -68,16 +68,6 @@ void LLMCPHttpServer::serverThread(LLMCPHttpServer* self)
 
 void LLMCPHttpServer::run()
 {
-#ifdef _WIN32
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-    {
-        LL_WARNS("MCP") << "WSAStartup failed" << LL_ENDL;
-        mRunning = false;
-        return;
-    }
-#endif
-
     mListenFd = (int)::socket(AF_INET, SOCK_STREAM, 0);
     if (mListenFd < 0)
     {
@@ -159,10 +149,6 @@ void LLMCPHttpServer::run()
 
     ::closesocket(mListenFd);
     mListenFd = -1;
-
-#ifdef _WIN32
-    WSACleanup();
-#endif
 
     LL_INFOS("MCP") << "HTTP server thread exiting" << LL_ENDL;
 }

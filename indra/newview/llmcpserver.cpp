@@ -15,6 +15,11 @@
 #include "workqueue.h"
 #include "fsnearbychathub.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+
 // create_new_item is defined in llviewerinventory.cpp
 void create_new_item(const std::string& name,
                      const LLUUID& parent_id,
@@ -47,6 +52,15 @@ void LLMCPServer::start()
 {
     if (mRunning) return;
 
+#ifdef _WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+    {
+        LL_WARNS("MCP") << "WSAStartup failed" << LL_ENDL;
+        return;
+    }
+#endif
+
     mPort = (U16)gSavedSettings.getU32("MCPPort");
     mAuthToken = gSavedSettings.getString("MCPAuthToken");
     mInitialized = false;
@@ -64,6 +78,9 @@ void LLMCPServer::stop()
     mRunning = false;
     LLMCPHttpServer::stop();
     LL_INFOS("MCP") << "MCP Server stopped" << LL_ENDL;
+#ifdef _WIN32
+    WSACleanup();
+#endif
 }
 
 void LLMCPServer::registerTool(const std::string& name,
