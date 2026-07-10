@@ -91,6 +91,7 @@ FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 
     // Bind requests, other controls are find-and-binds, see postBuild()
     mCommitCallbackRegistrar.add("Poser.RefreshAvatars", [this](LLUICtrl*, const LLSD&) { onAvatarsRefresh(); });
+    mCommitCallbackRegistrar.add("Poser.PoseSelf", [this](LLUICtrl*, const LLSD&) { onPoseSelf(); });
     mCommitCallbackRegistrar.add("Poser.StartStopAnimating", [this](LLUICtrl*, const LLSD&) { onPoseStartStop(); });
     mCommitCallbackRegistrar.add("Poser.ToggleLoadSavePanel", [this](LLUICtrl*, const LLSD&) { onToggleLoadSavePanel(); });
     mCommitCallbackRegistrar.add("Poser.ToggleVisualManipulators", [this](LLUICtrl*, const LLSD&) { onToggleVisualManipulators(); });
@@ -2871,6 +2872,37 @@ void FSFloaterPoser::onAvatarsRefresh()
     mAvatarSelectionScrollList->updateLayout();
     refreshTextHighlightingOnAvatarScrollList();
     populateRightAvatarList();
+}
+
+void FSFloaterPoser::onPoseSelf()
+{
+    LLVOAvatar* self = gAgentAvatarp;
+    if (!self || self->isDead())
+        return;
+
+    // Set self as the selected avatar
+    mRightSelectedAvatarId = self->getID();
+
+    // Update UI state
+    bool isPosing = mPoserAnimator.isPosingAvatar(self);
+    mRightStartStopBtn->setEnabled(true);
+    mRightStartStopBtn->setValue(isPosing);
+
+    if (isPosing)
+        mRightStartStopBtn->setLabel(tryGetString("StopPoseLabel"));
+    else
+        mRightStartStopBtn->setLabel(tryGetString("StartPoseLabel"));
+
+    // Set up tools and manipulators
+    FSToolCompPose::getInstance()->setAvatar(self);
+    FSToolCompPoseTranslate::getInstance()->setAvatar(self);
+    setVisualManipulators(self);
+
+    // Refresh joint lists
+    refreshJointScrollListMembers();
+    onJointTabSelect();
+    poseControlsEnable(true);
+    refreshTextHighlightingOnJointScrollLists();
 }
 
 void FSFloaterPoser::onRightAvatarRefresh()

@@ -260,6 +260,7 @@ public:
 
     // UI Event Handlers
     void onAvatarsRefresh();
+    void onPoseSelf();
     void onAvatarSelect();
     void onJointTabSelect();
     void onToggleMirrorChange();
