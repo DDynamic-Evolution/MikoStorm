@@ -957,7 +957,7 @@
 						 width="317" />
 						<scroll_list
 						 column_padding="0"
-						 height="250"
+						 height="220"
 						 can_sort="false"
 						 follows="all"
 						 layout="topleft"
@@ -994,7 +994,7 @@
 						 name="refresh_avatars"
 						 tool_tip="Refresh the list of avatars and animeshes"
 						 width="20"
-						 top="244"
+						 top="224"
 						 left="3">
 							<button.commit_callback
 							 function="Poser.RefreshAvatars"/>
@@ -1007,7 +1007,7 @@
 						 image_unselected="Toolbar_Middle_Off"
 						 name="pose_self_button"
 						 tool_tip="Pose your own avatar"
-						 width="60"
+						 width="42"
 						 top_delta="0"
 						 left_pad="2">
 							<button.commit_callback
@@ -1018,10 +1018,10 @@
 						 follows="top|left"
 						 enabled="false"
 						 is_toggle="true"
-						 label="Start Posing"
+						 label="Start"
 						 top_delta="0"
 						 left_pad="2"
-						 label_selected="Stop Posing"
+						 label_selected="Stop"
 						 image_hover_unselected="Toolbar_Middle_Over"
 						 image_selected="Toolbar_Middle_Selected"
 						 image_unselected="Toolbar_Middle_Off"
@@ -1031,8 +1031,8 @@
 						 button_flash_rate="0.5"
 						 tool_tip="Start posing the selected avatar or animesh, if you are allowed to."
 						 name="start_stop_posing_button"
-						 width="150">
-							<button.commit_callback>
+						 width="82">
+							<button.commit_callback
 							 function="Poser.StartStopAnimating"/>
 						</button>
 						<button
@@ -1045,7 +1045,7 @@
 						 image_unselected="Toolbar_Middle_Off"
 						 name="set_t_pose_button"
 						 tool_tip="Click to set the selected avatar to a 'T-Pose'"
-						 width="172">
+						 width="147">
 							<button.commit_callback
 							 function="Poser.SetToTPose"/>
 						</button>
