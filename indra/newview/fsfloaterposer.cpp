@@ -2804,9 +2804,6 @@ void FSFloaterPoser::onAvatarsRefresh()
         if (LLMuteList::getInstance()->isMuted(uuid))
             continue;
 
-        if (!avatar->isSelf())
-            continue;
-
         LLSD row;
         row["columns"][COL_ICON]["column"] = "icon";
         row["columns"][COL_ICON]["type"]   = "icon";
