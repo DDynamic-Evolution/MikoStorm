@@ -4,6 +4,8 @@
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
+This repository is not released by SecondLife or Firestorm!
+
 ## Features
 
 ### Experimental Features
