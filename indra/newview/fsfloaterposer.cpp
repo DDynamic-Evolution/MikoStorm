@@ -1486,6 +1486,11 @@ bool FSFloaterPoser::couldAnimateAvatar(LLVOAvatar* avatar) const
 {
     if (!avatar || avatar->isDead())
         return false;
+    
+    // Self can always be animated
+    if (avatar->isSelf())
+        return true;
+    
     if (avatar->getRegion() != gAgent.getRegion())
         return false;
 
@@ -2701,16 +2706,14 @@ uuid_vec_t FSFloaterPoser::getNearbyAvatarsAndAnimeshes() const
     for (LLCharacter* character : LLCharacter::sInstances)
     {
         LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
+        if (!avatar)
+            continue;
+            
         if (!avatarIsNearbyMe(avatar))
             continue;
 
-        bool isMuted = LLMuteList::getInstance()->isMuted(avatar->getID());
-        if (isMuted)
-            continue;
-
-        bool isSelfOrCtrl = avatar->isControlAvatar() || avatar->isSelf();
-
-        if (!isSelfOrCtrl)
+        // Self is never muted, other avatars can be
+        if (!avatar->isSelf() && LLMuteList::getInstance()->isMuted(avatar->getID()))
             continue;
 
         avatar_ids.emplace_back(character->getID());
@@ -2724,9 +2727,17 @@ bool FSFloaterPoser::avatarIsNearbyMe(LLCharacter* character) const
     if (!gAgentAvatarp || gAgentAvatarp.isNull() || !character)
         return false;
 
+    LLVOAvatar* avatar = dynamic_cast<LLVOAvatar*>(character);
+    if (!avatar)
+        return false;
+
+    // Self is always nearby
+    if (avatar->isSelf())
+        return true;
+
     LLVector3 separationVector = character->getCharacterPosition() - gAgentAvatarp->getCharacterPosition();
 
-    return separationVector.magVec() < 50.f;
+    return separationVector.magVec() < 20.f;
 }
 
 uuid_vec_t FSFloaterPoser::getCurrentlyListedAvatarsAndAnimeshes() const
@@ -2798,10 +2809,21 @@ void FSFloaterPoser::onAvatarsRefresh()
             continue;
 
         LLAvatarName av_name;
-        if (!LLAvatarNameCache::get(uuid, &av_name))
+        std::string displayName;
+        if (LLAvatarNameCache::get(uuid, &av_name))
+        {
+            displayName = av_name.getDisplayName();
+        }
+        else if (avatar->isSelf())
+        {
+            displayName = "Me";
+        }
+        else
+        {
             continue;
+        }
 
-        if (LLMuteList::getInstance()->isMuted(uuid))
+        if (!avatar->isSelf() && LLMuteList::getInstance()->isMuted(uuid))
             continue;
 
         LLSD row;
@@ -2809,7 +2831,7 @@ void FSFloaterPoser::onAvatarsRefresh()
         row["columns"][COL_ICON]["type"]   = "icon";
         row["columns"][COL_ICON]["value"]  = getIconNameForAvatar(avatar);
         row["columns"][COL_NAME]["column"] = "name";
-        row["columns"][COL_NAME]["value"]  = av_name.getDisplayName();
+        row["columns"][COL_NAME]["value"]  = displayName;
         row["columns"][COL_UUID]["column"] = "uuid";
         row["columns"][COL_UUID]["value"]  = uuid;
         row["columns"][COL_SAVE]["column"] = "saveFileName";
