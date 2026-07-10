@@ -1,6 +1,6 @@
 # MikoStorm - A Second Life Viewer
 
-[![Download Latest Release](https://img.shields.io/badge/Download-v1.0.15.13-blue)](https://github.com/DDynamic-Evolution/MikoStorm/releases/latest)
+[![Download Latest Release](https://img.shields.io/badge/Download-v1.0.15.14-blue)](https://github.com/DDynamic-Evolution/MikoStorm/releases/latest)
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
@@ -242,6 +242,11 @@ build.bat
 ---
 
 ## Changelog
+
+### v1.0.15.14
+- **Critical IM Fix** — Poser permission request check no longer blocks all incoming IMs
+- **Self Selection in Poser** — Self is now shown in the right avatar list (Avatars in Range) and can be selected directly
+- **Permission Fix** — Self always has permission to pose, no permission request dialog needed
 
 ### v1.0.15.13
 - **MCP Support** — Full Model Context Protocol implementation for AI assistant integration
