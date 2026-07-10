@@ -11,7 +11,8 @@ This repository is not released by SecondLife or Firestorm!
 ### ATTENTION,
 
 Thisviewer contains experimental features like 
-- a slider for **Animationspeed** 
+- a slider for **Animationspeed**
+  ![Screenshot](images/s3.png)
 - A **photogrammetry tool** for our fellow 3D Scanners ans 3D Printers (i.e. to use with [3DF Zephyr](https://store.steampowered.com/app/438450/3DF_Zephyr_Lite_Steam_Edition/)
 - A **multiuser Posing system** for photographers (Yes it has an IM request if someone wants to be posed)
 - **Voicebox** A tool to connect to an external voicebox server on your system, to read messages aloud.
