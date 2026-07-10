@@ -952,6 +952,19 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
             break;
 
         case IM_NOTHING_SPECIAL:    // p2p IM
+            // MikoStorm: Check for pending animation permission request FIRST
+            // Must be standalone (not in the else-if chain below) so that
+            // normal IMs without a pending request still fall through.
+            if (from_id.notNull() && offline == IM_ONLINE)
+            {
+                FSFloaterPoser* poser = LLFloaterReg::findTypedInstance<FSFloaterPoser>("fs_poser");
+                if (poser && poser->hasPendingRequest(from_id))
+                {
+                    poser->handleIMReply(from_id, message);
+                    break;
+                }
+            }
+
             // Don't show dialog, just do IM
             if (!gAgent.isGodlike()
                 && gAgent.inPrelude()
@@ -967,16 +980,6 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                 // Eat the message and do nothing
             }
 // [/RLVa:KB]
-            // MikoStorm: Check if this is a reply to an animation permission request
-            else if (from_id.notNull() && offline == IM_ONLINE)
-            {
-                FSFloaterPoser* poser = LLFloaterReg::findTypedInstance<FSFloaterPoser>("fs_poser");
-                if (poser && poser->hasPendingRequest(from_id))
-                {
-                    poser->handleIMReply(from_id, message);
-                    break;
-                }
-            }
 //          else if (offline == IM_ONLINE
 //                      && is_do_not_disturb
 //                      && from_id.notNull() //not a system message
