@@ -6,11 +6,15 @@ MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer
 
 This repository is not released by SecondLife or Firestorm!
 
-## Features
+### ATTENTION,
 
-### Experimental Features
-- **Poser Bone Anchor Points** — Joint markers (spheres at bone positions) in the Animation Poser now remain visible when switching between avatars, even without a specific joint selected.
-- **Voicebox TTS** — HTTP-REST based text-to-speech reads nearby chat and IMs aloud. Start with `voicebox serve` ([voicebox.sh](https://voicebox.sh/)). Configurable server URL and voice profile in Preferences > Sound > TTS.
+**Thisviewer contains experimental features like 
+- a slider for **Animationspeed** 
+- A **photogrammetry tool** for our fellow 3D Scanners ans 3D Printers (i.e. to use with [3DF Zephyr](https://store.steampowered.com/app/438450/3DF_Zephyr_Lite_Steam_Edition/)
+- A **multiuser Posing system** for photographers (Yes it has an IM request if someone wants to be posed)
+- **Voicebox** A tool to connect to an external voicebox server on your system, to read messages aloud.
+- **A unique color scheme**
+- **New render pipeline** from [Ayastorm](https://github.com/mayatonton/phoenix-firestorm/) which gives you alot more afvantages over the original
 - **LL-style Chat Window** — Ported Linden Lab chat UI with mini profile icons and range filtering
   - Three chat window styles: FS V1 (plain text), FS V7 (modern headers), LL Style
   - Mini profile icons next to speaker names in nearby chat
@@ -18,10 +22,7 @@ This repository is not released by SecondLife or Firestorm!
   - Flash effect for new IMs in conversation list
   - Human/System & Object tab split for chat history
   - Configurable via Preferences > Chat > Chat Window Style (requires restart)
-- **3D Stream Metadata Notifications** — Display title/artist metadata from 3D streams
-  - Toast notifications when stream metadata changes (configurable)
-  - Optional script channel output for custom integrations
-  - Settings: Stream3DShowToast, Stream3DChatNotify, Stream3DChatChannel
+- **3D Stream** forked from [Ayastorm](https://github.com/mayatonton/phoenix-firestorm/) which lets you stream music from prims.
 - **Script bulk upload** — Specially made for scripters who want to upload their script repositories to SL.
 - **Automated Photogrammetry Capture** — Orbits the camera around the focus target and saves PNG images for photogrammetry reconstruction.
 - **3D Stream Audio** — Positional streaming audio from prims with multi-speaker / 5.1ch support
@@ -30,15 +31,14 @@ This repository is not released by SecondLife or Firestorm!
   - Distributed Stereo (multiple Speakers in Linkset)
   - Optional Parameters: `binaural:on|off`, `venue:NAME`, `upmix:on|off`, `volume:0.8`
   - Activate: Preferences > Sound > `3D Stream Enabled`
+- **3D Stream Metadata Notifications** — Display title/artist metadata from 3D streams
+  - Toast notifications when stream metadata changes (configurable)
+  - Optional script channel output for custom integrations
+  - Settings: Stream3DShowToast, Stream3DChatNotify, Stream3DChatChannel
 - **URL Phishing / Scam Link Detection** — Warns before opening suspicious URLs
 - **Hide Local Chat** — Toggle to hide chat in quick preferences
 - **MCP Server** — Model Context Protocol for AI assistants (see [MCP Documentation](#mcp-model-context-protocol))
-- Removed discord and Flickr support
-- Removed velo updater
-- Hides your data
-- Custom and definable login page
-- Latest original code merged
-- Removed Social Links
+- **Custom and definable login window** (makes the viewer alot faster on startup)
 
 ### Rendering Features
 - **HQ Depth of Field** — High-quality circular bokeh DoF with foreground blur and chromatic aberration
@@ -238,29 +238,6 @@ configure.bat
 # Build
 build.bat
 ```
-
----
-
-## Changelog
-
-### v1.0.15.14
-- **Critical IM Fix** — Poser permission request check no longer blocks all incoming IMs
-- **Self Selection in Poser** — Self is now shown in the right avatar list (Avatars in Range) and can be selected directly
-- **Permission Fix** — Self always has permission to pose, no permission request dialog needed
-
-### v1.0.15.13
-- **MCP Support** — Full Model Context Protocol implementation for AI assistant integration
-- **Windows MCP Compatibility** — Fixed socket compatibility issues for Windows builds
-- **Render Pipeline Fixes** — HQ DoF iteration cap, GLTF error handling, LUT error checking
-- **UI Fixes** — FSFloaterPoser access fix, NACLfloaterexploresounds include fix
-- **HWID Removal** — Removed HWID spoofing functionality
-- **XUI Layout Fixes** — Fixed various UI layout overlaps
-- **Color Grading LUT Panel** — Fixed panel positioning in preferences
-
-### v1.0.15.7 - Rendering Features + UI
-- **DoF Extras** — Added `RenderDepthOfFieldFront` (foreground blur) and `RenderDepthOfFieldChroma` (DoF-coupled chromatic aberration) settings
-- **Shadow Softness** — New `RenderShadowSoftness` setting (F32, default 1.0, range 1.0–3.0)
-- **3D Color Grading LUT** — Load .cube LUT files from `app_settings/luts/`
 
 ---
 
