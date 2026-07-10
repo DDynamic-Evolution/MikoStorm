@@ -224,10 +224,8 @@ curl -X POST http://localhost:13231/mcp \
 
 ## Build Instructions
 
-- [Linux](doc/building_linux.md)
 - [Windows](doc/building_windows.md)
-- No support for Mac/Darwin
-
+  
 ### Quick Build (Windows)
 
 ```bash
