@@ -86,12 +86,9 @@ Name ${INSTNAME}
 
 ;SubCaption 0 $(LicenseSubTitleSetup)	# Override "license agreement" text
 
-# <FS:Ansariel> FIRE-24335: Use different icon for OpenSim version
-#!define MUI_ICON   "%%SOURCE%%\installers\windows\mikostorm_icon_os.ico"
-#!define MUI_UNICON "%%SOURCE%%\installers\windows\mikostorm_icon_os.ico"
-!define MUI_ICON   "%%SOURCE%%\installers\windows\mikostorm_icon${ICON_SUFFIX}.ico"
-!define MUI_UNICON "%%SOURCE%%\installers\windows\mikostorm_icon${ICON_SUFFIX}.ico"
-# </FS:Ansariel>
+# Use same icon as the viewer executable
+!define MUI_ICON   "%%SOURCE%%\res\firestorm_icon.ico"
+!define MUI_UNICON "%%SOURCE%%\res\firestorm_icon.ico"
 
 BrandingText " "						# Bottom of window text
 Icon          "${MUI_ICON}"

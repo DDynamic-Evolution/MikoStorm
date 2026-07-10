@@ -61,31 +61,31 @@
 	 top_delta="0"
 	 width="256" />
 
-	<panel
-	 follows="bottom|right"
-	 height="48"
-	 name="buttons_panel"
-	 top_pad="4"
-	 width="256">
-
 	<button
-	 follows="top|right"
+	 follows="right|bottom"
 	 height="22"
 	 label="Stop"
 	 layout="topleft"
 	 left_pad="4"
 	 name="stop_btn"
-	 top="0"
+	 top_pad="2"
 	 width="80" />
 
 	<button
-	 follows="top|right"
+	 follows="right|bottom"
 	 height="22"
 	 label="Stop and Revoke"
 	 layout="topleft"
 	 left_pad="4"
 	 name="stop_and_revoke_btn"
 	 width="84" />
+
+	<panel
+	 follows="bottom|right"
+	 height="48"
+	 name="buttons_panel"
+	 top_pad="4"
+	 width="256">
 
 	<button
 	 follows="top|right"

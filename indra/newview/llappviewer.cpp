@@ -1476,10 +1476,15 @@ bool LLAppViewer::init()
 
     // Start MCP server if enabled
 #ifdef USE_MCP
+    LL_INFOS("MCP") << "USE_MCP defined, MCPEnabled=" << gSavedSettings.getBOOL("MCPEnabled") << LL_ENDL;
     if (gSavedSettings.getBOOL("MCPEnabled"))
     {
+        LL_INFOS("MCP") << "Starting MCP server..." << LL_ENDL;
         LLMCPServer::instance().start();
+        LL_INFOS("MCP") << "MCP server start() returned" << LL_ENDL;
     }
+#else
+    LL_INFOS("MCP") << "USE_MCP not defined" << LL_ENDL;
 #endif
 
 #if LL_WINDOWS
