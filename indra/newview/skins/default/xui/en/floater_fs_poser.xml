@@ -1002,6 +1002,20 @@
 						<button
 						 height="21"
 						 follows="top|left"
+						 layout="topleft"
+						 label="Me"
+						 image_unselected="Toolbar_Middle_Off"
+						 name="pose_self_button"
+						 tool_tip="Pose your own avatar"
+						 width="60"
+						 top_delta="0"
+						 left_pad="2">
+							<button.commit_callback
+							 function="Poser.PoseSelf"/>
+						</button>
+						<button
+						 height="21"
+						 follows="top|left"
 						 enabled="false"
 						 is_toggle="true"
 						 label="Start Posing"
@@ -1018,7 +1032,7 @@
 						 tool_tip="Start posing the selected avatar or animesh, if you are allowed to."
 						 name="start_stop_posing_button"
 						 width="150">
-							<button.commit_callback
+							<button.commit_callback>
 							 function="Poser.StartStopAnimating"/>
 						</button>
 						<button
