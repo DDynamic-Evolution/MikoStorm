@@ -1532,6 +1532,8 @@ bool FSFloaterPoser::havePermissionToAnimateOtherAvatar(LLVOAvatar* avatar) cons
 
 bool FSFloaterPoser::isPermissionGranted(const LLUUID& avatarId) const
 {
+    if (gAgentAvatarp && avatarId == gAgentAvatarp->getID())
+        return true;
     auto it = mPermissionMap.find(avatarId);
     return it != mPermissionMap.end() && it->second;
 }
@@ -1783,6 +1785,11 @@ void FSFloaterPoser::onToggleLoadSavePanel()
     mLoadPosesBtn->setVisible(loadSavePanelExpanded);
     mSavePosesBtn->setVisible(loadSavePanelExpanded);
     mBrowserFolderBtn->setVisible(loadSavePanelExpanded);
+
+    // Hide the right avatar panel when load/save is shown (avoids XUI overlap)
+    LLPanel* rightPanel = findChild<LLPanel>("right_avatar_panel");
+    if (rightPanel)
+        rightPanel->setVisible(!loadSavePanelExpanded);
 
     // change the width of the Poser panel for the (dis)appearance of the load/save panel
     S32 currentWidth       = getRect().getWidth();
@@ -2880,8 +2887,11 @@ void FSFloaterPoser::onPoseSelf()
     if (!self || self->isDead())
         return;
 
-    // Set self as the selected avatar
+    // Select self in the list and refresh
     mRightSelectedAvatarId = self->getID();
+    populateRightAvatarList();
+    if (mRightAvatarList)
+        mRightAvatarList->selectByID(self->getID());
 
     // Update UI state
     bool isPosing = mPoserAnimator.isPosingAvatar(self);
@@ -2990,6 +3000,33 @@ void FSFloaterPoser::populateRightAvatarList()
         return;
 
     mRightAvatarList->clearRows();
+
+    // Self always first
+    if (gAgentAvatarp && !gAgentAvatarp.isNull())
+    {
+        LLVOAvatar* self = gAgentAvatarp;
+        if (!self->isDead() && !self->isControlAvatar())
+        {
+            LLUUID id = self->getID();
+            std::string icon = tryGetString("icon_permission_granted");
+            LLAvatarName av_name;
+            std::string displayName = "Me";
+            if (LLAvatarNameCache::get(id, &av_name))
+                displayName = av_name.getDisplayName();
+
+            LLSD row;
+            row["columns"][COL_ICON]["column"] = "icon";
+            row["columns"][COL_ICON]["value"]  = icon;
+            row["columns"][COL_NAME]["column"] = "name";
+            row["columns"][COL_NAME]["value"]  = displayName;
+            row["columns"][COL_UUID]["column"] = "uuid";
+            row["columns"][COL_UUID]["value"]  = id;
+            row["columns"][COL_SAVE]["column"] = "saveFileName";
+            row["columns"][COL_SAVE]["value"]  = "";
+            row["value"]                       = id;
+            mRightAvatarList->addElement(row, ADD_TOP);
+        }
+    }
 
     for (LLCharacter* character : LLCharacter::sInstances)
     {
