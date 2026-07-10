@@ -14,7 +14,7 @@ This repository is not released by SecondLife or Firestorm!
 - A **multiuser Posing system** for photographers (Yes it has an IM request if someone wants to be posed)
 - **Voicebox** A tool to connect to an external voicebox server on your system, to read messages aloud.
 - **A unique color scheme**
-- **New render pipeline** from [Ayastorm](https://github.com/mayatonton/phoenix-firestorm/) which gives you alot more afvantages over the original
+- **New render pipeline** from [Ayastorm](https://github.com/mayatonton/phoenix-firestorm/) which gives you alot more advantages over the original
 - **LL-style Chat Window** — Ported Linden Lab chat UI with mini profile icons and range filtering
   - Three chat window styles: FS V1 (plain text), FS V7 (modern headers), LL Style
   - Mini profile icons next to speaker names in nearby chat
