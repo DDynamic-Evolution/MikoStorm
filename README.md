@@ -1,6 +1,8 @@
 # MikoStorm - A Second Life Viewer
 
-![Screenshot](images/mikostorm.png)
+<p align="center">
+  <img src="images/mikostorm.png">
+</p>
 
 [![Download Latest Release](https://img.shields.io/badge/Download-v1.0.15.14-blue)](https://github.com/DDynamic-Evolution/MikoStorm/releases/latest)
 
