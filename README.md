@@ -14,15 +14,11 @@ This repository is not released by SecondLife or Firestorm!
 
 Thisviewer contains experimental features like 
 - a slider for **Animationspeed**
-  ![Screenshot](images/s3.png) ![Screenshot](images/s10.png)
 - A **photogrammetry tool** for our fellow 3D Scanners an 3D Printers (i.e. to use with [3DF Zephyr](https://store.steampowered.com/app/438450/3DF_Zephyr_Lite_Steam_Edition/)
-  ![Screenshot](images/s2.png)
 - A **multiuser Posing system** for photographers (Yes it has an IM request if someone wants to be posed)
 - **Voicebox** A tool to connect to an external voicebox server on your system, to read messages aloud.
-  ![Screenshot](images/s8.png)
 - **A unique color scheme**
 - **New render pipeline** from [Ayastorm](https://github.com/mayatonton/phoenix-firestorm/) which gives you alot more advantages over the original
-  ![Screenshot](images/s6.png) ![Screenshot](images/s5.png)
 - **LL-style Chat Window** — Ported Linden Lab chat UI with mini profile icons and range filtering
   - Three chat window styles: FS V1 (plain text), FS V7 (modern headers), LL Style
   - Mini profile icons next to speaker names in nearby chat
@@ -45,7 +41,6 @@ Thisviewer contains experimental features like
 - **URL Phishing / Scam Link Detection** — Warns before opening suspicious URLs
 - **Hide Local Chat** — Toggle to hide chat in quick preferences
 - **MCP Server** — Model Context Protocol for AI assistants (see [MCP Documentation](#mcp-model-context-protocol))
-  ![Screenshot](images/s4.png)
 - **Custom and definable login window** (makes the viewer alot faster on startup)
 
 ### Rendering Features
