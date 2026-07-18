@@ -19,7 +19,7 @@
      top="30"
      width="250"
      height="16"
-     label="Send crash reports to firestormviewer.org"
+     label="Send crash reports to MikoStorm"
      name="checkSendCrashReports"
      enabled="false" />
 

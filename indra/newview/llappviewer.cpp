@@ -5567,8 +5567,7 @@ void LLAppViewer::badNetworkHandler()
         "Try uninstalling and reinstalling to see if this resolves \n"
         "the issue. \n"
         " \n"
-        "If the problem continues, see the Tech Support FAQ at: \n"
-        "www.firestormviewer.org/support";
+        "If the problem continues, contact support.";
     forceDisconnect(message.str());
 
     LLApp::instance()->writeMiniDump();

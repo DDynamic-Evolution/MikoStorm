@@ -351,8 +351,8 @@
       <combo_box.drop_down_button
         font="SansSerifLarge"/>
       <combo_box.item
-        label="Firestorm"
-        name="Firestorm"
+        label="MikoStorm"
+        name="MikoStorm"
         value="settings_firestorm.xml" />
       <combo_box.item
         label="Phoenix"

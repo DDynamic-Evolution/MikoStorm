@@ -160,6 +160,9 @@ void LLPreviewTexture::populateRatioList()
     mRatiosList.push_back("3:2");
     mRatiosList.push_back("16:10");
     mRatiosList.push_back("16:9");
+    mRatiosList.push_back("19.5:9");
+    mRatiosList.push_back("20:9");
+    mRatiosList.push_back("21:9");
     mRatiosList.push_back("2:1");
 
     // Now fill combo box with provided list

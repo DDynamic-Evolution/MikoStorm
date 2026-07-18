@@ -234,7 +234,7 @@ DesktopNotifierLinux::DesktopNotifierLinux()
     m_pLibNotify = new NDLibnotifyWrapper();
     m_pNotification = 0;
 
-    if ( m_pLibNotify->init() && m_pLibNotify->mInit( "Firestorm Viewer" ) )
+    if ( m_pLibNotify->init() && m_pLibNotify->mInit( "MikoStorm Viewer" ) )
     {
 
         LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notifications initialized." << LL_ENDL;
