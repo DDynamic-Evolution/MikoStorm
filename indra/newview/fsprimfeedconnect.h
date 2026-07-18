@@ -40,7 +40,7 @@
 
 // Coro based connector designed to interface with floater designed along the same principles as LLFloaterFlickr.cpp
 #ifndef FS_PF_USER_AGENT
-#define FS_PF_USER_AGENT "Firestorm-PF"
+#define FS_PF_USER_AGENT "MikoStorm-PF"
 #endif // FS_PF_USER_AGENT
 class FSPrimfeedConnect : public LLSingleton<FSPrimfeedConnect>
 {

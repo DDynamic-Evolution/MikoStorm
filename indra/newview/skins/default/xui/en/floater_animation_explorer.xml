@@ -45,10 +45,6 @@
 		 label="Object ID"
 		 name="object_id"
 		 width="-1" />
-		<scroll_list.column
-		 label="Animation Name"
-		 name="animation_name"
-		 width="-1" />
 	</scroll_list>
 
 	<view_border
@@ -61,31 +57,31 @@
 	 top_delta="0"
 	 width="256" />
 
-	<button
-	 follows="right|bottom"
-	 height="22"
-	 label="Stop"
-	 layout="topleft"
-	 left_pad="4"
-	 name="stop_btn"
-	 top_pad="2"
-	 width="80" />
-
-	<button
-	 follows="right|bottom"
-	 height="22"
-	 label="Stop and Revoke"
-	 layout="topleft"
-	 left_pad="4"
-	 name="stop_and_revoke_btn"
-	 width="84" />
-
 	<panel
 	 follows="bottom|right"
 	 height="48"
 	 name="buttons_panel"
 	 top_pad="4"
 	 width="256">
+
+	<button
+	 follows="top|right"
+	 height="22"
+	 label="Stop"
+	 layout="topleft"
+	 left="0"
+	 name="stop_btn"
+	 top="0"
+	 width="98" />
+
+	<button
+	 follows="top|right"
+	 height="22"
+	 label="Stop and Revoke"
+	 layout="topleft"
+	 left_pad="4"
+	 name="stop_and_revoke_btn"
+	 width="154" />
 
 	<button
 	 follows="top|right"

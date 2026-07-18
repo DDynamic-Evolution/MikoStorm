@@ -123,6 +123,12 @@
 		<combo_item name="3840x2160">3840 x 2160 (4K)</combo_item>
 		<combo_item name="4096x2160">4096 x 2160</combo_item>
 		<combo_item name="7680x4320">7680 x 4320 (8K)</combo_item>
+		<combo_item name="1080x2340">1080 x 2340 (9:19.5)</combo_item>
+		<combo_item name="1080x2400">1080 x 2400 (9:20)</combo_item>
+		<combo_item name="1080x2520">1080 x 2520 (9:21)</combo_item>
+		<combo_item name="2340x1080">2340 x 1080 (19.5:9)</combo_item>
+		<combo_item name="2400x1080">2400 x 1080 (20:9)</combo_item>
+		<combo_item name="2520x1080">2520 x 1080 (21:9)</combo_item>
 		<combo_item name="custom">Custom</combo_item>
 	</combo_box>
 
