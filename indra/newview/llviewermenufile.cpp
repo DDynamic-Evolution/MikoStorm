@@ -1184,7 +1184,7 @@ void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID
     {
         std::string ext = gDirUtilp->getExtension(filename);
         LLStringUtil::toLower(ext);
-        if (ext == "lsl" || ext == "lua")
+        if (ext == "lsl" || ext == "lua" || ext == "txt")
         {
             lsl_files.push_back(filename);
         }
@@ -1202,6 +1202,174 @@ void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID
         folder = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_LSL_TEXT);
     }
     FSBulkScriptUploader::start(lsl_files, folder);
+}
+
+class LLFileUploadBulkNotecard : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        if (gAgentCamera.cameraMouselook())
+        {
+            gAgentCamera.changeCameraToDefault();
+        }
+        LLFilePickerReplyThread::startPicker([](const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
+        {
+            upload_bulk_notecards(filenames, LLUUID::null);
+        }, LLFilePicker::FFLOAD_ALL, true);
+        return true;
+    }
+};
+
+class FSBulkNotecardUploader : public std::enable_shared_from_this<FSBulkNotecardUploader>
+{
+public:
+    static void start(const std::vector<std::string>& filenames, const LLUUID& destFolder)
+    {
+        auto uploader = std::make_shared<FSBulkNotecardUploader>(filenames, destFolder);
+        uploader->uploadNext();
+    }
+
+    FSBulkNotecardUploader(const std::vector<std::string>& filenames, const LLUUID& destFolder)
+        : mFiles(filenames), mDestFolder(destFolder), mCurrentIndex(0), mSuccessCount(0), mFailCount(0)
+        , mProgressDialog(NULL)
+    {
+        mProgressDialog = LLUploadDialog::modalUploadDialog("Bulk Notecard Upload");
+    }
+
+private:
+    void uploadNext()
+    {
+        if (mCurrentIndex >= mFiles.size())
+        {
+            finish();
+            return;
+        }
+
+        std::string filename = mFiles[mCurrentIndex];
+        std::string name = gDirUtilp->getBaseFileName(filename, true);
+
+        std::ifstream t(filename);
+        if (!t.is_open())
+        {
+            mFailCount++;
+            mCurrentIndex++;
+            uploadNext();
+            return;
+        }
+        mCurrentContent = std::string((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+        t.close();
+
+        if (mProgressDialog)
+        {
+            mProgressDialog->setMessage(llformat("Uploading notecard %d of %d: %s",
+                (int)mCurrentIndex + 1, (int)mFiles.size(), name.c_str()));
+        }
+
+        LLTransactionID tid;
+        tid.generate();
+
+        U32 perms = PERM_MOVE | PERM_COPY | PERM_TRANSFER | PERM_MODIFY;
+
+        auto self = shared_from_this();
+        auto cb = new LLBoostFuncInventoryCallback([self](const LLUUID& itemId)
+        {
+            self->onItemCreated(itemId);
+        });
+
+        create_inventory_item(gAgent.getID(), gAgent.getSessionID(), mDestFolder, tid, name, "",
+            LLAssetType::AT_NOTECARD, LLInventoryType::IT_NOTECARD, NO_INV_SUBTYPE, perms, cb);
+    }
+
+    void onItemCreated(const LLUUID& itemId)
+    {
+        std::string url = gAgent.getRegion()->getCapability("UpdateNotecardAgentInventory");
+        if (url.empty())
+        {
+            mFailCount++;
+            mCurrentIndex++;
+            uploadNext();
+            return;
+        }
+
+        auto self = shared_from_this();
+
+        LLBufferedAssetUploadInfo::invnUploadFinish_f finishFn =
+            [self](LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD response)
+        {
+            self->mSuccessCount++;
+            self->mCurrentIndex++;
+            self->uploadNext();
+        };
+
+        LLBufferedAssetUploadInfo::uploadFailed_f failFn =
+            [self](LLUUID itemId, LLUUID taskId, LLSD response, std::string reason)
+        {
+            self->mFailCount++;
+            self->mCurrentIndex++;
+            self->uploadNext();
+            return false;
+        };
+
+        LLResourceUploadInfo::ptr_t uploadInfo = std::make_shared<LLBufferedAssetUploadInfo>(itemId, LLAssetType::AT_NOTECARD, mCurrentContent, finishFn, failFn);
+        LLViewerAssetUpload::EnqueueInventoryUpload(url, uploadInfo);
+    }
+
+    void finish()
+    {
+        mProgressDialog = NULL;
+        LLUploadDialog::modalUploadFinished();
+
+        if (mFailCount > 0)
+        {
+            LLSD args;
+            args["MESSAGE"] = llformat("Bulk notecard upload complete: %d succeeded, %d failed.",
+                mSuccessCount, mFailCount);
+            LLNotificationsUtil::add("BulkNotecardUploadComplete", args);
+        }
+        else
+        {
+            LLSD args;
+            args["MESSAGE"] = llformat("All %d notecards uploaded successfully.", mSuccessCount);
+            LLNotificationsUtil::add("BulkNotecardUploadComplete", args);
+        }
+    }
+
+    std::vector<std::string> mFiles;
+    size_t mCurrentIndex;
+    LLUUID mDestFolder;
+    S32 mSuccessCount;
+    S32 mFailCount;
+    std::string mCurrentContent;
+    LLUploadDialog* mProgressDialog;
+};
+
+void upload_bulk_notecards(const std::vector<std::string>& filenames, const LLUUID& destFolder)
+{
+    if (filenames.empty()) return;
+
+    std::vector<std::string> txt_files;
+    for (const auto& filename : filenames)
+    {
+        std::string ext = gDirUtilp->getExtension(filename);
+        LLStringUtil::toLower(ext);
+        if (ext == "txt")
+        {
+            txt_files.push_back(filename);
+        }
+    }
+
+    if (txt_files.empty())
+    {
+        LLNotificationsUtil::add("NoNotecardsSelected");
+        return;
+    }
+
+    LLUUID folder = destFolder;
+    if (folder.isNull())
+    {
+        folder = gInventory.findUserDefinedCategoryUUIDForType(LLFolderType::FT_NOTECARD);
+    }
+    FSBulkNotecardUploader::start(txt_files, folder);
 }
 
 // <FS:CR> Import Linkset
@@ -1847,6 +2015,7 @@ void init_menu_file()
     view_listener_t::addCommit(new LLFileUploadMaterial(), "File.UploadMaterial");
     view_listener_t::addCommit(new LLFileUploadBulk(), "File.UploadBulk");
     view_listener_t::addCommit(new LLFileUploadBulkScript(), "File.UploadBulkScript");
+    view_listener_t::addCommit(new LLFileUploadBulkNotecard(), "File.UploadBulkNotecard");
     view_listener_t::addCommit(new LLFileCloseWindow(), "File.CloseWindow");
     view_listener_t::addCommit(new LLFileCloseAllWindows(), "File.CloseAllWindows");
     view_listener_t::addEnable(new LLFileEnableCloseWindow(), "File.EnableCloseWindow");

@@ -2,6 +2,7 @@
 <line_editor background_image="TextField_Off"
              background_image_disabled="TextField_Disabled"
              background_image_focused="TextField_Active"
+             bg_color="Black"
              select_on_focus="false"
              commit_on_focus_lost="true"
              ignore_tab="true"
@@ -11,7 +12,7 @@
              text_readonly_color="TextFgReadOnlyColor"
              text_tentative_color="TextFgTentativeColor"
 			 highlight_color="lineeditor_highlight"
-			 preedit_bg_color="lineeditor_preedit_bg"
+			 preedit_bg_color="Black"
              mouse_opaque="true"
              name="line_editor"
              font="EmojiSmall">

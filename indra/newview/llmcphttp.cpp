@@ -20,6 +20,7 @@ typedef int ssize_t;
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <poll.h>
+#define closesocket close
 #endif
 
 LLMCPHttpServer* LLMCPHttpServer::sInstance = nullptr;

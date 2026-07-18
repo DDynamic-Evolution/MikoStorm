@@ -1,91 +1,83 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <colors>
 
-	<!--  MikoStorm Color Scheme — Cyber Cyan  -->
-	<!-- 
-   bg = #001418    = rgb(0.000, 0.078, 0.094)  dark cyan
-   bg2 = #051E24   = rgb(0.020, 0.118, 0.141)  medium cyan
-   bg3 = #08262E   = rgb(0.031, 0.149, 0.180)  lighter cyan
-   text = #BFF2FF  = rgb(0.749, 0.949, 1.000)  cyan-white
-   accent = #00B3E6 = rgb(0.000, 0.702, 0.902)  bright cyan
-   highlight = #33D9FF = rgb(0.200, 0.851, 1.000)  highlight cyan
+	<!--  MikoStorm Color Scheme — Pure Black  -->
 
-	-->
 	<color
 	 name="ltgrey123"
-	 value="0 0.078 0.094 1.0" />
+	 value="0 0 0 1.0" />
 	 <color
 	 name="drkgrey123"
-	 value="0 0.078 0.094 1.0" />
+	 value="0 0 0 1.0" />
 	 <color
 	 name="btncolordisabled123"
-	 value="0 0.549 0.702 1.0" />
+	 value="0.3 0.3 0.3 1.0" />
 	 <color
 	 name="btncolor123"
-	 value="0 0.702 0.902 1.0" />
+	 value="0.15 0.15 0.15 1.0" />
 	<color
 	 name="AccentColor"
-	 value="0 0.702 0.902 1.0" />
+	 value="1 1 1 1.0" />
 	<color
-	 name="EmphasisColor"             
-	 value="0 0.702 0.902 1.0" />
+	 name="EmphasisColor"
+	 value="1 1 1 1.0" />
 	<color
 	 name="SchemeLightest"
-	 value="0.200 0.851 1.000 1.0" />
+	 value="1.0 1.0 1.0 1.0" />
 	<color
 	 name="SchemeLightest_35"
-	 value="0.200 0.851 1.000 0.35" />
+	 value="1.0 1.0 1.0 0.35" />
 	<color 
 	 name="SchemeDark"
-	 value="0.020 0.118 0.141 1.0" />
+	 value="0 0 0 1.0" />
 	<color
 	 name="EmphasisColor_13"
-	 value="0 0.702 0.902 0.13" />
+	 value="1 1 1 0.13" />
 	<color
 	 name="EmphasisColor_35"
-	 value="0 0.702 0.902 0.35" />
+	 value="1 1 1 0.35" />
 	<color
 	 name="White"
-	 value="0.749 0.949 1.000 1" />
+	 value="1.0 1.0 1.0 1" />
 	<color
 	 name="White_05"
-	 value="0.749 0.949 1.000 0.05" />
+	 value="1.0 1.0 1.0 0.05" />
 	<color
 	 name="White_10"
-	 value="0.749 0.949 1.000 0.1" />
+	 value="1.0 1.0 1.0 0.1" />
 	<color
 	 name="White_25"
-	 value="0.749 0.949 1.000 0.25" />
+	 value="1.0 1.0 1.0 0.25" />
 	<color
 	 name="White_50"
-	 value="0.749 0.949 1.000 0.5" />
+	 value="1.0 1.0 1.0 0.5" />
 	<color
 	 name="White_70"
-	 value="0.749 0.949 1.000 0.7" />
+	 value="1.0 1.0 1.0 0.7" />
 	<color
 	 name="LtGray"
-	 value="0.600 0.902 0.949 1" />
+	 value="0.85 0.85 0.85 1" />
 	<color
 	 name="LtGray_50"
-	 value="0.600 0.902 0.949 0.50" />
+	 value="0.85 0.85 0.85 0.50" />
 	<color
 	 name="LtGray_75"
-	 value="0.600 0.902 0.949 0.75" />
+	 value="0.85 0.85 0.85 0.75" />
 	<color
 	 name="DkGray"
-	 value="0 0.078 0.094 1" />
+	 value="0.12 0.12 0.12 1" />
 	<color
 	 name="DkGray_66"
-	 value="0 0.078 0.094 0.66" />
+	 value="0.12 0.12 0.12 0.66" />
 	<color
 	 name="DkGray_86"
-	 value="0 0.078 0.094 0.86" />
+	 value="0.12 0.12 0.12 0.86" />
 	<color
 	 name="DkGray2"
-	 value="0.020 0.118 0.141 1" />
+	 value="0.08 0.08 0.08 1" />
 	<color
 	 name="MouseGray"
-	 value="0.031 0.149 0.180 1" />
+	 value="0.10 0.10 0.10 1" />
 	<color
 	 name="Black"
 	 value="0 0 0 1" />
@@ -136,64 +128,64 @@
 
 	<color
 	 name="SL-White"
-	 value="0.749 0.949 1.000 1" />
+	 value="1.0 1.0 1.0 1" />
 	<color
 	 name="SL-Normal"
-	 value="0.020 0.118 0.141 1" />
+	 value="0.08 0.08 0.08 1" />
 	<color
 	 name="SL-Dark"
-	 value="0.010 0.060 0.080 1" />
+	 value="0.04 0.04 0.04 1" />
 	<color
 	 name="SL-Background_Light"
-	 value="0.031 0.149 0.180 1" />
+	 value="0.10 0.10 0.10 1" />
 	<color
 	 name="SL-Background"
-	 value="0 0.078 0.094 1" />
+	 value="0 0 0 1" />
 	<color
 	 name="SL-Background_50"
-	 value="0 0.078 0.094 0.50" />
+	 value="0 0 0 0.50" />
 	<color
 	 name="SL-Background_66"
-	 value="0 0.078 0.094 0.66" />
+	 value="0 0 0 0.66" />
 	<color
 	 name="SL-Foreground"
-	 value="0.050 0.200 0.250 1" />
+	 value="0.20 0.20 0.20 1" />
 	<color
 	 name="SL-Foreground_50"
-	 value="0.050 0.200 0.250 0.50" />
+	 value="0.20 0.20 0.20 0.50" />
 	<color
 	 name="SL-Foreground_66"
-	 value="0.050 0.200 0.250 0.66" />
+	 value="0.20 0.20 0.20 0.66" />
 	<color
 	 name="SL-Silver"
-	 value="0.500 0.700 0.750 1" />
+	 value="0.75 0.75 0.75 1" />
 	<color
 	 name="SL-MidGray_50"
-	 value="0.500 0.700 0.750 0.50" />
+	 value="0.50 0.50 0.50 0.50" />
 	<color
 	 name="SL-MidDkGray"
-	 value="0.250 0.400 0.450 1" />
+	 value="0.30 0.30 0.30 1" />
 	<color
 	 name="SL-MidDkGray_50"
-	 value="0.250 0.400 0.450 0.50" />
+	 value="0.30 0.30 0.30 0.50" />
 	<color
 	 name="SL-Titanium_25"
-	 value="0.050 0.200 0.250 0.25" />
+	 value="0.20 0.20 0.20 0.25" />
 	<color
 	 name="SL-Titanium"
-	 value="0.050 0.200 0.250 1" />
+	 value="0.20 0.20 0.20 1" />
 	<color
 	 name="SL-DkTitanium"
-	 value="0.030 0.120 0.150 1" />
+	 value="0.06 0.06 0.06 1" />
 	<color
 	 name="SL-TitaniumGray"
-	 value="0.080 0.250 0.300 1" />
+	 value="0.15 0.15 0.15 1" />
 	<color
 	 name="SL-MidBlue"
 	 value="0 0.600 0.800 1" />
 	<color
 	 name="OldGray_63"
-	 value="0 0.078 0.094 0.63" />
+	 value="0 0 0 0.63" />
 	<color
 	 name="Brown"
 	 value="0.225 0.100 0.05 1" />
@@ -239,28 +231,28 @@
      value="0 0 0 0.31" />
     <color
      name="GridlineBGColor"
-     value="0.176 0.039 0.039 0.78" />
+     value="0.10 0.10 0.10 0.78" />
     <color
      name="TextFgColor"
-     value="1.0 0.843 0.0 1" />
+     value="1.0 1.0 1.0 1" />
     <color
      name="ChicletFlashColor"
      value="SchemeLightest" />
     <color
      name="GroupNotifyBoxColor"
-     value="0.3344 0.5456 0.5159 1" />
+     value="0.15 0.15 0.15 1" />
     <color
      name="GroupOverTierColor"
      value="0.43 0.06 0.06 1" />
     <color
      name="HighlightParentColor"
-     value="1.0 0.843 0.0 1" />
+     value="1.0 1.0 1.0 1" />
     <color
      name="MapAvatarSelfColor"
      reference="AccentColor" />
     <color
      name="MenuNonProductionGodBgColor"
-     value="0.263 0.325 0.345 1" />
+     value="0.10 0.10 0.10 1" />
     <color
      name="NetMapGroupOwnBelowWater"
      value="0.78 0 0.78 1" />
@@ -300,13 +292,13 @@
      value="0 1 0 0.4" />
     <color
      name="ColorSwatchBorderColor"
-     value="0.700 0.0 0.0 1"/>
+     value="0.40 0.40 0.40 1"/>
     <color
      name="TextEmbeddedItemColor"
-     value="1.0 0.843 0.0 1" />
+     value="1.0 1.0 1.0 1" />
     <color
      name="ToolTipBgColor"
-     value="0.150 0.030 0.030 1" />
+     value="0.08 0.08 0.08 1" />
     <color
      name="ToolTipBorderColor"
      value="White" />
@@ -366,13 +358,13 @@
      reference="DkGray" />
     <color
      name="ButtonBorderColor"
-     value="0.700 0.0 0.0 0.7" />
+     value="0.30 0.30 0.30 1" />
     <color
      name="ButtonCautionImageColor"
      reference="EmphasisColor" />
     <color
      name="ButtonColor"
-     reference="EmphasisColor" />
+     reference="DkGray2" />
     <color
      name="ButtonFlashBgColor"
      reference="White" />
@@ -406,7 +398,7 @@
      reference="Unused?" />
     <color
      name="ChatHistoryBgColor"
-     reference="OldGray_63" />
+     reference="Black" />
     <color
      name="ChatHistoryTextColor"
      reference="LtGray" />
@@ -424,7 +416,7 @@
      reference="SchemeLightest" />
     <color
      name="DefaultHighlightDark"
-     value="1.0 0.843 0.0 0.10" />
+     value="1.0 1.0 1.0 0.10" />
     <color
      name="DefaultHighlightLight"
      reference="SchemeLightest_35" />
@@ -451,13 +443,13 @@
      reference="DkGray2" />
     <color
      name="simpleeditor_bg_selected"
-     reference="EmphasisColor" />
+     reference="EmphasisColor_35" />
     <color
      name="floater_bg_color"
-     reference="drkgrey123"/>
+     reference="Black"/>
     <color
      name="floater_bg_color_a"
-     reference="drkgrey123"/>
+     reference="Black"/>
     <color
      name="ScriptEditorTextRColor"
      reference="LtGray" />
@@ -469,18 +461,18 @@
      reference="LtGray" />
     <color
      name="FloaterDefaultBackgroundColor"
-     reference="DkGray_66" />
+     reference="Black" />
 <!-- Changed Color -->
     <color
      name="FloaterFocusBackgroundColor"
-     reference="SL-Background" />
+     reference="Black" />
 <!-- Changed Color -->
     <color
      name="FloaterFocusBorderColor"
-     value="0.700 0.0 0.0 1.0" />
+     value="0.40 0.40 0.40 1.0" />
     <color
      name="FloaterUnfocusBorderColor"
-     value="0.400 0.0 0.0 0.6" />
+     value="0.25 0.25 0.25 0.6" />
     <color
      name="FocusColor"
      reference="EmphasisColor" />
@@ -804,19 +796,19 @@
      reference="LtGray" />
     <color
      name="TextBgFocusColor"
-     value="0.250 0.060 0.060 1" />
+     value="0.08 0.08 0.08 1" />
     <color
      name="TextBgReadOnlyColor"
-	 value="0.200 0.045 0.045 1" />
+	 value="0.06 0.06 0.06 1" />
     <color
      name="TextBgWriteableColor"
-     value="0.220 0.055 0.055 1" />
+     value="0.08 0.08 0.08 1" />
     <color
      name="TextCursorColor"
-     value="1.0 0.843 0.0 1" />
+     value="1.0 1.0 1.0 1" />
     <color
      name="TextDefaultColor"
-     value="1.0 0.843 0.0 1" />
+     value="1.0 1.0 1.0 1" />
     <color
      name="TextEmbeddedItemReadOnlyColor"
      reference="SchemeLightest" />
