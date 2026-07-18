@@ -9930,6 +9930,26 @@ No .lsl script files were selected.
      name="okbutton"
      yestext="OK"/>
   </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="BulkNotecardUploadComplete"
+   type="alertmodal">
+[MESSAGE]
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="NoNotecardsSelected"
+   type="alertmodal">
+No .txt notecard files were selected.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
   
    <notification
     icon="alertmodal.tga"

@@ -1361,17 +1361,17 @@
       <integer>1</integer>   
     </map>
 
-  <key>SkinCurrentTheme</key>
-    <map>
-      <key>Comment</key>
-      <string>The selected theme for the current skin.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>grey</string>
-    </map>
+<key>SkinCurrentTheme</key>
+<map>
+  <key>Comment</key>
+  <string>The currently selected theme for the skin.</string>
+  <key>Persist</key>
+  <integer>1</integer>
+  <key>Type</key>
+  <string>String</string>
+  <key>Value</key>
+  <string>black</string>
+</map>
 
     <key>ShowSearchTopBar</key>
     <map>
@@ -22432,19 +22432,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>MikoStorm</string>
     </map>
-  <key>FSSkinCurrentThemeReadableName</key>
-    <map>
-      <key>Comment</key>
-      <string>The readable name of the selected theme for the current skin.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>HideFromEditor</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string>Grey</string>
-    </map>
+<key>FSSkinCurrentThemeReadableName</key>
+<map>
+  <key>Comment</key>
+  <string>The currently selected readable name for the skin theme.</string>
+  <key>Persist</key>
+  <integer>1</integer>
+  <key>Type</key>
+  <string>String</string>
+  <key>Value</key>
+  <string>Black</string>
+</map>
     <key>FSStatusbarShowSimulatorVersion</key>
     <map>
       <key>Comment</key>

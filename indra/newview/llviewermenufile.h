@@ -87,6 +87,7 @@ void upload_bulk(
     const LLUUID& dest);
 
 void upload_bulk_scripts(const std::vector<std::string>& filenames, const LLUUID& destFolder);
+void upload_bulk_notecards(const std::vector<std::string>& filenames, const LLUUID& destFolder);
 
 //consider moving all file pickers below to more suitable place
 class LLFilePickerThread : public LLThread
