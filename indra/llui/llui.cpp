@@ -163,6 +163,14 @@ void make_ui_sound(const char* namep, bool force_sound)
     }
 }
 
+void make_ui_sound(const LLUUID& sound_uuid)
+{
+    if (sound_uuid.notNull() && LLUI::getInstance()->mAudioCallback != NULL)
+    {
+        LLUI::getInstance()->mAudioCallback(sound_uuid);
+    }
+}
+
 //void make_ui_sound_deferred(const char* namep)
 void make_ui_sound_deferred(const char* namep, bool force_sound)
 {

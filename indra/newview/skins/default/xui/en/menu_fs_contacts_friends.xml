@@ -34,6 +34,23 @@
          function="Contacts.Friends.AddToContactSet"/>
     </menu_item_call>
     <menu_item_call
+     label="Set IM Sound..."
+     layout="topleft"
+     name="set_im_sound">
+        <menu_item_call.on_click
+         function="Contacts.Friends.SetIMSound"/>
+    </menu_item_call>
+    <menu_item_call
+     label="Clear IM Sound"
+     layout="topleft"
+     name="clear_im_sound">
+        <menu_item_call.on_click
+         function="Contacts.Friends.ClearIMSound"/>
+        <menu_item_call.on_enable
+         function="Contacts.Friends.EnableItem"
+         parameter="clear_im_sound"/>
+    </menu_item_call>
+    <menu_item_call
      label="Zoom at Friend"
      layout="topleft"
      name="zoom_agent">

@@ -36,6 +36,7 @@
 #include "llslurl.h"
 #include "llurlaction.h"
 #include "llviewercontrol.h"
+#include "fsfloaterimsetsound.h"
 
 FSContactsFriendsMenu gFSContactsFriendsMenu;
 
@@ -57,6 +58,8 @@ LLContextMenu* FSContactsFriendsMenu::createMenu()
         registrar.add("Contacts.Friends.Pay",                   boost::bind(&LLAvatarActions::pay,                              id));
         registrar.add("Contacts.Friends.AddToContactSet",       boost::bind(&FSContactsFriendsMenu::addToContactSet,            this));
         registrar.add("Contacts.Friends.TeleportToTarget",      boost::bind(&FSContactsFriendsMenu::teleportToAvatar,           this));
+        registrar.add("Contacts.Friends.SetIMSound",            boost::bind(&FSContactsFriendsMenu::setIMSound,                this));
+        registrar.add("Contacts.Friends.ClearIMSound",          boost::bind(&FSContactsFriendsMenu::clearIMSound,              this));
         registrar.add("Contacts.Friends.TrackAvatar",           boost::bind(&FSContactsFriendsMenu::onTrackAvatarMenuItemClick, this));
         registrar.add("Contacts.Friends.CopyLabel",             boost::bind(&FSContactsFriendsMenu::copyNameToClipboard,        this, id));
         registrar.add("Contacts.Friends.CopyUrl",               boost::bind(&FSContactsFriendsMenu::copySLURLToClipboard,       this, id));
@@ -139,6 +142,15 @@ bool FSContactsFriendsMenu::enableContextMenuItem(const LLSD& userdata)
         }
         return false;
     }
+    else if (item == "clear_im_sound")
+    {
+        if (mUUIDs.size() == 1)
+        {
+            LLSD customSounds = gSavedPerAccountSettings.getLLSD("FSPerAccountIMSounds");
+            return customSounds.has(mUUIDs.front().asString());
+        }
+        return false;
+    }
     else if (item == "FSFriendListColumnShowUserName")
     {
         return (gSavedSettings.getBOOL("FSFriendListColumnShowDisplayName") ||
@@ -179,6 +191,28 @@ void FSContactsFriendsMenu::onTrackAvatarMenuItemClick()
 void FSContactsFriendsMenu::addToContactSet()
 {
     LLAvatarActions::addToContactSet(mUUIDs);
+}
+
+void FSContactsFriendsMenu::setIMSound()
+{
+    if (mUUIDs.size() == 1)
+    {
+        FSFloaterIMSetSound::showInstance(mUUIDs.front());
+    }
+}
+
+void FSContactsFriendsMenu::clearIMSound()
+{
+    if (mUUIDs.size() == 1)
+    {
+        LLSD customSounds = gSavedPerAccountSettings.getLLSD("FSPerAccountIMSounds");
+        std::string key = mUUIDs.front().asString();
+        if (customSounds.has(key))
+        {
+            customSounds.erase(key);
+            gSavedPerAccountSettings.setLLSD("FSPerAccountIMSounds", customSounds);
+        }
+    }
 }
 
 void FSContactsFriendsMenu::copyNameToClipboard(const LLUUID& id)

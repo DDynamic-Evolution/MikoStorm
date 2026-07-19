@@ -111,6 +111,7 @@ set(viewer_SOURCE_FILES
     fsdroptarget.cpp
     fsexportperms.cpp
     fsfloateraddtocontactset.cpp
+    fsfloaterimsetsound.cpp
     fsfavoritegroups.cpp
     fsinventorycustomtabs.cpp
     pvassets.cpp
@@ -992,6 +993,7 @@ set(viewer_HEADER_FILES
     fsdroptarget.h
     fsexportperms.h
     fsfloateraddtocontactset.h
+    fsfloaterimsetsound.h
     fsfavoritegroups.h
     fsinventorycustomtabs.h
     pvassets.h
