@@ -3,7 +3,6 @@
 <p align="center">
   <img src="images/mikostorm.png">
 </p>
-[![Download Latest Release](https://img.shields.io/badge/Download-v1.15.17-blue)](https://github.com/DDynamic-Evolution/MikoStorm/releases/tag/v1.15.17)
 
 [![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.17/MikoStorm-v1.15.17-Windows.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.17/MikoStorm-v1.15.17-Linux.tar.xz)
 
