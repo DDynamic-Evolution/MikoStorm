@@ -3,9 +3,6 @@
 <p align="center">
   <img src="images/mikostorm.png">
 </p>
-
-[![Download Latest Release](https://img.shields.io/badge/Download-v1.15.18-blue)](https://github.com/DDynamic-Evolution/MikoStorm/releases/tag/v1.15.18)
-
 [Windows Installer](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Windows.exe) | [Linux tar.xz](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Linux.tar.xz)
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
