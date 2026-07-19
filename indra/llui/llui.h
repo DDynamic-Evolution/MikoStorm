@@ -54,6 +54,7 @@ class LLHelp;
 // <FS:PP> UI Sounds preview
 // void make_ui_sound(const char* name);
 void make_ui_sound(const char* name, bool force_sound = false);
+void make_ui_sound(const LLUUID& sound_uuid);
 // </FS:PP> UI Sounds preview
 // <FS:CR>
 //void make_ui_sound_deferred(const char * name);

@@ -41,6 +41,8 @@ private:
     void teleportToAvatar();
     void onTrackAvatarMenuItemClick();
     void addToContactSet();
+    void setIMSound();
+    void clearIMSound();
     void copyNameToClipboard(const LLUUID& id);
     void copySLURLToClipboard(const LLUUID& id);
     void selectOption(const LLSD& userdata);

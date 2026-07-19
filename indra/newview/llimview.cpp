@@ -3610,6 +3610,10 @@ void LLIMMgr::addMessage(
     }
     // </FS:PP> Configurable IM sounds
 
+    // <FS:Miko> Per-contact IM sound override
+    LLSD customIMSounds = gSavedPerAccountSettings.getLLSD("FSPerAccountIMSounds");
+    // </FS:Miko>
+
     if (new_session)
     {
         // Group chat session was initiated by muted resident, do not start this session viewerside
@@ -3757,7 +3761,17 @@ void LLIMMgr::addMessage(
             {
                 if (PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
                 {
-                    make_ui_sound("UISndNewIncomingIMSession");
+                    // <FS:Miko> Per-contact IM sound override
+                    LLUUID customSound(customIMSounds[other_participant_id.asString()]);
+                    if (customSound.notNull())
+                    {
+                        make_ui_sound(customSound);
+                    }
+                    else
+                    {
+                        make_ui_sound("UISndNewIncomingIMSession");
+                    }
+                    // </FS:Miko>
                 }
                 else if (PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
                 {
@@ -3786,7 +3800,17 @@ void LLIMMgr::addMessage(
     // </FS:Zi>
     else if(!do_not_disturb && PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL && !play_snd_mention)
     {
-        make_ui_sound("UISndNewIncomingIMSession");
+        // <FS:Miko> Per-contact IM sound override
+        LLUUID customSound(customIMSounds[other_participant_id.asString()]);
+        if (customSound.notNull())
+        {
+            make_ui_sound(customSound);
+        }
+        else
+        {
+            make_ui_sound("UISndNewIncomingIMSession");
+        }
+        // </FS:Miko>
     }
     else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL && is_group_chat && !play_snd_mention)
     {
@@ -3806,7 +3830,17 @@ void LLIMMgr::addMessage(
         // </FS:Ansariel> [FS communication UI]
         if (im_floater && !im_floater->hasFocus() && !play_snd_mention)
         {
-            make_ui_sound("UISndNewIncomingIMSession");
+            // <FS:Miko> Per-contact IM sound override
+            LLUUID customSound(customIMSounds[other_participant_id.asString()]);
+            if (customSound.notNull())
+            {
+                make_ui_sound(customSound);
+            }
+            else
+            {
+                make_ui_sound("UISndNewIncomingIMSession");
+            }
+            // </FS:Miko>
         }
     }
     else if(!do_not_disturb && PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL && is_group_chat)
