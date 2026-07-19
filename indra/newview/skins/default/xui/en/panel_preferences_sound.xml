@@ -1704,6 +1704,43 @@ Hover your mouse cursor over UUID field to show its default value.
          tool_tip="Swap left and right audio channels on 3D streams. Useful when your headset is on backwards or the stream's channel assignment is reversed."
          width="200"/>
         <check_box
+         control_name="Stream3DDescriptionScan"
+         label="Scan linked child prims for stream tags"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         top_pad="8"
+         name="stream3d_description_scan_check"
+         tool_tip="When enabled, the viewer scans child prims of nearby objects for [3dstream:...] tags in their Description field to discover distributed-stereo speaker layouts. Disable to only play streams on the root prim."
+         width="340"/>
+        <check_box
+         control_name="Stream3DScanAttachments"
+         label="Scan avatar attachments for stream tags"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         top_pad="2"
+         name="stream3d_scan_attachments_check"
+         tool_tip="When enabled, the viewer also scans objects attached to avatars (worn items, HUDs) for [3dstream:...] tags. Disable to skip avatar attachments and only scan world prims. Requires 'Scan linked child prims' to be enabled."
+         width="340"/>
+        <spinner
+         control_name="Stream3DMaxConcurrent"
+         label="Max concurrent streams:"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         top_pad="2"
+         name="stream3d_max_concurrent_spinner"
+         tool_tip="Maximum number of 3D streams playing simultaneously. 0 = unlimited."
+         decimal_digits="0"
+         increment="1"
+         min="0"
+         max="32"
+         width="200"/>
+        <check_box
          control_name="Stream3DRoutingDiagnostic"
          label="Show channel routing diagnostics in chat"
          follows="left|top"
