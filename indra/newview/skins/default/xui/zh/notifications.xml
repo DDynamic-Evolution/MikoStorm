@@ -2479,9 +2479,7 @@ URL:[UNTRUSTED_URL]
 可能需要稍候一段時間，地圖才會反映這個變更。
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
-	<notification label="聲音版本不相符" name="VoiceVersionMismatch">
-		這版本的 [APP_NAME] 和本區域的語音聊天功能不相容。 想要語音聊天正常運作，你必須更新 [APP_NAME]。
-	</notification>
+
 	<notification label="無法購買物件" name="BuyObjectOneOwner">
 		無法同時向不同物主購買物件。
 請只選擇一個物件，再試一次。
@@ -3653,10 +3651,6 @@ URL：[AUDIOURL]
 
 在決定是否允許此訪問之前，請務必了解該物件的性質以及它為何提出這樣的請求。此外，仔細考慮你是否信任這個物件的創造者。如果你對此沒有把握，請點擊「拒絕」以防止任何未經授權的資金提取。
 
-
-
-
-
 		<form name="form">
 			<button name="Grant" text="允許全權存取"/>
 			<button name="Deny" text="拒絕"/>
@@ -3765,33 +3759,7 @@ URL：[AUDIOURL]
 	<notification name="VoiceChannelJoinFailed">
 		無法連線 [VOICE_CHANNEL_NAME],，請稍候再試。  現在你將重新連線到附近的語音聊天。
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		至少一個你訂閱的變聲效果已經過期。
-[[URL] 點擊這裡] 繼續訂閱。
 
-付費使用者請[[PREMIUM_URL] 點擊這裡]領取免費變聲工具。
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		使用中的變聲效果已經過期，已用你平時的聲音設定替換。
-[[URL] 點擊這裡]繼續訂閱。
-
-付費使用者請[[PREMIUM_URL] 點擊這裡]領取免費變聲工具。
-		<usetemplate ignoretext="提醒我語音變聲即將過期" name="okignore" yestext="確定"/>
-	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		至少一個你訂閱的變聲效果將在 [INTERVAL] 天后到期。
-[[URL] 點擊這裡]繼續訂閱。
-
-付費使用者請[[PREMIUM_URL] 點擊這裡]領取免費變聲工具。
-	</notification>
-	<notification name="VoiceEffectsNew">
-		新的變聲效果上市了！
-	</notification>
-	<notification name="VoiceEffectsNotSupported">
-		此檢視器不支援語音變聲功能。
-有關其他語音變形工具的更多資訊，請參見[[FAQ_URL] 這篇文章]。
-		<usetemplate ignoretext="提醒我語音變聲不被支援" name="okignore" yestext="確定"/>
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		只有某特定群組的成員才能進入這區域。
 	</notification>

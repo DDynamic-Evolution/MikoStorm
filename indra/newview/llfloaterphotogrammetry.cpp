@@ -133,7 +133,7 @@ bool LLFloaterPhotogrammetry::postBuild()
     mProgressBar = getChild<LLProgressBar>("capture_progress");
     mStatusText = getChild<LLTextBox>("status_text");
     mEstimatedSizeText = getChild<LLTextBox>("estimated_size");
-    mTotalImagesText = getChild<LLTextBox>("total_images");
+    mTotalImagesText = getChild<LLTextBox>("total_images_text");
 
     mStartBtn->setCommitCallback(boost::bind(&LLFloaterPhotogrammetry::onStartBtn, this));
     mStopBtn->setCommitCallback(boost::bind(&LLFloaterPhotogrammetry::onStopBtn, this));
@@ -282,6 +282,12 @@ void LLFloaterPhotogrammetry::onBrowseDirSelected(const std::vector<std::string>
 
 void LLFloaterPhotogrammetry::onStartBtn()
 {
+    mTotalImagesSpinner->forceEditorCommit();
+    mNumVerticalSpinner->forceEditorCommit();
+    mDelaySpinner->forceEditorCommit();
+    mHeightMinSpinner->forceEditorCommit();
+    mHeightMaxSpinner->forceEditorCommit();
+
     S32 total_setting = (S32)mTotalImagesSpinner->get();
     mNumVertical = llmax((S32)1, (S32)mNumVerticalSpinner->get());
     mNumHorizontal = (S32)ceil((F32)total_setting / (F32)mNumVertical);

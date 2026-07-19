@@ -113,13 +113,12 @@ struct LLVoiceVersionInfo
 /// @class LLVoiceP2POutgoingCallInterface
 /// @brief Outgoing call interface
 ///
-/// For providers that support P2P signaling (vivox)
+/// For providers that support P2P signaling
 /////////////////////////////////
 
 class LLVoiceP2POutgoingCallInterface
 {
   public:
-    // initiate an outgoing call to a user
     virtual void callUser(const LLUUID &agentID) = 0;
     virtual void hangup() = 0;
 };
@@ -128,7 +127,7 @@ class LLVoiceP2POutgoingCallInterface
 /// @class LLVoiceP2PIncomingCallInterface
 /// @brief Incoming call interface
 ///
-/// For providers that support P2P signaling (vivox)
+/// For providers that support P2P signaling
 /////////////////////////////////
 class LLVoiceP2PIncomingCallInterface
 {
@@ -154,14 +153,14 @@ public:
     LLVoiceModuleInterface() {}
     virtual ~LLVoiceModuleInterface() {}
 
-    virtual void init(LLPumpIO *pump)=0;    // Call this once at application startup (creates connector)
-    virtual void terminate()=0; // Call this to clean up during shutdown
+    virtual void init(LLPumpIO *pump)=0;
+    virtual void terminate()=0;
 
-    virtual void updateSettings()=0; // call after loading settings and whenever they change
+    virtual void updateSettings()=0;
 
-    virtual bool isVoiceWorking() const = 0; // connected to a voice server and voice channel
+    virtual bool isVoiceWorking() const = 0;
 
-    virtual void setHidden(bool hidden)=0;  //  Hides the user from voice.
+    virtual void setHidden(bool hidden)=0;
 
     virtual const LLVoiceVersionInfo& getVersion()=0;
 
@@ -182,15 +181,9 @@ public:
     /////////////////////
     /// @name Devices
     //@{
-    // This returns true when it's safe to bring up the "device settings" dialog in the prefs.
-    // i.e. when the daemon is running and connected, and the device lists are populated.
     virtual bool deviceSettingsAvailable()=0;
     virtual bool deviceSettingsUpdated() = 0;
 
-    // Requery the vivox daemon for the current list of input/output devices.
-    // If you pass true for clearCurrentList, deviceSettingsAvailable() will be false until the query has completed
-    // (use this if you want to know when it's done).
-    // If you pass false, you'll have no way to know when the query finishes, but the device lists will not appear empty in the interim.
     virtual void refreshDeviceLists(bool clearCurrentList = true)=0;
 
     virtual void setCaptureDevice(const std::string& name)=0;
@@ -206,8 +199,6 @@ public:
     ////////////////////////////
     /// @ name Channel stuff
     //@{
-    // returns true iff the user is currently in a proximal (local spatial) channel.
-    // Note that gestures should only fire if this returns true.
     virtual bool inProximalChannel()=0;
 
     virtual void setNonSpatialChannel(const LLSD& channelInfo,
@@ -229,12 +220,8 @@ public:
     /// @name p2p
     //@{
 
-    // initiate a call with a peer using the P2P interface, which only applies to some
-    // voice server types.  Otherwise, a group call should be used for P2P
     virtual LLVoiceP2POutgoingCallInterface* getOutgoingCallInterface() = 0;
 
-    // an incoming call was received, and the incoming call dialogue is asking for an interface to
-    // answer or decline.
     virtual LLVoiceP2PIncomingCallInterfacePtr getIncomingCallInterface(const LLSD &voice_call_info) = 0;
     //@}
 
@@ -249,10 +236,10 @@ public:
     /// @name enable disable voice and features
     //@{
     virtual void setVoiceEnabled(bool enabled)=0;
-    virtual void setMuteMic(bool muted)=0;      // Set the mute state of the local mic.
+    virtual void setMuteMic(bool muted)=0;
     //@}
 
-    virtual void notifyVoiceConnected() {}; // <FS:TJ/> Fix Nearby Voice when changing voice device settings
+    virtual void notifyVoiceConnected() {};
 
     //////////////////////////
     /// @name nearby speaker accessors
@@ -261,9 +248,9 @@ public:
     virtual bool isParticipantAvatar(const LLUUID &id)=0;
     virtual bool getIsSpeaking(const LLUUID& id)=0;
     virtual bool getIsModeratorMuted(const LLUUID& id)=0;
-    virtual F32 getCurrentPower(const LLUUID& id)=0;        // "power" is related to "amplitude" in a defined way.  I'm just not sure what the formula is...
+    virtual F32 getCurrentPower(const LLUUID& id)=0;
     virtual F32 getUserVolume(const LLUUID& id)=0;
-    virtual void setUserVolume(const LLUUID& id, F32 volume)=0; // set's volume for specified agent, from 0-1 (where .5 is nominal)
+    virtual void setUserVolume(const LLUUID& id, F32 volume)=0;
     //@}
 
     //////////////////////////
@@ -271,10 +258,8 @@ public:
     //@{
     virtual bool isSessionTextIMPossible(const LLUUID& id)=0;
     virtual bool isSessionCallBackPossible(const LLUUID& id)=0;
-    //virtual bool sendTextMessage(const LLUUID& participant_id, const std::string& message)=0;
     //@}
 
-    // authorize the user
     virtual void userAuthorized(const std::string& user_id,
                                 const LLUUID &agentID)=0;
 
@@ -293,63 +278,6 @@ public:
     virtual LLSD getP2PChannelInfoTemplate(const LLUUID& id) const=0;
     //@}
 
-};
-
-
-//////////////////////////////////
-/// @class LLVoiceEffectObserver
-class LLVoiceEffectObserver
-{
-public:
-    virtual ~LLVoiceEffectObserver() { }
-    virtual void onVoiceEffectChanged(bool effect_list_updated) = 0;
-};
-
-typedef std::multimap<const std::string, const LLUUID, LLDictionaryLess> voice_effect_list_t;
-
-//////////////////////////////////
-/// @class LLVoiceEffectInterface
-/// @brief Voice effect module interface
-///
-/// Voice effect modules should provide an implementation for this interface.
-/////////////////////////////////
-
-class LLVoiceEffectInterface
-{
-public:
-    LLVoiceEffectInterface() {}
-    virtual ~LLVoiceEffectInterface() {}
-
-    //////////////////////////
-    /// @name Accessors
-    //@{
-    virtual bool setVoiceEffect(const LLUUID& id) = 0;
-    virtual const LLUUID getVoiceEffect() = 0;
-    virtual LLSD getVoiceEffectProperties(const LLUUID& id) = 0;
-
-    virtual void refreshVoiceEffectLists(bool clear_lists) = 0;
-    virtual const voice_effect_list_t &getVoiceEffectList() const = 0;
-    virtual const voice_effect_list_t &getVoiceEffectTemplateList() const = 0;
-    //@}
-
-    //////////////////////////////
-    /// @name Status notification
-    //@{
-    virtual void addObserver(LLVoiceEffectObserver* observer) = 0;
-    virtual void removeObserver(LLVoiceEffectObserver* observer) = 0;
-    //@}
-
-    //////////////////////////////
-    /// @name Preview buffer
-    //@{
-    virtual void enablePreviewBuffer(bool enable) = 0;
-    virtual void recordPreviewBuffer() = 0;
-    virtual void playPreviewBuffer(const LLUUID& effect_id = LLUUID::null) = 0;
-    virtual void stopPreviewBuffer() = 0;
-
-    virtual bool isPreviewRecording() = 0;
-    virtual bool isPreviewPlaying() = 0;
-    //@}
 };
 
 
@@ -375,7 +303,7 @@ public:
     typedef boost::signals2::signal<void(void)> micro_changed_signal_t;
     micro_changed_signal_t mMicroChangedSignal;
 
-    void terminate();   // Call this to clean up during shutdown
+    void terminate();
 
     const LLVoiceVersionInfo getVersion();
 
@@ -391,9 +319,9 @@ public:
     static const F32 VOLUME_DEFAULT;
     static const F32 VOLUME_MAX;
 
-    void updateSettings(); // call after loading settings and whenever they change
+    void updateSettings();
 
-    bool isVoiceWorking() const; // connected to a voice server and voice channel
+    bool isVoiceWorking() const;
 
     // tuning
     void tuningStart();
@@ -406,15 +334,9 @@ public:
 
     // devices
 
-    // This returns true when it's safe to bring up the "device settings" dialog in the prefs.
-    // i.e. when the daemon is running and connected, and the device lists are populated.
     bool deviceSettingsAvailable();
-    bool deviceSettingsUpdated();   // returns true when the device list has been updated recently.
+    bool deviceSettingsUpdated();
 
-    // Requery the vivox daemon for the current list of input/output devices.
-    // If you pass true for clearCurrentList, deviceSettingsAvailable() will be false until the query has completed
-    // (use this if you want to know when it's done).
-    // If you pass false, you'll have no way to know when the query finishes, but the device lists will not appear empty in the interim.
     void refreshDeviceLists(bool clearCurrentList = true);
 
     void setCaptureDevice(const std::string& name);
@@ -426,10 +348,7 @@ public:
 
     ////////////////////////////
     // Channel stuff
-    //
 
-    // returns true iff the user is currently in a proximal (local spatial) channel.
-    // Note that gestures should only fire if this returns true.
     bool inProximalChannel();
 
     void setNonSpatialChannel(const LLSD& channelInfo,
@@ -446,8 +365,6 @@ public:
 
     bool compareChannels(const LLSD& channelInfo1, const LLSD& channelInfo2);
 
-    // initiate a call with a peer using the P2P interface, which only applies to some
-    // voice server types.  Otherwise, a group call should be used for P2P
     LLVoiceP2POutgoingCallInterface* getOutgoingCallInterface(const LLSD& voiceChannelInfo = LLSD());
 
     LLVoiceP2PIncomingCallInterfacePtr getIncomingCallInterface(const LLSD &voiceCallInfo);
@@ -455,19 +372,18 @@ public:
     /////////////////////////////
     // Sending updates of current state
 
-
     void setVoiceVolume(F32 volume);
     void setMicGain(F32 volume);
-    void setUserVolume(const LLUUID& id, F32 volume); // set's volume for specified agent, from 0-1 (where .5 is nominal)
+    void setUserVolume(const LLUUID& id, F32 volume);
     // <FS:Ansariel> Bypass LLCachedControls for voice status update
     //bool voiceEnabled();
     bool voiceEnabled(bool no_cache = false);
     // </FS:Ansariel>
-    void setMuteMic(bool muted);        // Use this to mute the local mic (for when the client is minimized, etc), ignoring user PTT state.
+    void setMuteMic(bool muted);
     void setUserPTTState(bool ptt);
     bool getUserPTTState();
     void toggleUserPTTState(void);
-    void inputUserControlState(bool down);  // interpret any sort of up-down mic-open control input according to ptt-toggle prefs
+    void inputUserControlState(bool down);
     static void setVoiceEnabled(bool enabled);
 
     void notifyVoiceConnected(); // <FS:TJ/> Fix Nearby Voice when changing voice device settings
@@ -486,13 +402,13 @@ public:
 
     /////////////////////////////
     // Accessors for data related to nearby speakers
-    bool getVoiceEnabled(const LLUUID& id) const;     // true if we've received data for this avatar
+    bool getVoiceEnabled(const LLUUID& id) const;
     std::string getDisplayName(const LLUUID& id) const;
     bool isOnlineSIP(const LLUUID &id);
     bool isParticipantAvatar(const LLUUID &id);
     bool getIsSpeaking(const LLUUID& id);
     bool getIsModeratorMuted(const LLUUID& id);
-    F32 getCurrentPower(const LLUUID& id);      // "power" is related to "amplitude" in a defined way.  I'm just not sure what the formula is...
+    F32 getCurrentPower(const LLUUID& id);
     bool getOnMuteList(const LLUUID& id);
     F32 getUserVolume(const LLUUID& id);
 
@@ -509,7 +425,6 @@ public:
     //@{
     bool isSessionTextIMPossible(const LLUUID& id);
     bool isSessionCallBackPossible(const LLUUID& id);
-    //bool sendTextMessage(const LLUUID& participant_id, const std::string& message) const {return true;} ;
     //@}
 
     void setSpatialVoiceModule(const std::string& voice_server_type);
@@ -530,16 +445,6 @@ public:
     std::string sipURIFromID(const LLUUID &id) const;
     LLSD getP2PChannelInfoTemplate(const LLUUID& id) const;
 
-    //////////////////////////
-    /// @name Voice effects
-    //@{
-    bool getVoiceEffectEnabled() const { return mVoiceEffectEnabled; };
-    LLUUID getVoiceEffectDefault() const { return LLUUID(mVoiceEffectDefault); };
-
-    // Returns NULL if voice effects are not supported, or not enabled.
-    LLVoiceEffectInterface* getVoiceEffectInterface() const;
-    //@}
-
     void handleSimulatorFeaturesReceived(const LLSD &simulatorFeatures);
 
   private:
@@ -548,21 +453,13 @@ public:
 
 protected:
 
-    static bool onVoiceEffectsNotSupported(const LLSD &notification, const LLSD &response);
-
     LLVoiceModuleInterface* mSpatialVoiceModule;
     LLVoiceModuleInterface* mNonSpatialVoiceModule;
-    LLSD                    mSpatialCredentials;  // used to store spatial credentials for vivox
-                                                  // so they're available when the region voice
-                                                  // server is retrieved.
+    LLSD                    mSpatialCredentials;
     LLPumpIO *m_servicePump;
 
     boost::signals2::connection  mSimulatorFeaturesReceivedSlot;
     boost::signals2::connection  mRegionChangedCallbackSlot;
-
-    LLCachedControl<bool> mVoiceEffectEnabled;
-    LLCachedControl<std::string> mVoiceEffectDefault;
-    bool        mVoiceEffectSupportNotified;
 
     bool        mPTTDirty;
     bool        mPTT;
@@ -628,6 +525,3 @@ private:
 };
 
 #endif //LL_VOICE_CLIENT_H
-
-
-

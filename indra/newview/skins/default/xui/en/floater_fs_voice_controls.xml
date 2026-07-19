@@ -94,20 +94,10 @@
          height="26"
          layout="topleft"
          mouse_opaque="false"
-         name="voice_effect_and_leave_call_stack"
-         orientation="horizontal"
-         width="262">
-          <layout_panel
-            height="30"
-            width="200">
-            <panel
-			 top="0"
-             class="panel_voice_effect"
-             name="panel_voice_effect"
-             visiblity_control="VoiceMorphingEnabled"
-             filename="panel_voice_effect.xml" />
-          </layout_panel>
-          <layout_panel
+          name="voice_effect_and_leave_call_stack"
+          orientation="horizontal"
+          width="262">
+           <layout_panel
            auto_resize="false"
            follows="top|right"
            height="23"

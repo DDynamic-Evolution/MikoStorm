@@ -711,14 +711,6 @@ class Windows_x86_64_Manifest(ViewerManifest):
             self.path_optional("vcruntime140_1.dll")
             self.path_optional("vcruntime140_threads.dll")
 
-            # SLVoice executable
-            with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
-                self.path("SLVoice.exe")
-
-            # Vivox libraries
-            self.path("vivoxsdk_x64.dll")
-            self.path("ortp_x64.dll")
-
             # BugSplat
             if self.args.get('bugsplat'):
                 self.path("BsSndRpt64.exe")
@@ -748,7 +740,6 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         with self.prefix(src=pkgdir):
             self.path("ca-bundle.crt")
-        self.path("VivoxAUP.txt")
 
         # Media plugins - CEF
         with self.prefix(dst="llplugin"):
@@ -1292,13 +1283,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                 # with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
                     # self.path("SLVoice")
 
-                # # Vivox libraries
-                # for libfile in (
-                                # 'libortp.dylib',
-                                # 'libvivoxsdk.dylib',
-                                # ):
-                    # self.path2basename(relpkgdir, libfile)
-
                 # # Fmod studio dylibs (vary based on configuration)
                 # if self.args['fmodstudio'] == 'ON':
                     # if self.args['configuration'].lower() == 'debug':
@@ -1460,7 +1444,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                 self.path("featuretable_mac.txt")
                 self.path("cube.dae")
 
-                self.path("VivoxAUP.txt")
                 self.path("LGPL-license.txt")
                 with self.prefix(src=pkgdir,dst=""):
                     self.path("ca-bundle.crt")
@@ -1530,19 +1513,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                                 "libgrowl++.dylib",
                                 ):
                     dylibs += path_optional(os.path.join(relpkgdir, libfile), libfile)
-
-                # SLVoice executable
-                with self.prefix(src=os.path.join(pkgdir, 'bin', 'release')):
-                    self.path("SLVoice")
-
-                # Vivox libraries
-                for libfile in (
-                                'libortp.dylib',
-                                'libvivoxsdk.dylib',
-                                ):
-                    self.path2basename(relpkgdir, libfile)
-
-
 
                 # Fmod studio dylibs (vary based on configuration)
                 # <FS:Beq> Fix intolerant processing of booleans
@@ -1790,7 +1760,6 @@ class Darwin_x86_64_Manifest(ViewerManifest):
                             # <FS:ND> MikoStorm does not ship SLVersionChecker
                             #resources + "updater/SLVersionChecker",
                             resources + "SLPlugin.app/Contents/MacOS/SLPlugin",
-                            resources + "SLVoice",
                             tmp_app_path,
                             ]
                         for attempt in range(3):
@@ -1882,7 +1851,6 @@ class LinuxManifest(ViewerManifest):
         debpkgdir = os.path.join(pkgdir, "lib", "debug")
 
         self.path("licenses-linux.txt","licenses.txt")
-        self.path("VivoxAUP.txt")
         self.path("LGPL-license.txt")
         self.path("res/miko_storm.png","mikostorm_icon.png")
         with self.prefix("linux_tools"):
@@ -2024,20 +1992,6 @@ class LinuxManifest(ViewerManifest):
             ):
                 self.path(libfile)
 
-            # Vivox runtimes
-            # Currentelly, the 32-bit ones will work with a 64-bit client.
-        with self.prefix(src=os.path.join(pkgdir, 'bin32' ), dst="bin"):
-            self.path("SLVoice")
-        with self.prefix(src=os.path.join(pkgdir ), dst="bin"):
-            self.path("win32")
-            self.path("win64")
-
-        with self.prefix(src=os.path.join(pkgdir, 'lib32' ), dst="lib32"):
-            self.path("libvivox*")
-            self.path("libortp*")
-            self.path("libsndfile*")
-            self.path("*.crt")
-
         if self.args['espeak'].lower() == 'on':
             espeak_data_build = os.path.join(self.args['build'], os.pardir, 'espeak-ng', 'espeak-ng-data')
             if os.path.isdir(espeak_data_build):
@@ -2137,7 +2091,6 @@ class Linux_i686_Manifest(LinuxManifest):
             self.path("libopenal.so*")
 
             # <FS:ND> Linking this breaks voice as stock openal.so does not have alcGetMixedBuffer
-            #self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
             # </FS:ND>
             
             # KLUDGE: As of 2012-04-11, the 'fontconfig' package installs
@@ -2179,15 +2132,6 @@ class Linux_i686_Manifest(LinuxManifest):
                     print("Skipping libfmod.so - not found")
                     pass
 
-        # Vivox runtimes
-        with self.prefix(src=relpkgdir, dst="bin"):
-            self.path("SLVoice")
-        with self.prefix(src=relpkgdir, dst="lib"):
-            self.path("libortp.so")
-            self.path("libsndfile.so.1")
-            #self.path("libvivoxoal.so.1") # no - we'll re-use the viewer's own OpenAL lib
-            self.path("libvivoxsdk.so")
-
         self.fs_delete_linux_symbols() # <FS:ND/> Delete old syms
         self.strip_binaries()
 
@@ -2204,12 +2148,6 @@ class Linux_x86_64_Manifest(LinuxManifest):
 
         with self.prefix(src=os.path.join(pkgdir, 'lib', 'release'), dst="lib"):
             #self.path("libffi*.so*")
-            # vivox 32-bit hack.
-            # one has to extract libopenal.so from the 32-bit openal package, or official LL viewer, and rename it to libopenal32.so
-            # and place it in the prebuilt lib/release directory
-            # <FS:TS> No, we don't need to dink with this. A usable library
-            # is now in the slvoice package, and we need to just use it as is.
-            # self.path("libopenal32.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
 
             # if self.args['fmodstudio'] == 'ON':
             if self.args['fmodstudio'].lower() == 'on':

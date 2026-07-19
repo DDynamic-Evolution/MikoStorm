@@ -2410,9 +2410,7 @@ Publier cette petite annonce maintenant pour [AMOUNT] L$ ?
 Il se peut que l&apos;affichage de cette modification sur la carte prenne quelque temps.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification label="Versions de voix non compatibles" name="VoiceVersionMismatch">
-		Cette version de [APP_NAME] n&apos;est pas compatible avec la fonctionnalité de chat vocal dans cette région. Vous devez mettre à jour [APP_NAME] pour que le chat vocal fonctionne correctement.
-	</notification>
+
 	<notification label="Impossible d&apos;acheter des objets" name="BuyObjectOneOwner">
 		Impossible d&apos;acheter simultanément des objets de propriétaires différents.
 Veuillez ne sélectionner qu&apos;un seul objet.
@@ -3665,27 +3663,7 @@ Pour y participer, cliquez sur Accepter. Sinon, cliquez sur Refuser. Pour ignore
 	<notification name="VoiceChannelJoinFailed">
 		Échec de la connexion avec [VOICE_CHANNEL_NAME], veuillez réessayer ultérieurement.  Vous allez maintenant être reconnecté(e) au chat vocal près de vous.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Au moins l&apos;un des effets de voix auxquels vous êtes abonné a expiré.
-[[URL] Cliquez ici] pour renouveler votre abonnement.
 
-Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		L&apos;effet de voix actif a expiré. Vos paramètres de voix normaux ont été rétablis.
-[[URL] Cliquez ici] pour renouveler votre abonnement.
-
-Si vous êtes un membre Premium, [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">Au moins l'un de vos effets de voix expirera dans moins de [INTERVAL] jours.  
-[[URL] Cliquez ici] pour renouveler votre abonnement. 
-
-Si vous êtes un membre Premium,  [[PREMIUM_URL] cliquez ici] pour recevoir votre effet de voix.
-		<usetemplate ignoretext="M'avertir de l'expiration du morphing vocal" name="okignore" yestext="OK"/>
-	</notification>
-	<notification name="VoiceEffectsNew">
-		De nouveaux effets de voix sont disponibles !
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Seuls les membres d&apos;un certain groupe peuvent visiter cette zone.
 	</notification>

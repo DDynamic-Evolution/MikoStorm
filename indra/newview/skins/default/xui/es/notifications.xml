@@ -2231,9 +2231,7 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 Puede que lleve algún tiempo hasta que el cambio se vea reflejado en el mapa.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
-	<notification label="Voice Version Mismatch" name="VoiceVersionMismatch">
-		Esta versión de [APP_NAME] no es compatible con la caracterítica de voz de esta región. Para que el chat de voz funcione correctamente debes actualizar [APP_NAME].
-	</notification>
+
 	<notification label="No se pudo comprar los objetos" name="BuyObjectOneOwner">
 		No se pueden comprar a la vez objetos de propietarios diferentes.
 Por favor, selecciona sólo un objeto y vuelve a intentarlo.
@@ -3386,25 +3384,7 @@ Pulsa Aceptar o Rehusar para coger o no la llamada. Pulsa Bloquear para ignorar 
 	<notification name="VoiceChannelJoinFailed">
 		Fallo al conectar a [VOICE_CHANNEL_NAME]; por favor, inténtalo más tarde. Vas a ser reconectado al chat de voz.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Una o más de las transformaciones de voz a las que estás suscrito han caducado. 
-[[URL] Pulsa aquí] para renovar la suscripción. 
 
-Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio de transformación de voz.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		La transformación de voz activa ha caducado y se ha aplicado tu configuración de voz normal. 
-[[URL] Pulsa aquí] para renovar la suscripción. 
-
-Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio de transformación de voz.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">Una o más de tus transformaciones de voz caducarán en menos de [INTERVAL] días. 
-[[URL] Pulsa aquí] para renovar la suscripción 
-
-Si eres un miembro Premium [[PREMIUM_URL] pulsa aquí] para recibir tu beneficio de transformación de voz.</notification>
-	<notification name="VoiceEffectsNew">
-		Están disponibles nuevos filtros de voz.
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Sólo los miembros de un grupo determinado pueden visitar esta zona.
 	</notification>

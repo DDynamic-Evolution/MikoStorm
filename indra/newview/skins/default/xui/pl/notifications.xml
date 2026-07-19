@@ -2333,9 +2333,7 @@ Zamieścić tą reklamę za [AMOUNT]L$?
 		Klasyfikacja wieku dla tego regionu została zmieniona.
 Może minąć trochę czasu, zanim zmiana będzie odzwierciedlona na mapie.
 	</notification>
-	<notification label="Wersja Niezgodna z Systemem Rozmów" name="VoiceVersionMismatch">
-		Ta wersja [APP_NAME] nie jest kompatybilna z systemem rozmów w tym Regionie. Musisz zainstalować aktualną wersję [APP_NAME] aby komunikacja głosowa działała poprawnie.
-	</notification>
+
 	<notification label="Nie Można Kupić Obiektów" name="BuyObjectOneOwner">
 		Jednorazowo możesz kupować tylko od jednego właściciela.
 Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
@@ -3574,30 +3572,7 @@ Wybierz Zablokuj żeby wyciszyć tą osobę.
 	<notification name="VoiceChannelJoinFailed">
 		Brak połączenia z [VOICE_CHANNEL_NAME], spróbuj później. Przełączanie do rozmowy w czacie w pobliżu.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Subskrypcja jednego lub więcej Przekształceń Głosu wygasła.
-[[URL] Kliknij tutaj] oby odnowić subskrypcję.
-Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Czas aktywności Przekształcenia Głosu wygasł, normalne ustawienia Twojego głosu zostały zastosowane.
-[[URL] Kliknij tutaj] aby odnowić subskrypcję.
-Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Jedno lub więcej z Twoich Przekształceń Głosu wygaśnie za mniej niż [INTERVAL] dni.
-[[URL] Kliknij tutaj] aby odnowić subskrypcję.
-Jeśli jesteś użytkownikiem premium, to [[PREMIUM_URL] kliknij tutaj] aby otrzymać swój perk Przekształceń Głosu.
-		<usetemplate ignoretext="Ostrzegaj mnie o wygasaniu Przekształcania Głosu" name="okignore" />
-	</notification>
-	<notification name="VoiceEffectsNew">
-		Nowe Przekształcenia Głosu są dostępne!
-	</notification>
-	<notification name="VoiceEffectsNotSupported">
-		Ta przeglądarka nie obsługuje funkcji Przekształcania Głosu.
-Aby uzyskać więcej informacji na temat innych narzędzi do przekształcania głosu, zapoznaj się z [[FAQ_URL] tym artykułem].
-		<usetemplate ignoretext="Ostrzegaj mnie, że Przekształcanie Głosu nie jest obsługiwane" name="okignore" />
-	</notification>
+
 	<notification name="Cannot enter parcel: not a group member">
 		Nie masz dostępu do działki, nie należysz do właściwej grupy.
 	</notification>

@@ -2232,9 +2232,7 @@ Pubblica questo annuncio adesso per [AMOUNT]L$?
 		La classificazione di questa regione è stata modificata.
 Prima che questa modifica venga integrata nella mappa potrebbe essere necessario un po&apos; di tempo.
 	</notification>
-	<notification label="Versione voce non compatibile" name="VoiceVersionMismatch">
-		Questa versione di [APP_NAME] non è compatibile con la funzionalità di chat vocale in questa regione. Affinché la chat vocale funzioni correttamente, dovrai aggiornare [APP_NAME].
-	</notification>
+
 	<notification label="Impossibile comprare oggetti" name="BuyObjectOneOwner">
 		Impossibile comprare oggetti da proprietari diversi nello stesso momento.
 Seleziona solo un oggetto e riprova.
@@ -3442,32 +3440,7 @@ Clicca su Accetta per unirti alla chat oppure su Rifiuta per declinare l&apos;in
 	<notification name="VoiceLoginRetry">
 		Stiamo creando una canale voce per te. Questo può richiedere fino a un minuto.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Almeno una delle manipolazioni vocali alle quali sei iscritto è scaduta. 
-[[URL] Fai clic qui] per rinnovare l&apos;abbonamento. 
 
-Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta di manipolazioni vocali.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Poiché la manipolazione vocale attiva è scaduta, sono state applicate le tue impostazioni normali. 
-[[URL] Fai clic qui] per rinnovare l&apos;abbonamento. 
-
-Se sei un utente Premium, [[PREMIUM_URL] clic qui] per ricevere la tua offerta di manipolazioni vocali.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">Almeno una delle tue manipolazioni vocali scadrà tra meno di [INTERVAL] giorni. 
-[[URL] Fai clic qui] per rinnovare l'abbonamento. 
-
-Se sei un membro Premium, [[PREMIUM_URL] fai clic qui] per ricevere in regalo la manipolazione vocale.
-		<usetemplate ignoretext="Avvisami quando scade la trasformazione vocale" name="okignore" />
-	</notification>
-	<notification name="VoiceEffectsNew">
-		Sono disponibili nuove manipolazioni vocali.
-	</notification>
-	<notification name="VoiceEffectsNotSupported">
-		La trasformazione vocale non è supportata da questo viewer. 
-Per maggiori informazioni su altri strumenti di trasformazione vocale, consulta [[FAQ_URL] questo articolo].
-		<usetemplate ignoretext="Avvisami se la trasformazione vocale non è supportata" name="okignore" />
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Soltanto i membri di un determinato gruppo possono visitare questa zona.
 	</notification>

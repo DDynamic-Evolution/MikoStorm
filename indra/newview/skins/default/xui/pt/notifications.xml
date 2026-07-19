@@ -2469,9 +2469,7 @@ Publicar anúncio por [AMOUNT] L$?
 Pode demorar um pouco para que essa alteração apareça no mapa.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification label="Versão de voz incorreta" name="VoiceVersionMismatch">
-		Esta versão do [APP_NAME] não é compatível com o recurso de bate-papo por voz nesta região. Para que o bate-papo por voz funcione, você precisa atualizar [APP_NAME].
-	</notification>
+
 	<notification label="Objetos não podem ser comprados" name="BuyObjectOneOwner">
 		Os itens não podem ser adquiridos por vários proprietários ao mesmo tempo.
 Selecione um único objeto e tente novamente.
@@ -3667,30 +3665,7 @@ Clique em &apos;Aceitar &apos; para entrar no bate-papo ou em &apos;Rejeitar &ap
 	<notification name="VoiceChannelJoinFailed">
 		Não é possível conectar-se a [VOICE_CHANNEL_NAME]. Por favor, tente mais tarde.  Agora você será reconectado ao chat perto de você.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Uma ou mais de suas assinaturas do Voice Morph expiraram. 
-[[URL] Clique aqui] para renovar sua assinatura. 
 
-Se você for um membro premium, [[PREMIUM_URL] clique aqui] para usar seu benefício de transformação de voz.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		A assinatura ativa do Voice Morph expirou. Suas configurações normais de voz serão aplicadas. 
-[[URL] Clique aqui] para renovar sua assinatura. 
-
-Se você for um membro premium, [[PREMIUM_URL] clique aqui] para usar seu benefício de transformação de voz.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">Uma ou mais de suas assinaturas do Voice Morph expirarão em menos de [INTERVAL] dias. 
-[[URL] Clique aqui] para renovar sua assinatura. 
-
-Se você for um membro premium, [[PREMIUM_URL] clique aqui] para usar seu benefício de transformação de voz.</notification>
-	<notification name="VoiceEffectsNew">
-		Novos efeitos de transformação de voz estão disponíveis!
-	</notification>
-	<notification name="VoiceEffectsNotSupported">
-		Os efeitos de transformação de voz não são suportados por este visualizador.
-Para obter mais informações sobre outras ferramentas de transformação de voz, leia este artigo].
-		<usetemplate ignoretext="Avisar se a transformação de voz não for suportada" name="okignore" yestext="OK"/>
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Somente membros de um grupo específico podem entrar nesta área.
 	</notification>
@@ -5816,8 +5791,6 @@ O valor definido para carregamento simultâneo de objetos de malha ([VALUE]; con
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
-
-
 
 	<notification name="FSPrimfeedUploadComplete">
 A postagem do Primfeed agora pode ser visualizada [[PF_POSTURL] aqui].

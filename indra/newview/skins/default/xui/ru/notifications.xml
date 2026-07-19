@@ -2374,9 +2374,7 @@ URL: [UNTRUSTED_URL]
 		Рейтинг для этого региона был изменен.
 Отображение этого изменения на карте может занять некоторое время.
 	</notification>
-	<notification label="Несоответствие версии голоса" name="VoiceVersionMismatch">
-		Данная версия [APP_NAME] несовместима с функцией голосового чата в этом регионе. Для правильной работы голосового чата необходимо обновить [APP_NAME].
-	</notification>
+
 	<notification label="Нельзя купить объекты" name="BuyObjectOneOwner">
 		Нельзя купить объекты одновременно у разных владельцев.
 Выберите один объект и повторите попытку.
@@ -3644,32 +3642,7 @@ URL: [AUDIOURL]
 	<notification name="VoiceChannelJoinFailed">
 		Не удалось подключиться к [VOICE_CHANNEL_NAME], повторите попытку позже. Будет установлено подключение к общему голосовому чату.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Истек срок действия подписки на один или несколько типов анимационного изменения голоса.
-[[URL] Щелкните здесь], чтобы обновить подписку.
 
-Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Истек срок действия анимационного изменения голоса, действуют настройки вашего обычного голоса.
-[[URL] Щелкните здесь], чтобы обновить подписку.
-
-Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Срок действия одного или нескольких ваших типов анимационного изменения голоса истекает через [INTERVAL] дней или раньше.
-[[URL] Щелкните здесь], чтобы обновить подписку.
-
-Если вы - владелец премиум-аккаунта, [[PREMIUM_URL] щелкните здесь], чтобы получить право на анимационное изменение голоса.
-	</notification>
-	<notification name="VoiceEffectsNew">
-		Появились новые типы изменения голоса!
-	</notification>
-	<notification name="VoiceEffectsNotSupported">
-Функция изменения голоса не поддерживается данным средством просмотра.
-Более подробную информацию о других инструментах для изменения голоса см. в [[FAQ_URL]этой статье].
-		<usetemplate name="okignore" ignoretext="Предупредить о том, что голосовая трансформация не поддерживается" yestext="OK"/>
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Эту область могут посещать только участники определенной группы.
 	</notification>
@@ -5688,7 +5661,6 @@ https://wiki.firestormviewer.org/antivirus_whitelisting
 	<notification name="PrimfeedUserStatusFailed">
 		Вход пользователя Primfeed успешен, но проверки статуса не пройдены. Проверьте, работает ли Primfeed.
 	</notification>
-
 
 	<notification name="FSSetTitleRegion">
 		Введите точное название региона для привязки к выбранному титулу группы.

@@ -205,7 +205,7 @@
 	 height="16"
 	 layout="topleft"
 	 left="20"
-	 name="total_images"
+	 name="total_images_text"
 	 top_pad="2"
 	 width="320" />
 

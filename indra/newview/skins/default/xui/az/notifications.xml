@@ -2281,9 +2281,7 @@ Bu elanı indi L$[AMOUNT] ödəməklə dərc etmək istəyirsiniz?
 		Bu regionun reytinqi dəyişdirilib.
 Bu dəyişikliyin xəritədə görünməsi bir qədər vaxt ala bilər.
 	</notification>
-	<notification label="Səs versiyası uyğunsuzluğu" name="VoiceVersionMismatch">
-		[APP_NAME] tətbiqinin bu versiyası bu regionda səsli söhbət funksiyası ilə uyğun deyil. Səsli söhbətin düzgün işləməsi üçün [APP_NAME] yenilənməlidir.
-	</notification>
+
 	<notification label="Əşyaları almaq mümkün deyil" name="BuyObjectOneOwner">
 		Eyni zamanda müxtəlif sahiblərdən obyektləri ala bilməzsiniz.
 Zəhmət olmasa, bir obyekt seçin və yenidən cəhd edin.
@@ -3477,21 +3475,7 @@ Söhbətə qoşulmaq üçün &quot;Qəbul et&quot;, dəvəti rədd etmək üçü
 	<notification name="VoiceChannelJoinFailed">
 		[VOICE_CHANNEL_NAME] kanalına qoşulmaq alınmadı, sonra yenidən cəhd edin. Ümumi səsli söhbətə əlaqə qurulacaq.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Bir və ya bir neçə növ animasiyalı səs dəyişikliyinə abunəliyiniz başa çatıb.
-Abunəliyi yeniləmək üçün [[URL] buraya basın].
 
-Əgər siz premium hesab sahibisinizsə, zəhmət olmasa animasiyalı səs dəyişikliyinin hüququnu almaq üçün [[PREMIUM_URL] bura basın].
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Animasiyalı səs dəyişdiricisinin müddəti bitdi, normal səs seçimləriniz qüvvədədir.
-Abunəliyi yeniləmək üçün [[URL] buraya basın].
-
-Əgər siz premium hesab sahibisinizsə, zəhmət olmasa animasiyalı səs dəyişikliyinin hüququnu almaq üçün [[PREMIUM_URL] bura basın].
-	</notification>
-	<notification name="VoiceEffectsNew">
-		Səs dəyişikliklərinin yeni növləri var!
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Bu sahəyə yalnız müəyyən qrupun üzvləri baş çəkə bilər.
 	</notification>
