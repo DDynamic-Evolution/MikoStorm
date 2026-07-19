@@ -3550,7 +3550,9 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
 
         LLViewerObject* obj = gObjectList.findObject(id);
         if (!obj || obj->isDead()) continue;
-        if (obj->isAvatar() || obj->isAttachment() || obj->isHUDAttachment()) continue;
+        if (obj->isAvatar()) continue;
+        if (!gSavedSettings.getBOOL("Stream3DScanAttachments")
+            && (obj->isAttachment() || obj->isHUDAttachment())) continue;
 
         LLVector3d delta = obj->getPositionGlobal();
         delta -= agent_pos;
@@ -3609,8 +3611,11 @@ void LLPositionalStreamMgr::pollObjectPropertiesFamily(F64 now)
         }
         ++n_total;
 
-        // Avatars / attachments / HUDs don't carry [3dstream:...] tags.
-        if (obj->isAvatar() || obj->isAttachment() || obj->isHUDAttachment())
+        // Avatars themselves never carry stream tags; attachments / HUDs
+        // are excluded unless the user explicitly opts in.
+        if (obj->isAvatar()
+            || (!gSavedSettings.getBOOL("Stream3DScanAttachments")
+                && (obj->isAttachment() || obj->isHUDAttachment())))
         {
             ++n_filtered;
             continue;

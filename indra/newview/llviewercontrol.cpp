@@ -596,6 +596,11 @@ static void handleStream3DDescriptionScanChanged(const LLSD& newvalue)
     }
 }
 
+static void handleStream3DScanAttachmentsChanged(const LLSD& newvalue)
+{
+    LLPositionalStreamMgr::instance().forceRescan();
+}
+
 static void handleStream3DDebugPlayChanged(const LLSD& newvalue)
 {
     if (newvalue.asBoolean())
@@ -1690,6 +1695,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "MuteStream3D", handleStream3DVolumeChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
+    setting_setup_signal_listener(gSavedSettings, "Stream3DScanAttachments", handleStream3DScanAttachmentsChanged);
     setting_setup_signal_listener(gSavedSettings, "FSParcelStreamQuality", handleParcelStreamQualityChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);

@@ -4,7 +4,8 @@
   <img src="images/mikostorm.png">
 </p>
 
-[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.17/MikoStorm-v1.15.17-Windows.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.17/MikoStorm-v1.15.17-Linux.tar.xz)
+
+[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Windows.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Linux.tar.xz)
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
@@ -39,6 +40,10 @@ Thisviewer contains experimental features like
   - Toast notifications when stream metadata changes (configurable)
   - Optional script channel output for custom integrations
   - Settings: Stream3DShowToast, Stream3DChatNotify, Stream3DChatChannel
+- **3D Stream Preferences** — Configure 3D stream behavior in Preferences > Sound > 3D Stream
+  - **Scan linked child prims for stream tags** (`Stream3DDescriptionScan`) — Scan child prims for distributed-stereo speaker layouts
+  - **Scan avatar attachments for stream tags** (`Stream3DScanAttachments`) — Also scan worn objects and HUDs for stream tags (default: off)
+  - **Max concurrent streams** (`Stream3DMaxConcurrent`) — Limit simultaneous 3D streams (default: 4, 0 = unlimited)
 - **URL Phishing / Scam Link Detection** — Warns before opening suspicious URLs
 - **Hide Local Chat** — Toggle to hide chat in quick preferences
 - **MCP Server** — Model Context Protocol for AI assistants (see [MCP Documentation](#mcp-model-context-protocol))

@@ -585,8 +585,19 @@
      <string>F32</string>
      <key>Value</key>
      <real>1.0</real>
-   </map>
-   <key>Stream3DRoutingDiagnostic</key>
+    </map>
+    <key>Stream3DScanAttachments</key>
+    <map>
+      <key>Comment</key>
+      <string>PandaView: When true, the 3D stream poll scanner also requests descriptions from avatar attachments and HUD objects. When false (default), attachments are excluded from the round-robin and priority-poll scans. Bindings created through other paths (e.g. ObjectProperties arriving from user interaction) are unaffected. Requires Stream3DDescriptionScan to be true. Live-toggling triggers a forceRescan.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>Stream3DRoutingDiagnostic</key>
    <map>
      <key>Comment</key>
      <string>PandaView r10.x: When true, emit one chat line per fallback case describing which source channel feeds which speaker prim per the §4.2 compatibility matrix (e.g. "ch:FL prim playing L (source is 2ch)"). Throttled by (root, url, observed channel count, prim-set signature) so it fires once per structural change. False (default) keeps chat silent for ordinary listeners; turn on while placing 5.1ch venues. Bound to the Preferences &gt; Sound checkbox "Show channel routing diagnostics in chat".</string>
