@@ -526,14 +526,7 @@ void LLProgressView::initLogos()
     texture_start_x += icon_width + default_pad;
 #endif //LL_HAVOK
 
-    // 108x41
-    icon_width = 74;
-    icon_height = default_height;
-    loadLogo(temp_str + "vivox_logo.png",
-        image_codec,
-        LLRect(texture_start_x, texture_start_y + icon_height, texture_start_x + icon_width, texture_start_y),
-        default_clip,
-        default_clip);
+
 }
 
 void LLProgressView::initStartTexture(S32 location_id, bool is_in_production)

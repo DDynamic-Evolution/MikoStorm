@@ -871,9 +871,7 @@ Det kan tage noget tid inden ændringen slår igennem på kortet.
 
 For at få adgang til voksen regioner, skal beboere være alders-checket, enten via aldersverifikation eller  betalingsverifikation.
 	</notification>
-	<notification label="Voice Version Mismatch" name="VoiceVersionMismatch">
-		Denne version af [APP_NAME] er ikke kompatibel med stemme chat funktionen i denne region. For at kunne få stemme chat til at fungere skal du opdatere [APP_NAME].
-	</notification>
+
 	<notification name="MoveInventoryFromObject">
 		<usetemplate ignoretext="Advar mig før jeg flytter &apos;ikke-kopiérbare&apos; genstande fra et objekt" name="okcancelignore" notext="Cancel" yestext="OK"/>
 	</notification>
@@ -1590,21 +1588,7 @@ Klik på Acceptér for at deltage eller Afvis for at afvise invitationen. Klik p
 	<notification name="VoiceChannelJoinFailed">
 		Det lykkedes ikke at forbinde til [VOICE_CHANNEL_NAME], prøv venligst igen senere.  Du vil nu blive koblet til almindelig voice-chat.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		En eller flere af dine stemme &quot;morphs&quot; er udløbet.
-[[URL] Click here] for at forny dit abbonnement.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Den aktive stemme &quot;morph&quot; er udløbet og din normale stemme opsætning er genaktiveret.
-[[URL] Click here] for at forny dit abbonnement.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		En eller flere af dine stemme &quot;morphs&quot; vil udløbe om mindre end [INTERVAL] dage.
-[[URL] Click here] for at forny dit abbonnement.
-	</notification>
-	<notification name="VoiceEffectsNew">
-		Nye stemme &quot;morphs&quot; er tilgængelige!
-	</notification>
+
 	<notification name="Cannot enter parcel: not a group member">
 		Kun medlemmer af en bestemt gruppe kan besøge dette område.
 	</notification>
@@ -1773,7 +1757,6 @@ Du opdaterede en [RESOLUTION] &quot;bagt&quot; tekstur for &apos;[BODYREGION]&ap
 		Du har valgt at slukke for lyden for alle deltagere i gruppeopkaldet.
 Dette vil også betyde, at alle beboere der slutter sig til opkaldet
 vil have lyden slukket - selv efter de har forladt kaldet.
-
 
 Sluk for alles lyd?
 		<usetemplate ignoretext="Bekræft før jeg slukker for alle deltageres lyd i gruppe-kald" name="okcancelignore" notext="Annullér" yestext="Ok"/>

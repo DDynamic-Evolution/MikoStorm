@@ -88,7 +88,7 @@ showUsage()
     echo "  --openal                 : Build with OpenAL"
   echo "  --3dstream               : Build with 3D Stream (PandaView) support (default)"
   echo "  --no-3dstream            : Build without 3D Stream (PandaView) support"
-  echo "  --espeak                 : Build with eSpeak-NG TTS support (default)"
+  echo "  --espeak                 : Build with eSpeak-NG TTS support (default, Linux only)"
   echo "  --no-espeak              : Build without eSpeak-NG TTS support"
   echo "  --mcp                    : Build with MCP support (default)"
   echo "  --no-mcp                 : Build without MCP support"

@@ -25,7 +25,6 @@
  */
 
 #include "llvoiceclient.h"
-#include "llvoicevivox.h"
 #include "llvoicewebrtc.h"
 #include "llviewernetwork.h"
 #include "llviewercontrol.h"
@@ -54,37 +53,6 @@ user_voice_volume_change_callback_t LLVoiceClient::sUserVolumeUpdateSignal;
 const F32 LLVoiceClient::VOLUME_MIN = 0.f;
 const F32 LLVoiceClient::VOLUME_DEFAULT = 0.5f;
 const F32 LLVoiceClient::VOLUME_MAX = 1.0f;
-
-// Support for secondlife:///app/voice SLapps
-class LLVoiceHandler : public LLCommandHandler
-{
-public:
-    // requests will be throttled from a non-trusted browser
-    LLVoiceHandler() : LLCommandHandler("voice", UNTRUSTED_THROTTLE) {}
-
-    bool handle(const LLSD& params, const LLSD& query_map, const std::string& grid, LLMediaCtrl* web)
-    {
-        if (params[0].asString() == "effects")
-        {
-            LLVoiceEffectInterface* effect_interface = LLVoiceClient::instance().getVoiceEffectInterface();
-            // If the voice client doesn't support voice effects, we can't handle effects SLapps
-            if (!effect_interface)
-            {
-                return false;
-            }
-
-            // Support secondlife:///app/voice/effects/refresh to update the voice effect list with new effects
-            if (params[1].asString() == "refresh")
-            {
-                effect_interface->refreshVoiceEffectLists(false);
-                return true;
-            }
-        }
-        return false;
-    }
-};
-LLVoiceHandler gVoiceHandler;
-
 
 
 std::string LLVoiceClientStatusObserver::status2string(LLVoiceClientStatusObserver::EStatusType inStatus)
@@ -124,17 +92,12 @@ std::string LLVoiceClientStatusObserver::status2string(LLVoiceClientStatusObserv
 
 LLVoiceModuleInterface *getVoiceModule(const std::string &voice_server_type)
 {
-    if (voice_server_type == VIVOX_VOICE_SERVER_TYPE || voice_server_type.empty())
-    {
-        return (LLVoiceModuleInterface *) LLVivoxVoiceClient::getInstance();
-    }
-    else if (voice_server_type == WEBRTC_VOICE_SERVER_TYPE)
+    if (voice_server_type == WEBRTC_VOICE_SERVER_TYPE || voice_server_type.empty())
     {
         return (LLVoiceModuleInterface *) LLWebRTCVoiceClient::getInstance();
     }
     else
     {
-        LLNotificationsUtil::add("VoiceVersionMismatch");
         return nullptr;
     }
 }
@@ -146,9 +109,6 @@ LLVoiceClient::LLVoiceClient(LLPumpIO *pump)
     mSpatialVoiceModule(NULL),
     mNonSpatialVoiceModule(NULL),
     m_servicePump(NULL),
-    mVoiceEffectEnabled(LLCachedControl<bool>(gSavedSettings, "VoiceMorphingEnabled", true)),
-    mVoiceEffectDefault(LLCachedControl<std::string>(gSavedPerAccountSettings, "VoiceEffectDefault", "00000000-0000-0000-0000-000000000000")),
-    mVoiceEffectSupportNotified(false),
     mPTTDirty(true),
     mPTT(true),
     mUsePTT(true),
@@ -171,10 +131,8 @@ LLVoiceClient::~LLVoiceClient()
 
 void LLVoiceClient::init(LLPumpIO *pump)
 {
-    // Initialize all of the voice modules
     m_servicePump = pump;
     LLWebRTCVoiceClient::getInstance()->init(pump);
-    LLVivoxVoiceClient::getInstance()->init(pump);
 }
 
 void LLVoiceClient::userAuthorized(const std::string& user_id, const LLUUID &agentID)
@@ -185,21 +143,14 @@ void LLVoiceClient::userAuthorized(const std::string& user_id, const LLUUID &age
     }
     mRegionChangedCallbackSlot = gAgent.addRegionChangedCallback(boost::bind(&LLVoiceClient::onRegionChanged, this));
     LLWebRTCVoiceClient::getInstance()->userAuthorized(user_id, agentID);
-    LLVivoxVoiceClient::getInstance()->userAuthorized(user_id, agentID);
 }
 
 void LLVoiceClient::handleSimulatorFeaturesReceived(const LLSD &simulatorFeatures)
 {
     std::string voiceServerType = simulatorFeatures["VoiceServerType"].asString();
-    if (voiceServerType.empty())
-    {
-        voiceServerType = VIVOX_VOICE_SERVER_TYPE;
-    }
 
     if (mSpatialVoiceModule && !mNonSpatialVoiceModule)
     {
-        // stop processing if we're going to change voice modules
-        // and we're not currently in non-spatial.
         LLVoiceVersionInfo version = mSpatialVoiceModule->getVersion();
         if (version.internalVoiceServerType != voiceServerType)
         {
@@ -208,7 +159,6 @@ void LLVoiceClient::handleSimulatorFeaturesReceived(const LLSD &simulatorFeature
     }
     setSpatialVoiceModule(simulatorFeatures["VoiceServerType"].asString());
 
-    // if we should be in spatial voice, switch to it and set the creds
     if (mSpatialVoiceModule && !mNonSpatialVoiceModule)
     {
         if (!mSpatialCredentials.isUndefined())
@@ -280,8 +230,6 @@ void LLVoiceClient::setNonSpatialVoiceModule(const std::string &voice_server_typ
     mNonSpatialVoiceModule = getVoiceModule(voice_server_type);
     if (!mNonSpatialVoiceModule)
     {
-        // we don't have a non-spatial voice module,
-        // so revert to spatial.
         if (mSpatialVoiceModule)
         {
             mSpatialVoiceModule->processChannels(true);
@@ -296,27 +244,20 @@ void LLVoiceClient::setHidden(bool hidden)
     LL_INFOS("Voice") << "( " << (hidden ? "true" : "false") << " )" << LL_ENDL;
 #ifdef OPENSIM
     LLWebRTCVoiceClient::getInstance()->setHidden(hidden && LLGridManager::getInstance()->isInSecondLife());
-    LLVivoxVoiceClient::getInstance()->setHidden(hidden && LLGridManager::getInstance()->isInSecondLife());
 #else
     LLWebRTCVoiceClient::getInstance()->setHidden(hidden);
-    LLVivoxVoiceClient::getInstance()->setHidden(hidden);
 #endif
 }
 
 void LLVoiceClient::terminate()
 {
-    if (LLVivoxVoiceClient::instanceExists())
+    if (LLWebRTCVoiceClient::instanceExists())
     {
         LLWebRTCVoiceClient::getInstance()->terminate();
-    }
-    if (LLVivoxVoiceClient::instanceExists())
-    {
-        LLVivoxVoiceClient::getInstance()->terminate();
     }
     mSpatialVoiceModule = NULL;
     m_servicePump = NULL;
 
-    // Shutdown speaker volume storage before LLSingletonBase::deleteAll() does it
     if (LLSpeakerVolumeStorage::instanceExists())
     {
         LLSpeakerVolumeStorage::deleteSingleton();
@@ -348,7 +289,6 @@ void LLVoiceClient::updateSettings()
     updateMicMuteLogic();
 
     LLWebRTCVoiceClient::getInstance()->updateSettings();
-    LLVivoxVoiceClient::getInstance()->updateSettings();
 }
 
 //--------------------------------------------------
@@ -357,13 +297,11 @@ void LLVoiceClient::updateSettings()
 void LLVoiceClient::tuningStart()
 {
     LLWebRTCVoiceClient::getInstance()->tuningStart();
-    LLVivoxVoiceClient::getInstance()->tuningStart();
 }
 
 void LLVoiceClient::tuningStop()
 {
     LLWebRTCVoiceClient::getInstance()->tuningStop();
-    LLVivoxVoiceClient::getInstance()->tuningStop();
 }
 
 bool LLVoiceClient::inTuningMode()
@@ -406,13 +344,11 @@ void LLVoiceClient::refreshDeviceLists(bool clearCurrentList)
 
 void LLVoiceClient::setCaptureDevice(const std::string& name)
 {
-    LLVivoxVoiceClient::getInstance()->setCaptureDevice(name);
     LLWebRTCVoiceClient::getInstance()->setCaptureDevice(name);
 }
 
 void LLVoiceClient::setRenderDevice(const std::string& name)
 {
-    LLVivoxVoiceClient::getInstance()->setRenderDevice(name);
     LLWebRTCVoiceClient::getInstance()->setRenderDevice(name);
 }
 
@@ -434,13 +370,11 @@ const LLVoiceDeviceList& LLVoiceClient::getRenderDevices()
 void LLVoiceClient::getParticipantList(std::set<LLUUID> &participants) const
 {
     LLWebRTCVoiceClient::getInstance()->getParticipantList(participants);
-    LLVivoxVoiceClient::getInstance()->getParticipantList(participants);
 }
 
 bool LLVoiceClient::isParticipant(const LLUUID &speaker_id) const
 {
-    return LLWebRTCVoiceClient::getInstance()->isParticipant(speaker_id) ||
-           LLVivoxVoiceClient::getInstance()->isParticipant(speaker_id);
+    return LLWebRTCVoiceClient::getInstance()->isParticipant(speaker_id);
 }
 
 
@@ -449,13 +383,11 @@ bool LLVoiceClient::isParticipant(const LLUUID &speaker_id) const
 
 bool LLVoiceClient::isSessionTextIMPossible(const LLUUID& id)
 {
-    // all sessions can do TextIM, as we no longer support PSTN
     return true;
 }
 
 bool LLVoiceClient::isSessionCallBackPossible(const LLUUID& id)
 {
-    // we don't support PSTN calls anymore.  (did we ever?)
     return true;
 }
 
@@ -532,14 +464,12 @@ void LLVoiceClient::activateSpatialChannel(bool activate)
 
 bool LLVoiceClient::isCurrentChannel(const LLSD& channelInfo)
 {
-    return LLWebRTCVoiceClient::getInstance()->isCurrentChannel(channelInfo) ||
-           LLVivoxVoiceClient::getInstance()->isCurrentChannel(channelInfo);
+    return LLWebRTCVoiceClient::getInstance()->isCurrentChannel(channelInfo);
 }
 
 bool LLVoiceClient::compareChannels(const LLSD &channelInfo1, const LLSD &channelInfo2)
 {
-    return LLWebRTCVoiceClient::getInstance()->compareChannels(channelInfo1, channelInfo2) ||
-           LLVivoxVoiceClient::getInstance()->compareChannels(channelInfo1, channelInfo2);
+    return LLWebRTCVoiceClient::getInstance()->compareChannels(channelInfo1, channelInfo2);
 }
 
 LLVoiceP2PIncomingCallInterfacePtr LLVoiceClient::getIncomingCallInterface(const LLSD& voice_call_info)
@@ -557,20 +487,7 @@ LLVoiceP2PIncomingCallInterfacePtr LLVoiceClient::getIncomingCallInterface(const
 // outgoing calls
 LLVoiceP2POutgoingCallInterface *LLVoiceClient::getOutgoingCallInterface(const LLSD& voiceChannelInfo)
 {
-    std::string voice_server_type = gSavedSettings.getString("VoiceServerType");
-    if (voice_server_type.empty())
-    {
-        // default to the server type associated with the region we're on.
-        LLVoiceVersionInfo versionInfo = LLVoiceClient::getInstance()->getVersion();
-        voice_server_type = versionInfo.internalVoiceServerType;
-    }
-    if (voiceChannelInfo.has("voice_server_type") && voiceChannelInfo["voice_server_type"] != voice_server_type)
-    {
-        // there's a mismatch between what the peer is offering and what our server
-        // can handle, so downgrade to vivox
-        voice_server_type = VIVOX_VOICE_SERVER_TYPE;
-    }
-    LLVoiceModuleInterface *module = getVoiceModule(voice_server_type);
+    LLVoiceModuleInterface *module = getVoiceModule(WEBRTC_VOICE_SERVER_TYPE);
     return dynamic_cast<LLVoiceP2POutgoingCallInterface *>(module);
 }
 
@@ -581,38 +498,16 @@ LLVoiceP2POutgoingCallInterface *LLVoiceClient::getOutgoingCallInterface(const L
 void LLVoiceClient::setVoiceVolume(F32 volume)
 {
     LLWebRTCVoiceClient::getInstance()->setVoiceVolume(volume);
-    LLVivoxVoiceClient::getInstance()->setVoiceVolume(volume);
 }
 
 void LLVoiceClient::setMicGain(F32 gain)
 {
     LLWebRTCVoiceClient::getInstance()->setMicGain(gain);
-    LLVivoxVoiceClient::getInstance()->setMicGain(gain);
 }
 
 
 //------------------------------------------
 // enable/disable voice features
-
-// static
-bool LLVoiceClient::onVoiceEffectsNotSupported(const LLSD &notification, const LLSD &response)
-{
-    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-    switch (option)
-    {
-        case 0:  // "Okay"
-            gSavedPerAccountSettings.setString("VoiceEffectDefault", LLUUID::null.asString());
-            break;
-
-        case 1:  // "Cancel"
-            break;
-
-        default:
-            llassert(0);
-            break;
-    }
-    return false;
-}
 
 // <FS:Ansariel> Bypass LLCachedControls for voice status update
 //bool LLVoiceClient::voiceEnabled()
@@ -626,17 +521,7 @@ bool LLVoiceClient::voiceEnabled(bool no_cache)
 
     static LLCachedControl<bool> enable_voice_chat(gSavedSettings, "EnableVoiceChat");
     static LLCachedControl<bool> cmd_line_disable_voice(gSavedSettings, "CmdLineDisableVoice");
-    bool enabled = enable_voice_chat && !cmd_line_disable_voice && !gNonInteractive;
-    if (enabled && !mVoiceEffectSupportNotified && getVoiceEffectEnabled() && !getVoiceEffectDefault().isNull())
-    {
-        static const LLSD args = llsd::map(
-            "FAQ_URL", LLTrans::getString("no_voice_morphing_faq_url")
-        );
-
-        LLNotificationsUtil::add("VoiceEffectsNotSupported", args, LLSD(), &LLVoiceClient::onVoiceEffectsNotSupported);
-        mVoiceEffectSupportNotified = true;
-    }
-    return enabled;
+    return enable_voice_chat && !cmd_line_disable_voice && !gNonInteractive;
 }
 
 void LLVoiceClient::setVoiceEnabled(bool enabled)
@@ -644,10 +529,6 @@ void LLVoiceClient::setVoiceEnabled(bool enabled)
     if (LLWebRTCVoiceClient::instanceExists())
     {
         LLWebRTCVoiceClient::getInstance()->setVoiceEnabled(enabled);
-    }
-    if (LLVivoxVoiceClient::instanceExists())
-    {
-        LLVivoxVoiceClient::getInstance()->setVoiceEnabled(enabled);
     }
 }
 
@@ -662,22 +543,18 @@ void LLVoiceClient::notifyVoiceConnected()
 
 void LLVoiceClient::updateMicMuteLogic()
 {
-    // If not configured to use PTT, the mic should be open (otherwise the user will be unable to speak).
     bool new_mic_mute = false;
 
     if(mUsePTT)
     {
-        // If configured to use PTT, track the user state.
         new_mic_mute = !mUserPTTState;
     }
 
     if(mMuteMic || mDisableMic)
     {
-        // Either of these always overrides any other PTT setting.
         new_mic_mute = true;
     }
     LLWebRTCVoiceClient::getInstance()->setMuteMic(new_mic_mute);
-    LLVivoxVoiceClient::getInstance()->setMuteMic(new_mic_mute);
 }
 
 void LLVoiceClient::setMuteMic(bool muted)
@@ -714,7 +591,6 @@ void LLVoiceClient::setUsePTT(bool usePTT)
 {
     if(usePTT && !mUsePTT)
     {
-        // When the user turns on PTT, reset the current state.
         mUserPTTState = false;
     }
     mUsePTT = usePTT;
@@ -726,7 +602,6 @@ void LLVoiceClient::setPTTIsToggle(bool PTTIsToggle)
 {
     if(!PTTIsToggle && mPTTIsToggle)
     {
-        // When the user turns off toggle, reset the current state.
         mUserPTTState = false;
     }
 
@@ -744,12 +619,12 @@ void LLVoiceClient::inputUserControlState(bool down)
 {
     if(mPTTIsToggle)
     {
-        if(down) // toggle open-mic state on 'down'
+        if(down)
         {
             toggleUserPTTState();
         }
     }
-    else // set open-mic state as an absolute
+    else
     {
         setUserPTTState(down);
         make_ui_sound("UISndMicToggle"); // <FS:PP> FIRE-33249 Mic toggle
@@ -773,18 +648,12 @@ bool LLVoiceClient::getVoiceEnabled(const LLUUID& id) const
 
 std::string LLVoiceClient::getDisplayName(const LLUUID& id) const
 {
-    std::string result = LLWebRTCVoiceClient::getInstance()->getDisplayName(id);
-    if (result.empty())
-    {
-        result = LLVivoxVoiceClient::getInstance()->getDisplayName(id);
-    }
-    return result;
+    return LLWebRTCVoiceClient::getInstance()->getDisplayName(id);
 }
 
 bool LLVoiceClient::isVoiceWorking() const
 {
-    return LLVivoxVoiceClient::getInstance()->isVoiceWorking() ||
-           LLWebRTCVoiceClient::getInstance()->isVoiceWorking();
+    return LLWebRTCVoiceClient::getInstance()->isVoiceWorking();
 }
 
 bool LLVoiceClient::isParticipantAvatar(const LLUUID& id)
@@ -799,40 +668,32 @@ bool LLVoiceClient::isOnlineSIP(const LLUUID& id)
 
 bool LLVoiceClient::getIsSpeaking(const LLUUID& id)
 {
-    return LLWebRTCVoiceClient::getInstance()->getIsSpeaking(id) ||
-           LLVivoxVoiceClient::getInstance()->getIsSpeaking(id);
+    return LLWebRTCVoiceClient::getInstance()->getIsSpeaking(id);
 }
 
 bool LLVoiceClient::getIsModeratorMuted(const LLUUID& id)
 {
-    // don't bother worrying about p2p calls, as
-    // p2p calls don't have mute.
-    return LLWebRTCVoiceClient::getInstance()->getIsModeratorMuted(id) ||
-           LLVivoxVoiceClient::getInstance()->getIsModeratorMuted(id);
+    return LLWebRTCVoiceClient::getInstance()->getIsModeratorMuted(id);
 }
 
 F32 LLVoiceClient::getCurrentPower(const LLUUID& id)
 {
-    return std::fmax(LLVivoxVoiceClient::getInstance()->getCurrentPower(id),
-                     LLWebRTCVoiceClient::getInstance()->getCurrentPower(id));
+    return LLWebRTCVoiceClient::getInstance()->getCurrentPower(id);
 }
 
 bool LLVoiceClient::getOnMuteList(const LLUUID& id)
 {
-    // don't bother worrying about p2p calls, as
-    // p2p calls don't have mute.
     return LLMuteList::getInstance()->isMuted(id, LLMute::flagVoiceChat);
 }
 
 F32 LLVoiceClient::getUserVolume(const LLUUID& id)
 {
-    return std::fmax(LLVivoxVoiceClient::getInstance()->getUserVolume(id), LLWebRTCVoiceClient::getInstance()->getUserVolume(id));
+    return LLWebRTCVoiceClient::getInstance()->getUserVolume(id);
 }
 
 void LLVoiceClient::setUserVolume(const LLUUID& id, F32 volume)
 {
     LLWebRTCVoiceClient::getInstance()->setUserVolume(id, volume);
-    LLVivoxVoiceClient::getInstance()->setUserVolume(id, volume);
     // <FS:Ansariel> Add callback for user volume change
     sUserVolumeUpdateSignal(id);
 }
@@ -880,16 +741,11 @@ EVoicePowerLevel LLVoiceClient::getPowerLevel(const LLUUID& id)
 
 void LLVoiceClient::addObserver(LLVoiceClientStatusObserver* observer)
 {
-    LLVivoxVoiceClient::getInstance()->addObserver(observer);
     LLWebRTCVoiceClient::getInstance()->addObserver(observer);
 }
 
 void LLVoiceClient::removeObserver(LLVoiceClientStatusObserver* observer)
 {
-    if (LLVivoxVoiceClient::instanceExists())
-    {
-        LLVivoxVoiceClient::getInstance()->removeObserver(observer);
-    }
     if (LLWebRTCVoiceClient::instanceExists())
     {
         LLWebRTCVoiceClient::getInstance()->removeObserver(observer);
@@ -898,16 +754,11 @@ void LLVoiceClient::removeObserver(LLVoiceClientStatusObserver* observer)
 
 void LLVoiceClient::addObserver(LLFriendObserver* observer)
 {
-    LLVivoxVoiceClient::getInstance()->addObserver(observer);
     LLWebRTCVoiceClient::getInstance()->addObserver(observer);
 }
 
 void LLVoiceClient::removeObserver(LLFriendObserver* observer)
 {
-    if (LLVivoxVoiceClient::instanceExists())
-    {
-        LLVivoxVoiceClient::getInstance()->removeObserver(observer);
-    }
     if (LLWebRTCVoiceClient::instanceExists())
     {
         LLWebRTCVoiceClient::getInstance()->removeObserver(observer);
@@ -916,16 +767,11 @@ void LLVoiceClient::removeObserver(LLFriendObserver* observer)
 
 void LLVoiceClient::addObserver(LLVoiceClientParticipantObserver* observer)
 {
-    LLVivoxVoiceClient::getInstance()->addObserver(observer);
     LLWebRTCVoiceClient::getInstance()->addObserver(observer);
 }
 
 void LLVoiceClient::removeObserver(LLVoiceClientParticipantObserver* observer)
 {
-    if (LLVivoxVoiceClient::instanceExists())
-    {
-        LLVivoxVoiceClient::getInstance()->removeObserver(observer);
-    }
     if (LLWebRTCVoiceClient::instanceExists())
     {
         LLWebRTCVoiceClient::getInstance()->removeObserver(observer);
@@ -964,11 +810,6 @@ LLSD LLVoiceClient::getP2PChannelInfoTemplate(const LLUUID& id) const
     }
 }
 
-LLVoiceEffectInterface* LLVoiceClient::getVoiceEffectInterface() const
-{
-    return NULL;
-}
-
 ///////////////////
 // version checking
 
@@ -980,7 +821,7 @@ class LLViewerRequiredVoiceVersion : public LLHTTPNode
                       const LLSD& context,
                       const LLSD& input) const
     {
-        std::string voice_server_type = "vivox";
+        std::string voice_server_type = WEBRTC_VOICE_SERVER_TYPE;
         if (input.has("body") && input["body"].has("voice_server_type"))
         {
             voice_server_type = input["body"]["voice_server_type"].asString();
@@ -988,22 +829,13 @@ class LLViewerRequiredVoiceVersion : public LLHTTPNode
 
         LLVoiceModuleInterface *voiceModule = NULL;
 
-        if (voice_server_type == "vivox" || voice_server_type.empty())
-        {
-            voiceModule = (LLVoiceModuleInterface *) LLVivoxVoiceClient::getInstance();
-        }
-        else if (voice_server_type == "webrtc")
+        if (voice_server_type == WEBRTC_VOICE_SERVER_TYPE || voice_server_type.empty())
         {
             voiceModule = (LLVoiceModuleInterface *) LLWebRTCVoiceClient::getInstance();
         }
         else
         {
             LL_WARNS("Voice") << "Unknown voice server type " << voice_server_type << LL_ENDL;
-            if (!sAlertedUser)
-            {
-                // sAlertedUser = true;
-                LLNotificationsUtil::add("VoiceVersionMismatch");
-            }
             return;
         }
 
@@ -1013,8 +845,7 @@ class LLViewerRequiredVoiceVersion : public LLHTTPNode
         {
             if (!sAlertedUser)
             {
-                // sAlertedUser = true;
-                LLNotificationsUtil::add("VoiceVersionMismatch");
+                sAlertedUser = true;
                 LL_WARNS("Voice") << "Voice server version mismatch " << input["body"]["major_version"].asInteger() << "/"
                                   << versionInfo.majorVersion
                                   << LL_ENDL;
@@ -1031,26 +862,10 @@ class LLViewerParcelVoiceInfo : public LLHTTPNode
                       const LLSD& context,
                       const LLSD& input) const
     {
-        //the parcel you are in has changed something about its
-        //voice information
-
-        //this is a misnomer, as it can also be when you are not in
-        //a parcel at all.  Should really be something like
-        //LLViewerVoiceInfoChanged.....
         if ( input.has("body") )
         {
             LLSD body = input["body"];
 
-            //body has "region_name" (str), "parcel_local_id"(int),
-            //"voice_credentials" (map).
-
-            //body["voice_credentials"] has "channel_uri" (str),
-            //body["voice_credentials"] has "channel_credentials" (str)
-
-            //if we really wanted to be extra careful,
-            //we'd check the supplied
-            //local parcel id to make sure it's for the same parcel
-            //we believe we're in
             if ( body.has("voice_credentials") )
             {
                 LLVoiceClient::getInstance()->setSpatialChannel(body["voice_credentials"]);
@@ -1081,9 +896,6 @@ void LLSpeakerVolumeStorage::storeSpeakerVolume(const LLUUID& speaker_id, F32 vo
     if ((volume >= LLVoiceClient::VOLUME_MIN) && (volume <= LLVoiceClient::VOLUME_MAX))
     {
         mSpeakersData[speaker_id] = volume;
-
-        // Enable this when debugging voice slider issues.  It's way to spammy even for debug-level logging.
-        // LL_DEBUGS("Voice") << "Stored volume = " << volume <<  " for " << id << LL_ENDL;
     }
     else
     {
@@ -1099,10 +911,6 @@ bool LLSpeakerVolumeStorage::getSpeakerVolume(const LLUUID& speaker_id, F32& vol
     if (it != mSpeakersData.end())
     {
         volume = it->second;
-
-        // Enable this when debugging voice slider issues.  It's way to spammy even for debug-level logging.
-        // LL_DEBUGS("Voice") << "Retrieved stored volume = " << volume <<  " for " << id << LL_ENDL;
-
         return true;
     }
 
@@ -1112,17 +920,10 @@ bool LLSpeakerVolumeStorage::getSpeakerVolume(const LLUUID& speaker_id, F32& vol
 void LLSpeakerVolumeStorage::removeSpeakerVolume(const LLUUID& speaker_id)
 {
     mSpeakersData.erase(speaker_id);
-
-    // Enable this when debugging voice slider issues.  It's way to spammy even for debug-level logging.
-    // LL_DEBUGS("Voice") << "Removing stored volume for  " << id << LL_ENDL;
 }
 
 /* static */ F32 LLSpeakerVolumeStorage::transformFromLegacyVolume(F32 volume_in)
 {
-    // Convert to linear-logarithmic [0.0..1.0] with 0.5 = 0dB
-    // from legacy characteristic composed of two square-curves
-    // that intersect at volume_in = 0.5, volume_out = 0.56
-
     F32 volume_out = 0.f;
     volume_in = llclamp(volume_in, 0.f, 1.0f);
 
@@ -1140,10 +941,6 @@ void LLSpeakerVolumeStorage::removeSpeakerVolume(const LLUUID& speaker_id)
 
 /* static */ F32 LLSpeakerVolumeStorage::transformToLegacyVolume(F32 volume_in)
 {
-    // Convert from linear-logarithmic [0.0..1.0] with 0.5 = 0dB
-    // to legacy characteristic composed of two square-curves
-    // that intersect at volume_in = 0.56, volume_out = 0.5
-
     F32 volume_out = 0.f;
     volume_in = llclamp(volume_in, 0.f, 1.0f);
 
@@ -1161,7 +958,6 @@ void LLSpeakerVolumeStorage::removeSpeakerVolume(const LLUUID& speaker_id)
 
 void LLSpeakerVolumeStorage::load()
 {
-    // load per-resident voice volume information
     std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, SETTINGS_FILE_NAME);
 
     LL_INFOS("Voice") << "Loading stored speaker volumes from: " << filename << LL_ENDL;
@@ -1182,7 +978,6 @@ void LLSpeakerVolumeStorage::load()
     for (LLSD::map_const_iterator iter = settings_llsd.beginMap();
         iter != settings_llsd.endMap(); ++iter)
     {
-        // Maintain compatibility with 1.23 non-linear saved volume levels
         F32 volume = transformFromLegacyVolume((F32)iter->second.asReal());
 
         storeSpeakerVolume(LLUUID(iter->first), volume);
@@ -1191,9 +986,6 @@ void LLSpeakerVolumeStorage::load()
 
 void LLSpeakerVolumeStorage::save()
 {
-    // If we quit from the login screen we will not have an SL account
-    // name.  Don't try to save, otherwise we'll dump a file in
-    // C:\Program Files\SecondLife\ or similar. JC
     std::string user_dir = gDirUtilp->getLindenUserDir();
     if (!user_dir.empty())
     {
@@ -1204,7 +996,6 @@ void LLSpeakerVolumeStorage::save()
 
         for(speaker_data_map_t::const_iterator iter = mSpeakersData.begin(); iter != mSpeakersData.end(); ++iter)
         {
-            // Maintain compatibility with 1.23 non-linear saved volume levels
             F32 volume = transformToLegacyVolume(iter->second);
 
             settings_llsd[iter->first.asString()] = volume;

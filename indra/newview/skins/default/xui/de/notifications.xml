@@ -2469,9 +2469,7 @@ Anzeige für [AMOUNT] L$ veröffentlichen?
 Es kann eine Weile dauern, bis diese Änderung auf der Karte angezeigt wird.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification label="Falsche Voice-Version" name="VoiceVersionMismatch">
-		Diese Version von [APP_NAME] ist mit der Voice-Chat-Funktion in dieser Region nicht kompatibel. Damit Voice-Chat funktioniert, müssen Sie [APP_NAME] aktualisieren.
-	</notification>
+
 	<notification label="Objekte können nicht gekauft werden" name="BuyObjectOneOwner">
 		Objekte können nicht von mehreren Eigentümern gleichzeitig gekauft werden.
 Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
@@ -3667,30 +3665,7 @@ Klicken Sie auf  &apos;Akzeptieren &apos;, um dem Chat beizutreten, oder auf  &a
 	<notification name="VoiceChannelJoinFailed">
 		Verbindung zu [VOICE_CHANNEL_NAME] nicht möglich. Bitte versuchen Sie es später.  Sie werden nun wieder mit dem Chat in Ihrer Nähe verbunden.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Ein oder mehrere Ihrer Voice-Morph-Abos sind abgelaufen. 
-[[URL] Klicken Sie hier], um Ihr Abo zu erneuern. 
 
-Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Das aktive Voice-Morph-Abo ist abgelaufen. Ihre normalen Voice-Einstellungen werden angewendet. 
-[[URL] Klicken Sie hier], um Ihr Abo zu erneuern. 
-
-Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.
-	</notification>
-	<notification name="VoiceEffectsWillExpire">Ein oder mehrere Ihrer Voice-Morph-Abos laufen in weniger als [INTERVAL] Tagen ab. 
-[[URL] Klicken Sie hier], um Ihr Abo zu erneuern. 
-
-Wenn Sie Premium-Mitglied sind, [[PREMIUM_URL] klicken Sie hier], um Ihren Voice-Morphing-Vorteil zu nutzen.</notification>
-	<notification name="VoiceEffectsNew">
-		Neue Voice-Morph-Effekte sind erhältlich!
-	</notification>
-	<notification name="VoiceEffectsNotSupported">
-		Voice-Morph-Effekte werden von diesem Viewer nicht unterstützt.
-Für weitere Informationen zu anderen Voice-Morphing-Tools, lesen Sie bitte [[FAQ_URL] diesen Artikel].
-		<usetemplate ignoretext="Warnen, falls Voice-Morphing nicht unterstützt wird" name="okignore" yestext="OK"/>
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Nur Mitglieder einer bestimmten Gruppe dürfen diesen Bereich betreten.
 	</notification>
@@ -5836,8 +5811,6 @@ Der Wert, der für das gleichzeitige Laden von Mesh-Objekten gesetzt wurde ([VAL
 			<button name="Cancel" text="Abbrechen"/>
 		</form>
 	</notification>
-
-
 
 	<notification name="FSPrimfeedUploadComplete">
 Der Primfeed-Post kann jetzt [[PF_POSTURL] hier] betrachtet werden.

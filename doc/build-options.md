@@ -27,8 +27,13 @@ autobuild build -A 64 -c ReleaseFS_open -- --avx2 --fmodstudio --no-opensim --pa
 | `--package` | Viewer | tar.xz-Archiv und Startverzeichnis erstellen (Default: an) |
 | `--clean` | Viewer | Alle gecachten Packages neu laden + komplett neu bauen |
 | `--chan "<name>"` | Viewer | Channel-Name → Viewer heißt `Firestorm-<name>` |
+| `--espeak` | Viewer | eSpeak-NG TTS einbinden (Default, **nur Linux**) |
+| `--no-espeak` | Viewer | eSpeak-NG TTS deaktivieren |
 | `-DLL_TESTS:BOOL=FALSE` | CMake | Tests überspringen (baut schneller) |
 | `-DPACKAGE:BOOL=OFF` | CMake | Kein Archiv erstellen (nur Binaries) |
+
+> [!NOTE]
+> eSpeak-NG wird unter Windows nicht unterstützt. Bei Windows-Builds muss `--no-espeak` verwendet werden.
 
 ## Build-Konfigurationen (`-c`)
 

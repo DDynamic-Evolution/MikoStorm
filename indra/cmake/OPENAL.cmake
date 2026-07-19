@@ -10,7 +10,7 @@ include_guard()
 
 set(USE_OPENAL ON CACHE BOOL "Enable OpenAL")
 
-# <FS:Zi> Always download the libopenal.so library on Linux for SLVoice
+# <FS:Zi> Always download the libopenal.so library on Linux
 if (LINUX)
   use_prebuilt_binary(openal)
 endif (LINUX)

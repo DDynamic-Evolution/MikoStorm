@@ -2171,9 +2171,7 @@ Devam etmek istiyor musunuz?
 Bu değişikliğin harita üzerine yansıtılması biraz zaman alabilir.
 		<usetemplate name="okbutton" yestext="Tamam"/>
 	</notification>
-	<notification label="Sesli Sohbet Sürüm Uyumsuzluğu" name="VoiceVersionMismatch">
-		[APP_NAME] uygulamasının bu sürümü bu bölgedeki Sesli Sohbet özelliği ile uyumlu değil. Sesli Sohbet özelliğinin düzgün bir şekilde çalışabilmesi için [APP_NAME] uygulamasını güncellemeniz gerekiyor.
-	</notification>
+
 	<notification label="Nesneler Satın Alınamıyor" name="BuyObjectOneOwner">
 		Farklı sahipleri olan nesneler aynı anda satın alınamaz.
 Lütfen sadece bir nesne seçin ve tekrar deneyin.
@@ -3264,27 +3262,7 @@ Sohbete katılmak için Kabul Et&apos;i, daveti geri çevirmek için ise Reddet&
 	<notification name="VoiceChannelJoinFailed">
 		[VOICE_CHANNEL_NAME] ile bağlantı kurulamadı, lütfen daha sonra tekrar deneyin. Şimdi Yakındaki bir Sesli Sohbete yeniden bağlanılacaksınız.
 	</notification>
-	<notification name="VoiceEffectsExpired">
-		Abone olduğunuz Ses Dönüşümlerinden birinin ya da daha fazlasının süresi dolmuş. 
-Aboneliğinizi yenilemek için [[URL] buraya tıklayın]. 
 
-Özel Üye iseniz, ses dönüştürme özelliğini almak için [[PREMIUM_URL] buraya tıklayın].
-	</notification>
-	<notification name="VoiceEffectsExpiredInUse">
-		Etkin Ses Dönüşümünün süresi dolmuş, normal ses ayarlarınız uygulandı. 
-Aboneliğinizi yenilemek için [[URL] buraya tıklayın]. 
-
-Özel Üye iseniz, ses dönüştürme özelliğini almak için [[PREMIUM_URL] buraya tıklayın].
-	</notification>
-	<notification name="VoiceEffectsWillExpire">
-		Ses Dönüşümlerinizden birinin ya da daha fazlasının süresi [INTERVAL] günden daha az bir zamanda dolacak. 
-Aboneliğinizi yenilemek için [[URL] buraya tıklayın]. 
-
-Özel Üye iseniz, ses dönüştürme özelliğini almak için [[PREMIUM_URL] buraya tıklayın].
-	</notification>
-	<notification name="VoiceEffectsNew">
-		Yeni Ses Şekilleri kullanılabilir!
-	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Sadece belli bir grubun üyeleri bu alanı ziyaret edebilir.
 	</notification>

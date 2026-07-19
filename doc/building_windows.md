@@ -268,6 +268,7 @@ There are a number of switches you can use to modify the configuration process. 
 - **--clean** will cause autobuild to remove any previously compiled objects and fetched packages. It can be useful if you need to force a reload of all packages.
 - **--fmodstudio** controls if the FMOD Studio package is incorporated into the viewer. You must have performed the FMOD Studio installation steps in [FMOD Studio using Autobuild](#fmod-studio-using-autobuild) for this to work. You will not have any sound if you do not include FMOD.
 - **--kdu** will tell autobuiild to use the KDU (Kakadu) package when compiling.
+- **--no-espeak** disables eSpeak-NG TTS support. This flag **must** be used on Windows, as eSpeak-NG is not supported on this platform.
 - **--package** makes sure all files are copied into viewers output directory. You won't be able to start your compiled viewer if you don't enable package or do 'compile' it in VS. It will also run NSIS to create a setup package.
 - **--chan \<channel name\>** will set a unique channel (and the name) for the viewer, appending whatever is defined to "MikoStorm-". By default, the channel is "private" followed by your computer's name.
 - **-LL_TESTS:BOOL=\<bool\>** controls if the tests are compiled and run. There are quite a lot of them so excluding them is recommended unless you have some reason to need one or more of them.

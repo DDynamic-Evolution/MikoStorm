@@ -6306,16 +6306,6 @@ It may take some time for this change to be reflected on the map.
 
   <notification
    icon="alertmodal.tga"
-   label="Voice Version Mismatch"
-   name="VoiceVersionMismatch"
-   type="alertmodal">
-This version of [APP_NAME] is not compatible with the Voice Chat feature in this region. In order for Voice Chat to function correctly you will need to update [APP_NAME].
-  <tag>fail</tag>
-  <tag>voice</tag>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    label="Cannot Buy Objects"
    name="BuyObjectOneOwner"
    type="alertmodal">
@@ -9618,81 +9608,6 @@ Failed to connect to [VOICE_CHANNEL_NAME], please try again later.  You will now
     <unique>
       <context>VOICE_CHANNEL_NAME</context>
     </unique>
-  </notification>
-
-  <notification
-   icon="notify.tga"
-   name="VoiceEffectsExpired"
-   sound="UISndAlert"
-   persist="true"
-   type="notify">
-    <unique/>    
-One or more of your subscribed Voice Morphs has expired.
-[[URL] Click here] to renew your subscription.
-
-If you are a Premium Member, [[PREMIUM_URL] click here] to receive your voice morphing perk.
-  <tag>fail</tag>
-  <tag>voice</tag>
-  </notification>
-
-  <notification
-   icon="notify.tga"
-   name="VoiceEffectsExpiredInUse"
-   sound="UISndAlert"
-   persist="true"
-   type="notify">
-    <unique/>
-The active Voice Morph has expired, your normal voice settings have been applied.
-[[URL] Click here] to renew your subscription.
-
-If you are a Premium Member, [[PREMIUM_URL] click here] to receive your voice morphing perk.
-    <tag>fail</tag>
-    <tag>voice</tag>
-  </notification>
-
-  <notification
-   icon="notify.tga"
-   name="VoiceEffectsWillExpire"
-   sound="UISndAlert"
-   persist="true"
-   type="notify">
-    <unique/>    
-One or more of your Voice Morphs will expire in less than [INTERVAL] days.
-[[URL] Click here] to renew your subscription.
-
-If you are a Premium Member, [[PREMIUM_URL] click here] to receive your voice morphing perk.
-  <tag>fail</tag>
-  <tag>voice</tag>
-  <usetemplate
-      ignoretext="Warn me about voice morph expiring"
-      name="okignore"
-      yestext="OK"/>
-  </notification>
-
-  <notification
-   icon="notify.tga"
-   name="VoiceEffectsNew"
-   sound="UISndAlert"
-   persist="true"
-   type="notify">
-    <unique/>    
-New Voice Morphs are available!
-   <tag>voice</tag>
-  </notification>
-
-  <notification
-    icon="alertmodal.tga"
-    name="VoiceEffectsNotSupported"
-    sound="UISndAlert"
-    persist="true"
-    type="alertmodal">
-Voice Morphs are not supported by this viewer.
-For more information about other voice morph tools, see [[FAQ_URL] this article].
-    <usetemplate
-        ignoretext="Warn me about voice morph not being supported"
-        name="okignore"
-        yestext="OK"/>
-    <tag>voice</tag>
   </notification>
 
   <notification
