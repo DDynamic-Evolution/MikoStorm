@@ -249,10 +249,6 @@ build.bat
 
 ## Links
 
-- [Latest Release (v1.15.18)](https://github.com/DDynamic-Evolution/MikoStorm/releases/tag/v1.15.18)
-  - [Windows Installer (exe)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Windows.exe)
-  - [Linux Package (tar.xz)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Linux.tar.xz)
-- [All Releases](https://github.com/DDynamic-Evolution/MikoStorm/releases)
 - [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm)
 - [Second Life](https://secondlife.com/)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
