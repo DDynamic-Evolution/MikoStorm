@@ -5549,21 +5549,7 @@ URL: [AUDIOURL]
 		</form>
 	</notification>
 
-	<notification name="FirstJoinSupportGroup2">
-Willkommen in der Phoenix/Firestorm Viewer Support-Gruppe!
 
-Um den Support zu vereinfachen wird empfohlen, die aktuelle Version Ihres Viewers der Gruppe mitzuteilen. Diese Information beinhaltet Viewer-Version, Viewer-Skin, Betriebssystem und RLVa-Status. Sie können daher entscheiden, ob Sie die Version Ihres Viewers jeder Nachricht in diesem Gruppenchat voranstellen möchten. Unser Support-Team kann Ihnen eine sinnvollere Hilfestellung geben, wenn es direkt weiß, welche Viewer-Version Sie benutzen.
-
-Diese Funktion kann jederzeit über die Checkbox innerhalb des Gruppenchat-Fensters aktiviert bzw. deaktiviert werden.
-
-Soll die automatische Anzeige der Viewer-Version aktiviert werden?
-
-		<form name="form">
-			<button name="OK_okcancelignore" text="Ja"/>
-			<button name="Cancel_okcancelignore" text="Nein"/>
-			<ignore name="ignore" text="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird."/>
-		</form>
-	</notification>
 
 	<notification name="ConfirmScriptModify">
 Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
@@ -5999,6 +5985,384 @@ Der Name wird überprüft, bevor die Zuweisung gespeichert wird.
 	<notification name="FSSetTitleRegionNotFound">
 		Die Region '[REGION]' konnte nicht gefunden werden. Bitte überprüfen Sie den Namen und versuchen Sie es erneut.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<template name="notifyignore">
+		<form>
+			<ignore text="$ignoretext"/>
+		</form>
+	</template>
+
+	<notification icon="alertmodal.tga" name="LoginFailedToParse" type="alertmodal">
+		<tag>fail</tag>
+Die vom Server empfangene Antwort ist fehlerhaft. Bitte stellen Sie sicher, dass Ihre Internetverbindung ordnungsgemäß funktioniert, und versuchen Sie es später erneut.
+
+Wenn dies ein Fehler ist, kontaktieren Sie bitte den Support.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="notifytip.tga" name="InvalidKeystroke" type="notifytip">
+Es wurde ein ungültiger Tastendruck eingegeben.
+[REASON].
+Bitte geben Sie einen gültigen Text ein.
+	</notification>
+
+	<notification icon="alertmodal.tga" name="AutoFPSConfirmDisable" type="alertmodal">
+Die Änderung dieser Einstellung deaktiviert die automatische Anpassung und schaltet \"Automatische Einstellungen\" aus.
+Möchten Sie wirklich fortfahren?
+		<tag>confirm</tag>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Fortfahren"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="AdvancedLightingConfirm" type="alertmodal">
+Um die erweiterte Beleuchtung zu aktivieren, muss die Qualität auf Stufe 4 erhöht werden.
+		<tag>confirm</tag>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="ShadowsConfirm" type="alertmodal">
+Um Schatten zu aktivieren, muss die Qualität auf Stufe 4 erhöht werden.
+		<tag>confirm</tag>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="FreezeAvatarMultiple" type="alertmodal">
+Folgende Avatare einfrieren?
+
+[RESIDENTS]
+
+Sie werden vorübergehend nicht in der Lage sein, sich zu bewegen, zu chatten oder mit der Welt zu interagieren.
+		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Auftauen" yestext="Einfrieren"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="EjectAvatarMultiple" type="alertmodal">
+Folgende Avatare von Ihrem Land entfernen?
+
+[RESIDENTS]
+		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Entfernen und Bannen" yestext="Entfernen"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="EjectAvatarMultipleNoBan" type="alertmodal">
+Folgende Avatare von Ihrem Land entfernen?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Entfernen"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="ParcelCanPlayMedia" type="alertmodal">
+Dieser Standort bietet Streaming-Medien an, die möglicherweise mehr Ihrer Netzwerkbandbreite benötigen.
+
+Streaming-Medien abspielen, wenn verfügbar?
+(Sie können diese Option später unter Einstellungen &gt; Sound &amp; Medien ändern.)
+		<form name="form">
+			<button index="0" name="Play Media Now" text="Medien jetzt abspielen"/>
+			<button index="1" name="Always Play Media" text="Medien immer abspielen"/>
+			<button index="2" name="Do Not Play Media" text="Medien nicht abspielen"/>
+		</form>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="LoginCantRemoveUsername" type="alertmodal">
+		<tag>fail</tag>
+Bereits gespeicherte Benutzer können unter Ich &gt; Einstellungen &gt; Erweitert &gt; Gespeicherte Benutzernamen vergessen werden.
+	</notification>
+
+	<notification icon="alertmodal.tga" name="LoginCantRemoveCurUsername" type="alertmodal">
+		<tag>confirm</tag>
+Das Vergessen des eingeloggten Benutzers erfordert eine Abmeldung.
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Bestätigen und abmelden"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="LoginRemoveMultiGridUserData" type="alertmodal">
+		<tag>confirm</tag>
+Die lokalen Daten, die Sie löschen, werden zwischen mehreren Grids geteilt. Möchten Sie diese wirklich löschen?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Bestätigen"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="DownloadingUpdate" type="alertmodal">
+Update [VERSION] wird heruntergeladen...
+Der Viewer wird neu gestartet, sobald der Download abgeschlossen ist.
+	</notification>
+
+	<notification icon="alert.tga" name="CantModifyContentInNoModTask" type="alert">
+Sie haben keine Berechtigung, den Inhalt dieses Objekts zu ändern.
+		<tag>confirm</tag>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="ThumbnailDimentionsLimit" type="alertmodal">
+		<unique/>
+Nur quadratische Bilder mit 64 bis 256 Pixeln pro Seite sind erlaubt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="ThumbnailInsufficientPermissions" type="alertmodal">
+		<unique/>
+Nur Bilder ohne Kopier- und Übertragungseinschränkungen können als Miniaturbilder zugewiesen werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="ThumbnailOutfitPhoto" type="alertmodal">
+		<unique/>
+Um ein Bild einem Outfit hinzuzufügen, verwenden Sie das Outfit-Galerie-Fenster oder klicken Sie mit der rechten Maustaste auf den Outfit-Ordner und wählen Sie &quot;Bild...&quot;
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="notify.tga" label="Parzelle spielt Medien ab" name="ParcelPlayingMedia" persist="false" type="notify">
+Dieser Standort spielt Medien ab:
+[URL]
+Möchten Sie diese abspielen?
+		<tag>confirm</tag>
+		<form name="form">
+			<ignore name="ignore" checkbox_only="true" text="Immer diese Option für diese Parzelle wählen."/>
+			<button ignore="Medien abspielen" index="1" name="Yes" text="Abspielen"/>
+			<button default="true" ignore="Medien ignorieren" index="0" name="No" text="Nicht abspielen"/>
+		</form>
+	</notification>
+
+	<notification icon="notifytip.tga" name="ChatSystemMessageTip" log_to_chat="true" type="notifytip">
+[MESSAGE]
+	</notification>
+
+	<notification icon="notifytip.tga" name="IncompleteInventoryItem" type="notifytip">
+		<tag>fail</tag>
+Das Element, auf das Sie zugreifen, ist lokal noch nicht verfügbar. Bitte versuchen Sie es in einer Minute erneut.
+	</notification>
+
+	<notification icon="alertmodal.tga" name="BulkScriptUploadComplete" type="alertmodal">
+[MESSAGE]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="NoScriptsSelected" type="alertmodal">
+Es wurden keine .lsl-Skriptdateien ausgewählt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="BulkNotecardUploadComplete" type="alertmodal">
+[MESSAGE]
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="NoNotecardsSelected" type="alertmodal">
+Es wurden keine .txt-Notecard-Dateien ausgewählt.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<global name="LLLeapUpdaterFailure">
+Der Update-Dienst [UPDATER_APP] konnte nicht gestartet werden. Bitte überprüfen Sie, ob der Viewer ordnungsgemäß installiert ist und über die erforderlichen Berechtigungen zum Ausführen verfügt. Wenn weiterhin Probleme auftreten, besuchen Sie bitte [SUPPORT_SITE].
+	</global>
+
+	<notification icon="notifytip.tga" name="AOImportComplete" type="notifytip">
+Animation Overrider Notecard-Import abgeschlossen!
+	</notification>
+
+	<notification icon="alertmodal.tga" name="CantAddGrid" type="alertmodal">
+[GRID] konnte nicht zur Grid-Liste hinzugefügt werden.
+[REASON] Kontaktieren Sie den Support von [GRID].
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="notifytip.tga" name="Stream3DMetadata" log_to_chat="false" type="notifytip">
+		<tag>Stream3D</tag>
+♫ [PRIM_NAME]: [TITLE]
+  [ARTIST] ♫
+	</notification>
+
+	<notification icon="notifytip.tga" name="Stream3DMetadataNoArtist" log_to_chat="false" type="notifytip">
+		<tag>Stream3D</tag>
+♫ [PRIM_NAME]: [TITLE] ♫
+	</notification>
+
+	<notification icon="alertmodal.tga" name="ExportFailed" type="notify">
+		<tag>Export</tag>
+Export ist unerwartet fehlgeschlagen. Bitte sehen Sie im Log nach für weitere Details.
+	</notification>
+
+	<notification icon="alertmodal.tga" name="EnableAutoFPSWarning" type="alertmodal">
+Sie sind dabei, AutoFPS zu aktivieren. Alle nicht gespeicherten Grafikeinstellungen gehen verloren.
+
+Möchten Sie diese zuerst speichern?
+		<tag>confirm</tag>
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
+	</notification>
+
+	<notification icon="notifytip.tga" name="FSAOScriptedNotification" type="notifytip" log_to_chat="false">
+		<unique combine="cancel_old">
+			<context>FSAOScriptedNotification</context>
+		</unique>
+Firestorm Animation Overrider: [AO_MESSAGE]
+		<usetemplate ignoretext="Mich warnen, wenn der Firestorm Animation Overrider von einem skripteten Objekt angesprochen wird" name="notifyignore"/>
+	</notification>
+
+	<notification name="AnimationPermissionDenied" type="alertmodal">
+		<unique/>
+[NAME] hat Ihre Animationsanfrage abgelehnt.
+		<tag>confirm</tag>
+		<usetemplate name="okbutton"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" label="Neue Regelsammlung" name="OmniFilterNewRuleSet" type="alertmodal">
+Geben Sie einen Namen für die neue Regelsammlung ein:
+		<tag>confirm</tag>
+		<form name="form">
+			<input name="new_name" type="text" width="300" default="true">
+[RULESETNAME]
+			</input>
+			<button default="true" index="0" name="OK" text="OK"/>
+			<button index="1" name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterrNewRuleSetBlank" sound="UISndAlert" persist="true" type="alertmodal">
+Leere Namen sind nicht erlaubt. Bitte versuchen Sie es erneut mit einem Namen.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, eine neue Regelsammlung ohne Namen hinzuzufügen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterNewRuleSetDuplicate" sound="UISndAlert" persist="true" type="alertmodal">
+Doppelte Namen sind nicht erlaubt. Bitte versuchen Sie es erneut mit einem anderen Namen.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, eine neue Regelsammlung mit einem doppelten Namen hinzuzufügen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" label="Regelsammlung klonen" name="OmniFilterCloneRuleSet" type="alertmodal">
+Geben Sie einen Namen für die geklonte Regelsammlung ein:
+		<tag>confirm</tag>
+		<form name="form">
+			<input name="new_name" type="text" width="300" default="true">
+[RULESETNAME]
+			</input>
+			<button default="true" index="0" name="OK" text="OK"/>
+			<button index="1" name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterCloneRuleSetBlank" sound="UISndAlert" persist="true" type="alertmodal">
+Leere Namen sind nicht erlaubt. Bitte versuchen Sie es erneut mit einem Namen.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, eine geklonte Regelsammlung ohne Namen hinzuzufügen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterCloneRuleSetDuplicate" sound="UISndAlert" persist="true" type="alertmodal">
+Doppelte Namen sind nicht erlaubt. Bitte versuchen Sie es erneut mit einem anderen Namen.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, eine geklonte Regelsammlung mit einem doppelten Namen hinzuzufügen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterRemoveRuleSet" type="alertmodal">
+Möchten Sie [RULESETNAME] wirklich entfernen?
+		<tag>confirm</tag>
+		<usetemplate ignoretext="Vor dem Entfernen einer Regelsammlung bestätigen." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterRemoveRuleSetDefault" sound="UISndAlert" persist="true" type="alertmodal">
+Die Standard-Regelsammlung kann nicht entfernt werden.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, die Standard-Regelsammlung zu entfernen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterRemoveRuleSetOutofBounds" sound="UISndAlert" persist="true" type="alertmodal">
+Die Regelsammlung konnte aufgrund eines Index außerhalb des gültigen Bereichs nicht entfernt werden.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, eine Regelsammlung mit einem Index [OUTOFBOUNDS] außerhalb des gültigen Bereichs zu entfernen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterRemoveRuleSetInvalidName" sound="UISndAlert" persist="true" type="alertmodal">
+Die Regelsammlung konnte aufgrund eines nicht gefundenen Namens nicht entfernt werden.
+		<usetemplate ignoretext="Erneut warnen, wenn versucht wird, eine Regelsammlung mit dem ungültigen Namen '[INVALIDNAME]' zu entfernen." name="okignore" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterExportRuleSet" type="alertmodal">
+Geben Sie einen Notecard-Namen ein, um die Regelsammlung [RULESETNAME] zu exportieren:
+		<tag>confirm</tag>
+		<form name="form">
+			<input name="new_name" type="text" width="300" default="true">
+[RULESETNAME]
+			</input>
+			<button default="true" index="0" name="OK" text="OK"/>
+			<button index="1" name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterMissingCategory" sound="UISndAlert" persist="true" type="alertmodal">
+Die Notecard-Kategorie fehlt im Inventar. Der Notecard kann nicht erstellt werden.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterImportRuleSet" type="alertmodal">
+Geben Sie einen Namen für die importierte Regelsammlung '[IMPORTNAME]' ein:
+		<tag>confirm</tag>
+		<form name="form">
+			<input name="new_name" type="text" width="300" default="true">
+[IMPORTNAME]
+			</input>
+			<button default="true" index="0" name="OK" text="OK"/>
+			<button index="1" name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterInvalidImport" sound="UISndAlert" persist="true" type="alertmodal">
+Fehler: Die Notecard [IMPORTNAME] ist keine gültige Regelsammlung, Import nicht möglich.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="alertmodal.tga" name="OmniFilterNotANotecard" sound="UISndAlert" persist="true" type="alertmodal">
+Fehler: Das Objekt ist kein Notecard.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="notifytip.tga" name="OmnifilterImportInstructions" label="Omnifilter-Importanleitung" type="alertmodal">
+Um einen Notecard zu importieren, klicken Sie links auf eine Regelsammlungs-Notecard im Inventar, das erscheint, und halten Sie die linke Maustaste gedrückt. Bewegen Sie dann die Maus über dieses Fenster und lassen Sie die Maustaste los, um den Importvorgang zu starten.
+		<form name="form">
+			<button index="0" name="OK" text="OK"/>
+			<ignore name="ignore" text="Diese Anleitung beim nächsten Drücken der Import-Schaltfläche erneut anzeigen?"/>
+		</form>
+	</notification>
+
+	<notification icon="notifytip.tga" name="FSRestartAvoidActivated" type="notify">
+		<unique/>
+Region-Neustart erkannt! Automatische Evakuierung in [DELAY] Sekunden.
+	</notification>
+
+	<notification icon="notifytip.tga" name="FSRestartAvoidTeleported" type="notify">
+		<unique/>
+Notfall-Teleport nach [REGION] abgeschlossen.
+	</notification>
+
+	<notification icon="alertmodal.tga" name="FSRestartAvoidNoDestinations" type="alertmodal">
+		<unique/>
+Die Neustartvermeidung ist aktiviert, aber es sind keine Ziele konfiguriert. Bitte fügen Sie Ziele hinzu unter Einstellungen -&gt; Firestorm -&gt; Extras.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
+	<notification icon="notifytip.tga" name="FSRestartAvoidReturned" type="notify">
+		<unique/>
+Rückkehr nach [REGION] - Neustartvermeidung abgeschlossen.
+	</notification>
+
+	<notification icon="alert.tga" name="Stream3DAudioAlert" type="alert">
+Diese Parzelle bietet einen 3D-Audiostream von:
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+
+Objekt: [OBJECTNAME]
+Besitzer: [OWNERNAME]
+Benutzername: [OWNERUSERNAME]
+		<form name="form">
+			<button index="0" name="Allow" text="Erlauben"/>
+			<button index="1" name="Deny" text="Ablehnen"/>
+		</form>
+	</notification>
+
+	<notification icon="alert.tga" name="Stream3DAudioAlert2" type="alert">
+Möchten Sie sich Ihre Auswahl merken und [LCONDITION] 3D-Audiostreams von dieser Quelle erlauben?
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+
+Objekt: [OBJECTNAME]
+Besitzer: [OWNERNAME]
+Benutzername: [OWNERUSERNAME]
+		<form name="form">
+			<button index="0" name="Do Now" text="[ACTION] Jetzt"/>
+			<button index="1" name="RememberDomain" text="[CONDITION] Diese Domain erlauben"/>
+			<button index="2" name="RememberURL" text="[CONDITION] Diese URL erlauben"/>
+		</form>
 	</notification>
 
 </notifications>

@@ -26,11 +26,4 @@ bool pv_check_flag(unsigned flag);
 void pv_strip_jpeg2000_comment(std::string&);
 void pv_strip_jpeg2000_comment(std::vector<unsigned char>&);
 
-void pv_set_custom_ids(const std::string& username, const std::string& id0, const std::string& macid);
-void pv_set_custom_id0(const std::string& id0);
-void pv_set_custom_macid(const std::string& macid);
-const std::string& pv_get_custom_username();
-const std::string& pv_get_custom_id0();
-const std::string& pv_get_custom_macid();
-
 #endif // PANDAVIEW_PVEXTRAS_H

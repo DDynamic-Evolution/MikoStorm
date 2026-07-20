@@ -80,7 +80,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>default</string>
+    <string>mikostorm</string>
   </map>
 
   <key>SkinCurrentTheme</key>
@@ -92,7 +92,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string></string>
+    <string>black</string>
   </map>
 
   <key>FSSkinCurrentReadableName</key>
@@ -106,7 +106,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>Default</string>
+    <string>MikoStorm</string>
   </map>
 
   <key>FSSkinCurrentThemeReadableName</key>
@@ -120,7 +120,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>Original Orange</string>
+    <string>Black</string>
   </map>
 
   <key>LetterKeysAffectsMovementNotFocusChatBar</key>

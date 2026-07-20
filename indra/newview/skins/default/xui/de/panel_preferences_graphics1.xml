@@ -297,6 +297,20 @@
 		<button label="Durchsuchen..." name="BrowseLUTBtn"/>
 		<button label="Entfernen" name="RemoveLUTBtn"/>
 		<slider label="LUT-Intensität:" name="ColorGradingLUTIntensity" tool_tip="Überblendintensität der Farb-LUT (0.0=aus, 1.0=voll)" label_width="195" width="409"/>
+		<text follows="left|top" height="110" layout="topleft" left="10" name="ColorLUTInfo" top_pad="10" width="490" word_wrap="true" use_ellipses="false" parse_urls="true">
+Eine Lookup Table (LUT) ist eine Datei, die die Farben Ihres Viewers
+neu zuordnet, um einen bestimmten visuellen Stil oder eine bestimmte
+Stimmung zu erzeugen. Wie ein Fotofilter für Ihre gesamte 3D-Welt.
+Laden Sie eine .cube-LUT-Datei, um filmische Farbkorrekturen, warme
+Töne, kühle Blautöne, Vintage-Looks oder eigene Farbumwandlungen
+anzuwenden.
+
+Kostenlose LUTs finden Sie unter:
+https://github.com/imnz730/LUTs
+https://github.com/ampas/aces-dev
+https://www.colorgradingcentral.com
+https://lutify.me
+		</text>
 	</panel>
 	
 </tab_container>

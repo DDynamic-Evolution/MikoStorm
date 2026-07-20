@@ -414,118 +414,6 @@ void FSFloaterIM::sendMsgFromInputEditor(EChatType type)
                 utf8_text = FSCommon::applyAutoCloseOoc(utf8_text);
                 utf8_text = FSCommon::applyMuPose(utf8_text);
 
-                // <FS:Techwolf Lupindo> Support group chat prefix
-                static LLCachedControl<bool> chat_prefix_support(gSavedSettings, "FSSupportGroupChatPrefix3");
-                static LLCachedControl<bool> chat_prefix_testing(gSavedSettings, "FSSupportGroupChatPrefixTesting");
-                if ((chat_prefix_support || chat_prefix_testing) && FSData::getInstance()->isFirestormGroup(mSessionID))
-                {
-                    // <FS:PP> FIRE-7075: Skin indicator
-                    static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
-                    std::string skin_indicator(FSInternalSkinCurrent);
-                    LLStringUtil::toLower(skin_indicator);
-                    skin_indicator = skin_indicator.substr(0, 1);
-                    // </FS:PP>
-
-                    //Address size check
-#if ADDRESS_SIZE == 32
-                    std::string str_address_size_tag = "32";
-#else
-                    std::string str_address_size_tag = "";
-#endif
-#ifdef USE_AVX2_OPTIMIZATION
-                    std::string str_optimization_tag = "+";
-#else
-                    std::string str_optimization_tag = "-";
-#endif
-                    //OpenSim check
-                    std::string str_opensim_tag;
-#ifdef OPENSIM
-                    str_opensim_tag = " os";
-#endif
-
-                    //Operating System check
-#if LL_WINDOWS
-                    std::string str_operating_system_tag = "W";
-#elif LL_LINUX
-                    std::string str_operating_system_tag = "L";
-#elif LL_DARWIN
-                    std::string str_operating_system_tag = "M";
-#endif
-
-                    //RLV check
-                    std::string str_rlv_enabled = "";
-                    if (RlvHandler::isEnabled())
-                        str_rlv_enabled = "*";
-
-                    // Text mode check
-                    std::string str_viewer_mode = "";
-
-                    // Unfortunately, we have to cheat a little here. Ideally we'd have
-                    // a method defined to check if the viewer is running in Text Mode.
-                    // For now, we will use the same method as used in llappviewer.cpp(LLAppViewer::getViewerInfo())
-                    static LLCachedControl<std::string> FSViewerMode(gSavedSettings, "SessionSettingsFile");
-                    std::string viewer_mode(FSViewerMode);
-                    LLStringUtil::toLower(viewer_mode);
-                    if (viewer_mode == "settings_text.xml")
-                        str_viewer_mode = "T";
-
-                    //Build it up
-                    size_t insert_pos = FSCommon::is_irc_me_prefix(utf8_text) ? 4 : 0;
-
-                    //For testing/beta groups, we display the build version since it doesn't speed by and this might change often
-                    if (FSData::getInstance()->isTestingGroup(mSessionID))
-                    {
-                        if(chat_prefix_testing)
-                        {
-                            auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
-                            std::string str_version_tag;
-                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
-                            {
-                                str_version_tag = "Release";
-                            }
-                            else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::STREAMING_VIEWER )
-                            {
-                                str_version_tag = "Streaming";
-                            }
-                            else if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
-                            {
-                                str_version_tag = "Unofficial";
-                            }
-                            else// In testing groups we'll allow all non-release recognised channels.
-                            {
-                                str_version_tag = LLVersionInfo::getInstance()->getBuildVersion();
-                            }
-                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + str_optimization_tag + " " + str_version_tag + " " + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
-                        }
-
-                    }
-                    //For release support groups, only display the short version(Major.Minor.Patch) since chat can speed by. This makes it easier on Support's eyes.
-                    else if(FSData::getInstance()->isSupportGroup(mSessionID))
-                    {
-                        if(chat_prefix_support)
-                        {
-                            std::string str_version_tag;
-                            auto viewer_maturity = LLVersionInfo::getInstance()->getFSViewerMaturity();
-                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::UNOFFICIAL_VIEWER )
-                            {
-                                str_version_tag = "Unofficial";
-                            }
-                            if( viewer_maturity == LLVersionInfo::FSViewerMaturity::STREAMING_VIEWER )
-                            {
-                                str_version_tag = "Streaming";
-                            }
-                            else if( viewer_maturity != LLVersionInfo::FSViewerMaturity::RELEASE_VIEWER )
-                            {
-                                str_version_tag = "pre-Release";
-                            }
-                            else
-                            {
-                                str_version_tag = LLVersionInfo::getInstance()->getShortVersion();
-                            }
-                            utf8_text.insert(insert_pos, ("(" + str_address_size_tag + str_operating_system_tag + str_optimization_tag + " " + str_version_tag + " " + skin_indicator + str_viewer_mode + str_rlv_enabled + str_opensim_tag + ") "));
-                        }
-                    }
-                }
 
                 // <FS:Techwolf Lupindo> Allow user to send system info.
                 if (mDialog == IM_NOTHING_SPECIAL && utf8_text.find("/sysinfo") == 0)
@@ -1054,19 +942,6 @@ bool FSFloaterIM::postBuild()
     //But we cannot with the support group button, because testing groups are also support groups
     childSetVisible("support_panel", isFSSupportGroup && !isFSTestingGroup);
 
-    // <FS:Zi> Viewer version popup
-    if (isFSSupportGroup || isFSTestingGroup)
-    {
-        // check if the dialog was set to ignore
-        LLNotificationTemplatePtr templatep = LLNotifications::instance().getTemplate("FirstJoinSupportGroup2");
-        if (!templatep.get()->mForm->getIgnored())
-        {
-            // if not, give the user a choice, whether to enable the version prefix or not
-            LLSD args;
-            LLNotificationsUtil::add("FirstJoinSupportGroup2", args, LLSD(), boost::bind(&FSFloaterIM::enableViewerVersionCallback, this, _1, _2));
-        }
-    }
-    // </FS:Zi> Viewer version popup
 
     // only dock when chiclets are visible, or the floater will get stuck in the top left
     // FIRE-9984 -Zi
@@ -2327,21 +2202,7 @@ void FSFloaterIM::onClickCloseBtn(bool app_quitting)
 }
 
 // <FS:Zi> Viewer version popup
-bool FSFloaterIM::enableViewerVersionCallback(const LLSD& notification,const LLSD& response)
-{
-    S32 option = LLNotificationsUtil::getSelectedOption(notification,response);
 
-    bool result = false;
-    if (option == 0)        // "yes"
-    {
-        result = true;
-    }
-
-    gSavedSettings.setBOOL("FSSupportGroupChatPrefix3", result);
-    gSavedSettings.setBOOL("FSSupportGroupChatPrefixTesting", result);
-    return result;
-}
-// </FS:Zi>
 
 // <FS:CR> FIRE-11734
 //static

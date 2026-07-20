@@ -8442,12 +8442,7 @@ void process_script_dialog(LLMessageSystem* msg, void**)
     }
 
     LLSD args;
-    std::string title = object_name;
-    if (chat_channel != 0)
-    {
-        title += llformat(" [Ch: %d]", chat_channel);
-    }
-    args["TITLE"] = title;
+    args["TITLE"] = object_name;
     args["MESSAGE"] = message;
     LLNotificationPtr notification;
     if (!first_name.empty())
