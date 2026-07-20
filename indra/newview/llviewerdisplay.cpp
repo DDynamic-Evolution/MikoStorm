@@ -113,6 +113,8 @@
 extern LLPointer<LLViewerTexture> gStartTexture;
 extern bool gShiftFrame;
 
+#include "mikostorm_reshade_adapter.hpp"
+
 LLPointer<LLViewerTexture> gDisconnectedImagep = nullptr;
 
 // used to toggle renderer back on after teleport
@@ -1698,6 +1700,14 @@ void swap()
     LLPerfStats::RecordSceneTime T ( LLPerfStats::StatType_t::RENDER_SWAP ); // render time capture - Swap buffer time - can signify excessive data transfer to/from GPU
     LL_PROFILE_ZONE_NAMED_CATEGORY_DISPLAY("Swap");
     LL_PROFILE_GPU_ZONE("swap");
+
+    // Apply ReShade effects before buffer swap
+    {
+        auto *adapter = getReShadeAdapter();
+        if (adapter && adapter->is_initialized())
+            adapter->on_present();
+    }
+
     if (gDisplaySwapBuffers)
     {
         gViewerWindow->getWindow()->swapBuffers();

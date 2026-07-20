@@ -2341,7 +2341,7 @@ if (WINDOWS)
       app_settings/message.xml
       ${CMAKE_SOURCE_DIR}/../scripts/messages/message_template.msg
       #${SHARED_LIB_STAGING_DIR}/openjp2.dll # <FS:Ansariel> Only copy OpenJPEG dll if needed
-      ${SHARED_LIB_STAGING_DIR}/llwebrtc.dll
+      #${SHARED_LIB_STAGING_DIR}/llwebrtc.dll # Built from source, target dependency handles build order
       #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/SLVoice.exe
       #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/libsndfile-1.dll
       #${SHARED_LIB_STAGING_DIR}/${LL_INTDIR}/vivoxoal.dll
@@ -2620,6 +2620,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
         llplugin
         llprimitive
         llrender
+        llreshade
         llui
         llfilesystem
         llwindow

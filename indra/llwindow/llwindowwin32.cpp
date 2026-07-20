@@ -1756,6 +1756,12 @@ const   S32   max_format  = (S32)num_formats - 1;
         return false;
     }
 
+    // Initialize ReShade adapter after GL context is fully set up
+    {
+        extern void initReShadeAdapter(HWND hwnd, HDC hdc, HGLRC hglrc);
+        initReShadeAdapter(mWindowHandle, mhDC, mhRC);
+    }
+
     // Setup Tracy gpu context
     {
         LL_PROFILER_GPU_CONTEXT;

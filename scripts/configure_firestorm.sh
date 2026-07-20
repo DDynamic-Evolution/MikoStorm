@@ -592,12 +592,15 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
 
     if [ $WANTS_CACHE -eq $TRUE ]
     then
-        if [ `which ccache 2>/dev/null` ]
+        if [ `which sccache 2>/dev/null` ]
+        then
+            echo "Found sccache"
+            CACHE_OPT="-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
+        elif [ `which ccache 2>/dev/null` ]
         then
             echo "Found ccache"
             CACHE_OPT="-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
-        fi
-        if [ `which buildcache 2>/dev/null` ]
+        elif [ `which buildcache 2>/dev/null` ]
         then
             echo "Found buildcache"
             CACHE_OPT="-DCMAKE_C_COMPILER_LAUNCHER=buildcache -DCMAKE_CXX_COMPILER_LAUNCHER=buildcache"
@@ -644,19 +647,24 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             build_status=${PIPESTATUS[0]}
         fi
     elif [ $TARGET_PLATFORM == "windows" ] ; then
-        # VS2026+ now uses .slnx so determine which one exists
-        if [ -f "MikoStorm.slnx" ]; then
-          SOLUTION="MikoStorm.slnx"
-        elif [ -f "MikoStorm.sln" ]; then
-          SOLUTION="MikoStorm.sln"
+        if [ $WANTS_NINJA -eq $TRUE ] ; then
+            ninja -C build-linux-x86_64 -j $JOBS | tee -a "$LOG"
+            build_status=${PIPESTATUS[0]}
         else
-          echo "Build failed! No MikoStorm.slnx or MikoStorm.sln found"
-          exit 1
+            # VS2026+ now uses .slnx so determine which one exists
+            if [ -f "MikoStorm.slnx" ]; then
+              SOLUTION="MikoStorm.slnx"
+            elif [ -f "MikoStorm.sln" ]; then
+              SOLUTION="MikoStorm.sln"
+            else
+              echo "Build failed! No MikoStorm.slnx or MikoStorm.sln found"
+              exit 1
+            fi
+            msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\MikoStormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
+                -flp1:"errorsonly;LogFile=logs\\MikoStormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
+                -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
+            build_status=$?
         fi
-        msbuild.exe "$SOLUTION" -p:Configuration=${BTYPE} -flp:LogFile="logs\\MikoStormBuild_win-${AUTOBUILD_ADDRSIZE}.log" \
-            -flp1:"errorsonly;LogFile=logs\\MikoStormBuild_win-${AUTOBUILD_ADDRSIZE}.err" -p:Platform=${AUTOBUILD_WIN_VSPLATFORM} -t:Build -p:useenv=true \
-            -verbosity:normal -toolsversion:Current -p:"VCBuildAdditionalOptions= /incremental"
-        build_status=$?
     fi
     # Check the return code of the build command
     if [ $build_status -ne 0 ]; then

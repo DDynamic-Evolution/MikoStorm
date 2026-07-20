@@ -16,8 +16,13 @@ if (USE_ESPEAK_NG)
 
   add_library(ll::espeak-ng ALIAS espeak-ng)
   target_compile_definitions(espeak-ng INTERFACE LL_ESPEAK_NG=1)
-  target_compile_options(espeak-ng PRIVATE -Wno-error)
-  target_compile_options(espeak-ng-bin PRIVATE -Wno-error)
+  if(MSVC)
+    target_compile_options(espeak-ng PRIVATE /WX-)
+    target_compile_options(espeak-ng-bin PRIVATE /WX-)
+  else()
+    target_compile_options(espeak-ng PRIVATE -Wno-error)
+    target_compile_options(espeak-ng-bin PRIVATE -Wno-error)
+  endif()
 
   set(ESPEAK_NG_DATA_DIR ${CMAKE_BINARY_DIR}/espeak-ng/espeak-ng-data
     CACHE PATH "Path to compiled espeak-ng-data directory")
