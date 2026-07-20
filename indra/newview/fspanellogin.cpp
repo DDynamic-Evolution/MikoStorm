@@ -77,6 +77,10 @@
 
 #include "fsdata.h"
 
+#include "llcoros.h"
+#include "llcorehttputil.h"
+#include "llhttpconstants.h"
+
 #if LL_WINDOWS
 #pragma warning(disable: 4355)      // 'this' used in initializer list
 #endif  // LL_WINDOWS
@@ -997,6 +1001,15 @@ void FSPanelLogin::loadLoginImage(const std::string& path)
     LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
     web_browser->navigateTo("about:blank");
 
+    // Detect URL
+    std::string scheme = image_path.substr(0, image_path.find("://"));
+    if (scheme == "http" || scheme == "https")
+    {
+        LLCoros::instance().launch("loadLoginImageFromURL",
+            boost::bind(&FSPanelLogin::loadLoginImageFromURL, image_path));
+        return;
+    }
+
     // Determine image type from extension
     U8 image_codec = IMG_CODEC_JPEG;
     std::string ext = gDirUtilp->getExtension(image_path);
@@ -1023,6 +1036,82 @@ void FSPanelLogin::loadLoginImage(const std::string& path)
 
     raw->expandToPowerOfTwo();
     sInstance->mLoginImage = LLViewerTextureManager::getLocalTexture(raw.get(), false);
+}
+
+void FSPanelLogin::loadLoginImageFromURL(const std::string& url)
+{
+    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
+    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter =
+        std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("loadLoginImageFromURL", httpPolicy);
+    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
+    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
+    LLCore::HttpHeaders::ptr_t httpHeaders = std::make_shared<LLCore::HttpHeaders>();
+
+    httpOpts->setSSLVerifyPeer(false);
+    httpOpts->setFollowRedirects(true);
+
+    std::string ext = gDirUtilp->getExtension(url);
+    if (ext == "png")
+    {
+        httpHeaders->append(HTTP_OUT_HEADER_ACCEPT, "image/png");
+    }
+    else
+    {
+        httpHeaders->append(HTTP_OUT_HEADER_ACCEPT, "image/jpeg,image/png,image/bmp,image/tga,*/*");
+    }
+
+    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts, httpHeaders);
+    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
+    if (!status)
+    {
+        LL_WARNS("AppInit") << "Failed to download login image: " << url
+            << " status: " << status.toInteger() << LL_ENDL;
+        return;
+    }
+
+    const LLSD::Binary& rawBody = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+    if (rawBody.empty())
+    {
+        LL_WARNS("AppInit") << "Empty response downloading login image: " << url << LL_ENDL;
+        return;
+    }
+
+    // Determine image type from URL extension
+    LLStringUtil::toLower(ext);
+    U8 image_codec = IMG_CODEC_JPEG;
+    if (ext == "png") image_codec = IMG_CODEC_PNG;
+    else if (ext == "bmp") image_codec = IMG_CODEC_BMP;
+    else if (ext == "tga") image_codec = IMG_CODEC_TGA;
+
+    LLPointer<LLImageFormatted> image_frmted = LLImageFormatted::createFromType(image_codec);
+
+    U8* data = image_frmted->allocateData((S32)rawBody.size());
+    if (!data)
+    {
+        LL_WARNS("AppInit") << "Failed to allocate data for login image: " << url << LL_ENDL;
+        return;
+    }
+    memcpy(data, rawBody.data(), rawBody.size());
+
+    if (!image_frmted->updateData())
+    {
+        LL_WARNS("AppInit") << "Failed to update image data for: " << url << LL_ENDL;
+        return;
+    }
+
+    LLPointer<LLImageRaw> raw = new LLImageRaw;
+    if (!image_frmted->decode(raw, 0.0f))
+    {
+        LL_WARNS("AppInit") << "Failed to decode login image: " << url << LL_ENDL;
+        return;
+    }
+
+    raw->expandToPowerOfTwo();
+    if (sInstance)
+    {
+        sInstance->mLoginImage = LLViewerTextureManager::getLocalTexture(raw.get(), false);
+    }
 }
 
 void FSPanelLogin::draw()

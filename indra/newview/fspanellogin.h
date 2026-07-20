@@ -75,6 +75,7 @@ public:
 
     static void loadLoginPage();
     void loadLoginImage(const std::string& path = "");
+    static void loadLoginImageFromURL(const std::string& url);
     static void giveFocus();
     static void setAlwaysRefresh(bool refresh);
 
