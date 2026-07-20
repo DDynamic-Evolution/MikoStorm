@@ -11,6 +11,8 @@ MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer
 
 This repository is not released by SecondLife or Firestorm!
 
+MikoStorm aims to provide a viewer with many missing or unique features that enhance the Second Life experience. Anyone looking for a viewer with illegal features must look elsewhere — this is not the place for it.
+
 ### ATTENTION,
 
 Thisviewer contains experimental features like 
