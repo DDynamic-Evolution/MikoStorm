@@ -462,9 +462,6 @@
 		<menu_item_check label="Flugbeschränkungen aufheben" name="Fly Override"/>
 		<menu_item_check label="RestrainedLove API" name="RLV API"/>
 		<menu_item_call label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
-		<menu_item_call label="Login-Bild-Einstellungen..." name="Login Image Settings">
-			<menu_item_call.on_click function="Floater.Show" parameter="fs_login_image_settings"/>
-		</menu_item_call>
 		<menu_item_check label="Menü „Entwickler“ anzeigen" name="Debug Mode"/>
 	</menu>
 	<menu label="Entwickler" name="Develop">

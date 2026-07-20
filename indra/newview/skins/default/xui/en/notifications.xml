@@ -11290,6 +11290,21 @@ This will send the following information to the current IM session:
 
   <notification
    icon="alertmodal.tga"
+   name="MikoStormNewVersion"
+   type="alertmodal">
+    A new version of [APP_NAME] ([REMOTE_VERSION]) is available! You are currently running [LOCAL_VERSION].
+    <tag>confirm</tag>
+    <url option="0" name="url">
+		https://github.com/DDynamic-Evolution/MikoStorm/releases
+    </url>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Later"
+     yestext="Download"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="FireStormReqInfo"
    type="alertmodal">
     [NAME] is requesting that you send them information about your [APP_NAME] setup.

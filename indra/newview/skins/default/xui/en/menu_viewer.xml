@@ -3822,14 +3822,7 @@
             <menu_item_call.on_click
              function="Advanced.ShowDebugSettings"
              parameter="all" />
-        </menu_item_call>
-        <menu_item_call
-         label="Login Image Settings..."
-         name="Login Image Settings">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="fs_login_image_settings" />
-        </menu_item_call>
+         </menu_item_call>
      <!-- <FS:TS> FIRE-17589: Use control-alt-Q on OS X too -->
      <menu_item_check
          label="Show Developer Menu"

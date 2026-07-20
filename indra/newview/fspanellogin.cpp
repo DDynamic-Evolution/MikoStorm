@@ -68,12 +68,6 @@
 #include "lltrans.h"
 #include "llglheaders.h"
 #include "llpanelloginlistener.h"
-#include "llimage.h"
-#include "llimagebmp.h"
-#include "llimagejpeg.h"
-#include "llimagepng.h"
-#include "llimagetga.h"
-#include "llviewertexturelist.h"
 
 #include "fsdata.h"
 
@@ -481,14 +475,7 @@ void FSPanelLogin::showLoginWidgets()
 {
     if (sInstance)
     {
-        // *NOTE: Mani - This may or may not be obselete code.
-        // It seems to be part of the defunct? reg-in-client project.
         sInstance->getChildView("login_widgets")->setVisible( true);
-        LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
-
-        // *TODO: Append all the usual login parameters, like first_login=Y etc.
-        std::string splash_screen_url = LLGridManager::getInstance()->getLoginPage();
-        web_browser->navigateTo( splash_screen_url, HTTP_CONTENT_TEXT_HTML );
         LLUICtrl* username_combo = sInstance->getChild<LLUICtrl>("username_combo");
         username_combo->setFocus(true);
     }
@@ -885,258 +872,19 @@ void FSPanelLogin::loadLoginPage()
 {
     if (!sInstance) return;
 
-    std::string login_image_path = gSavedSettings.getString("LoginImagePath");
-    if (!login_image_path.empty())
-    {
-        sInstance->loadLoginImage(login_image_path);
-        return;
-    }
-
-    // Default: load built-in start image
-    {
-        std::string default_path = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter()
-            + "default" + gDirUtilp->getDirDelimiter()
-            + "textures" + gDirUtilp->getDirDelimiter()
-            + "windows" + gDirUtilp->getDirDelimiter()
-            + "startimage.png";
-        sInstance->loadLoginImage(default_path);
-        return;
-    }
-
-    LLURI login_page = LLURI(LLGridManager::getInstance()->getLoginPage());
-    LLSD params(login_page.queryMap());
-
-    LL_DEBUGS("AppInit") << "login_page: " << login_page << LL_ENDL;
-
-    // allow users (testers really) to specify a different login content URL
-    std::string force_login_url = gSavedSettings.getString("ForceLoginURL");
-    if ( force_login_url.length() > 0 )
-    {
-        LLNotificationsUtil::add("WarnForceLoginURL", LLSD(), LLSD(), [](const LLSD&notif, const LLSD&resp)
-        {
-            S32 opt = LLNotificationsUtil::getSelectedOption(notif, resp);
-            if (opt == 0)
-            {
-                gSavedSettings.setString("ForceLoginURL", "");
-                loadLoginPage();
-            }
-        });
-        login_page = LLURI(force_login_url);
-    }
-
-    // Language
-    params["lang"] = LLUI::getLanguage();
-
-    // First Login?
-    if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
-    {
-        params["firstlogin"] = "TRUE"; // not bool: server expects string TRUE
-    }
-
-    // Channel and Version
-    params["version"] = llformat("%s (%d)",
-                                 LLVersionInfo::getInstance()->getShortVersion().c_str(),
-                                 LLVersionInfo::getInstance()->getBuild());
-    params["channel"] = LLVersionInfo::getInstance()->getChannel();
-
-    // Grid
-    params["grid"] = LLGridManager::getInstance()->getGridId();
-
-    // add OS info
-    params["os"] = LLOSInfo::instance().getOSStringSimple();
-
-    // sourceid
-    params["sourceid"] = gSavedSettings.getString("sourceid");
-
-    // login page (web) content version
-    params["login_content_version"] = gSavedSettings.getString("LoginContentVersion");
-
-    // skin
-    params["skin"] = gSavedSettings.getString("FSInternalSkinCurrent") + " " + gSavedSettings.getString("FSInternalSkinCurrentTheme");
-
-    // No version popup
-    if (gSavedSettings.getBOOL("FSNoVersionPopup"))
-    {
-        params["noversionpopup"] = "true";
-    }
-
-	// Splash screen settings
-	static const std::pair<std::string, std::string> mappings[] = {
-		{"FSSplashScreenHideTopBar", "hidetopbar"},
-		{"FSSplashScreenHideBlogs", "hideblogs"},
-		{"FSSplashScreenHideDestinations", "hidedestinations"},
-		{"FSSplashScreenUseGrayMode", "usegraymode"},
-		{"FSSplashScreenUseHighContrast", "usehighcontrast"},
-		{"FSSplashScreenUseAllCaps", "useallcaps"},
-		{"FSSplashScreenUseLargerFonts", "uselargerfonts"},
-		{"FSSplashScreenNoTransparency", "notransparency"},
-	};
-
-	for (const auto &m : mappings)
-	{
-		params[m.second] = gSavedSettings.getBOOL(m.first) ? "1" : "0";
-	}
-
-    // Make an LLURI with this augmented info
-    std::string url = login_page.scheme().empty()? login_page.authority() : login_page.scheme() + "://" + login_page.authority();
-    LLURI login_uri(LLURI::buildHTTP(url,
-                                     login_page.path(),
-                                     params));
-
+    // <FS:MikoStorm> Load start page from remote URL
     LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
-    if (web_browser->getCurrentNavUrl() != login_uri.asString())
+    if (web_browser)
     {
-        LL_DEBUGS("AppInit") << "loading:    " << login_uri << LL_ENDL;
-        web_browser->navigateTo( login_uri.asString(), HTTP_CONTENT_TEXT_HTML );
+        web_browser->navigateTo("https://ddynamic-evolution.github.io/", HTTP_CONTENT_TEXT_HTML);
     }
-}
-
-void FSPanelLogin::loadLoginImage(const std::string& path)
-{
-    std::string image_path = path.empty() ? gSavedSettings.getString("LoginImagePath") : path;
-    if (image_path.empty()) return;
-
-    LL_DEBUGS("AppInit") << "Loading login image: " << image_path << LL_ENDL;
-
-    LLMediaCtrl* web_browser = sInstance->getChild<LLMediaCtrl>("login_html");
-    web_browser->navigateTo("about:blank");
-
-    // Detect URL
-    std::string scheme = image_path.substr(0, image_path.find("://"));
-    if (scheme == "http" || scheme == "https")
-    {
-        LLCoros::instance().launch("loadLoginImageFromURL",
-            boost::bind(&FSPanelLogin::loadLoginImageFromURL, image_path));
-        return;
-    }
-
-    // Determine image type from extension
-    U8 image_codec = IMG_CODEC_JPEG;
-    std::string ext = gDirUtilp->getExtension(image_path);
-    LLStringUtil::toLower(ext);
-    if (ext == "png") image_codec = IMG_CODEC_PNG;
-    else if (ext == "bmp") image_codec = IMG_CODEC_BMP;
-    else if (ext == "tga") image_codec = IMG_CODEC_TGA;
-
-    LLPointer<LLImageFormatted> image_frmted = LLImageFormatted::createFromType(image_codec);
-    if (!image_frmted->load(image_path))
-    {
-        LL_WARNS("AppInit") << "Failed to load login image: " << image_path << LL_ENDL;
-        sInstance->mLoginImage = NULL;
-        return;
-    }
-
-    LLPointer<LLImageRaw> raw = new LLImageRaw;
-    if (!image_frmted->decode(raw, 0.0f))
-    {
-        LL_WARNS("AppInit") << "Failed to decode login image: " << image_path << LL_ENDL;
-        sInstance->mLoginImage = NULL;
-        return;
-    }
-
-    raw->expandToPowerOfTwo();
-    sInstance->mLoginImage = LLViewerTextureManager::getLocalTexture(raw.get(), false);
-}
-
-void FSPanelLogin::loadLoginImageFromURL(const std::string& url)
-{
-    LLCore::HttpRequest::policy_t httpPolicy(LLCore::HttpRequest::DEFAULT_POLICY_ID);
-    LLCoreHttpUtil::HttpCoroutineAdapter::ptr_t httpAdapter =
-        std::make_shared<LLCoreHttpUtil::HttpCoroutineAdapter>("loadLoginImageFromURL", httpPolicy);
-    LLCore::HttpRequest::ptr_t httpRequest = std::make_shared<LLCore::HttpRequest>();
-    LLCore::HttpOptions::ptr_t httpOpts = std::make_shared<LLCore::HttpOptions>();
-    LLCore::HttpHeaders::ptr_t httpHeaders = std::make_shared<LLCore::HttpHeaders>();
-
-    httpOpts->setSSLVerifyPeer(false);
-    httpOpts->setFollowRedirects(true);
-
-    std::string ext = gDirUtilp->getExtension(url);
-    if (ext == "png")
-    {
-        httpHeaders->append(HTTP_OUT_HEADER_ACCEPT, "image/png");
-    }
-    else
-    {
-        httpHeaders->append(HTTP_OUT_HEADER_ACCEPT, "image/jpeg,image/png,image/bmp,image/tga,*/*");
-    }
-
-    LLSD result = httpAdapter->getRawAndSuspend(httpRequest, url, httpOpts, httpHeaders);
-    LLSD httpResults = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS];
-    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(httpResults);
-    if (!status)
-    {
-        LL_WARNS("AppInit") << "Failed to download login image: " << url
-            << " status: " << status.toInteger() << LL_ENDL;
-        return;
-    }
-
-    const LLSD::Binary& rawBody = result[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
-    if (rawBody.empty())
-    {
-        LL_WARNS("AppInit") << "Empty response downloading login image: " << url << LL_ENDL;
-        return;
-    }
-
-    // Determine image type from URL extension
-    LLStringUtil::toLower(ext);
-    U8 image_codec = IMG_CODEC_JPEG;
-    if (ext == "png") image_codec = IMG_CODEC_PNG;
-    else if (ext == "bmp") image_codec = IMG_CODEC_BMP;
-    else if (ext == "tga") image_codec = IMG_CODEC_TGA;
-
-    LLPointer<LLImageFormatted> image_frmted = LLImageFormatted::createFromType(image_codec);
-
-    U8* data = image_frmted->allocateData((S32)rawBody.size());
-    if (!data)
-    {
-        LL_WARNS("AppInit") << "Failed to allocate data for login image: " << url << LL_ENDL;
-        return;
-    }
-    memcpy(data, rawBody.data(), rawBody.size());
-
-    if (!image_frmted->updateData())
-    {
-        LL_WARNS("AppInit") << "Failed to update image data for: " << url << LL_ENDL;
-        return;
-    }
-
-    LLPointer<LLImageRaw> raw = new LLImageRaw;
-    if (!image_frmted->decode(raw, 0.0f))
-    {
-        LL_WARNS("AppInit") << "Failed to decode login image: " << url << LL_ENDL;
-        return;
-    }
-
-    raw->expandToPowerOfTwo();
-    if (sInstance)
-    {
-        sInstance->mLoginImage = LLViewerTextureManager::getLocalTexture(raw.get(), false);
-    }
+    return;
+    // </FS:MikoStorm>
 }
 
 void FSPanelLogin::draw()
 {
     LLPanel::draw();
-
-    if (mLoginImage.notNull())
-    {
-        LLView* web_browser = getChildView("login_html");
-        LLRect r = web_browser->getRect();
-        gGL.color4f(1, 1, 1, 1);
-        gGL.getTexUnit(0)->bind(mLoginImage);
-        gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
-        gGL.begin(LLRender::TRIANGLES);
-        {
-            gGL.texCoord2f(0, 0); gGL.vertex2i(r.mLeft, r.mBottom);
-            gGL.texCoord2f(1, 0); gGL.vertex2i(r.mRight, r.mBottom);
-            gGL.texCoord2f(0, 1); gGL.vertex2i(r.mLeft, r.mTop);
-            gGL.texCoord2f(1, 0); gGL.vertex2i(r.mRight, r.mBottom);
-            gGL.texCoord2f(1, 1); gGL.vertex2i(r.mRight, r.mTop);
-            gGL.texCoord2f(0, 1); gGL.vertex2i(r.mLeft, r.mTop);
-        }
-        gGL.end();
-        gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-    }
 }
 
 void FSPanelLogin::handleMediaEvent(LLPluginClassMedia* /*self*/, EMediaEvent event)

@@ -458,6 +458,69 @@ void downloadGridlistError( LLSD const &aData, std::string const &aURL )
     sGridListRequestReady = true;
 }
 
+// <FS:MikoStorm> Version check on startup
+static bool sVersionCheckDone = false;
+static bool sNewVersionAvailable = false;
+static std::string sRemoteVersion;
+
+static const std::string MIKOSTORM_VERSION_URL = "https://raw.githubusercontent.com/DDynamic-Evolution/MikoStorm/refs/heads/main/version";
+
+void versionCheckComplete(LLSD const &aData)
+{
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData);
+    if (status.getType() != HTTP_OK)
+    {
+        LL_WARNS("MikoStormVersion") << "Failed to check for updates: " << status.toString() << LL_ENDL;
+        sVersionCheckDone = true;
+        return;
+    }
+
+    const LLSD::Binary &rawData = aData[LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_RAW].asBinary();
+    if (rawData.empty())
+    {
+        LL_WARNS("MikoStormVersion") << "Empty version response" << LL_ENDL;
+        sVersionCheckDone = true;
+        return;
+    }
+
+    sRemoteVersion.assign(rawData.begin(), rawData.end());
+    // Trim whitespace/newlines
+    LLStringUtil::trim(sRemoteVersion);
+
+    std::string localVersion = LLVersionInfo::instance().getShortVersion();
+    LL_INFOS("MikoStormVersion") << "Local version: " << localVersion << ", Remote version: " << sRemoteVersion << LL_ENDL;
+
+    if (!sRemoteVersion.empty() && sRemoteVersion != localVersion)
+    {
+        sNewVersionAvailable = true;
+    }
+
+    sVersionCheckDone = true;
+}
+
+void versionCheckError(LLSD const &aData)
+{
+    LLCore::HttpStatus status = LLCoreHttpUtil::HttpCoroutineAdapter::getStatusFromLLSD(aData);
+    LL_WARNS("MikoStormVersion") << "Version check request failed: " << status.toString() << LL_ENDL;
+    sVersionCheckDone = true;
+}
+
+void checkForMikoStormUpdate()
+{
+    if (sVersionCheckDone)
+    {
+        return;
+    }
+
+    LLCore::HttpOptions::ptr_t httpOpts(new LLCore::HttpOptions);
+    httpOpts->setWantHeaders(true);
+
+    FSCoreHttpUtil::callbackHttpGetRaw(MIKOSTORM_VERSION_URL,
+        versionCheckComplete, versionCheckError,
+        LLCore::HttpHeaders::ptr_t(), httpOpts);
+}
+// </FS:MikoStorm>
+
  void downloadGridstatusComplete(LLSD const &aData)
 {
     LLSD header = aData[ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS ][ LLCoreHttpUtil::HttpCoroutineAdapter::HTTP_RESULTS_HEADERS];
@@ -1284,6 +1347,10 @@ bool idle_startup()
         LL_DEBUGS("AppInit") << "Initializing Window, show_connect_box = "
                              << show_connect_box << LL_ENDL;
 
+        // <FS:MikoStorm> Check for new version on startup
+        checkForMikoStormUpdate();
+        // </FS:MikoStorm>
+
         // if we've gone backwards in the login state machine, to this state where we show the UI
         // AND the debug setting to exit in this case is true, then go ahead and bail quickly
         if ( mLoginStatePastUI && gSavedSettings.getBOOL("QuitOnLoginActivated") )
@@ -1435,6 +1502,18 @@ bool idle_startup()
             return false;
         }
         // </FS:Ansariel>
+
+        // <FS:MikoStorm> Show new version notification
+        if (sNewVersionAvailable)
+        {
+            LL_INFOS("MikoStormVersion") << "New version available: " << sRemoteVersion << LL_ENDL;
+            LLSD args;
+            args["REMOTE_VERSION"] = sRemoteVersion;
+            args["LOCAL_VERSION"] = LLVersionInfo::instance().getShortVersion();
+            LLNotificationsUtil::add("MikoStormNewVersion", args);
+            sNewVersionAvailable = false; // only show once
+        }
+        // </FS:MikoStorm>
 
         // Post login screen, we should see if any settings have changed that may
         // require us to either start/stop or change the socks proxy. As various communications
