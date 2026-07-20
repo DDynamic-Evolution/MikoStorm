@@ -1,21 +1,15 @@
 
 #include "pvextras.h"
 
-static unsigned pv_flags = PV_FEATURE_MASK;
+static unsigned pv_flags = PV_CONVENIENCE | PV_ENHANCED_EXPORT;
 static unsigned pv_mask = 0;
 
 static unsigned default_on_flags[] = {
     PV_CONVENIENCE,
-    PV_BYPASS_EXPORT_PERMS,
-    PV_ENHANCED_EXPORT,
-    PV_ANONYMIZE_EXPORTS
+    PV_ENHANCED_EXPORT
 };
 
 static unsigned new_flags;
-
-static std::string custom_username;
-static std::string custom_id0;
-static std::string custom_macid;
 
 void pv_set_flags(unsigned flags, unsigned mask)
 {
@@ -116,34 +110,4 @@ void pv_strip_jpeg2000_comment(std::vector<unsigned char>& str)
     }
 }
 
-void pv_set_custom_ids(const std::string& username, const std::string& id0, const std::string& macid)
-{
-    custom_username = username;
-    custom_id0 = id0;
-    custom_macid = macid;
-}
 
-void pv_set_custom_id0(const std::string& id0)
-{
-    custom_id0 = id0;
-}
-
-void pv_set_custom_macid(const std::string& macid)
-{
-    custom_macid = macid;
-}
-
-const std::string& pv_get_custom_username()
-{
-    return custom_username;
-}
-
-const std::string& pv_get_custom_id0()
-{
-    return custom_id0;
-}
-
-const std::string& pv_get_custom_macid()
-{
-    return custom_macid;
-}

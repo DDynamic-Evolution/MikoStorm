@@ -45,6 +45,61 @@
 			<boolean>1</boolean>
 		</map>
 
+		<!-- Sent to the remote party when they issue @list or @except as an IM query (if enabled) -->
+		<key>imquery_list_deny</key>
+		<map>
+			<key>value</key>
+			<string>*** Die andere Partei bittet dich höflich, dich um deinen eigenen Kram zu kümmern (Hasen haben mich dazu gezwungen!)</string>
+			<key>description</key>
+			<string>Wird an den Gesprächspartner gesendet, wenn du seine Anfrage, deine aktiven RLV-Einschränkungen aufzulisten, ablehnst.</string>
+			<key>label</key>
+			<string>@list- und @except-Befehl (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+
+		<!-- Sent to the remote party as a suffix to @list to inform them there might be more information -->
+		<key>imquery_list_suffix</key>
+		<map>
+			<key>value</key>
+			<string>(Verwende @except, um die Liste der aktiven Ausnahmen zu sehen)</string>
+			<key>description</key>
+			<string>Wird dem Gesprächspartner als Suffix zu @list gesendet, um ihn darüber zu informieren, wie er deine Ausnahmen anfordern kann.</string>
+			<key>label</key>
+			<string>@list-Befehl-Suffix (remote)</string>
+			<key>customizable</key>
+			<boolean>0</boolean>
+		</map>
+
+		<!-- Sent to the remote party when they issue @stopim as an IM query (if enabled) -->
+		<key>stopim_nosession</key>
+		<map>
+			<key>value</key>
+			<string>*** Die andere Partei unterliegt keiner @startim-Einschränkung.</string>
+			<key>description</key>
+			<string>Wird an den Gesprächspartner gesendet, wenn er versucht, deine IM-Unterhaltung mit ihm zwangsweise zu beenden (und keine solche Sitzung existiert).</string>
+			<key>label</key>
+			<string>@stopim-Befehl ohne Sitzung (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_remote</key>
+		<map>
+			<key>value</key>
+			<string>*** Sitzung wurde für die andere Partei beendet.</string>
+			<key>description</key>
+			<string>Wird an den Gesprächspartner gesendet, wenn er versucht, die IM-Unterhaltung zwangsweise zu beenden (und sie existiert).</string>
+			<key>label</key>
+			<string>@stopim-Befehl mit aktiver Sitzung (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>stopim_endsession_local</key>
+		<map>
+			<key>value</key>
+			<string>[NAME] hat die IM-Unterhaltung per @stopim remote beendet.</string>
+		</map>
+
 		<!-- Shown as notifications -->
 		<key>blocked_autopilot</key>
 		<map>
@@ -148,6 +203,60 @@
 			<key>value</key>
 			<string>deaktiviert</string>
 		</map>
+		<!-- Sent as "Busy" messages to the remote party -->
+		<key>blocked_recvim_remote</key>
+		<map>
+			<key>value</key>
+			<string>Der Bewohner, den du kontaktiert hast, kann deine Sofortnachrichten im Moment nicht lesen. Bitte versuche es später erneut.</string>
+			<key>description</key>
+			<string>Wird an den Gesprächspartner gesendet, wenn seine IM geblockt wurde.</string>
+			<key>label</key>
+			<string>Geblockte eingehende IM (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
+		<key>blocked_tplurerequest_remote</key>
+		<map>
+			<key>value</key>
+			<string>Der Bewohner kann im Moment nicht angenommen werden. Bitte versuche es später erneut.</string>
+			<key>description</key>
+			<string>Wird an den Gesprächspartner gesendet, wenn sein Teleport-Angebot oder -Anfrage geblockt wurde.</string>
+			<key>label</key>
+			<string>Geblocktes Teleport-Angebot/-Anfrage (remote)</string>
+			<key>customizable</key>
+			<boolean>1</boolean>
+		</map>
 	</map>
+
+	<!-- Generic names used to replace resident names when @shownames restricted -->
+	<key>anonyms</key>
+	<array>
+		<string>Ein Bewohner</string>
+		<string>Dieser Bewohner</string>
+		<string>Jener Bewohner</string>
+		<string>Eine Person</string>
+		<string>Diese Person</string>
+		<string>Jene Person</string>
+		<string>Ein Fremder</string>
+		<string>Dieser Fremde</string>
+		<string>Jener Fremde</string>
+		<string>Ein Wesen</string>
+		<string>Dieses Wesen</string>
+		<string>Jenes Wesen</string>
+		<string>Ein Agent</string>
+		<string>Dieser Agent</string>
+		<string>Jener Agent</string>
+		<string>Eine Seele</string>
+		<string>Diese Seele</string>
+		<string>Jene Seele</string>
+		<string>Jemand</string>
+		<string>Einige Leute</string>
+		<string>Irgendeiner</string>
+		<string>Ein geheimnisvolles Wesen</string>
+		<string>Ein unbekanntes Wesen</string>
+		<string>Ein Unbekannter</string>
+		<string>Ein unbekannter Mensch</string>
+	</array>
+
 </map>
 </llsd>

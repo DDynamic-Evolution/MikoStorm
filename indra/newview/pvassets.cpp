@@ -91,9 +91,6 @@ static void pv_save_asset_callback(const LLUUID& asset_uuid, LLAssetType::EType 
         return;
     }
 
-    if (pv_check_flag(PV_ANONYMIZE_EXPORTS) && type == LLAssetType::AT_TEXTURE)
-        pv_strip_jpeg2000_comment(buffer);
-
     LLAPRFile outfile(cbdata.out_filename, LL_APR_WPB);
 
     if (outfile.getFileHandle())

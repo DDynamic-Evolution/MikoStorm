@@ -2235,6 +2235,30 @@ If you do not understand the distinction then leave this control alone."
          show_text="true"
          top_pad="5"
          width="490"/>
+        <text
+         type="string"
+         follows="left|top"
+         height="100"
+         layout="topleft"
+         left="10"
+         name="ColorLUTInfo"
+         top_pad="10"
+         width="490"
+         word_wrap="true"
+         use_ellipses="false"
+         parse_urls="true">
+A Lookup Table (LUT) is a file that remaps the colors of your viewer
+to create a specific visual style or mood. Think of it as a photo
+filter for your entire 3D world.
+Load a .cube LUT file to apply cinematic color grading, warm tones,
+cool blues, vintage film looks, or any custom color transformation.
+
+Free LUTs can be found at:
+https://github.com/imnz730/LUTs
+https://github.com/ampas/aces-dev
+https://www.colorgradingcentral.com
+https://lutify.me
+        </text>
      </panel>
 </tab_container>
 

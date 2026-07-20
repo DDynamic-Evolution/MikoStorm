@@ -87,8 +87,6 @@ constexpr F32 NormalTrackpadRangeInRads = F_PI;
 
 FSFloaterPoser::FSFloaterPoser(const LLSD& key) : LLFloater(key)
 {
-    loadPermissionMap();
-
     // Bind requests, other controls are find-and-binds, see postBuild()
     mCommitCallbackRegistrar.add("Poser.RefreshAvatars", [this](LLUICtrl*, const LLSD&) { onAvatarsRefresh(); });
     mCommitCallbackRegistrar.add("Poser.PoseSelf", [this](LLUICtrl*, const LLSD&) { onPoseSelf(); });
@@ -413,7 +411,7 @@ void FSFloaterPoser::onClose(bool app_quitting)
         stopPosingAllAvatars();
     }
 
-    savePermissionMap();
+    mPermissionMap.clear();
     disableVisualManipulators();
     delete mLoadPoseTimer;
     LLFloater::onClose(app_quitting);

@@ -175,7 +175,6 @@ protected:
     LLButton* mSysinfoButton;
     // support sysinfo button -Zi
 
-    bool enableViewerVersionCallback(const LLSD& notification,const LLSD& response);        // <FS:Zi> Viewer version popup
     void reshapeChatLayoutPanel();
 private:
     // process focus events to set a currently active session
