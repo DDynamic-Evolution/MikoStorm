@@ -16,6 +16,7 @@
   <string name="ServerComboTooltip">
     An existing grid or a grid URI
   </string>
+  <!-- <FS:MikoStorm> Start page -->
   <web_browser
     tab_stop="false"
     trusted_content="true"
@@ -28,6 +29,7 @@
     top="18"
     height="598"
     width="1024" />
+  <!-- </FS:MikoStorm> -->
   <layout_stack
   follows="left|right|bottom"
   height="152"
