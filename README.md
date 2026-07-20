@@ -5,7 +5,7 @@
 </p>
 
 
-[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Windows.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.18/MikoStorm-v1.15.18-Linux.tar.xz)
+[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.20/MikoStorm-MikoStormOS-Release_AVX2-1-15-20-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.20/MikoStorm-MikoStormOS-Release_AVX2-1-15-20-0.tar.xz)
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
