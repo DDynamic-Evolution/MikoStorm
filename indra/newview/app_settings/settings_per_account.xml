@@ -1531,16 +1531,27 @@
             <key>Value</key>
             <integer>1</integer>
         </map>
-        <key>FSVoiceBoxTTSNameFormat</key>
+    <key>FSVoiceBoxTTSNameFormat</key>
         <map>
-            <key>Comment</key>
+        <key>Comment</key>
             <string>How to display the speaker name: full (full name), first (first name only), or none (no name)</string>
-            <key>Persist</key>
+        <key>Persist</key>
             <integer>1</integer>
-            <key>Type</key>
+        <key>Type</key>
             <string>String</string>
-            <key>Value</key>
+        <key>Value</key>
             <string>full</string>
+        </map>
+    <key>FSPerAccountIMSounds</key>
+        <map>
+        <key>Comment</key>
+            <string>Per-contact custom IM notification sounds (map of agent UUID to sound UUID)</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>LLSD</string>
+        <key>Value</key>
+            <map/>
         </map>
     </map>
 </llsd>

@@ -6334,6 +6334,12 @@ Die Neustartvermeidung ist aktiviert, aber es sind keine Ziele konfiguriert. Bit
 Rückkehr nach [REGION] - Neustartvermeidung abgeschlossen.
 	</notification>
 
+	<notification icon="alertmodal.tga" name="FSRestartAvoidMaxRetries" type="alertmodal">
+		<unique/>
+Die Neustartvermeidung hat nach [COUNT] fehlgeschlagenen Rückkehrversuchen aufgegeben. Möglicherweise müssen Sie manuell zurückkehren.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+
 	<notification icon="alert.tga" name="Stream3DAudioAlert" type="alert">
 Diese Parzelle bietet einen 3D-Audiostream von:
 

@@ -55,6 +55,8 @@ private:
     S32 mEvacuateDelay;
     S32 mRetryCount;
 
+    static const S32 MAX_RETRY_COUNT = 10;
+
     boost::signals2::connection mRegionChangedConnection;
 };
 
