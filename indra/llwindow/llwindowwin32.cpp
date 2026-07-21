@@ -80,11 +80,8 @@
 
 #pragma comment(lib, "UxTheme.lib")
 #pragma comment(lib, "Dwmapi.lib")
-#pragma comment(lib, "gdiplus.lib")
 #include <Uxtheme.h>
 #include <dwmapi.h> // needed for DwmSetWindowAttribute to set window theme
-#include <gdiplus.h>
-#include <cmath>
 
 const S32   MAX_MESSAGE_PER_UPDATE = 20;
 const S32   BITS_PER_PIXEL = 32;
@@ -3885,375 +3882,93 @@ void LLWindowWin32::swapBuffers()
 
 
 //
-// LLSplashScreenImp — GDI+ animated splash on its own thread
+// LLSplashScreenImp
 //
-static const int SPLASH_W = 520;
-static const int SPLASH_H = 300;
-static const UINT_PTR SPLASH_TIMER_ID = 42;
-static const UINT SPLASH_FRAME_MS = 33; // ~30 fps
-
 LLSplashScreenWin32::LLSplashScreenWin32()
-:   mWindow(NULL), mThread(NULL), mGdiToken(0), mProgress(0.f),
-    mStartTick(0), mClosing(false)
+:   mWindow(NULL)
 {
-    InitializeCriticalSection(&mDataCS);
 }
 
 LLSplashScreenWin32::~LLSplashScreenWin32()
 {
-    DeleteCriticalSection(&mDataCS);
-}
-
-// static — runs on the splash thread
-DWORD WINAPI LLSplashScreenWin32::splashThreadProc(LPVOID param)
-{
-    LLSplashScreenWin32* self = (LLSplashScreenWin32*)param;
-
-    Gdiplus::GdiplusStartupInput si;
-    Gdiplus::GdiplusStartup(&self->mGdiToken, &si, NULL);
-
-    HINSTANCE hinst = GetModuleHandle(NULL);
-
-    WNDCLASSW wc = {};
-    wc.lpfnWndProc = LLSplashScreenWin32::windowProc;
-    wc.hInstance = hinst;
-    wc.lpszClassName = L"MikoStormSplash";
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    RegisterClassW(&wc);
-
-    int sx = (GetSystemMetrics(SM_CXSCREEN) - SPLASH_W) / 2;
-    int sy = (GetSystemMetrics(SM_CYSCREEN) - SPLASH_H) / 2;
-
-    self->mWindow = CreateWindowExW(
-        WS_EX_TOOLWINDOW | WS_EX_TOPMOST,
-        L"MikoStormSplash", L"MikoStorm",
-        WS_POPUP,
-        sx, sy, SPLASH_W, SPLASH_H,
-        NULL, NULL, hinst, NULL);
-
-    SetWindowLongPtr(self->mWindow, GWLP_USERDATA, (LONG_PTR)self);
-    self->mStartTick = GetTickCount();
-
-    ShowWindow(self->mWindow, SW_SHOW);
-    UpdateWindow(self->mWindow);
-
-    SetTimer(self->mWindow, SPLASH_TIMER_ID, SPLASH_FRAME_MS, NULL);
-
-    // Own message loop — runs independently of the main thread
-    MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0))
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-
-        if (self->mClosing)
-            break;
-    }
-
-    KillTimer(self->mWindow, SPLASH_TIMER_ID);
-    DestroyWindow(self->mWindow);
-    self->mWindow = NULL;
-
-    if (self->mGdiToken)
-    {
-        Gdiplus::GdiplusShutdown(self->mGdiToken);
-        self->mGdiToken = 0;
-    }
-
-    return 0;
 }
 
 void LLSplashScreenWin32::showImpl()
 {
-    mClosing = false;
-    mMessage = L"Initializing...";
-    mThread = CreateThread(NULL, 0, splashThreadProc, this, 0, NULL);
+    // This appears to work.  ???
+    HINSTANCE hinst = GetModuleHandle(NULL);
+
+    mWindow = CreateDialog(hinst,
+        TEXT("SPLASHSCREEN"),
+        NULL,   // no parent
+        (DLGPROC) LLSplashScreenWin32::windowProc);
+    ShowWindow(mWindow, SW_SHOW);
+
+    SetWindowText(mWindow, ll_convert<std::wstring>(APP_NAME).c_str());
 }
 
 void LLSplashScreenWin32::updateImpl(const std::string& mesg, F32 progress,
                                      const std::string& detail)
 {
-    EnterCriticalSection(&mDataCS);
+    if (!mWindow) return;
 
-    if (!mesg.empty())
+    int output_str_len = MultiByteToWideChar(CP_UTF8, 0, mesg.c_str(), static_cast<int>(mesg.length()), NULL, 0);
+    if( output_str_len>1024 )
+        return;
+
+    WCHAR w_mesg[1025];
+
+    MultiByteToWideChar (CP_UTF8, 0, mesg.c_str(), static_cast<int>(mesg.length()), w_mesg, output_str_len);
+
+    w_mesg[output_str_len] = 0;
+
+    SendDlgItemMessage(mWindow,
+        666,        // HACK: text id
+        WM_SETTEXT,
+        FALSE,
+        (LPARAM)w_mesg);
+
+    if (progress >= 0.f)
     {
-        int len = MultiByteToWideChar(CP_UTF8, 0, mesg.c_str(), (int)mesg.length(), NULL, 0);
-        if (len > 0 && len <= 1024)
-        {
-            mMessage.resize(len);
-            MultiByteToWideChar(CP_UTF8, 0, mesg.c_str(), (int)mesg.length(), &mMessage[0], len);
-        }
+        int pct = llclamp((int)(progress * 100.f), 0, 100);
+        SendDlgItemMessage(mWindow, 667, PBM_SETPOS, (WPARAM)pct, 0);
     }
 
     if (!detail.empty())
     {
-        int len = MultiByteToWideChar(CP_UTF8, 0, detail.c_str(), (int)detail.length(), NULL, 0);
-        if (len > 0 && len <= 1024)
+        int det_len = MultiByteToWideChar(CP_UTF8, 0, detail.c_str(),
+                                          static_cast<int>(detail.length()), NULL, 0);
+        if (det_len <= 1024)
         {
-            mDetail.resize(len);
-            MultiByteToWideChar(CP_UTF8, 0, detail.c_str(), (int)detail.length(), &mDetail[0], len);
+            WCHAR w_detail[1025];
+            MultiByteToWideChar(CP_UTF8, 0, detail.c_str(),
+                                static_cast<int>(detail.length()), w_detail, det_len);
+            w_detail[det_len] = 0;
+            SendDlgItemMessage(mWindow, 668, WM_SETTEXT, FALSE, (LPARAM)w_detail);
         }
     }
     else
     {
-        mDetail.clear();
+        SendDlgItemMessage(mWindow, 668, WM_SETTEXT, FALSE, (LPARAM)L"");
     }
-
-    if (progress >= 0.f)
-        mProgress = llclamp(progress, 0.f, 1.f);
-
-    LeaveCriticalSection(&mDataCS);
 }
 
 void LLSplashScreenWin32::hideImpl()
 {
-    mClosing = true;
-
     if (mWindow)
-        PostMessage(mWindow, WM_QUIT, 0, 0);
-
-    if (mThread)
     {
-        WaitForSingleObject(mThread, 3000);
-        CloseHandle(mThread);
-        mThread = NULL;
+        if (!destroy_window_handler(mWindow))
+        {
+            LL_WARNS("Window") << "Failed to properly close splash screen window!" << LL_ENDL;
+        }
+        mWindow = NULL;
     }
-}
-
-void LLSplashScreenWin32::render()
-{
-    if (!mWindow) return;
-
-    RECT rc;
-    GetClientRect(mWindow, &rc);
-    int w = rc.right, h = rc.bottom;
-
-    HDC hdc = GetDC(mWindow);
-    HDC memDC = CreateCompatibleDC(hdc);
-    HBITMAP bmp = CreateCompatibleBitmap(hdc, w, h);
-    HBITMAP oldBmp = (HBITMAP)SelectObject(memDC, bmp);
-
-    Gdiplus::Graphics g(memDC);
-    g.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
-    g.SetTextRenderingHint(Gdiplus::TextRenderingHintClearTypeGridFit);
-
-    float elapsed = (float)(GetTickCount() - mStartTick) / 1000.f;
-
-    // Read shared state
-    EnterCriticalSection(&mDataCS);
-    F32 progress = mProgress;
-    std::wstring statusMsg = mMessage;
-    std::wstring statusDetail = mDetail;
-    LeaveCriticalSection(&mDataCS);
-
-    // --- Background ---
-    Gdiplus::SolidBrush bgBrush(Gdiplus::Color(255, 26, 26, 30));
-    g.FillRectangle(&bgBrush, 0, 0, w, h);
-
-    // Subtle radial glow behind icon area
-    Gdiplus::GraphicsPath glowPath;
-    glowPath.AddEllipse(w / 2 - 160, 20, 320, 200);
-    Gdiplus::PathGradientBrush glowBrush(&glowPath);
-    Gdiplus::Color glowCenter(15, 255, 120, 40);
-    Gdiplus::Color glowEdge(0, 255, 120, 40);
-    glowBrush.SetCenterColor(glowCenter);
-    int glowCount = 1;
-    glowBrush.SetSurroundColors(&glowEdge, &glowCount);
-    g.FillPath(&glowBrush, &glowPath);
-
-    // --- Corner accents ---
-    Gdiplus::Pen cornerPen(Gdiplus::Color(38, 255, 140, 50), 1.0f);
-    int cm = 12, cl = 30;
-    g.DrawLine(&cornerPen, cm, cm, cm + cl, cm);
-    g.DrawLine(&cornerPen, cm, cm, cm, cm + cl);
-    g.DrawLine(&cornerPen, w - cm - cl, cm, w - cm, cm);
-    g.DrawLine(&cornerPen, w - cm, cm, w - cm, cm + cl);
-    g.DrawLine(&cornerPen, cm, h - cm, cm + cl, h - cm);
-    g.DrawLine(&cornerPen, cm, h - cm - cl, cm, h - cm);
-    g.DrawLine(&cornerPen, w - cm - cl, h - cm, w - cm, h - cm);
-    g.DrawLine(&cornerPen, w - cm, h - cm - cl, w - cm, h - cm);
-
-    // --- Icon area ---
-    int iconSize = 120;
-    int iconX = (w - iconSize) / 2;
-    int iconY = 35;
-    int iconR = 24;
-
-    // Glow pulse behind icon
-    float pulse = 0.3f + 0.4f * (0.5f + 0.5f * sinf(elapsed * 2.094f));
-    int glowAlpha = (int)(pulse * 50);
-    Gdiplus::GraphicsPath iconGlowPath;
-    int igM = 10;
-    iconGlowPath.AddEllipse(iconX - igM, iconY - igM, iconSize + igM * 2, iconSize + igM * 2);
-    Gdiplus::PathGradientBrush iconGlow(&iconGlowPath);
-    Gdiplus::Color igCenter((BYTE)glowAlpha, 255, 120, 40);
-    Gdiplus::Color igEdge(0, 255, 120, 40);
-    iconGlow.SetCenterColor(igCenter);
-    int igCount = 1;
-    iconGlow.SetSurroundColors(&igEdge, &igCount);
-    g.FillPath(&iconGlow, &iconGlowPath);
-
-    // Icon background rounded rect
-    Gdiplus::GraphicsPath iconBg;
-    iconBg.AddArc(iconX, iconY, iconR, iconR, 180, 90);
-    iconBg.AddArc(iconX + iconSize - iconR, iconY, iconR, iconR, 270, 90);
-    iconBg.AddArc(iconX + iconSize - iconR, iconY + iconSize - iconR, iconR, iconR, 0, 90);
-    iconBg.AddArc(iconX, iconY + iconSize - iconR, iconR, iconR, 90, 90);
-    iconBg.CloseFigure();
-
-    Gdiplus::LinearGradientBrush iconBgBrush(
-        Gdiplus::Point(iconX, iconY),
-        Gdiplus::Point(iconX + iconSize, iconY + iconSize),
-        Gdiplus::Color(255, 42, 42, 48),
-        Gdiplus::Color(255, 30, 30, 34));
-    g.FillPath(&iconBgBrush, &iconBg);
-
-    Gdiplus::Pen iconBorder(Gdiplus::Color(15, 255, 255, 255), 1.0f);
-    g.DrawPath(&iconBorder, &iconBg);
-
-    // Draw using the app icon resource
-    HICON hIcon = LoadIcon(GetModuleHandle(NULL), gIconResource);
-    if (hIcon)
-    {
-        int pawSize = 64;
-        int pawX = iconX + (iconSize - pawSize) / 2;
-        int pawY = iconY + (iconSize - pawSize) / 2;
-        DrawIconEx(memDC, pawX, pawY, hIcon, pawSize, pawSize, 0, NULL, DI_NORMAL);
-    }
-
-    // --- Sheen sweep over icon ---
-    {
-        float sheenPeriod = 3.5f;
-        float t = fmodf(elapsed, sheenPeriod) / sheenPeriod;
-        float sheenT = t * t * (3.0f - 2.0f * t);
-
-        g.SetClip(&iconBg);
-
-        float margin = 80.0f;
-        float startX = (float)iconX - margin;
-        float endX = (float)(iconX + iconSize) + margin;
-        float sheenX = startX + sheenT * (endX - startX);
-
-        Gdiplus::PointF p1(sheenX - 40, (float)iconY);
-        Gdiplus::PointF p2(sheenX + 40, (float)(iconY + iconSize));
-        Gdiplus::LinearGradientBrush sheenBrush(p1, p2,
-            Gdiplus::Color(0, 255, 180, 80),
-            Gdiplus::Color(0, 255, 180, 80));
-        Gdiplus::Color sheenColors[] = {
-            Gdiplus::Color(0, 255, 140, 50),
-            Gdiplus::Color(40, 255, 140, 50),
-            Gdiplus::Color(90, 255, 200, 100),
-            Gdiplus::Color(40, 255, 140, 50),
-            Gdiplus::Color(0, 255, 140, 50)
-        };
-        float sheenPos[] = { 0.0f, 0.35f, 0.5f, 0.65f, 1.0f };
-        sheenBrush.SetInterpolationColors(sheenColors, sheenPos, 5);
-        g.FillRectangle(&sheenBrush, iconX - 20, iconY - 20, iconSize + 40, iconSize + 40);
-        g.ResetClip();
-    }
-
-    // --- Title ---
-    Gdiplus::FontFamily ff(L"Segoe UI");
-    Gdiplus::Font titleFont(&ff, 20, Gdiplus::FontStyleBold, Gdiplus::UnitPixel);
-    Gdiplus::StringFormat sfCenter;
-    sfCenter.SetAlignment(Gdiplus::StringAlignmentCenter);
-
-    Gdiplus::SolidBrush titleBrush(Gdiplus::Color(255, 232, 232, 236));
-    Gdiplus::RectF titleRect(0, (float)(iconY + iconSize + 12), (float)w, 30);
-    g.DrawString(L"MikoStorm", -1, &titleFont, titleRect, &sfCenter, &titleBrush);
-
-    // Version
-    Gdiplus::Font verFont(&ff, 10, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-    Gdiplus::SolidBrush verBrush(Gdiplus::Color(90, 255, 255, 255));
-    Gdiplus::RectF verRect(0, (float)(iconY + iconSize + 36), (float)w, 20);
-    g.DrawString(L"", -1, &verFont, verRect, &sfCenter, &verBrush);
-
-    // --- Progress bar ---
-    int barW = 320, barH = 4;
-    int barX = (w - barW) / 2;
-    int barY = iconY + iconSize + 64;
-
-    Gdiplus::SolidBrush trackBrush(Gdiplus::Color(20, 255, 255, 255));
-    Gdiplus::GraphicsPath trackPath;
-    trackPath.AddArc(barX, barY, barH, barH, 90, 180);
-    trackPath.AddArc(barX + barW - barH, barY, barH, barH, 270, 180);
-    trackPath.CloseFigure();
-    g.FillPath(&trackBrush, &trackPath);
-
-    int fillW = (int)(progress * barW);
-    if (fillW > 2)
-    {
-        Gdiplus::LinearGradientBrush fillBrush(
-            Gdiplus::Point(barX, barY),
-            Gdiplus::Point(barX + fillW, barY),
-            Gdiplus::Color(255, 224, 115, 44),
-            Gdiplus::Color(255, 255, 159, 69));
-        Gdiplus::GraphicsPath fillPath;
-        fillPath.AddArc(barX, barY, barH, barH, 90, 180);
-        fillPath.AddArc(barX + fillW - barH, barY, barH, barH, 270, 180);
-        fillPath.CloseFigure();
-        g.FillPath(&fillBrush, &fillPath);
-
-        // Glowing dot at tip
-        float dotPulse = 0.6f + 0.4f * (0.5f + 0.5f * sinf(elapsed * 4.19f));
-        int dotAlpha = (int)(dotPulse * 200);
-        int dotR = 4;
-        Gdiplus::GraphicsPath dotGlow;
-        dotGlow.AddEllipse(barX + fillW - dotR, barY + barH / 2 - dotR, dotR * 2, dotR * 2);
-        Gdiplus::PathGradientBrush dotBrush(&dotGlow);
-        Gdiplus::Color dotCenter((BYTE)dotAlpha, 255, 176, 96);
-        Gdiplus::Color dotEdge(0, 255, 160, 60);
-        dotBrush.SetCenterColor(dotCenter);
-        int dotCount = 1;
-        dotBrush.SetSurroundColors(&dotEdge, &dotCount);
-        g.FillPath(&dotBrush, &dotGlow);
-    }
-
-    // --- Status text ---
-    Gdiplus::Font statusFont(&ff, 11, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-    Gdiplus::SolidBrush statusBrush(Gdiplus::Color(100, 255, 255, 255));
-    Gdiplus::RectF statusRect(0, (float)(barY + 14), (float)w, 20);
-
-    const std::wstring& statusText = statusDetail.empty() ? statusMsg : statusDetail;
-    g.DrawString(statusText.c_str(), -1, &statusFont, statusRect, &sfCenter, &statusBrush);
-
-    // Blit to screen
-    BitBlt(hdc, 0, 0, w, h, memDC, 0, 0, SRCCOPY);
-
-    SelectObject(memDC, oldBmp);
-    DeleteObject(bmp);
-    DeleteDC(memDC);
-    ReleaseDC(mWindow, hdc);
 }
 
 // static
 LRESULT CALLBACK LLSplashScreenWin32::windowProc(HWND h_wnd, UINT u_msg,
                                             WPARAM w_param, LPARAM l_param)
 {
-    LLSplashScreenWin32* self = (LLSplashScreenWin32*)GetWindowLongPtr(h_wnd, GWLP_USERDATA);
-
-    switch (u_msg)
-    {
-    case WM_TIMER:
-        if (w_param == SPLASH_TIMER_ID && self)
-        {
-            self->render();
-        }
-        return 0;
-
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            BeginPaint(h_wnd, &ps);
-            if (self) self->render();
-            EndPaint(h_wnd, &ps);
-        }
-        return 0;
-
-    case WM_ERASEBKGND:
-        return 1;
-    }
-
     return DefWindowProc(h_wnd, u_msg, w_param, l_param);
 }
 
