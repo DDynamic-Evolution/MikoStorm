@@ -27,7 +27,7 @@ You can post them here on github or send me a mail. Email is in my profile here 
 
 - [Experimental Features](doc/experimental_features.md) — How to use all experimental features
 
-### ATTENTION
+### ADDITIONAL FEATURES
 
 This viewer contains experimental features like 
 - a slider for **Animationspeed**
@@ -64,13 +64,121 @@ This viewer contains experimental features like
 - **Hide Local Chat** — Toggle to hide chat in quick preferences
 - **MCP Server** — Model Context Protocol for AI assistants (see [MCP Documentation](#mcp-model-context-protocol))
 
-### Rendering Features
+### Additional Rendering Features
 - **HQ Depth of Field** — High-quality circular bokeh DoF with foreground blur and chromatic aberration
 - **Shadow Softness** — Adjustable PCF shadow sample tap radius
 - **3D Color Grading LUT** — Load .cube LUT files for cinematic color grading
 - **HDR Tonemapping** — ACES and Khronos Neutral tonemapping operators
 - **CAS Sharpening** — Contrast Adaptive Sharpening
 - **PBR Materials** — Full GLTF/PBR material support with 16 shader variants
+
+### FEATURES
+
+- Separate text entry for bottom chat bar and nearby chat
+- Option to have group notices in the top right
+- Mesh upload (including fix for CTS-627:Mesh upload crashes Linux)
+- Spell Check Feature
+- Beacons show in mouselook
+- CTRL+H brings up chat history in mouselook
+- CTRL+I brings up inventory in mouselook
+- CTRL+T brings up conversations window in mouselook
+- Local bitmap browser
+- Spam blocker
+- Script count from right click
+- LSL Preprocessor
+- Right click > Script options
+- Texture refresh from right click
+- Option to view Web Profiles or In-world Profiles
+- Optional channel box in chat window for speaking to scripts
+- Text search to Notecards
+- Cam to on minimap
+- Option to always add attachments instead of wearing them
+- Inventory search: Multiple substring filters separated by '+'
+- Ability to move folders from outside of root inventory
+- Invite to group from profile or people tab
+- Client-side visible hint for typing avatars
+- Zoom in Mouselook with Right mouse button
+- Easy toggle on/off of name tag display in Quick prefs
+- Quick access to inventory filters next to inventory/recent/worn tabs
+- Ability to fly over 4096m
+- Day Cycle Slider in Quickprefs
+- Option to display World Map without the text alongside it
+- More compact conversation floater
+- Inventory allows multi-selected items to pull up properties
+- Improved Environment Settings Floater to minimise wasted space
+- Ability to auto-clear red Map Marker after TPing
+- Ability to adjust a worn attachment's position values in the edit window
+- Keyboard shortcuts for Sunrise & Midnight
+- Opensim hop protocol
+- Optional Pie menu or Context right click menus.
+- Color and opacity options for Pie menu
+- Brand new built in AO
+- Brand new built in full range Radar with lots of options
+- Radar can report when an avatar enters or leaves draw distance and/or chat range
+- Extra Estate Management tools
+- Growl support
+- Estate/parcel management tools in radar right click menus
+- Region/parcel information in menu bar (optional)
+- Lots of skin customization options and changes from LL V2
+- V1 style Communicate window
+- Ability to close floater windows
+- Ability to show/hide ALL windows via bottom bar buttons
+- Viewer remembers window state/locations on relogs
+- Several additional skins with side tabs and without side tabs options
+- Additional Graphics settings and options
+- Seperate Movie/Music stream controls
+- Ability to quickly open locations for crash logs, settings, cache, chat logs etc.
+- Greater camera freedom
+- V1 style Dialogs in top right of window
+- V1 style nearby chat
+- V1 style profile windows, ability to open multiple profiles
+- Vertical side tabs for IM's
+- Show look-at, and selection crosshairs beacons
+- Hide my look-at, and selection crosshairs beacons
+- Allow multiple viewer instances
+- Allow login to other grids (has known issues)
+- RLVa
+- Disable TP screens, log in and log out screens
+- Disable TP Sounds
+- Rez objects under land group
+- Filter duplicate landmarks on world map
+- Ability to not send av physics to server
+- Display name/user name options for displaying and sorting in multiple lists like friend list, radar etc
+- Clicking your av keeps camera position option
+- Disable minimum camera zoom distance
+- Allow camera to move without constraints through prims
+- Minimap rotation options
+- Role Play Chat options
+- Friend on/offline notices to nearby chat
+- Show IM's in chat console
+- Use full screen width for chat console
+- Group moderators can be shown in bold text
+- Disable all group chats
+- When receive group notices is disabled, disables group chat as well
+- Keyword alerts
+- Improved Area Search
+- Command line options for chat bar (not all functions work yet)
+- Shared Parcel Windlight
+- New Bridge for improved viewer functionality
+- Window size presets for Machinima makers
+- KDU for greater performance, stability, and reliability in decoding images
+- Configurable Auto responses to IM's
+- Snapshots can upload directly to your Flickr account
+- Set Default upload permissions
+- Improved Camera control and movement control windows
+- Separated Media/music stream controls
+- Media Filter for your security
+- Prim Alignment tool
+- Inventory collapse/expand buttons
+- Inventory right click> wear and replace/add outfits on inventory folders
+- Cut/copy/paste on text editors like notecards, chat windows, scripts etc.
+- Worn tab in inventory
+- Ability to hide bottom chat bar via unrestricted resize
+- Dragable group notices
+- Group UUID and Link copy button for groups
+- User UUID's in their profiles
+- Stream artist song and artist information in chat
+- All builds are Large Address Aware for systems with greater than 2 gig memory
 
 ### Build Configuration
 - AVX2 optimization
