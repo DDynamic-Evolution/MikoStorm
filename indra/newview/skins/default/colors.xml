@@ -760,7 +760,7 @@
      reference="NavyBlue_0" />
     <color
      name="LoginProgressBoxCenterColor"
-     reference="Black_78" />
+     value="0 0 0 1" />
     <color
      name="LoginProgressBoxShadowColor"
      reference="Black_78" />

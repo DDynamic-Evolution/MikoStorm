@@ -49,8 +49,8 @@
                  min_height="255"
                  name="panel4"
                  width="670">
-                    <icon
-                     color="LoginProgressBoxCenterColor"
+                     <icon
+                      color="0 0 0 1"
                      follows="left|right|bottom|top"
                      image_name="Rounded_Square"
                      layout="topleft"
@@ -109,7 +109,7 @@
                          text_color="LoginProgressBoxTextColor"
                          word_wrap="true"/>
                         <progress_bar
-                         color_bar="1 1 1 0.96"
+                         color_bar="0.5 0.5 0.5 1"
                          follows="left|right|top"
                          layout="topleft"
                          height="16"

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MikoStorm</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: monospace;
+  }
+  #rain-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+  #content {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 1;
+  }
+  #ascii-art {
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.15;
+    text-align: center;
+    white-space: pre;
+    text-shadow: 0 0 12px rgba(255,255,255,0.25);
+    margin-bottom: 40px;
+  }
+  #tagline {
+    color: #aaa;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  #footer {
+    position: fixed;
+    bottom: 0; left: 0; width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    z-index: 2;
+  }
+  #footer a {
+    color: #666;
+    font-size: 11px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+  }
+  #footer a:hover { color: #ccc; }
+  #online-stats {
+    color: #888;
+    font-size: 12px;
+    margin-top: 24px;
+    text-align: center;
+  }
+  #online-stats .count {
+    color: #4f4;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  #online-stats .label {
+    color: #666;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  #online-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: #4f4;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
+</head>
+<body>
+<canvas id="rain-canvas"></canvas>
+<div id="content">
+  <div id="ascii-art">
+    __  __ _        __ __ _    ____  ____  ____
+   |  \/  (_) __ _ / _/ _ \  | |\/| | | | |  _ \
+   | |\/| | |/ _` | |_| | | | |  | | | | | |_) |
+   | |  | | | (_| |  _| |_| | |  | | |_| |  __/
+   |_|  |_|_|\__,_|_|  \___/  |_|  |_|____/|_|</div>
+  <div id="tagline">Second Life Viewer</div>
+  <div id="online-stats">
+    <div><span id="online-dot"></span><span class="count" id="online-count">...</span></div>
+    <div class="label">Residents Online</div>
+  </div>
+</div>
+<div id="footer">
+  <a href="https://github.com/DDynamic-Evolution/MikoStorm" target="_blank">github.com/DDynamic-Evolution/MikoStorm</a>
+</div>
+<script>
+(function() {
+  var canvas = document.getElementById('rain-canvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, columns, drops;
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*+=[]{}|;:<>~^';
+  var fontSize = 14;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    columns = Math.floor(W / fontSize);
+    drops = [];
+    for (var i = 0; i < columns; i++) {
+      drops[i] = Math.random() * -100;
+    }
+  }
+
+  function draw() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(160, 160, 160, 0.35)';
+    ctx.font = fontSize + 'px monospace';
+    for (var i = 0; i < columns; i++) {
+      var char = chars[Math.floor(Math.random() * chars.length)];
+      var x = i * fontSize;
+      var y = drops[i] * fontSize;
+      ctx.fillText(char, x, y);
+      if (y > H && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  setInterval(draw, 50);
+
+  // Fetch online user count from Second Life API
+  function fetchOnlineCount() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.secondlife.com/datafeeds/secondlife.xml', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var parser = new DOMParser();
+        var xml = parser.parseFromString(xhr.responseText, 'text/xml');
+        var inworld = xml.getElementsByTagName('inworld')[0];
+        if (inworld) {
+          document.getElementById('online-count').textContent = inworld.textContent.trim();
+        }
+      }
+    };
+    xhr.send();
+  }
+  fetchOnlineCount();
+  setInterval(fetchOnlineCount, 60000);
+})();
+</script>
+</body>
+</html>
