@@ -117,15 +117,6 @@ Toggle nearby chat visibility in the chat console.
 
 ---
 
-## Custom Login Window
-
-Customize the login screen layout and accessibility.
-
-- **Location:** Login screen → Splash Screen Settings (gear icon on the login page)
-- **How to use:** Toggle visibility of sections (top bar, blogs, destinations) and accessibility options (grayscale mode, high contrast, all caps, larger fonts, disable transparency). Settings take effect after restarting the viewer.
-
----
-
 ## Rendering Features
 
 All rendering features are found in **Preferences > Graphics**.
