@@ -288,22 +288,11 @@ public:
 #if LL_WINDOWS
     static LRESULT CALLBACK windowProc(HWND h_wnd, UINT u_msg,
         WPARAM w_param, LPARAM l_param);
-    static DWORD WINAPI splashThreadProc(LPVOID param);
 #endif
 
 private:
-    void render();
-
 #if LL_WINDOWS
     HWND mWindow;
-    HANDLE mThread;
-    ULONG_PTR mGdiToken;
-    volatile F32 mProgress;
-    std::wstring mMessage;
-    std::wstring mDetail;
-    CRITICAL_SECTION mDataCS;
-    DWORD mStartTick;
-    volatile bool mClosing;
 #endif
 };
 

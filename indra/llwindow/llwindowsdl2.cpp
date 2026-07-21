@@ -2356,250 +2356,28 @@ void LLWindowSDL::hideCursorUntilMouseMove()
 }
 
 //
-// LLSplashScreenSDL — Animated splash using SDL2
+// LLSplashScreenSDL - I don.t think we.ll bother to implement this; it.s
+// fairly obsolete at this point.
 //
-static const int SPLASH_W = 520;
-static const int SPLASH_H = 300;
-static const int SPLASH_FRAME_MS = 33; // ~30 fps
-
 LLSplashScreenSDL::LLSplashScreenSDL()
-:   mWindow(NULL), mRenderer(NULL), mThread(NULL), mMutex(NULL),
-    mProgress(0.f), mClosing(false), mStartTick(0)
 {
-    mMutex = SDL_CreateMutex();
 }
 
 LLSplashScreenSDL::~LLSplashScreenSDL()
 {
-    if (mMutex)
-    {
-        SDL_DestroyMutex(mMutex);
-        mMutex = NULL;
-    }
-}
-
-// static — runs on the splash thread
-int LLSplashScreenSDL::splashThreadFunc(void* param)
-{
-    LLSplashScreenSDL* self = (LLSplashScreenSDL*)param;
-
-    self->mWindow = SDL_CreateWindow(
-        "MikoStorm",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        SPLASH_W, SPLASH_H,
-        SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP);
-
-    if (!self->mWindow)
-        return 1;
-
-    self->mRenderer = SDL_CreateRenderer(self->mWindow, -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (!self->mRenderer)
-    {
-        self->mRenderer = SDL_CreateRenderer(self->mWindow, -1,
-            SDL_RENDERER_SOFTWARE);
-    }
-
-    self->mStartTick = SDL_GetTicks();
-
-    while (!self->mClosing)
-    {
-        self->render();
-        SDL_Delay(SPLASH_FRAME_MS);
-    }
-
-    if (self->mRenderer)
-    {
-        SDL_DestroyRenderer(self->mRenderer);
-        self->mRenderer = NULL;
-    }
-
-    if (self->mWindow)
-    {
-        SDL_DestroyWindow(self->mWindow);
-        self->mWindow = NULL;
-    }
-
-    return 0;
 }
 
 void LLSplashScreenSDL::showImpl()
 {
-    mClosing = false;
-    mMessage = "Initializing...";
-    mThread = SDL_CreateThread(splashThreadFunc, "SplashScreen", this);
 }
 
 void LLSplashScreenSDL::updateImpl(const std::string& mesg, F32 progress,
                                    const std::string& detail)
 {
-    SDL_LockMutex(mMutex);
-
-    if (!mesg.empty())
-        mMessage = mesg;
-
-    if (!detail.empty())
-        mDetail = detail;
-    else
-        mDetail.clear();
-
-    if (progress >= 0.f)
-        mProgress = llclamp(progress, 0.f, 1.f);
-
-    SDL_UnlockMutex(mMutex);
 }
 
 void LLSplashScreenSDL::hideImpl()
 {
-    mClosing = true;
-
-    if (mThread)
-    {
-        SDL_WaitThread(mThread, NULL);
-        mThread = NULL;
-    }
-}
-
-void LLSplashScreenSDL::render()
-{
-    if (!mRenderer) return;
-
-    SDL_LockMutex(mMutex);
-    F32 progress = mProgress;
-    std::string statusMsg = mMessage;
-    std::string statusDetail = mDetail;
-    SDL_UnlockMutex(mMutex);
-
-    float elapsed = (float)(SDL_GetTicks() - mStartTick) / 1000.f;
-
-    // --- Background ---
-    SDL_SetRenderDrawColor(mRenderer, 26, 26, 30, 255);
-    SDL_RenderClear(mRenderer);
-
-    // Subtle glow behind icon area (approximated with semi-transparent rect)
-    {
-        int glowAlpha = 15;
-        SDL_SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(mRenderer, 255, 120, 40, glowAlpha);
-        SDL_Rect glowRect = { SPLASH_W/2 - 160, 20, 320, 200 };
-        SDL_RenderFillRect(mRenderer, &glowRect);
-    }
-
-    // --- Corner accents ---
-    {
-        SDL_SetRenderDrawColor(mRenderer, 255, 140, 50, 38);
-        int cm = 12, cl = 30;
-        // Top-left
-        SDL_RenderDrawLine(mRenderer, cm, cm, cm + cl, cm);
-        SDL_RenderDrawLine(mRenderer, cm, cm, cm, cm + cl);
-        // Top-right
-        SDL_RenderDrawLine(mRenderer, SPLASH_W - cm - cl, cm, SPLASH_W - cm, cm);
-        SDL_RenderDrawLine(mRenderer, SPLASH_W - cm, cm, SPLASH_W - cm, cm + cl);
-        // Bottom-left
-        SDL_RenderDrawLine(mRenderer, cm, SPLASH_H - cm, cm + cl, SPLASH_H - cm);
-        SDL_RenderDrawLine(mRenderer, cm, SPLASH_H - cm - cl, cm, SPLASH_H - cm);
-        // Bottom-right
-        SDL_RenderDrawLine(mRenderer, SPLASH_W - cm - cl, SPLASH_H - cm, SPLASH_W - cm, SPLASH_H - cm);
-        SDL_RenderDrawLine(mRenderer, SPLASH_W - cm, SPLASH_H - cm - cl, SPLASH_W - cm, SPLASH_H - cm);
-    }
-
-    // --- Icon area ---
-    {
-        int iconSize = 120;
-        int iconX = (SPLASH_W - iconSize) / 2;
-        int iconY = 35;
-        int iconR = 24;
-
-        // Glow pulse behind icon
-        float pulse = 0.3f + 0.4f * (0.5f + 0.5f * sinf(elapsed * 2.094f));
-        int glowAlpha = (int)(pulse * 50);
-        SDL_SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(mRenderer, 255, 120, 40, glowAlpha);
-        SDL_Rect iconGlowRect = { iconX - 10, iconY - 10, iconSize + 20, iconSize + 20 };
-        SDL_RenderFillRect(mRenderer, &iconGlowRect);
-
-        // Icon background rounded rect (approximated with rect + border)
-        SDL_SetRenderDrawColor(mRenderer, 42, 42, 48, 255);
-        SDL_Rect iconBgRect = { iconX, iconY, iconSize, iconSize };
-        SDL_RenderFillRect(mRenderer, &iconBgRect);
-
-        // Border
-        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 15);
-        SDL_RenderDrawRect(mRenderer, &iconBgRect);
-
-        // Draw app icon (simplified - just a colored square placeholder)
-        // In a real implementation, you'd load and draw the actual icon
-        int pawSize = 64;
-        int pawX = iconX + (iconSize - pawSize) / 2;
-        int pawY = iconY + (iconSize - pawSize) / 2;
-        SDL_SetRenderDrawColor(mRenderer, 255, 165, 0, 200);
-        SDL_Rect iconRect = { pawX, pawY, pawSize, pawSize };
-        SDL_RenderFillRect(mRenderer, &iconRect);
-    }
-
-    // --- Sheen sweep over icon ---
-    {
-        float sheenPeriod = 3.5f;
-        float t = fmodf(elapsed, sheenPeriod) / sheenPeriod;
-        float sheenT = t * t * (3.0f - 2.0f * t);
-
-        int iconSize = 120;
-        int iconX = (SPLASH_W - iconSize) / 2;
-        int iconY = 35;
-
-        float margin = 80.0f;
-        float startX = (float)iconX - margin;
-        float endX = (float)(iconX + iconSize) + margin;
-        float sheenX = startX + sheenT * (endX - startX);
-
-        // Draw sheen as a semi-transparent white rectangle
-        SDL_SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_BLEND);
-        int sheenAlpha = 40 + (int)(50 * sinf(t * 3.14159f));
-        SDL_SetRenderDrawColor(mRenderer, 255, 200, 100, sheenAlpha);
-        SDL_Rect sheenRect = { (int)(sheenX - 40), iconY, 80, iconSize };
-        SDL_RenderFillRect(mRenderer, &sheenRect);
-    }
-
-    // --- Progress bar ---
-    {
-        int barW = 320, barH = 4;
-        int barX = (SPLASH_W - barW) / 2;
-        int barY = 35 + 120 + 64; // iconY + iconSize + 64
-
-        // Track
-        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 20);
-        SDL_Rect trackRect = { barX, barY, barW, barH };
-        SDL_RenderFillRect(mRenderer, &trackRect);
-
-        // Fill
-        int fillW = (int)(progress * barW);
-        if (fillW > 2)
-        {
-            SDL_SetRenderDrawColor(mRenderer, 255, 159, 69, 255);
-            SDL_Rect fillRect = { barX, barY, fillW, barH };
-            SDL_RenderFillRect(mRenderer, &fillRect);
-
-            // Glowing dot at tip
-            float dotPulse = 0.6f + 0.4f * (0.5f + 0.5f * sinf(elapsed * 4.19f));
-            int dotAlpha = (int)(dotPulse * 200);
-            SDL_SetRenderDrawColor(mRenderer, 255, 176, 96, dotAlpha);
-            SDL_Rect dotRect = { barX + fillW - 4, barY + barH / 2 - 4, 8, 8 };
-            SDL_RenderFillRect(mRenderer, &dotRect);
-        }
-    }
-
-    // --- Status text (simplified - just a placeholder) ---
-    // In a real implementation, you'd use SDL_ttf for text rendering
-    // For now, we'll draw a small indicator
-    {
-        int barY = 35 + 120 + 64;
-        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 100);
-        SDL_Rect textRect = { SPLASH_W/2 - 50, barY + 14, 100, 12 };
-        SDL_RenderFillRect(mRenderer, &textRect);
-    }
-
-    SDL_RenderPresent(mRenderer);
 }
 
 S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 type)

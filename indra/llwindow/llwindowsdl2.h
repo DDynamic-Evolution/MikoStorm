@@ -269,21 +269,6 @@ public:
     /*virtual*/ void updateImpl(const std::string& mesg, F32 progress,
                                 const std::string& detail);
     /*virtual*/ void hideImpl();
-
-    static int splashThreadFunc(void* param);
-
-private:
-    void render();
-
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
-    SDL_Thread* mThread;
-    SDL_mutex* mMutex;
-    volatile F32 mProgress;
-    std::string mMessage;
-    std::string mDetail;
-    volatile bool mClosing;
-    Uint32 mStartTick;
 };
 
 S32 OSMessageBoxSDL(const std::string& text, const std::string& caption, U32 type);
