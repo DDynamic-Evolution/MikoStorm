@@ -9,6 +9,8 @@
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
+[Nikostorm Startpage](https://ddynamic-evolution.github.io/)
+
 This repository is not released by SecondLife or Firestorm!
 
 MikoStorm aims to provide a viewer with many missing or unique features that enhance the Second Life experience. Anyone looking for a viewer with illegal features must look elsewhere — this is not the place for it.
@@ -25,14 +27,14 @@ You can post them here on github or send me a mail. Email is in my profile here 
 
 - [Experimental Features](doc/experimental_features.md) — How to use all experimental features
 
-### ATTENTION,
+### ATTENTION
 
-Thisviewer contains experimental features like 
+This viewer contains experimental features like 
 - a slider for **Animationspeed**
 - **Set individual IM sounds for your contacts**
-- A **photogrammetry tool** for our fellow 3D Scanners an 3D Printers (i.e. to use with [3DF Zephyr](https://store.steampowered.com/app/438450/3DF_Zephyr_Lite_Steam_Edition/)
-- A **multiuser Posing system** for photographers (Yes it has an IM request if someone wants to be posed)
-- **Voicebox** A tool to connect to an external voicebox server on your system, to read messages aloud.
+- **photogrammetry tool** for our fellow 3D Scanners an 3D Printers (i.e. to use with [3DF Zephyr](https://store.steampowered.com/app/438450/3DF_Zephyr_Lite_Steam_Edition/)
+- **multiuser Posing system** for photographers (Yes it has an IM request if someone wants to be posed)
+- **Voicebox TTS** A tool to connect to an external voicebox server on your system, to read messages aloud.
 - **A unique color scheme**
 - **New render pipeline** from [Ayastorm](https://github.com/mayatonton/phoenix-firestorm/) which gives you alot more advantages over the original
 - **LL-style Chat Window** — Ported Linden Lab chat UI with mini profile icons and range filtering
