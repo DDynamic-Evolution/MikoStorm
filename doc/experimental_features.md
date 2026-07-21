@@ -37,6 +37,8 @@ Pose multiple avatars simultaneously with joint-level control.
 
 - **Location:** Toolbar button (Toybox) or top menu bar → **Poser**
 - **How to use:** Select joints from the bone list. Use rotation/position/scale sliders or the visual gizmos (rotate/translate). Save/load poses to XML files. Supports mirroring, flipping, undo/redo, and BVH export. Other users receive an IM request when invited to be posed.
+- they need to answer yes or nothing will be posed
+- For this functionm the other user does NOT have to use the same viewer
 
 ---
 
