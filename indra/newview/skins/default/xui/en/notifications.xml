@@ -15316,6 +15316,16 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
     Returned to [REGION] - restart avoidance complete.
   </notification>
   <notification
+   icon="alertmodal.tga"
+   name="FSRestartAvoidMaxRetries"
+   type="alertmodal">
+    <unique/>
+    Restart avoidance gave up after [COUNT] failed return attempts. You may need to return manually.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
    icon="alert.tga"
    name="Stream3DAudioAlert"
    type="alert">

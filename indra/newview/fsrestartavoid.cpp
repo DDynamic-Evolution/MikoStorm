@@ -125,6 +125,14 @@ bool FSRestartAvoid::tick()
         mTimer -= 1.f;
         if (mTimer <= 0.f)
         {
+            if (mRetryCount >= MAX_RETRY_COUNT)
+            {
+                LLSD args;
+                args["COUNT"] = (LLSD::Integer)mRetryCount;
+                LLNotificationsUtil::add("FSRestartAvoidMaxRetries", args);
+                clearState();
+                return true;
+            }
             mRetryCount++;
             attemptReturn();
             mTimer = 60.f;
