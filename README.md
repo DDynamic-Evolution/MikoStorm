@@ -9,7 +9,7 @@
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
-[Mikostorm Startpage](https://ddynamic-evolution.github.io/) - [Discord](https://discord.gg/2eKKTcwHF4)
+[Mikostorm Startpage](https://ddynamic-evolution.github.io/) - [Discord](https://discord.gg/2eKKTcwHF4)<img width="1839" height="919" alt="Bildschirmfoto vom 2026-07-21 20-31-12" src="https://github.com/user-attachments/assets/44ebaa9b-3fc1-490f-926e-2c3b8156c395" />
 
 This repository is not released by SecondLife or Firestorm!
 
@@ -20,6 +20,8 @@ This is a one person project! So be patient
 ### Not on the TPV List.. why?
 
 Because I never applied and even tho I stay within TOS, I dont see a reason. It will be a specialized viewer.
+
+![Uploading Bildschirmfoto vom 2026-07-21 20-31-12.png…]()
 
 ### Issues
 
