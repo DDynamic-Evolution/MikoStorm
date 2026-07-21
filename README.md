@@ -161,7 +161,6 @@ This viewer contains experimental features like
 - Shared Parcel Windlight
 - New Bridge for improved viewer functionality
 - Window size presets for Machinima makers
-- KDU for greater performance, stability, and reliability in decoding images
 - Configurable Auto responses to IM's
 - Snapshots can upload directly to your Flickr account
 - Set Default upload permissions
