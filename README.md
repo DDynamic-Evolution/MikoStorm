@@ -61,7 +61,6 @@ Thisviewer contains experimental features like
 - **URL Phishing / Scam Link Detection** — Warns before opening suspicious URLs
 - **Hide Local Chat** — Toggle to hide chat in quick preferences
 - **MCP Server** — Model Context Protocol for AI assistants (see [MCP Documentation](#mcp-model-context-protocol))
-- **Custom and definable login window** (makes the viewer alot faster on startup)
 
 ### Rendering Features
 - **HQ Depth of Field** — High-quality circular bokeh DoF with foreground blur and chromatic aberration
