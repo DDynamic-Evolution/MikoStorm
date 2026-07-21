@@ -357,23 +357,6 @@ curl -X POST http://localhost:13231/mcp \
 
 ---
 
-## Build Instructions
-
-- [Windows](doc/building_windows.md)
-  
-### Quick Build (Windows)
-
-```bash
-# Configure
-cd build-vc170-64
-configure.bat
-
-# Build
-build.bat
-```
-
----
-
 ## Links
 
 - [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm)
