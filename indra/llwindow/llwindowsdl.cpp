@@ -2530,7 +2530,8 @@ void LLSplashScreenSDL::showImpl()
 {
 }
 
-void LLSplashScreenSDL::updateImpl(const std::string& mesg)
+void LLSplashScreenSDL::updateImpl(const std::string& mesg, F32 progress,
+                                   const std::string& detail)
 {
 }
 

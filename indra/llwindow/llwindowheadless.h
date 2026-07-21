@@ -123,7 +123,8 @@ public:
     virtual ~LLSplashScreenHeadless() {}
 
     /*virtual*/ void showImpl() override {}
-    /*virtual*/ void updateImpl(const std::string& mesg) override {}
+    /*virtual*/ void updateImpl(const std::string& mesg, F32 progress,
+                                const std::string& detail) override {}
     /*virtual*/ void hideImpl() override {}
 
 };

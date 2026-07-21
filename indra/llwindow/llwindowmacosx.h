@@ -255,7 +255,8 @@ public:
     virtual ~LLSplashScreenMacOSX();
 
     void showImpl();
-    void updateImpl(const std::string& mesg);
+    void updateImpl(const std::string& mesg, F32 progress,
+                    const std::string& detail);
     void hideImpl();
 
 private:

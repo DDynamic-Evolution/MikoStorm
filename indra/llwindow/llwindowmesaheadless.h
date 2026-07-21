@@ -113,7 +113,8 @@ public:
     virtual ~LLSplashScreenMesaHeadless() {};
 
     /*virtual*/ void showImpl() {};
-    /*virtual*/ void updateImpl(const std::string& mesg) {};
+    /*virtual*/ void updateImpl(const std::string& mesg, F32 progress,
+                                const std::string& detail) {};
     /*virtual*/ void hideImpl() {};
 
 };
