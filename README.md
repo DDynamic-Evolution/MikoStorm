@@ -23,7 +23,7 @@ You can post them here on github or send me a mail. Email is in my profile here 
 
 ### Documentation
 
-Coming soon
+- [Experimental Features](doc/experimental_features.md) — How to use all experimental features
 
 ### ATTENTION,
 
