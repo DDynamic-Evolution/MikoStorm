@@ -29,7 +29,6 @@ private:
     void processQueue();
     void doTTS(const std::string& text);
     void doVoiceboxTTS(const std::string& text);
-    void doEspeakTTS(const std::string& text);
     static std::string sanitizeText(const std::string& text);
     static std::string jsonEscape(const std::string& text);
 

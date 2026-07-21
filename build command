@@ -1,1 +1,1 @@
-export AUTOBUILD_VARIABLES_FILE=$HOME/src/fs-build-variables/variables && ./scripts/configure_firestorm.sh --config --build --compiler-cache --ninja --avx2 --fmodstudio --mcp --espeak --opensim --3dstream --package --chan Release 2>&1
+export AUTOBUILD_VARIABLES_FILE=$HOME/src/fs-build-variables/variables && ./scripts/configure_firestorm.sh --config --build --compiler-cache --ninja --avx2 --fmodstudio --mcp --no-espeak --opensim --3dstream --package --chan Release 2>&1
