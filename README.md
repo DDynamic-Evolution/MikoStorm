@@ -72,7 +72,7 @@ This viewer contains experimental features like
 - **CAS Sharpening** — Contrast Adaptive Sharpening
 - **PBR Materials** — Full GLTF/PBR material support with 16 shader variants
 
-### FEATURES
+### FEATURES FROM THE FIRESTORM FORK
 
 - Separate text entry for bottom chat bar and nearby chat
 - Option to have group notices in the top right
