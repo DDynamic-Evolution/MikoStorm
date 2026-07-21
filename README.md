@@ -15,7 +15,15 @@ MikoStorm aims to provide a viewer with many missing or unique features that enh
 
 ### Not on the TPV List.. why?
 
-BEcause I never applied and even though I stay within TOS, I dont see a reason
+Because I never applied and even tho I stay within TOS, I dont see a reason. It will be a specialized viewer.
+
+### Issues
+
+You can post them here on github or send me a mail. Email is in my profile here on github. 
+
+### Ducumentation
+
+Coming soon
 
 ### ATTENTION,
 
