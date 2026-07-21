@@ -21,7 +21,7 @@ Because I never applied and even tho I stay within TOS, I dont see a reason. It 
 
 You can post them here on github or send me a mail. Email is in my profile here on github. 
 
-### Ducumentation
+### Documentation
 
 Coming soon
 
