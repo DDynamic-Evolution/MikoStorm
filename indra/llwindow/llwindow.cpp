@@ -350,10 +350,12 @@ bool LLSplashScreen::isVisible()
 // static
 LLSplashScreen *LLSplashScreen::create()
 {
-#if LL_MESA_HEADLESS || LL_SDL  // !!! *FIX: (?)
+#if LL_MESA_HEADLESS
     return 0;
 #elif LL_WINDOWS
     return new LLSplashScreenWin32;
+#elif LL_SDL
+    return new LLSplashScreenSDL;
 #elif LL_DARWIN
     return new LLSplashScreenMacOSX;
 #else
@@ -369,6 +371,8 @@ void LLSplashScreen::show()
     {
 #if LL_WINDOWS && !LL_MESA_HEADLESS
         gSplashScreenp = new LLSplashScreenWin32;
+#elif LL_SDL
+        gSplashScreenp = new LLSplashScreenSDL;
 #elif LL_DARWIN
         gSplashScreenp = new LLSplashScreenMacOSX;
 #endif
@@ -380,12 +384,13 @@ void LLSplashScreen::show()
 }
 
 //static
-void LLSplashScreen::update(const std::string& str)
+void LLSplashScreen::update(const std::string& str, F32 progress,
+                            const std::string& detail)
 {
     LLSplashScreen::show();
     if (gSplashScreenp)
     {
-        gSplashScreenp->updateImpl(str);
+        gSplashScreenp->updateImpl(str, progress, detail);
     }
 }
 

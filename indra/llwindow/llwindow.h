@@ -277,13 +277,15 @@ public:
     static LLSplashScreen * create();
     static void show();
     static void hide();
-    static void update(const std::string& string);
+    static void update(const std::string& string, F32 progress = -1.f,
+                       const std::string& detail = "");
 
     static bool isVisible();
 protected:
     // These are overridden by the platform implementation
     virtual void showImpl() = 0;
-    virtual void updateImpl(const std::string& string) = 0;
+    virtual void updateImpl(const std::string& string, F32 progress,
+                            const std::string& detail) = 0;
     virtual void hideImpl() = 0;
 
     static bool sVisible;

@@ -1891,7 +1891,8 @@ void LLSplashScreenMacOSX::showImpl()
     // This code _could_ be used to display a spash screen...
 }
 
-void LLSplashScreenMacOSX::updateImpl(const std::string& mesg)
+void LLSplashScreenMacOSX::updateImpl(const std::string& mesg, F32 progress,
+                                       const std::string& detail)
 {
 }
 
