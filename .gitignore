@@ -141,3 +141,8 @@ AGENTS.md
 packages/
 .git-rewrite/
 README_mcp.md
+
+# MyTools
+build_mikostorm.py
+build_pandaview.ps1
+__pycache__
