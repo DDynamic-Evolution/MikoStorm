@@ -145,4 +145,9 @@ README_mcp.md
 # MyTools
 build_mikostorm.py
 build_pandaview.ps1
-__pycache__
+__pycache__/
+
+# Flatpak build artifacts
+_build/
+repo/
+.flatpak-builder/

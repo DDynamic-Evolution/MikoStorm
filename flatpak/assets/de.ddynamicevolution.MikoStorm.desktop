@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=MikoStorm
+GenericName=Virtual World Viewer
+Comment=Client for virtual worlds
+Exec=mikostorm-viewer %u
+Icon=de.ddynamicevolution.MikoStorm
+Terminal=false
+Categories=Network;Simulation;
+MimeType=x-scheme-handler/secondlife;x-scheme-handler/hop;
+Keywords=secondlife;sl;virtualworld;metaverse;

@@ -1,0 +1,86 @@
+{
+    "app-id": "de.ddynamicevolution.MikoStorm",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "25.08",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "mikostorm-viewer",
+    "separate-locales": false,
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=pulseaudio",
+        "--share=network",
+        "--allow=multiarch",
+        "--device=all",
+        "--filesystem=~/.mikostorm:create",
+        "--filesystem=xdg-desktop",
+        "--filesystem=xdg-documents",
+        "--filesystem=xdg-download",
+        "--filesystem=xdg-music",
+        "--filesystem=xdg-pictures",
+        "--talk-name=org.freedesktop.Notifications",
+        "--talk-name=org.freedesktop.secrets",
+        "--own-name=com.secondlife.ViewerAppAPIService",
+        "--env=LD_LIBRARY_PATH=/app/extra/lib/:/app/lib"
+    ],
+    "cleanup": [
+        "/share/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/lib/pkgconfig"
+    ],
+    "build-options": {
+        "strip": true
+    },
+    "modules": [
+        {
+            "name": "mikostorm",
+            "buildsystem": "simple",
+            "sources": [
+                {
+                    "type": "extra-data",
+                    "filename": "viewer.tar.xz",
+                    "url": "https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.22/MikoStorm-MikoStormOS-Release_AVX2-1-15-22-0.tar.xz",
+                    "sha256": "6d6119bf732c075ea7b9af315e1d130d2c6d7d9d7ee81b82c79f6c4dd10bf31d",
+                    "size": 178354484
+                },
+                {
+                    "type": "script",
+                    "dest-filename": "apply_extra",
+                    "commands": [
+                        "tar -xf viewer.tar.xz --strip 1 --no-same-owner",
+                        "rm viewer.tar.xz"
+                    ]
+                },
+                {
+                    "type": "file",
+                    "path": "assets/mikostorm-viewer"
+                },
+                {
+                    "type": "file",
+                    "path": "assets/launch_url.sh"
+                },
+                {
+                    "type": "file",
+                    "path": "assets/de.ddynamicevolution.MikoStorm.desktop"
+                },
+                {
+                    "type": "file",
+                    "path": "assets/de.ddynamicevolution.MikoStorm.metainfo.xml"
+                },
+                {
+                    "type": "file",
+                    "path": "assets/de.ddynamicevolution.MikoStorm.png"
+                }
+            ],
+            "build-commands": [
+                "install -Dm755 apply_extra $FLATPAK_DEST/bin/apply_extra",
+                "install -Dm755 launch_url.sh $FLATPAK_DEST/etc/launch_url.sh",
+                "install -Dm755 mikostorm-viewer $FLATPAK_DEST/bin/mikostorm-viewer",
+                "install -Dm644 $FLATPAK_ID.desktop $FLATPAK_DEST/share/applications/$FLATPAK_ID.desktop",
+                "install -Dm644 $FLATPAK_ID.png $FLATPAK_DEST/share/icons/hicolor/512x512/apps/$FLATPAK_ID.png",
+                "install -Dm644 $FLATPAK_ID.metainfo.xml $FLATPAK_DEST/share/metainfo/$FLATPAK_ID.metainfo.xml"
+            ]
+        }
+    ]
+}
