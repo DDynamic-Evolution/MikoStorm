@@ -1,6 +1,6 @@
 # MikoStorm – Fast. Modern. Open Source
 
-[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0.tar.xz)
+[![Windowsx64](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0.tar.xz)
 
 <p align="center">
   <img src="images/mikostorm.png">
@@ -21,6 +21,10 @@ This is a one person project! So be patient
 
 Because I never applied and even tho I stay within TOS, I don't see a reason to give my address and real name. 
 It is a specialized viewer for creators and enthusiasts.
+
+### No 32Bit version
+
+There is and never will be a 32bit version
 
 ### Issues
 
