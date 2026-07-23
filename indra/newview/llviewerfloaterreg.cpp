@@ -244,6 +244,7 @@
 #include "omnifilter.h"               // Omnifilter support
 #include "fsfloateravataralign.h" // <FS:Chanayane> Compass floater
 #include "llfloaterphotogrammetry.h"
+#include "llfloatercameratimeline.h"
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 const std::string FLOATER_PROFILE("profile");
@@ -699,6 +700,8 @@ void LLViewerFloaterReg::registerFloaters()
     // </FS:Chanayane>
 
     LLFloaterReg::add("photogrammetry", "floater_photogrammetry.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPhotogrammetry>);
+
+    LLFloaterReg::add("camera_timeline", "floater_camera_timeline.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCameraTimeline>);
 
     LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

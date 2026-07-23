@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ can_resize="true"
+ can_close="true"
+ can_minimize="true"
+ height="500"
+ layout="topleft"
+ min_height="300"
+ min_width="350"
+ name="camera_timeline"
+ single_instance="true"
+ title="Kamera-Zeitachse"
+ width="600">
+
+	<!-- Keyframe List -->
+	<text
+	 follows="left|top"
+	 font="SansSerifBold"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="keyframes_label"
+	 top="10"
+	 width="580">
+	 Keyframes
+	</text>
+
+	<scroll_list
+	 allow_multi_select="false"
+	 column_header="true"
+	 follows="left|top|right"
+	 header_height="16"
+	 height="180"
+	 layout="topleft"
+	 left="10"
+	 name="keyframe_list"
+	 top_pad="5"
+	 width="580">
+		<list_column column="0" label="#" width="30" />
+		<list_column column="1" label="Zeit" width="60" />
+		<list_column column="2" label="Position" width="220" />
+		<list_column column="3" label="FOV" width="60" />
+	</scroll_list>
+
+	<!-- Keyframe Buttons -->
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Kamera aufnehmen"
+	 layout="topleft"
+	 left="10"
+	 name="capture_btn"
+	 top_pad="5"
+	 width="120" />
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Löschen"
+	 layout="topleft"
+	 left_pad="5"
+	 name="delete_btn"
+	 top_delta="0"
+	 width="70" />
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Alle löschen"
+	 layout="topleft"
+	 left_pad="5"
+	 name="clear_btn"
+	 top_delta="0"
+	 width="80" />
+
+	<!-- Timeline Scrubber -->
+	<text
+	 follows="left|top"
+	 font="SansSerifBold"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="timeline_label"
+	 top_pad="15"
+	 width="580">
+	 Zeitachse
+	</text>
+
+	<slider
+	 decimal_digits="1"
+	 follows="left|top|right"
+	 height="10"
+	 increment="0.5"
+	 initial_value="0"
+	 layout="topleft"
+	 left="10"
+	 max_val="100"
+	 min_val="0"
+	 name="timeline_slider"
+	 show_text="false"
+	 top_pad="5"
+	 width="400" />
+
+	<text
+	 follows="left|top"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="time_display"
+	 top_pad="2"
+	 width="200">
+	 0,0s / 10,0s
+	</text>
+
+	<!-- Playback Controls -->
+	<text
+	 follows="left|top"
+	 font="SansSerifBold"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="playback_label"
+	 top_pad="10"
+	 width="580">
+	 Wiedergabe
+	</text>
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Abspielen"
+	 layout="topleft"
+	 left="10"
+	 name="play_btn"
+	 top_pad="5"
+	 width="70" />
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Stopp"
+	 layout="topleft"
+	 left_pad="5"
+	 name="stop_btn"
+	 top_delta="0"
+	 width="70" />
+
+	<slider
+	 decimal_digits="2"
+	 follows="left|top"
+	 height="10"
+	 increment="0.25"
+	 initial_value="1.0"
+	 label="Geschwindigkeit"
+	 label_width="50"
+	 layout="topleft"
+	 left="10"
+	 max_val="4.0"
+	 min_val="0.25"
+	 name="speed_slider"
+	 show_text="true"
+	 top_pad="10"
+	 width="200" />
+
+	<spinner
+	 decimal_digits="1"
+	 height="20"
+	 increment="1.0"
+	 initial_value="10.0"
+	 label="Dauer"
+	 label_width="60"
+	 layout="topleft"
+	 left="250"
+	 max_val="600"
+	 min_val="0.5"
+	 name="duration_spinner"
+	 top_pad="5"
+	 width="150" />
+
+	<!-- File I/O -->
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Speichern"
+	 layout="topleft"
+	 left="10"
+	 name="save_btn"
+	 top_pad="15"
+	 width="70" />
+
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Laden"
+	 layout="topleft"
+	 left_pad="5"
+	 name="load_btn"
+	 top_delta="0"
+	 width="70" />
+
+	<text
+	 follows="left|top|right"
+	 height="16"
+	 layout="topleft"
+	 left="10"
+	 name="status_text"
+	 top_pad="10"
+	 width="580">
+	 Bereit
+	</text>
+
+</floater>

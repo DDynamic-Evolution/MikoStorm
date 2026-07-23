@@ -6310,6 +6310,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_FaceNearest_Tooltip">
 		Zum Avatar in der geringsten Entfernung innerhalb von 20m drehen
 	</string>
+	<string name="Command_CameraTimeline_Label">
+		Kamera-Zeitachse
+	</string>
+	<string name="Command_CameraTimeline_Tooltip">
+		Kamera-Position, Drehung und Brennweite aufnehmen und auf einer Zeitachse abspielen
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
 	</string>
