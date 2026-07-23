@@ -1,11 +1,10 @@
-# MikoStorm - A Second Life Viewer
+# MikoStorm – Fast. Modern. Open Source
+
+[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0.tar.xz)
 
 <p align="center">
   <img src="images/mikostorm.png">
 </p>
-
-
-[![Windows](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0.tar.xz)
 
 MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer/phoenix-firestorm) for Second Life. The client codebase has been open source since 2007 and is available under the LGPL license.
 
@@ -19,7 +18,8 @@ This is a one person project! So be patient
 
 ### Not on the TPV List.. why?
 
-Because I never applied and even tho I stay within TOS, I dont see a reason. It will be a specialized viewer.
+Because I never applied and even tho I stay within TOS, I don't see a reason to give my address and real name. 
+It is a specialized viewer for creators and enthusiasts.
 
 <img width="1839" height="919" alt="Bildschirmfoto vom 2026-07-21 20-31-12" src="https://github.com/user-attachments/assets/44ebaa9b-3fc1-490f-926e-2c3b8156c395" />
 
