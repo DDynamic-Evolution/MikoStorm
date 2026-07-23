@@ -67,6 +67,14 @@ This viewer contains experimental features like
 - **URL Phishing / Scam Link Detection** — Warns before opening suspicious URLs
 - **Hide Local Chat** — Toggle to hide chat in quick preferences
 - **MCP Server** — Model Context Protocol for AI assistants (see [MCP Documentation](#mcp-model-context-protocol))
+- **Camera Timeline** — Record and playback camera movements for machinima and photography
+  - Capture camera position, rotation, FOV as keyframes at any point on the timeline
+  - Smooth step interpolation between keyframes for natural camera motion
+  - Adjustable playback speed (0.25x–4x) and total duration (up to 600s)
+  - Scrub the timeline to preview camera positions at any time
+  - Select and delete individual keyframes to fine-tune your camera path
+  - Save/Load camera timelines as XML files for reuse and sharing
+  - Reset camera to previous position after playback stops
 
 ### Additional Rendering Features
 - **HQ Depth of Field** — High-quality circular bokeh DoF with foreground blur and chromatic aberration
