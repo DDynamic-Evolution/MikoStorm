@@ -327,7 +327,7 @@
            />
   <command name="quickprefs"
            available_in_toybox="true"
-           icon="phoenix_18"
+           icon="quickprefs_18"
            label_ref="Command_Quickprefs_Label"
            tooltip_ref="Command_Quickprefs_Tooltip"
            execute_function="Floater.Toggle"
