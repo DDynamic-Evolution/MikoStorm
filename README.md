@@ -19,8 +19,7 @@ This is a one person project! So be patient
 
 ### Not on the TPV List.. why?
 
-Because I never applied and even tho I stay within TOS, I don't see a reason to give my address and real name. 
-It is a specialized viewer for creators and enthusiasts.
+Working on it
 
 ### No 32Bit version
 
