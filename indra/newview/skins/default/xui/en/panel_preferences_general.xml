@@ -643,18 +643,6 @@
 		 value="0" />
     </combo_box>
 
-    <check_box
-     control_name="PVForceAway"
-     name="pv_force_away_check"
-     follows="top|left"
-     height="16"
-     label="Lock Away on"
-     layout="topleft"
-     left_pad="5"
-     top_delta="4"
-     width="130"
-     tool_tip="Locks Away status on: moving or typing will not clear it. Your tag shows Away until you untick this. Resets on relog."/>
-
     <text
      type="string"
      font="SansSerifSmall"
