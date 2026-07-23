@@ -104,7 +104,6 @@ set(llcommon_SOURCE_FILES
     lluuid.cpp
     llwatchdog.cpp
     llworkerthread.cpp
-    pvextras.cpp
     hbxxh.cpp
     u64.cpp
     threadpool.cpp
@@ -247,7 +246,6 @@ set(llcommon_HEADER_FILES
     llwatchdog.h
     llwin32headers.h
     llworkerthread.h
-    pvextras.h
     hbxxh.h
     lockstatic.h
     stdtypes.h

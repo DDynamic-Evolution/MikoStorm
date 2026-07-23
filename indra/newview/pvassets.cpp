@@ -20,8 +20,6 @@
 #include <utility>
 #include <vector>
 
-#include "pvextras.h"
-
 struct save_data_entry
 {
     LLAssetType::EType asset_type;
