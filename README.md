@@ -90,7 +90,7 @@ This viewer contains experimental features like
 ### Build Configuration
 - AVX2 optimization
 - FMOD audio
-- 3D Stream (PandaView)
+- 3D Stream (Ayastorm)
 - OpenSim support
 - MCP (Model Context Protocol)
 
