@@ -1,6 +1,6 @@
 # MikoStorm – Fast. Modern. Open Source
 
-[![Windowsx64](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0.tar.xz)
+[![Windowsx64](https://img.shields.io/badge/Windows-Installer-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0_Setup.exe) [![Linux](https://img.shields.io/badge/Linux-tar.xz-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/MikoStorm-MikoStormOS-Release_AVX2-1-15-23-0.tar.xz) [![Debian/Ubuntu](https://img.shields.io/badge/Debian/Ubuntu-.deb-orange)](https://github.com/DDynamic-Evolution/MikoStorm/releases/download/v1.15.23/mikostorm_1.15.23_amd64.deb)
 
 <p align="center">
   <img src="images/mikostorm.png" width="512" height="512">
