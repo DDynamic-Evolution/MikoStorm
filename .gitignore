@@ -146,3 +146,8 @@ README_mcp.md
 build_mikostorm.py
 build_pandaview.ps1
 __pycache__/
+
+# Debian packaging build artifacts
+debian/mikostorm/
+debian/*.debhelper.log
+debian/*.substvars
