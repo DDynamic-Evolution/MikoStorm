@@ -25,7 +25,7 @@ All installations are done with default settings (unless told explicitly) - if y
 > [!TIP]
 > If you don't own a copy of a commercial edition of Visual Studio 2022 (e.g. Professional), you might consider installing the [Community version](https://visualstudio.microsoft.com/free-developer-offers)
 
-### Command Prompt vs Powershell
+### Do NOT use Powershell
 - Make sure that you use the Windows Command Prompt / Terminal (cmd.exe) and not Powershell or it won't detect the Visual Studio build tools properly.
 
 ### Git
@@ -61,20 +61,6 @@ All installations are done with default settings (unless told explicitly) - if y
     `C:\Program Files (x86)\CMake\bin`
     For the 64bit version:
     `C:\Program Files\CMake\bin`
-
-### Cygwin
-
-- Download and install [Cygwin 64](http://cygwin.com/install.html) (64bit)
-  - Run the installer as Administrator (right click, "Run as administrator")
-  - Use default options (path, components etc.) *until* you get to the "Select Packages" screen
-  - Add additional packages:
-    - Devel/patch
-  - Use default options for everything else
-  - Make sure that the following directory was added to your path and that it is placed before "%SystemRoot%\system32" but after CMake path (in case you installed CMake in Cygwin):
-    `C:\Cygwin64\bin`
-
-> [!NOTE]
-> The Cygwin terminal is only needed for testing. All commands for actually building the viewer will be run from the Windows command shell.
 
 ### Python
 
