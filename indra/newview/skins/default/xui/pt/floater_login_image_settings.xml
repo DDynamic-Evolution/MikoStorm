@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="login_image_settings" title="Configurações da imagem de login">
+  <text name="description">
+    Selecione um arquivo de imagem local para exibir como fundo de login em vez da página web padrão. Deixe vazio para restaurar a página web padrão. Formatos suportados: JPG, PNG, BMP, TGA.
+  </text>
+  <text name="path_label">
+    Caminho da imagem de login:
+  </text>
+  <button name="set_path_btn" label="Procurar..."/>
+  <button name="clear_path_btn" label="Limpar"/>
+</floater>

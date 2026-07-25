@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_dir_events" label="Events">
+  <string name="searching_text">
+    Searching...
+  </string>
+  <string name="not_found_text">
+    None found.
+  </string>
+  <string name="found_text">
+    [COUNT] found.
+  </string>
+  <text name="find">
+    Enter search terms:
+  </text>
+  <combo_box name="category_combo">
+    <combo_item name="All" label="Any Category"/>
+    <combo_item name="Discussion" label="Discussion"/>
+    <combo_item name="Sports" label="Sports"/>
+    <combo_item name="LiveMusic" label="Live Music"/>
+    <combo_item name="LiveDJ" label="Live DJ"/>
+    <combo_item name="Commercial" label="Commercial"/>
+    <combo_item name="Nightlife/Entertainment" label="Nightlife/Entertainment"/>
+    <combo_item name="Games/Contests" label="Games/Contests"/>
+    <combo_item name="Pageants" label="Pageants"/>
+    <combo_item name="Education" label="Education"/>
+    <combo_item name="ArtsandCulture" label="Arts and Culture"/>
+    <combo_item name="Charity/SupportGroups" label="Charity/Support Groups"/>
+    <combo_item name="Miscellaneous" label="Miscellaneous"/>
+  </combo_box>
+  <check_box name="incpg" label=""/>
+  <icon name="rating_icon_general" tool_tip="General"/>
+  <check_box name="incmature" label=""/>
+  <icon name="rating_icon_moderate" tool_tip="Moderate"/>
+  <check_box name="incadult" label=""/>
+  <icon name="rating_icon_adult" tool_tip="Adult"/>
+  <scroll_list name="results">
+    <column name="icon" label=""/>
+    <column name="type" label=""/>
+    <column name="name" label="Имя"/>
+    <column name="date" label="Time (PT)"/>
+    <column name="event_id" label=""/>
+    <column name="time" label="Время"/>
+  </scroll_list>
+  <button name="prev_btn" tool_tip="Previous page"/>
+  <button name="next_btn" tool_tip="Next page"/>
+  <radio_group name="date_mode">
+    <radio_item name="current" label="In-Progress & Upcoming"/>
+    <radio_item name="date" label="Дата"/>
+  </radio_group>
+  <button name="back_btn" label="<<" tool_tip="Go back a day"/>
+  <text name="date_text">
+    6/6
+  </text>
+  <button name="forward_btn" label=">>" tool_tip="Go forward a day"/>
+</panel>

@@ -2794,6 +2794,22 @@
         <menu_item_separator/>
 
         <menu_item_call
+         label="Mikostorm Group"
+         name="Mikostorm Group">
+            <menu_item_call.on_click
+             function="OpenSLURL"
+             parameter="secondlife:///app/group/652d0bfc-9190-6a16-9c7d-c5d590c48e49/about" />
+        </menu_item_call>
+
+        <menu_item_call
+         label="Mikostorm Github"
+         name="Mikostorm Github">
+            <menu_item_call.on_click
+             function="OpenExternalURL"
+             parameter="https://github.com/DDynamic-Evolution/MikoStorm" />
+        </menu_item_call>
+
+        <menu_item_call
          label="About [APP_NAME]"
          name="About Second Life">
             <menu_item_call.on_click

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="controls" label="Controles">
+  <combo_box name="key_mode">
+    <combo_box.item name="third_person" label="When in third person"/>
+    <combo_box.item name="first_person" label="When in first person mode (Mouselook)"/>
+    <combo_box.item name="edit_avatar" label="When editing avatar"/>
+    <combo_box.item name="sitting" label="When sitting"/>
+  </combo_box>
+  <button name="restore_defaults" label="Restore Defaults" tool_tip="Restores default values for all control modes."/>
+</panel>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="env_edit_extdaycycle" title="Edit Day Cycle">
+  <string name="title_new">
+    Create a New Day Cycle
+  </string>
+  <string name="title_edit">
+    Edit Day Cycle
+  </string>
+  <string name="hint_new">
+    Name your day cycle, adjust the controls to create it, and click "Save".
+  </string>
+  <string name="hint_edit">
+    To edit your day cycle, adjust the controls below and click "Save".
+  </string>
+  <string name="time_label">
+    ([HH]:[MM])
+  </string>
+  <string name="sky_track_label">
+    Sky [ALT]
+  </string>
+  <string name="sky_label">
+    Sky
+  </string>
+  <string name="water_label">
+    Water
+  </string>
+  <string name="commit_parcel">
+    Apply To Parcel
+  </string>
+  <string name="commit_region">
+    Apply To Region
+  </string>
+  <layout_stack name="outer_stack">
+    <layout_panel name="name_and_import">
+      <text name="label">
+        Day Cycle Name:
+      </text>
+      <button name="btn_import" label="Import" tool_tip="Import legacy settings from disk."/>
+    </layout_panel>
+    <layout_panel name="content">
+      <layout_stack name="content_stack">
+        <layout_panel name="timeline_track_selection">
+          <panel name="timeline_layers">
+            <button name="sky4_track" label="Sky 4"/>
+            <button name="sky3_track" label="Sky 3"/>
+            <button name="sky2_track" label="Sky 2"/>
+            <button name="sky1_track" label="Ground Level"/>
+            <button name="water_track" label="Water"/>
+          </panel>
+          <panel name="timeline">
+            <layout_stack name="track_options_ls">
+              <layout_panel name="track_options_lp">
+                <button name="copy_track" label="Clone Track From"/>
+                <button name="load_track" label="Load Track From"/>
+                <button name="clear_track" label="Clear Track"/>
+              </layout_panel>
+              <layout_panel name="track_progress_lp">
+                <layout_stack name="progress_control">
+                  <layout_panel name="skip_back">
+                    <button name="skip_back_btn" tool_tip="Step back"/>
+                  </layout_panel>
+                  <layout_panel name="skip_forward">
+                    <button name="skip_forward_btn" tool_tip="Step forward"/>
+                  </layout_panel>
+                </layout_stack>
+              </layout_panel>
+              <layout_panel name="frames_lp">
+                <button name="add_frame" label="Add [FRAME]"/>
+                <button name="btn_load_frame" label="Load [FRAME]"/>
+                <button name="delete_frame" label="Delete [FRAME]"/>
+              </layout_panel>
+            </layout_stack>
+          </panel>
+        </layout_panel>
+        <layout_panel name="frame_edit_controls">
+          <text name="icn_lock_edit">
+            Select a key frame from the timeline above to edit settings.
+          </text>
+        </layout_panel>
+        <layout_panel name="frame_settings_water">
+          <tab_container name="water_tabs">
+            <panel name="water_panel" label="Water"/>
+          </tab_container>
+        </layout_panel>
+        <layout_panel name="frame_settings_sky">
+          <tab_container name="sky_tabs">
+            <panel name="atmosphere_panel" label="Atmosphere & Lighting"/>
+            <panel name="clouds_panel" label="Clouds"/>
+            <panel name="moon_panel" label="Sun & Moon"/>
+          </tab_container>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+    <layout_panel name="buttons">
+      <button name="save_btn" label="Gem"/>
+      <button name="btn_flyout" label=""/>
+      <button name="cancel_btn" label="Annuller"/>
+    </layout_panel>
+  </layout_stack>
+</floater>

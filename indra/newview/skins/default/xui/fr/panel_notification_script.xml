@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="notification_panel" label="notification_panel">
+  <panel name="info_panel" label="info_panel"/>
+  <panel name="control_panel" label="control_panel"/>
+</panel>

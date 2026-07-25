@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_local">
+  <text name="title">
+    Disk
+  </text>
+  <combo_box name="local_size_combo" label="Opløsning">
+    <combo_box.item name="CurrentWindow" label="Aktuelt vindue"/>
+    <combo_box.item name="320x240" label="320x240"/>
+    <combo_box.item name="640x480" label="640x480"/>
+    <combo_box.item name="800x600" label="800x600"/>
+    <combo_box.item name="1024x768" label="1024x768"/>
+    <combo_box.item name="1280x1024" label="1280x1024"/>
+    <combo_box.item name="1600x1200" label="1600x1200"/>
+    <combo_box.item name="1080x2340" label="1080x2340 (9:19.5)"/>
+    <combo_box.item name="1080x2400" label="1080x2400 (9:20)"/>
+    <combo_box.item name="1080x2520" label="1080x2520 (9:21)"/>
+    <combo_box.item name="2340x1080" label="2340x1080 (19.5:9)"/>
+    <combo_box.item name="2400x1080" label="2400x1080 (20:9)"/>
+    <combo_box.item name="2520x1080" label="2520x1080 (21:9)"/>
+    <combo_box.item name="Custom" label="Brugerdefineret"/>
+  </combo_box>
+  <spinner name="local_snapshot_width" label="Width x Height"/>
+  <spinner name="local_snapshot_height" label=""/>
+  <check_box name="local_keep_aspect_check" label="Constrain proportions"/>
+  <text name="local_format_label">
+    Format:
+  </text>
+  <combo_box name="local_format_combo" label="Format">
+    <combo_box.item name="PNG" label="PNG (Lossless)"/>
+    <combo_box.item name="JPEG" label="JPEG"/>
+    <combo_box.item name="BMP" label="BMP (Lossless)"/>
+  </combo_box>
+  <slider name="image_quality_slider" label="Kvalitet:"/>
+  <check_box name="local_remember_location_sessions" label="Persist location and filename"/>
+  <check_box name="local_use_timestamp" label="Include date/time in filename"/>
+  <button name="cancel_btn" label="▶ Selection"/>
+  <flyout_button name="save_btn" label="Gem" tool_tip="Save image to a file">
+    <flyout_button.item name="save_item" label="Gem"/>
+    <flyout_button.item name="saveas_item" label="Save As..."/>
+  </flyout_button>
+</panel>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents >
+  <rows name="media_actions">
+    <columns name="lst_action" label="Sound and Media"/>
+  </rows>
+</contents>

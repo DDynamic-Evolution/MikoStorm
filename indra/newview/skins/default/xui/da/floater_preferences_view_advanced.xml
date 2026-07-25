@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floaterpreferencesviewadvanced" title="Camera Position">
+  <text name="camera_offset_lbl">
+    Camera offset:
+  </text>
+  <spinner name="camera_x" label="X"/>
+  <spinner name="camera_y" label="Y"/>
+  <spinner name="camera_z" label="Z"/>
+  <text name="focus_offset_lbl">
+    Focus offset:
+  </text>
+  <spinner name="focus_x" label="X"/>
+  <spinner name="focus_y" label="Y"/>
+  <spinner name="focus_z" label="Z"/>
+  <text name="offset_scale_lbl">
+    Camera offset scale:
+  </text>
+  <button name="save_preset_btn" label="Save as preset..."/>
+  <button name="close_btn" label="Luk"/>
+</floater>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_wearable_favorites">
+  <menu_item_check name="sort_by_name" label="Sort by name..."/>
+  <menu_item_check name="sort_by_most_recent" label="Sort by most recent..."/>
+  <menu_item_check name="sort_by_type_name" label="Sort by type name..."/>
+</toggleable_menu>

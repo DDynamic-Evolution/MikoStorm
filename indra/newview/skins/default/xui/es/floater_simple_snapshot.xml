@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="simple_snapshot" title="Vista previa del elemento">
+  <button name="new_snapshot_btn" label="Tomar foto"/>
+  <button name="save_btn" label="Guardar"/>
+  <button name="cancel_btn" label="Cancelar"/>
+</floater>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autoadjustments">
+  <text name="back_lbl">
+    Wstecz
+  </text>
+  <text name="settings_title">
+    Automatyczne ustawienia
+  </text>
+  <button name="defaults_btn" label="Resetuj do zalecanych ustawień"/>
+  <text name="targetfps_desc">
+    Pożądana liczba klatek
+  </text>
+  <spinner name="target_fps" tool_tip="Program spróbuje osiągnąć to dostosowując ustawienia graficzne."/>
+  <text name="display_desc">
+    Twój ekran obsługuje do [FPS_LIMIT] fps.
+  </text>
+  <text name="settings_desc">
+    Ustawienia wpływają na
+  </text>
+  <combo_box name="TuningFPSStrategy">
+    <combo_box.item name="av_only" label="Tylko awatary"/>
+    <combo_box.item name="av_and_scene" label="Awatary i świat"/>
+    <combo_box.item name="scene_only" label="Tylko świat"/>
+  </combo_box>
+  <button name="start_autotune" label="Dostosuj teraz" tool_tip="Program spróbuje dostosować ustawienia aby osiągnąć docelowy FPS a następnie się zatrzymać."/>
+  <button name="stop_autotune" label="Anuluj" tool_tip="Zatrzymaj dostosowywanie ustawień."/>
+  <text name="wip_desc">
+    Pracuję...
+  </text>
+  <check_box name="AutoTuneContinuous" label="Adjust continuously" tool_tip="Program będzie ciągle dostosowywał ustawienia aby osiągnąć docelowy FPS aż do zatrzymania, nawet przy zamkniętym oknie."/>
+  <radio_group name="autotune_lock_type">
+    <radio_item name="one_session_lock" label="Tylko ta sesja logowania"/>
+    <radio_item name="next_session_lock" label="Przyszłe sesje logowania"/>
+  </radio_group>
+  <check_box name="vsync" label="Włącz VSync" tool_tip="Włącz synchronizację pionową aby zmniejszyć rwanie i zacinanie obrazu."/>
+  <text name="vsync_desc">
+    Dopasowuje częstotliwość odświeżania monitora do liczby klatek.
+  </text>
+  <text name="vsync_desc_limit">
+    Uwaga: Włączenie VSync ogranicza liczbę klatek do [FPS_LIMIT] fps.
+  </text>
+  <text name="simplify_dist_desc">
+    Zmniejszenie szczegółowości dalekich avatarów poprawi prędkość graficzną.
+  </text>
+  <check_box name="AutoTuneImpostorByDistEnabled" label="Uprość awatary powyżej" tool_tip="Gdy włączone,program dostosuje ustawienie MaxNonImpostors aby ograniczyć w pełni renderowane awatary do tych w określonym promieniu."/>
+  <text name="dist_meters">
+    metrów
+  </text>
+  <text name="dist_limits_desc">
+    Wybierz zakres odległości który automatyczne ustawienia będą wpływać.
+  </text>
+  <text name="min_dist_lbl">
+    Minimalna odległość
+  </text>
+  <text name="pref_dist_lbl">
+    Maksymalna odległość
+  </text>
+</panel>

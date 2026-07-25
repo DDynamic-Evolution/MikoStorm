@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="contact_sets_panel">
+  <panel.string name="empty_list">
+    This contact set is empty.
+  </panel.string>
+  <panel.string name="no_sets">
+    No sets
+  </panel.string>
+  <panel.string name="all_sets">
+    All sets
+  </panel.string>
+  <panel.string name="pseudonyms">
+    Aliases
+  </panel.string>
+  <panel.string name="non_friends">
+    Non-Friends
+  </panel.string>
+  <button name="config_btn" tool_tip="Configure selected contact set"/>
+  <button name="add_set_btn" tool_tip="Add a new contact set"/>
+  <button name="remove_set_btn" tool_tip="Remove selected contact set"/>
+  <filter_editor name="contact_sets_filter_input" label="Filter People"/>
+  <button name="add_btn" label="Add..." tool_tip="Add an avatar to the current contact set"/>
+  <button name="move_btn" label="Move..." tool_tip="Move this avatar to another contact set"/>
+  <button name="remove_btn" label="Remove..." tool_tip="Remove this avatar from the current contact set"/>
+  <button name="profile_btn" label="Profile..." tool_tip="Open this avatar's profile"/>
+  <button name="start_im_btn" label="IM..." tool_tip="Begin an instant message conversation"/>
+  <button name="offer_teleport_btn" label="Teleport..." tool_tip="Offer a teleport to your current location"/>
+  <button name="set_pseudonym_btn" label="Set Alias..." tool_tip="Give this avatar a pseudonym"/>
+  <button name="remove_pseudonym_btn" label="Rem Alias..." tool_tip="Remove an avatar's pseudonym"/>
+  <button name="remove_displayname_btn" label="Rem DN..." tool_tip="Remove an avatar's display name"/>
+  <text name="member_count">
+    Members: [COUNT]
+  </text>
+</panel>

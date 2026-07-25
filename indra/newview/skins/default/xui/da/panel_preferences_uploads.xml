@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="uploads" label="Uploads">
+  <text name="title">
+    Current destination folders for uploads
+  </text>
+  <text name="title_models">
+    Images
+  </text>
+  <text name="title_sounds">
+    Sounds
+  </text>
+  <text name="title_animation">
+    Animations
+  </text>
+  <text name="title_model">
+    Models
+  </text>
+  <text name="title_pbr">
+    PBR Materials
+  </text>
+  <text name="title_scripts">
+    Scripts
+  </text>
+  <text name="upload_help">
+    To change a destination folder, right click on it in inventory and choose
+ "Use as default for"
+  </text>
+</panel>

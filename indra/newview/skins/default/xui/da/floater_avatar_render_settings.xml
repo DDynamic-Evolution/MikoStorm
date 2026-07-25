@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_avatar_render_settings" title="Avatar Display Exceptions">
+  <name_list name="render_settings_list">
+    <name_list.columns name="name" label="Navn"/>
+    <name_list.columns name="setting" label="Full detail"/>
+  </name_list>
+  <panel name="add_subpanel">
+    <menu_button name="plus_btn" label="Add someone..." tool_tip="Actions on selected person"/>
+  </panel>
+</floater>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_complexity">
+  <text name="back_lbl">
+    Atrás
+  </text>
+  <text name="attachments_title">
+    Complejidad de accesorios de avatar
+  </text>
+  <text name="tot_att_count">
+    Total: 50 (120000.10μs)
+  </text>
+  <text name="attachments_desc1">
+    Los accesorios hacen su avatar más complejo y más lento de renderizar.
+  </text>
+  <text name="attachments_desc2">
+    Esta pantalla le permite ver los accesorios de su propio avatar.
+  </text>
+  <text name="attachments_desc3">
+    Puede eliminar sus propios accesorios rápida y fácilmente pulsando la «X».
+  </text>
+  <name_list name="obj_list">
+    <name_list.columns name="art_visual" label=""/>
+    <name_list.columns name="art_value" label="Tiempo (μs)" tool_tip="Tiempo de renderizado de este accesorio (microsegundos)"/>
+    <name_list.columns name="complex_value" label="ARC" tool_tip="Complejidad del elemento (ARC)"/>
+    <name_list.columns name="name" label="Nombre del accesorio" tool_tip="Haga clic en la «X» para desadjuntar"/>
+  </name_list>
+</panel>

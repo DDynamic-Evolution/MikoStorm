@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="Improve Graphics Speed">
+  <floater.string name="frame_stats">
+    Frame: [TOT_FRAME_TIME]ms - Scenery:[SCENERY_FRAME_PCT]% Avatars:[AV_FRAME_PCT]% UI:[UI_FRAME_PCT]% HUDs:[HUDS_FRAME_PCT]% Swap:[SWAP_FRAME_PCT]% Tasks:[IDLE_FRAME_PCT]%
+  </floater.string>
+  <floater.string name="limit_fps">
+    User Limited @ [FPSCAP] FPS
+  </floater.string>
+  <floater.string name="tuning_fps">
+    Target [FPSTARGET] FPS
+  </floater.string>
+  <floater.string name="av_frame_pct">
+    [AV_FRAME_PCT]%
+  </floater.string>
+  <floater.string name="huds_frame_pct">
+    [HUDS_FRAME_PCT]%
+  </floater.string>
+  <floater.string name="focus_fps">
+    In Background
+  </floater.string>
+  <floater.string name="info_waitforit">
+    Allow 5-10 seconds for changes to take effect.
+  </floater.string>
+  <floater.string name="info_frozen">
+    Stats pause when FPS is limited or in background.
+  </floater.string>
+  <floater.string name="tot_av_template">
+    Total: [TOT_AV] ([TOT_AV_TIME]μs)
+  </floater.string>
+  <floater.string name="tot_att_template">
+    Total: [TOT_ATT] ([TOT_ATT_TIME]μs)
+  </floater.string>
+  <panel name="panel_top">
+    <panel name="fps_subpanel">
+      <text name="fps_lbl">
+        cuadros por segundo
+      </text>
+      <text name="fps_warning">
+        User Limited @ 000 FPS
+      </text>
+      <text name="fps_desc1_lbl">
+        Stats pause when FPS is limited or in background.
+      </text>
+      <text name="frame_breakdown">
+        [--------------------Frame breakdown will appear here.---------------------]
+      </text>
+    </panel>
+    <panel name="target_subpanel">
+      <text name="settings_lbl" tool_tip="Automatically adjust settings to maintain FPS. Set the Target to the desired frame rate and the viewer will attempt to match this by dynamically altering your settings.">
+        Auto Tune:
+      </text>
+      <text name="targetfps_desc">
+        Target Frame Rate (fps)
+      </text>
+      <spinner name="target_fps" tool_tip="Target FPS - The desired FPS level. The viewer will attempt to achieve this by adjusting your graphics settings."/>
+      <button name="AutoTuneFPS" label="Iniciar" tool_tip="The viewer will attempt to adjust settings to meet the target FPS."/>
+      <check_box name="AutoTuneContinuous" label="Continuous" tool_tip="The viewer will continually adapt the settings to meet the target FPS until stopped even with the floater closed. When disabled clicking the Auto Tune button will adjust for the current settings then stop."/>
+      <button name="PrefSaveButton" tool_tip="Save the current settings to a default for future use."/>
+      <button name="PrefLoadButton" tool_tip="Load an existing preset."/>
+      <button name="Defaults" tool_tip="Reload default graphics settings for your hardware."/>
+      <text name="settings_desc">
+        Tuning Strategy
+      </text>
+      <combo_box name="FSTuningFPSStrategy">
+        <combo_box.item name="av_only" label="Solo avatares"/>
+        <combo_box.item name="av_and_scene" label="Avatars and Scene"/>
+      </combo_box>
+      <button name="target_btn" tool_tip="Change the Tuning Strategy behavior."/>
+    </panel>
+  </panel>
+  <panel name="panel_performance_main">
+    <panel name="settings_subpanel">
+      <text name="settings_lbl">
+        Configuración gráfica
+      </text>
+      <text name="settings_desc">
+        Elija configuración de distancia, agua, iluminación y más.
+      </text>
+    </panel>
+    <panel name="nearby_subpanel">
+      <text name="avatars_nearby_lbl">
+        Avatares cercanos
+      </text>
+      <text name="avatars_nearby_desc">
+        Gestione qué avatares cercanos se muestran completamente.
+      </text>
+      <text name="avatars_frme_pct_lbl">
+        Time spent
+drawing 
+avatars
+      </text>
+      <text name="av_frame_stats">
+        00%
+      </text>
+    </panel>
+    <panel name="complexity_subpanel">
+      <text name="complexity_lbl">
+        Complejidad de tu avatar
+      </text>
+      <text name="complexity_info">
+        Be a good citizen. Manage the impact of your avatar
+      </text>
+    </panel>
+    <panel name="huds_subpanel">
+      <text name="huds_lbl">
+        Tus HUDs activos
+      </text>
+      <text name="huds_desc">
+        Removing unnecessary HUDs may improve speed.
+      </text>
+      <text name="huds_frme_pct_lbl">
+        Time spent
+drawing 
+HUDs
+      </text>
+      <text name="huds_frame_stats">
+        00%
+      </text>
+    </panel>
+  </panel>
+</floater>

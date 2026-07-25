@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="particle_editor_floater" title="Particle Editor">
+  <panel name="particle_editor_panel">
+    <panel name="top_left_panel">
+      <text name="Pattern_Label">
+        Pattern:
+      </text>
+      <combo_box name="pattern_type_combo">
+        <combo_box.item name="explode" label="Explode"/>
+        <combo_box.item name="angle" label="Angle"/>
+        <combo_box.item name="angle_cone" label="Angle Cone"/>
+        <combo_box.item name="angle_cone_empty" label="Angle Cone Empty"/>
+        <combo_box.item name="drop" label="Slip"/>
+      </combo_box>
+      <text name="Texture_Label">
+        Texture:
+      </text>
+      <text name="Burst_Rate_Label">
+        Burst Rate:
+      </text>
+      <text name="Burst_Count_Label">
+        Burst Count:
+      </text>
+      <text name="Burst_Radius_Label">
+        Burst Radius:
+      </text>
+      <text name="Angle_Begin_Label">
+        Angle Begin:
+      </text>
+      <text name="Burst_Speed_Min_Label">
+        Burst Speed Min:
+      </text>
+      <text name="Angle_End_Label">
+        Angle End:
+      </text>
+      <text name="Burst_Speed_Max_Label">
+        Burst Speed Max:
+      </text>
+      <text name="Source_Max_Age_Label">
+        Source Max Age:
+      </text>
+      <text name="Start_Alpha_Label">
+        Start Alpha:
+      </text>
+      <text name="Particles_Max_Age_Label">
+        Particles Max Age:
+      </text>
+      <text name="End_Alpha_Label">
+        End Alpha:
+      </text>
+      <text name="Start_Glow_Label">
+        Start Glow:
+      </text>
+      <combo_box name="blend_func_src_combo">
+        <combo_box.item name="blend_one" label="Blend One"/>
+        <combo_box.item name="blend_zero" label="Blend Zero"/>
+        <combo_box.item name="blend_dest_color" label="Blend Dest Color"/>
+        <combo_box.item name="blend_src_color" label="Blend Src Color"/>
+        <combo_box.item name="blend_one_minus_dest_color" label="Blend 1 - Dest Color"/>
+        <combo_box.item name="blend_one_minus_src_color" label="Blend 1 - Src Color"/>
+        <combo_box.item name="blend_src_alpha" label="Blend Src Alpha"/>
+        <combo_box.item name="blend_one_minus_src_alpha" label="Blend 1 - Src Alpha"/>
+      </combo_box>
+      <text name="End_Glow_Label">
+        End Glow:
+      </text>
+      <combo_box name="blend_func_dest_combo">
+        <combo_box.item name="blend_one" label="Blend One"/>
+        <combo_box.item name="blend_zero" label="Blend Zero"/>
+        <combo_box.item name="blend_dest_color" label="Blend Dest Color"/>
+        <combo_box.item name="blend_src_color" label="Blend Src Color"/>
+        <combo_box.item name="blend_one_minus_dest_color" label="Blend 1 - Dest Color"/>
+        <combo_box.item name="blend_one_minus_src_color" label="Blend 1 - Src Color"/>
+        <combo_box.item name="blend_src_alpha" label="Blend Src Alpha"/>
+        <combo_box.item name="blend_one_minus_src_alpha" label="Blend 1 - Src Alpha"/>
+      </combo_box>
+      <text name="Scale_Start_Label">
+        Scale Start:
+      </text>
+      <text name="End_Label">
+        End:
+      </text>
+    </panel>
+    <panel name="top_right_panel">
+      <check_box name="bounce_checkbox" label="Bounce"/>
+      <check_box name="emissive_checkbox" label="Emissive"/>
+      <check_box name="follow_source_checkbox" label="Follow Source"/>
+      <check_box name="follow_velocity_checkbox" label="Follow Velocity"/>
+      <check_box name="interpolate_color_checkbox" label="Interpolate Color"/>
+      <check_box name="interpolate_scale_checkbox" label="Interpolate Scale"/>
+      <check_box name="target_position_checkbox" label="Target Position"/>
+      <check_box name="target_linear_checkbox" label="Target Linear"/>
+      <check_box name="wind_checkbox" label="Wind"/>
+      <check_box name="ribbon_checkbox" label="Ribbon"/>
+      <button name="copy_button" label="Kopier" tool_tip="Copies the particle system's parameter as LSL script to the clipboard."/>
+      <button name="inject_button" label="Inject" tool_tip="Inject this particle system into the selected object."/>
+    </panel>
+    <panel name="bottom_left_panel">
+      <text name="Target_Key_Label">
+        Target Key:
+      </text>
+      <button name="clear_target_button" tool_tip="Clear target object or avatar."/>
+      <button name="pick_target_button" tool_tip="Click here to select the particle target object or avatar."/>
+      <text name="Acceleration_Label">
+        Acceleration:
+      </text>
+      <text name="Omega_Label">
+        Omega:
+      </text>
+    </panel>
+    <panel name="bottom_right_panel">
+      <color_swatch name="start_color_selector" label="Start Color"/>
+      <color_swatch name="end_color_selector" label="End Color"/>
+    </panel>
+  </panel>
+</floater>

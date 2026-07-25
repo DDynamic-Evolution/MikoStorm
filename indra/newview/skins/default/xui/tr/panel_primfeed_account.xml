@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_primfeed_account">
+  <text name="connected_as_label">
+    Not connected to Primfeed.
+  </text>
+  <text name="primfeed_account_plan_label">
+    Account type:
+  </text>
+  <panel name="panel_buttons">
+    <button name="connect_btn" label="Connect..."/>
+    <button name="disconnect_btn" label="Bağlantıyı kes"/>
+    <text name="account_learn_more_label">
+      [https://docs.primfeed.com Learn more about Primfeed]
+    </text>
+  </panel>
+</panel>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Experiences" label="Experiences">
+  <panel.string name="trusted_estate_text">
+    Any Experience may be Key.
+
+Key Experiences have permission to run on this estate.
+
+Additionally, if the estate does not allow public access, Residents participating in any Key Experience may enter the estate and can remain as long as they are in a Key Experience.
+  </panel.string>
+  <panel.string name="allowed_estate_text">
+    Only Experiences that are Land-Scope may be Allowed.
+
+Allowed Experiences have permission to run on this estate.
+  </panel.string>
+  <panel.string name="blocked_estate_text">
+    Only Grid-Scope Experiences may be Blocked.
+      
+Blocked Experiences may not run on this estate.
+  </panel.string>
+  <panel.string name="estate_caption">
+    Changes to settings on this tab will affect all regions in the estate.
+  </panel.string>
+  <panel.string name="allowed_parcel_text">
+    Only Experiences that are Land-Scope may be Allowed.
+      
+Allowed Experiences have permission to run on this parcel if they are not Blocked by the estate.
+  </panel.string>
+  <panel.string name="blocked_parcel_text">
+    Any Resident Experience may be Blocked.
+      
+Blocked Experiences may not run on this parcel.
+  </panel.string>
+</panel>

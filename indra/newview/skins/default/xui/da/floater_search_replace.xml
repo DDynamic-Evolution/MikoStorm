@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="search replace" title="Search / Replace">
+  <check_box name="case_text" label="Case Insensitive"/>
+  <check_box name="find_previous" label="Search Up"/>
+  <button name="search_btn" label="Søg"/>
+  <button name="replace_btn" label="Replace"/>
+  <button name="replace_all_btn" label="Replace All"/>
+  <text name="txt">
+    Søg
+  </text>
+  <text name="txt2">
+    Replace
+  </text>
+</floater>

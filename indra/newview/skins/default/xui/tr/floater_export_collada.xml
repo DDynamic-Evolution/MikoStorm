@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_export_collada" title="Save as Collada...">
+  <floater.string name="texture_progress">
+    Save [OBJECT] Collada: Saving textures ([COUNT] remaining)
+  </floater.string>
+  <floater.string name="floater_title">
+    Save [OBJECT] as Collada...
+  </floater.string>
+  <layout_stack name="resizing_stack">
+    <layout_panel name="control_panel">
+      <text name="ObjectInfoText">
+        Object Info
+      </text>
+      <text name="NameText">
+        Name: [NAME]
+      </text>
+      <text name="exportable_prims">
+        Exportable prims: [COUNT]/[TOTAL]
+      </text>
+      <text name="exportable_textures">
+        Exportable textures: [COUNT]/[TOTAL]
+      </text>
+      <text name="OptionsText">
+        Options:
+      </text>
+      <check_box name="export_textures_check" label="Save textures"/>
+      <check_box name="consolidate_check" label="Consolidate textures"/>
+      <check_box name="skip_transparent_check" label="Skip transparent"/>
+      <check_box name="texture_params_check" label="Apply texture params"/>
+      <check_box name="single_uv_map_check" label="Single UV Map"/>
+      <text name="TextureFormatText">
+        Texture Format:
+      </text>
+      <combo_box name="texture_type_combo">
+        <combo_box.item name="tga" label="TARGA"/>
+        <combo_box.item name="png" label="PNG"/>
+        <combo_box.item name="j2c" label="JPEG2000"/>
+      </combo_box>
+      <button name="export_btn" label="Save as..."/>
+    </layout_panel>
+  </layout_stack>
+</floater>

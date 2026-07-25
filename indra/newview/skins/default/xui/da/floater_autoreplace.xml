@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="autoreplace_floater" title="Auto-Replace Settings">
+  <check_box name="autoreplace_enable" label="Enable Auto-Replace" tool_tip="As you enter chat text, replace any of the keywords entered with the corresponding replacement"/>
+  <button name="autoreplace_import_list" label="Import List..." tool_tip="Load a previously exported list from a file."/>
+  <button name="autoreplace_export_list" label="Export List..." tool_tip="Save the selected list to a file so you can share it."/>
+  <button name="autoreplace_new_list" label="New List..." tool_tip="Create a new list."/>
+  <button name="autoreplace_delete_list" label="Delete List" tool_tip="Delete the selected list."/>
+  <button name="autoreplace_list_up" tool_tip="Move this list up in priority."/>
+  <button name="autoreplace_list_down" tool_tip="Move this list down in priority."/>
+  <scroll_list name="autoreplace_list_replacements">
+    <scroll_list.columns name="keyword" label="Keyword"/>
+    <scroll_list.columns name="replacement" label="Replacement"/>
+  </scroll_list>
+  <button name="autoreplace_add_entry" label="Add..."/>
+  <button name="autoreplace_delete_entry" label="Fjern"/>
+  <text name="autoreplace_keyword_txt">
+    Keyword:
+  </text>
+  <text name="autoreplace_replacement_txt">
+    Replacement:
+  </text>
+  <button name="autoreplace_save_entry" label="Save Entry" tool_tip="Save this entry."/>
+  <button name="autoreplace_save_changes" label="Save Changes" tool_tip="Save all changes."/>
+  <button name="autoreplace_cancel" label="Annuller" tool_tip="Discard all changes."/>
+</floater>

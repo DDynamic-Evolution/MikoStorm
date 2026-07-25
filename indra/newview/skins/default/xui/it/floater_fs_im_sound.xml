@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="Imposta suono messaggio...">
+  <text name="label_name">
+    Imposta suono personalizzato per:
+  </text>
+  <text name="label_uuid">
+    Sound UUID:
+  </text>
+  <button name="preview_btn" label="Anteprima"/>
+  <button name="clear_btn" label="Pulisci"/>
+  <button name="ok_btn" label="OK"/>
+  <button name="cancel_btn" label="Annulla"/>
+</floater>

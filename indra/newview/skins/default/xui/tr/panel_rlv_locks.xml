@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_rlvLocks" label="Active RLV Locks">
+  <scroll_list name="lock_list">
+    <scroll_list.columns name="lock_type" label="Lock Type"/>
+    <scroll_list.columns name="lock_addrem" label="Method"/>
+    <scroll_list.columns name="lock_target" label="Target Object / Point"/>
+    <scroll_list.columns name="lock_origin" label="Lock Origin"/>
+  </scroll_list>
+  <panel name="bottom_panel" label="bottom_panel">
+    <button name="refresh_btn" label="Yenile"/>
+  </panel>
+</panel>

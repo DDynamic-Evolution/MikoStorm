@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="RegionSettings" label="Region Settings">
+  <spinner name="draw_distance" label="Default Draw Distance" tool_tip="Default regional draw distance"/>
+  <check_box name="force_draw_distance" label="Force Draw Distance" tool_tip="Enables locking draw distance for all agents in this region. NOTE: This may lag users with lower-performance computers. (Default: Off)"/>
+  <spinner name="max_drag_distance" label="Max Drag Distance" tool_tip="Maximum distance a prim can be dragged in this region"/>
+  <spinner name="max_prim_scale" label="Max Prim Scale" tool_tip="Maximum size a prim can be made in this region"/>
+  <spinner name="min_prim_scale" label="Min Prim Scale" tool_tip="Minimum size a prim can be made in this region"/>
+  <spinner name="max_phys_prim_scale" label="Max Physical Prim Scale" tool_tip="Maximum size a physical prim can be made in this region"/>
+  <spinner name="max_hollow_size" label="Max Hollow Size" tool_tip="Maximum size a hole can be made in a prim created in this region"/>
+  <spinner name="min_hole_size" label="Min Hole Size" tool_tip="Minimum size a hole can be made in a prim created in this region"/>
+  <spinner name="max_link_count" label="Max Link Count" tool_tip="Maximum amount of objects that can be linked in a non-physical linkset for this region"/>
+  <spinner name="max_link_count_phys" label="Max Link Count Phys" tool_tip="Maximum amount of objects that can be linked in a physical linkset for this region"/>
+  <spinner name="max_inventory_items_transfer" label="Max Inventory Items To Transfer" tool_tip="Number of objects that may be transfered between clients at once. -1 sets unlimited number of objects. (Default: -1)"/>
+  <spinner name="terrain_detail_scale" label="Terrain Detail Scale" tool_tip="Region terrain detail scale"/>
+  <spinner name="show_tags" label="Show Tags" tool_tip="Nametag mode for this region. (Show nametags = 2, Show nametags briefly = 1, Blocks nametags = 0)"/>
+  <spinner name="max_groups" label="Max Groups" tool_tip="Number of groups an agent can join. -1 sets unlimited number of groups. (Default: -1)"/>
+  <check_box name="render_water" label="Render Water" tool_tip="Enable water rendering in the region. (Default: On)"/>
+  <check_box name="allow_minimap" label="Allow Minimap" tool_tip="Allow the minimap in this region. (Default: On)"/>
+  <check_box name="allow_physical_prims" label="Allow Physical Prims" tool_tip="Allow physical prims to be created in this region. (Default: On)"/>
+  <check_box name="enforce_max_build" label="Enforce Max Build Constraints" tool_tip="Enforce maximum build constraints in this region. (Default: On)"/>
+  <check_box name="allow_parcel_windlight" label="Allow Parcel WindLight" tool_tip="Enable WindLight for parcels in this region. (Default: On)"/>
+  <button name="apply_ors_btn" label="Anvend"/>
+</panel>

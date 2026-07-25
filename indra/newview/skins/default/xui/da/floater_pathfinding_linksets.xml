@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_linksets" title="Region Objects">
+  <floater.string name="messaging_get_inprogress">
+    Querying for pathfinding linksets ...
+  </floater.string>
+  <floater.string name="messaging_get_error">
+    Error detected while querying for pathfinding linksets.
+  </floater.string>
+  <floater.string name="messaging_set_inprogress">
+    Modifying selected pathfinding linksets ...
+  </floater.string>
+  <floater.string name="messaging_set_error">
+    Error detected while modifying selected pathfinding linksets.
+  </floater.string>
+  <floater.string name="messaging_complete_none_found">
+    No pathfinding linksets.
+  </floater.string>
+  <floater.string name="messaging_complete_available">
+    [NUM_SELECTED] selected out of [NUM_TOTAL].
+  </floater.string>
+  <floater.string name="messaging_not_enabled">
+    This region is not enabled for pathfinding.
+  </floater.string>
+  <floater.string name="linkset_terrain_name">
+    [Terrain]
+  </floater.string>
+  <floater.string name="linkset_terrain_description">
+    --
+  </floater.string>
+  <floater.string name="linkset_terrain_owner">
+    --
+  </floater.string>
+  <floater.string name="linkset_terrain_scripted">
+    --
+  </floater.string>
+  <floater.string name="linkset_terrain_land_impact">
+    --
+  </floater.string>
+  <floater.string name="linkset_terrain_dist_from_you">
+    --
+  </floater.string>
+  <floater.string name="linkset_owner_loading">
+    [Loading]
+  </floater.string>
+  <floater.string name="linkset_owner_unknown">
+    [Unknown]
+  </floater.string>
+  <floater.string name="linkset_owner_group">
+    [group]
+  </floater.string>
+  <floater.string name="linkset_is_scripted">
+    Ja
+  </floater.string>
+  <floater.string name="linkset_is_not_scripted">
+    Nej
+  </floater.string>
+  <floater.string name="linkset_is_unknown_scripted">
+    Unknown
+  </floater.string>
+  <floater.string name="linkset_use_walkable">
+    Walkable
+  </floater.string>
+  <floater.string name="linkset_use_static_obstacle">
+    Static obstacle
+  </floater.string>
+  <floater.string name="linkset_use_dynamic_obstacle">
+    Movable obstacle
+  </floater.string>
+  <floater.string name="linkset_use_material_volume">
+    Material volume
+  </floater.string>
+  <floater.string name="linkset_use_exclusion_volume">
+    Exclusion volume
+  </floater.string>
+  <floater.string name="linkset_use_dynamic_phantom">
+    Movable phantom
+  </floater.string>
+  <floater.string name="linkset_is_terrain">
+    [unmodifiable]
+  </floater.string>
+  <floater.string name="linkset_is_restricted_state">
+    [restricted]
+  </floater.string>
+  <floater.string name="linkset_is_non_volume_state">
+    [concave]
+  </floater.string>
+  <floater.string name="linkset_is_restricted_non_volume_state">
+    [restricted,concave]
+  </floater.string>
+  <floater.string name="linkset_choose_use">
+    Choose linkset use...
+  </floater.string>
+  <panel name="pathfinding_linksets_main">
+    <text name="linksets_filter_label">
+      Filter by:
+    </text>
+    <text name="linksets_name_label">
+      Navn
+    </text>
+    <search_editor name="filter_by_name" label="Objects by Name"/>
+    <text name="linksets_desc_label">
+      Beskrivelse
+    </text>
+    <search_editor name="filter_by_description" label="Objects by Description"/>
+    <combo_box name="filter_by_linkset_use">
+      <combo_box.item name="filter_by_linkset_use_none" label="Filter by linkset use..."/>
+      <combo_box.item name="filter_by_linkset_use_walkable" label="Walkable"/>
+      <combo_box.item name="filter_by_linkset_use_static_obstacle" label="Static obstacle"/>
+      <combo_box.item name="filter_by_linkset_use_dynamic_obstacle" label="Movable obstacle"/>
+      <combo_box.item name="filter_by_linkset_use_material_volume" label="Material volume"/>
+      <combo_box.item name="filter_by_linkset_use_exclusion_volume" label="Exclusion volume"/>
+      <combo_box.item name="filter_by_linkset_use_dynamic_phantom" label="Movable phantom"/>
+    </combo_box>
+    <button name="apply_filters" label="Anvend"/>
+    <button name="clear_filters" label="Ryd"/>
+    <scroll_list name="objects_scroll_list">
+      <scroll_list.columns name="name" label="Name (root prim)"/>
+      <scroll_list.columns name="description" label="Description (root prim)"/>
+      <scroll_list.columns name="owner" label="Ejer"/>
+      <scroll_list.columns name="scripted" label="Scripted"/>
+      <scroll_list.columns name="land_impact" label="Impact"/>
+      <scroll_list.columns name="dist_from_you" label="Distance"/>
+      <scroll_list.columns name="linkset_use" label="Pathfinding use"/>
+      <scroll_list.columns name="a_percent" label="A %"/>
+      <scroll_list.columns name="b_percent" label="B %"/>
+      <scroll_list.columns name="c_percent" label="C %"/>
+      <scroll_list.columns name="d_percent" label="D %"/>
+    </scroll_list>
+    <text name="messaging_status">
+      Linksets:
+    </text>
+    <button name="refresh_objects_list" label="Refresh list"/>
+    <button name="select_all_objects" label="Select all"/>
+    <button name="select_none_objects" label="Select none"/>
+  </panel>
+  <panel name="pathfinding_linksets_actions">
+    <text name="linksets_actions_label">
+      Actions on selected
+    </text>
+    <check_box name="show_beacon" label="Show beacon"/>
+    <button name="take_objects" label="Tag"/>
+    <button name="take_copy_objects" label="Take copy"/>
+    <button name="teleport_me_to_object" label="Teleport me to it"/>
+    <button name="return_objects" label="Return"/>
+    <button name="delete_objects" label="Slet"/>
+  </panel>
+  <panel name="pathfinding_linksets_attributes">
+    <text name="linksets_attributes_label">
+      Edit pathfinding attributes
+    </text>
+    <text name="walkability_coefficients_label">
+      Walkability:
+    </text>
+    <line_editor name="edit_a_value" tool_tip="Walkability for characters of type A.  Example character type is humanoid."/>
+    <line_editor name="edit_b_value" tool_tip="Walkability for characters of type B.  Example character type is creature."/>
+    <line_editor name="edit_c_value" tool_tip="Walkability for characters of type C.  Example character type is mechanical."/>
+    <line_editor name="edit_d_value" tool_tip="Walkability for characters of type D.  Example character type is other."/>
+    <button name="apply_edit_values" label="Apply changes"/>
+    <text name="suggested_use_a_label">
+      (Humanoid)
+    </text>
+    <text name="suggested_use_b_label">
+      (Creature)
+    </text>
+    <text name="suggested_use_c_label">
+      (Mechanical)
+    </text>
+    <text name="suggested_use_d_label">
+      (Other)
+    </text>
+  </panel>
+</floater>

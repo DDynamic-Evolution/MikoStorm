@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="env_adjust_snapshot" title="Personal Lighting">
+  <string name="hdr_string">
+    HDR Scale:
+  </string>
+  <string name="brightness_string">
+    Brightness:
+  </string>
+  <string name="hdr_tooltip">
+    Intensity of lighting effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.
+  </string>
+  <layout_stack name="outer_stack">
+    <layout_panel name="env_controls">
+      <layout_stack name="settings_stack">
+        <layout_panel name="lp_1">
+          <text name="ambient_lbl">
+            Ambient:
+          </text>
+          <text name="blue_horizon_lbl">
+            Blue Horizon:
+          </text>
+          <text name="blue_density_lbl">
+            Blue Density:
+          </text>
+          <button name="btn_reset" label="Nulstil" tool_tip="Close and reset to Shared Environment"/>
+          <text name="sun_color_lbl">
+            Sun Color:
+          </text>
+          <text name="cloud_color_lbl">
+            Cloud Color:
+          </text>
+          <text name="cloud_map_label">
+            Cloud Image:
+          </text>
+          <text name="water_map_label">
+            Water Image:
+          </text>
+        </layout_panel>
+        <layout_panel name="lp_2">
+          <text name="haze_horizon_label">
+            Haze Horizon:
+          </text>
+          <text name="haze_density_label">
+            Haze Density:
+          </text>
+          <text name="cloud_coverage_label">
+            Cloud Coverage:
+          </text>
+          <text name="cloud_scale_label">
+            Cloud Scale:
+          </text>
+          <text name="reflection_probe_ambiance_label">
+            Reflection Probe Ambiance:
+          </text>
+          <slider name="probe_ambiance" tool_tip="Intensity of environment based indirect lighting. At zero HDR scale becomes Brightness"/>
+          <text name="scene_gamma_label">
+            Brightness:
+          </text>
+        </layout_panel>
+        <layout_panel name="lp_3">
+          <text name="label">
+            Sun:
+          </text>
+          <text name="sun_azimuth_label">
+            Azimuth:
+          </text>
+          <text name="sun_elevation_label">
+            Elevation:
+          </text>
+          <check_box name="sunbeacon" label="Show Beacon"/>
+          <text name="scale_label">
+            Scale:
+          </text>
+          <text name="glow_focus_label">
+            Glow Focus:
+          </text>
+          <text name="glow_size_label">
+            Glow Size:
+          </text>
+          <text name="star_brightness_label">
+            Star Brightness:
+          </text>
+        </layout_panel>
+        <layout_panel name="lp_4">
+          <text name="label">
+            Moon:
+          </text>
+          <text name="moon_azimuth_label">
+            Azimuth:
+          </text>
+          <text name="moon_elevation_label">
+            Elevation:
+          </text>
+          <check_box name="moonbeacon" label="Show Beacon"/>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</floater>

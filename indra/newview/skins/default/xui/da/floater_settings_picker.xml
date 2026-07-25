@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="settings picker" title="Select Settings">
+  <floater.string name="pick title">
+    Pick:
+  </floater.string>
+  <floater.string name="pick_track">
+    Select Track
+  </floater.string>
+  <floater.string name="pick_settings">
+    Select Settings
+  </floater.string>
+  <floater.string name="track_water">
+    Water
+  </floater.string>
+  <floater.string name="track_ground">
+    Ground
+  </floater.string>
+  <floater.string name="track_sky">
+    Sky[NUM]
+  </floater.string>
+  <layout_stack name="test_stack">
+    <layout_panel name="inv_list">
+      <filter_editor name="flt_inventory_search" label="Filter Settings"/>
+    </layout_panel>
+    <layout_panel name="temp">
+      <button name="btn_select" label="OK"/>
+      <button name="btn_cancel" label="Annuller"/>
+    </layout_panel>
+  </layout_stack>
+</floater>

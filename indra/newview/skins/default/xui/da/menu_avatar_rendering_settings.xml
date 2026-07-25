@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Settings">
+  <menu_item_check name="always_render" label="Always full detail"/>
+  <menu_item_check name="never_render" label="Never full detail"/>
+  <menu_item_check name="default" label="Remove from exceptions"/>
+</context_menu>

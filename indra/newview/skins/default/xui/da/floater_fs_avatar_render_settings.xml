@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatarrendersettings" title="Avatar Display Exceptions">
+  <floater.string name="av_render_never">
+    Never
+  </floater.string>
+  <floater.string name="av_render_always">
+    Always
+  </floater.string>
+  <filter_editor name="filter_input" label="Filter Avatars"/>
+  <menu_button name="plus_btn" tool_tip="Add new person to the list"/>
+  <name_list name="avatar_list">
+    <name_list.columns name="name" label="Navn"/>
+    <name_list.columns name="render_setting" label="Full detail"/>
+  </name_list>
+  <button name="close_btn" label="Luk"/>
+</floater>

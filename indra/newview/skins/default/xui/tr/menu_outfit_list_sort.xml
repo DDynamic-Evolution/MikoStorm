@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Sort Outfit">
+  <menu_item_call name="expand" label="Expand all folders"/>
+  <menu_item_call name="collapse" label="Collapse all folders"/>
+  <menu_item_check name="sort_favorites_to_top" label="Sort favorites to top"/>
+  <menu_item_check name="show_entire_outfit_in_search" label="Show entire outfit in search"/>
+</toggleable_menu>

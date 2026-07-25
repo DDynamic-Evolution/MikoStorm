@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="notification_panel" label="通知面板">
+  <panel name="info_panel" label="信息面板"/>
+  <panel name="control_panel" label="控制面板"/>
+</panel>

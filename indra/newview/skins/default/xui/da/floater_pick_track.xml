@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="track picker" title="Pick Track">
+  <layout_stack name="adjuster">
+    <layout_panel name="pnl_desc">
+      <text name="select_description">
+        Select source sky:
+      </text>
+    </layout_panel>
+    <layout_panel name="pnl_traks">
+      <radio_group name="track_selection">
+        <radio_item name="radio_sky4" label="Sky4 [ALT]"/>
+        <radio_item name="radio_sky3" label="Sky3 [ALT]"/>
+        <radio_item name="radio_sky2" label="Sky2 [ALT]"/>
+        <radio_item name="radio_sky1" label="Ground"/>
+      </radio_group>
+    </layout_panel>
+    <layout_panel name="pnl_ok_cancel">
+      <button name="btn_select" label="OK"/>
+      <button name="btn_cancel" label="Annuller"/>
+    </layout_panel>
+  </layout_stack>
+</floater>

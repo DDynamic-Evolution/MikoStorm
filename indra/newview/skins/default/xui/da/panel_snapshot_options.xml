@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_options">
+  <layout_stack name="option_buttons">
+    <layout_panel name="lp_download">
+      <button name="save_to_computer_btn" label="Save to Disk"/>
+    </layout_panel>
+    <layout_panel name="lp_inventory">
+      <button name="save_to_inventory_btn" label="Save to Inventory"/>
+    </layout_panel>
+    <layout_panel name="lp_profile">
+      <button name="save_to_profile_btn" label="Share to Profile Feed"/>
+    </layout_panel>
+    <layout_panel name="lp_primfeed">
+      <button name="send_to_primfeed_btn" label="Share to Primfeed"/>
+    </layout_panel>
+    <layout_panel name="lp_email">
+      <button name="save_to_email_btn" label="Send via E-mail"/>
+    </layout_panel>
+  </layout_stack>
+  <text name="fee_hint_lbl">
+    Fee is based on your subscription level. Higher levels are charged lower fees.
+  </text>
+</panel>

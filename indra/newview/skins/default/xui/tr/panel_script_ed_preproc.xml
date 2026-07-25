@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="script panel">
+  <panel.string name="loading">
+    Yükleniyor...
+  </panel.string>
+  <panel.string name="can_not_view">
+    You can not view or edit this script, since it has been set with restricted permissions. You need full permissions to view or edit a script inside an object.
+  </panel.string>
+  <panel.string name="public_objects_can_not_run">
+    Public Objects cannot run scripts
+  </panel.string>
+  <panel.string name="script_running">
+    Running
+  </panel.string>
+  <panel.string name="Title">
+    Script: [NAME]
+  </panel.string>
+  <menu_bar name="script_menu">
+    <menu name="File" label="File">
+      <menu_item_call name="Save" label="Kaydet"/>
+      <menu_item_call name="Revert All Changes" label="Revert All Changes"/>
+      <menu_item_call name="LoadFromFile" label="Load from file..."/>
+      <menu_item_call name="SaveToFile" label="Save to file..."/>
+      <menu_item_call name="ScriptPrefs" label="Script Editor Preferences..."/>
+    </menu>
+    <menu name="Edit" label="Düzenle">
+      <menu_item_call name="Undo" label="Geri al"/>
+      <menu_item_call name="Redo" label="Yinele"/>
+      <menu_item_call name="Cut" label="Kes"/>
+      <menu_item_call name="Copy" label="Kopyala"/>
+      <menu_item_call name="Paste" label="Yapıştır"/>
+      <menu_item_call name="Select All" label="Tümünü seç"/>
+      <menu_item_call name="Deselect" label="Deselect"/>
+      <menu_item_call name="Search / Replace..." label="Search / Replace..."/>
+      <menu_item_call name="Go to line..." label="Go to line..."/>
+    </menu>
+    <menu name="Help" label="Yardım">
+      <menu_item_call name="Help..." label="Help..."/>
+      <menu_item_call name="Keyword Help..." label="Keyword Help..."/>
+      <menu_item_call name="Script Library" label="Script Library..."/>
+    </menu>
+  </menu_bar>
+  <layout_stack name="script_editor_button_bar">
+    <layout_panel name="script_editor_buttons_panel">
+      <button name="save_btn" label="" tool_tip="Save script"/>
+      <button name="Edit_btn" label="" tool_tip="External Script Editor"/>
+      <button name="load_disk_btn" label="" tool_tip="Load a Script from your Hard Disk"/>
+      <button name="save_disk_btn" label="" tool_tip="Save a Script to your Hard Disk"/>
+      <button name="cut_btn" label="" tool_tip="Kes"/>
+      <button name="copy_btn" label="" tool_tip="Kopyala"/>
+      <button name="paste_btn" label="" tool_tip="Yapıştır"/>
+      <button name="undo_btn" label="" tool_tip="Geri al"/>
+      <button name="redo_btn" label="" tool_tip="Yinele"/>
+      <button name="search_btn" label="" tool_tip="Search/Replace"/>
+      <button name="prefs_btn" label="" tool_tip="Script Editor Preferences"/>
+    </layout_panel>
+  </layout_stack>
+  <tab_container name="Tabset">
+    <panel name="Script" label="Script">
+      <script_editor name="Script Editor">
+        Yükleniyor...
+      </script_editor>
+    </panel>
+    <panel name="Preprocessed" label="Preprocessed">
+      <fs_lsl_preproc_viewer name="Post Editor">
+        Yükleniyor...
+      </fs_lsl_preproc_viewer>
+    </panel>
+  </tab_container>
+  <combo_box name="Insert..." label="Insert..."/>
+  <button name="edit_btn_2" label="Edit..."/>
+  <button name="save_btn_2" label="Kaydet"/>
+</panel>

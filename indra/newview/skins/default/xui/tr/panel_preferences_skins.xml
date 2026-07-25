@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="skin_panel" label="Skins">
+  <text name="skin_textbox">
+    Skin:
+  </text>
+  <text name="skin_textbox1">
+    (Requires restart)
+  </text>
+  <text name="theme_textbox">
+    Colour scheme:
+  </text>
+  <text name="theme_textbox2">
+    (Requires restart)
+  </text>
+  <check_box name="reset_toolbar_settings" label="Reset toolbars to the skin's preferred layout when changing skins." tool_tip="When enabled, this option preserves the skin's designed toolbar button layout and will override your chosen button customisations when you change skins."/>
+  <check_box name="FSToolbarsResetOnModeChange" label="Reset toolbars to the login mode's preferred layout when changing login modes." tool_tip="When enabled, this option preserves the login mode's designed toolbar button layout and will override your chosen button customisations when you change login mode."/>
+  <check_box name="use_legacy_cursors" label="Use Viewer 1 style cursors"/>
+  <text name="theme_textbox3">
+    (Requires restart)
+  </text>
+</panel>

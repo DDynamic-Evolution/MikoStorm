@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Multi-Selected People Context Menu">
+  <menu_item_call name="Add Friends" label="Add Friends"/>
+  <menu_item_call name="Add to Set" label="Add to Set"/>
+  <menu_item_call name="Remove Friend" label="Remove Friends"/>
+  <menu_item_call name="IM" label="IM"/>
+  <menu_item_call name="Call" label="Call"/>
+  <menu name="MarkAvatar" label="Mark...">
+    <menu_item_call name="MarkRed" label="Red"/>
+    <menu_item_call name="MarkGreen" label="Green"/>
+    <menu_item_call name="MarkBlue" label="Blue"/>
+    <menu_item_call name="MarkPurple" label="Purple"/>
+    <menu_item_call name="MarkYellow" label="Yellow"/>
+    <menu_item_call name="Clear Mark" label="Clear Mark(s)"/>
+    <menu_item_call name="Clear Marks" label="Clear all Marks"/>
+  </menu>
+  <menu_item_call name="Share" label="Share"/>
+  <menu_item_call name="Pay" label="Öde"/>
+  <menu_item_call name="teleport" label="Offer Teleport"/>
+  <menu_item_call name="freeze" label="Freeze"/>
+  <menu_item_call name="eject" label="Parcel Eject"/>
+  <menu_item_call name="kick" label="Estate Kick"/>
+  <menu_item_call name="teleport_home" label="Estate Teleport Home"/>
+  <menu_item_call name="estate_ban" label="Estate Ban"/>
+  <menu_item_call name="derender" label="Derender"/>
+  <menu_item_call name="derender_permanent" label="Derender & Blacklist"/>
+  <menu name="render_settings" label="Render Settings">
+    <menu_item_call name="av_render_normal" label="Render Normally"/>
+    <menu_item_call name="av_render_never" label="Do Not Render"/>
+    <menu_item_call name="av_render_always" label="Render Fully"/>
+  </menu>
+</context_menu>

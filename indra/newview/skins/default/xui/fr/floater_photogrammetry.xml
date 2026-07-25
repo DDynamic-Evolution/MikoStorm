@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="photogrammetry" title="Capture de photogrammétrie">
+  <text name="capture_settings_label">
+    Paramètres de capture
+  </text>
+  <spinner name="capture_delay" label="Délai (sec)"/>
+  <spinner name="total_images" label="Nombre total d'images"/>
+  <spinner name="num_vertical" label="Niveaux de hauteur"/>
+  <spinner name="height_min" label="Hauteur min (m)"/>
+  <spinner name="height_max" label="Hauteur max (m)"/>
+  <text name="image_settings_label">
+    Paramètres de l'image
+  </text>
+  <combo_box name="resolution_combo" label="Résolution">
+    <combo_box.item name="current">
+      Fenêtre actuelle
+    </combo_box.item>
+    <combo_box.item name="1920x1080">
+      1920 x 1080
+    </combo_box.item>
+    <combo_box.item name="2560x1440">
+      2560 x 1440
+    </combo_box.item>
+    <combo_box.item name="3840x2160">
+      3840 x 2160 (4K)
+    </combo_box.item>
+    <combo_box.item name="4096x2160">
+      4096 x 2160
+    </combo_box.item>
+    <combo_box.item name="7680x4320">
+      7680 x 4320 (8K)
+    </combo_box.item>
+    <combo_box.item name="1080x2340">
+      1080 x 2340 (9:19.5)
+    </combo_box.item>
+    <combo_box.item name="1080x2400">
+      1080 x 2400 (9:20)
+    </combo_box.item>
+    <combo_box.item name="1080x2520">
+      1080 x 2520 (9:21)
+    </combo_box.item>
+    <combo_box.item name="2340x1080">
+      2340 x 1080 (19.5:9)
+    </combo_box.item>
+    <combo_box.item name="2400x1080">
+      2400 x 1080 (20:9)
+    </combo_box.item>
+    <combo_box.item name="2520x1080">
+      2520 x 1080 (21:9)
+    </combo_box.item>
+    <combo_box.item name="custom">
+      Personnalisé
+    </combo_box.item>
+  </combo_box>
+  <spinner name="custom_width" label="Larg. pers."/>
+  <spinner name="custom_height" label="Haut. pers."/>
+  <button name="browse_btn" label="Parcourir"/>
+  <text name="estimated_size_label">
+    Taille est. :
+  </text>
+  <button name="start_btn" label="Démarrer la capture"/>
+  <button name="stop_btn" label="Arrêter"/>
+</floater>

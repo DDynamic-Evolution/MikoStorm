@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_dir_groups" label="Groups">
+  <string name="searching_text">
+    Searching...
+  </string>
+  <string name="not_found_text">
+    None found.
+  </string>
+  <string name="found_text">
+    [COUNT] found.
+  </string>
+  <button name="prev_btn" tool_tip="Previous page"/>
+  <button name="next_btn" tool_tip="Next page"/>
+  <text name="find">
+    Enter search terms:
+  </text>
+  <combo_box name="groups_maturity">
+    <combo_box.item name="Desired_PG" label="General"/>
+    <combo_box.item name="Desired_Mature" label="General and Moderate"/>
+    <combo_box.item name="Desired_Adult" label="General, Moderate, Adult"/>
+  </combo_box>
+  <scroll_list name="results">
+    <column name="icon" label=""/>
+    <column name="type" label=""/>
+    <column name="name" label="Ad"/>
+    <column name="members" label="Members"/>
+    <column name="score" label=""/>
+  </scroll_list>
+</panel>

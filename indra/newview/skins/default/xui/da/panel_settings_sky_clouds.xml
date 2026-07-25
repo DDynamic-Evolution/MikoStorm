@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_settings_sky_clouds" label="Clouds">
+  <layout_stack name="main_ls">
+    <layout_panel name="left_lp">
+      <text name="cloud_coverage_label">
+        Cloud Coverage:
+      </text>
+      <text name="cloud_scale_label">
+        Cloud Scale:
+      </text>
+      <text name="cloud_variance_label">
+        Cloud Variance:
+      </text>
+      <text name="cloud_scroll_label">
+        Cloud Scroll:
+      </text>
+      <text name="cloud_image_label">
+        Cloud Image:
+      </text>
+      <text name="cloud_color_label">
+        Cloud Color:
+      </text>
+    </layout_panel>
+    <layout_panel name="right_lp">
+      <text name="cloud_density_label">
+        Cloud Density:
+      </text>
+      <slider name="cloud_density_x" label="X"/>
+      <slider name="cloud_density_y" label="Y"/>
+      <slider name="cloud_density_d" label="D"/>
+      <text name="cloud_detail_label">
+        Cloud Detail:
+      </text>
+      <slider name="cloud_detail_x" label="X"/>
+      <slider name="cloud_detail_y" label="Y"/>
+      <slider name="cloud_detail_d" label="D"/>
+    </layout_panel>
+  </layout_stack>
+</panel>

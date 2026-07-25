@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="animation_overrider_outer_panel">
+  <panel name="animation_overrider_panel">
+    <combo_box name="ao_set_selection_combo" tool_tip="Select animation set to edit."/>
+    <button name="ao_activate" tool_tip="Activate this animation set now."/>
+    <check_box name="ao_default" label="Standard" tool_tip="Make this animation set the default set that plays when you log in. If no animation set is the default, use the animation set from last session."/>
+    <menu_button name="ao_add" tool_tip="Create a new animation set."/>
+    <button name="ao_remove" tool_tip="Remove this animation set."/>
+    <check_box name="ao_sit_override" label="Override Sits" tool_tip="Check this if you want sit animation overrides."/>
+    <check_box name="ao_smart" label="Be smart" tool_tip="Smart mode tries to determine if the sit override would clash with the object's own animation and disables the overrider temporarily."/>
+    <check_box name="ao_disable_stands_in_mouselook" label="Disable Stands in Mouselook" tool_tip="If you need to preserve your custom stand animation in mouselook, check this box."/>
+    <combo_box name="ao_state_selection_combo" tool_tip="Select animation state to edit."/>
+    <panel name="ao_animation_move_trash_panel">
+      <button name="ao_move_up" tool_tip="Move the selected animation or animation group up in the list."/>
+      <button name="ao_move_down" tool_tip="Move the selected animation or animation group down in the list."/>
+      <button name="ao_rename" tool_tip="Rename the selected animation group."/>
+      <button name="ao_trash" tool_tip="Remove the selected animation from the list."/>
+    </panel>
+    <combo_box name="ao_track_selection_combo" tool_tip="Select which animation track of this state to show. The main list plays as usual, additional tracks play and cycle independently alongside it, for example a tail wag next to all walking animations."/>
+    <button name="ao_track_add" tool_tip="Add a new independent animation track to this state."/>
+    <check_box name="ao_cycle" label="Cycle" tool_tip="Play a different animation from the list every time the animation state is called."/>
+    <check_box name="ao_randomize" label="Randomize order" tool_tip="Randomize order of animations in cycle mode."/>
+    <spinner name="ao_cycle_time" tool_tip="Time before switching to the next animation in the list. Set this to 0 to disable automatic animation cycling."/>
+    <button name="ao_reload" label="Reload" tool_tip="Reload animation overrider configuration."/>
+    <layout_stack name="next_previous_buttons_stack">
+      <layout_panel name="next_previous_buttons_stack_left">
+        <button name="ao_previous" tool_tip="Switch to previous animation of the current state."/>
+      </layout_panel>
+      <layout_panel name="next_previous_buttons_stack_right">
+        <button name="ao_next" tool_tip="Switch to next animation of the current state."/>
+      </layout_panel>
+    </layout_stack>
+    <button name="ao_less" tool_tip="Show small Animation Overrider interface."/>
+    <panel name="ao_drop_zone_panel">
+      <text name="ao_drop_zone_add_label">
+        Drop here to add
+      </text>
+      <text name="ao_drop_zone_group_label">
+        Drop on existing to group
+      </text>
+    </panel>
+  </panel>
+  <panel name="ao_reload_cover">
+    <panel name="ao_reload_text_panel">
+      <text name="reload_label">
+        Reloading Config
+      </text>
+      <text name="wait_label">
+        Please Wait
+      </text>
+    </panel>
+  </panel>
+  <panel name="animation_overrider_panel_small">
+    <combo_box name="ao_set_selection_combo_small" tool_tip="Select animation set to edit."/>
+    <button name="ao_more" tool_tip="Show full interface for configuration."/>
+    <button name="ao_previous_small" tool_tip="Switch to previous animation of the current state."/>
+    <button name="ao_next_small" tool_tip="Switch to next animation of the current state."/>
+    <check_box name="ao_sit_override_small" label="Sits" tool_tip="Check this if you want sit animation overrides."/>
+  </panel>
+</panel>

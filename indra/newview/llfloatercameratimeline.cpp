@@ -37,15 +37,20 @@
 #include "llsliderctrl.h"
 #include "llscrolllistctrl.h"
 #include "llsdserialize.h"
-#include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltextbox.h"
+#include "lltoolbar.h"
+#include "lltoolbarview.h"
 #include "llviewercamera.h"
+#include "llviewerwindow.h"
 #include "llviewermenufile.h"
 #include "llcoordframe.h"
 
 static const std::string TIMELINE_SAVE_SUBDIRECTORY = "camera_timelines";
 static const std::string TIMELINE_FILE_EXT = ".camera_timeline.xml";
+
+static const S32 BAR_HEIGHT = 64;
+static const S32 KEYFRAME_PANEL_HEIGHT = 280;
 
 LLFloaterCameraTimeline::LLFloaterCameraTimeline(const LLSD& key)
     : LLFloater(key),
@@ -53,7 +58,8 @@ LLFloaterCameraTimeline::LLFloaterCameraTimeline(const LLSD& key)
       mCurrentTime(0.f),
       mPlaybackSpeed(1.f),
       mPlaybackDuration(30.f),
-      mScrubbing(false)
+      mScrubbing(false),
+      mKeyframesVisible(false)
 {
 }
 
@@ -67,36 +73,53 @@ LLFloaterCameraTimeline::~LLFloaterCameraTimeline()
 
 bool LLFloaterCameraTimeline::postBuild()
 {
-    mKeyframeList = getChild<LLScrollListCtrl>("keyframe_list");
-    mCaptureBtn = getChild<LLButton>("capture_btn");
-    mDeleteBtn = getChild<LLButton>("delete_btn");
-    mClearBtn = getChild<LLButton>("clear_btn");
+    // Control bar
     mTimelineSlider = getChild<LLSliderCtrl>("timeline_slider");
-    mTimeDisplay = getChild<LLTextBox>("time_display");
+    mCaptureBtn = getChild<LLButton>("capture_btn");
     mPlayBtn = getChild<LLButton>("play_btn");
     mStopBtn = getChild<LLButton>("stop_btn");
-    mSpeedSlider = getChild<LLSliderCtrl>("speed_slider");
     mDurationSpinner = getChild<LLSpinCtrl>("duration_spinner");
-    mSaveBtn = getChild<LLButton>("save_btn");
-    mLoadBtn = getChild<LLButton>("load_btn");
+    mSpeedSlider = getChild<LLSliderCtrl>("speed_slider");
+    mKeyframesBtn = getChild<LLButton>("keyframes_btn");
     mStatusText = getChild<LLTextBox>("status_text");
 
-    mKeyframeList->setCommitCallback([this](LLUICtrl*, const LLSD&) { updateUIState(); });
-    mKeyframeList->setCommitOnSelectionChange(true);
+    // Keyframe panel - individual children
+    mKeyframeList = getChild<LLScrollListCtrl>("keyframe_list");
+    mDeleteBtn = getChild<LLButton>("delete_btn");
+    mClearBtn = getChild<LLButton>("clear_btn");
+    mSaveBtn = getChild<LLButton>("save_btn");
+    mLoadBtn = getChild<LLButton>("load_btn");
+    mDeleteAllBtn = getChild<LLButton>("delete_all_btn");
 
+    // Keyframe panel children start hidden
+    mKeyframeList->setVisible(false);
+    mDeleteBtn->setVisible(false);
+    mClearBtn->setVisible(false);
+    mSaveBtn->setVisible(false);
+    mLoadBtn->setVisible(false);
+    mDeleteAllBtn->setVisible(false);
+
+    // Callbacks - control bar
     mCaptureBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { captureCamera(); });
-    mDeleteBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { deleteSelectedKeyframe(); });
-    mClearBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { clearAllKeyframes(); });
     mPlayBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { startPlayback(); });
     mStopBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { stopPlayback(); });
     mSaveBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { saveToFile(); });
     mLoadBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { loadFromFile(); });
+    mKeyframesBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { toggleKeyframes(); });
 
+    // Callbacks - keyframe panel
+    mKeyframeList->setCommitCallback([this](LLUICtrl*, const LLSD&) { updateUIState(); });
+    mKeyframeList->setCommitOnSelectionChange(true);
+    mDeleteBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { deleteSelectedKeyframe(); });
+    mClearBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { clearAllKeyframes(); });
+    mDeleteAllBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { deleteAllKeyframes(); });
+
+    // Speed / duration / scrub callbacks
     mSpeedSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onSpeedChanged(); });
     mDurationSpinner->setCommitCallback([this](LLUICtrl*, const LLSD&) { onDurationChanged(); });
-
     mTimelineSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onTimelineScrub(); });
 
+    // Initial values
     mSpeedSlider->setValue(mPlaybackSpeed);
     mDurationSpinner->setValue(mPlaybackDuration);
     mStopBtn->setEnabled(false);
@@ -107,6 +130,7 @@ bool LLFloaterCameraTimeline::postBuild()
 
 void LLFloaterCameraTimeline::onOpen(const LLSD& key)
 {
+    positionAboveToolbar();
     updateUIState();
 }
 
@@ -132,6 +156,75 @@ void LLFloaterCameraTimeline::onIdle(void* user_data)
 
     F32 dt = self->mPlaybackTimer.getElapsedTimeAndResetF32();
     self->updatePlayback(dt);
+}
+
+// --- Positioning ---
+
+void LLFloaterCameraTimeline::positionAboveToolbar()
+{
+    if (!gToolBarView)
+        return;
+
+    LLToolBar* toolbar_bottom = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM);
+    if (!toolbar_bottom)
+        return;
+
+    S32 toolbar_height = 0;
+    if (toolbar_bottom->hasButtons())
+    {
+        toolbar_height = toolbar_bottom->getRect().getHeight();
+    }
+
+    S32 window_width = gViewerWindow->getWindowWidthScaled();
+    S32 new_height = BAR_HEIGHT;
+
+    reshape(window_width, new_height);
+    setOrigin(0, toolbar_height);
+}
+
+// --- Keyframe Panel Toggle ---
+
+void LLFloaterCameraTimeline::toggleKeyframes()
+{
+    mKeyframesVisible = !mKeyframesVisible;
+
+    mKeyframeList->setVisible(mKeyframesVisible);
+    mDeleteBtn->setVisible(mKeyframesVisible);
+    mClearBtn->setVisible(mKeyframesVisible);
+    mSaveBtn->setVisible(mKeyframesVisible);
+    mLoadBtn->setVisible(mKeyframesVisible);
+    mDeleteAllBtn->setVisible(mKeyframesVisible);
+
+    S32 window_width = gViewerWindow->getWindowWidthScaled();
+    S32 new_height = mKeyframesVisible ? (BAR_HEIGHT + KEYFRAME_PANEL_HEIGHT) : BAR_HEIGHT;
+
+    reshape(window_width, new_height);
+
+    if (mKeyframesVisible)
+    {
+        // Position keyframe panel children at 75% width, centered
+        S32 panel_width = (S32)(window_width * 0.75f);
+        S32 panel_left = (window_width - panel_width) / 2;
+
+        mKeyframeList->reshape(panel_width, mKeyframeList->getRect().getHeight());
+        mKeyframeList->setOrigin(panel_left, mKeyframeList->getRect().mBottom);
+
+        // Position action buttons in a row centered below the list
+        S32 btn_y = 27;
+        mDeleteBtn->setOrigin(panel_left, btn_y);
+        mClearBtn->setOrigin(mDeleteBtn->getRect().mRight + 3, btn_y);
+        mSaveBtn->setOrigin(mClearBtn->getRect().mRight + 3, btn_y);
+        mLoadBtn->setOrigin(mSaveBtn->getRect().mRight + 3, btn_y);
+        mDeleteAllBtn->setOrigin(mLoadBtn->getRect().mRight + 3, btn_y);
+    }
+    else
+    {
+        LLToolBar* toolbar_bottom = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM);
+        S32 toolbar_height = toolbar_bottom ? toolbar_bottom->getRect().getHeight() : 0;
+        setOrigin(0, toolbar_height);
+    }
+
+    mKeyframesBtn->setLabel(mKeyframesVisible ? "Keyframes <<" : "Keyframes >>");
 }
 
 // --- Keyframe Management ---
@@ -222,6 +315,19 @@ void LLFloaterCameraTimeline::clearAllKeyframes()
     mStatusText->setText(std::string("All keyframes cleared"));
 }
 
+void LLFloaterCameraTimeline::deleteAllKeyframes()
+{
+    if (mKeyframes.empty())
+        return;
+
+    mKeyframes.clear();
+    mCurrentTime = 0.f;
+    if (mPlaying) stopPlayback();
+    updateKeyframeList();
+    updateUIState();
+    mStatusText->setText(std::string("All keyframes deleted"));
+}
+
 // --- Playback ---
 
 void LLFloaterCameraTimeline::startPlayback()
@@ -298,7 +404,7 @@ void LLFloaterCameraTimeline::updatePlayback(F32 delta_time)
 
     // Update time display
     F32 seconds = mCurrentTime * total_seconds;
-    mTimeDisplay->setText(llformat("%.1fs / %.1fs", seconds, total_seconds));
+    mStatusText->setText(llformat("%.1fs / %.1fs", seconds, total_seconds));
 }
 
 void LLFloaterCameraTimeline::applyCameraAtTime(F32 time)
@@ -366,9 +472,6 @@ void LLFloaterCameraTimeline::applyCameraAtTime(F32 time)
     gAgentCamera.setCameraAnimating(false);
 
     // Extract roll from quaternion:
-    // The viewer applies roll as a final rotation around the forward axis.
-    // Compute the angle between the quaternion's up vector and the "natural" up
-    // (world up projected perpendicular to forward).
     LLVector3 captured_up = LLVector3::z_axis * rot;
     LLVector3 world_up = LLVector3::z_axis;
     LLVector3 natural_up = world_up - forward * (forward * world_up);
@@ -587,6 +690,7 @@ void LLFloaterCameraTimeline::updateUIState()
 
     mDeleteBtn->setEnabled(has_keyframes && mKeyframeList->getFirstSelectedIndex() >= 0);
     mClearBtn->setEnabled(has_keyframes);
+    mDeleteAllBtn->setEnabled(has_keyframes);
     mPlayBtn->setEnabled(has_multiple && !mPlaying);
     mStopBtn->setEnabled(mPlaying);
     mSaveBtn->setEnabled(has_keyframes);
@@ -609,7 +713,7 @@ void LLFloaterCameraTimeline::onTimelineScrub()
     }
 
     F32 seconds = mCurrentTime * mPlaybackDuration;
-    mTimeDisplay->setText(llformat("%.1fs / %.1fs", seconds, mPlaybackDuration));
+    mStatusText->setText(llformat("%.1fs / %.1fs", seconds, mPlaybackDuration));
     mScrubbing = false;
 }
 

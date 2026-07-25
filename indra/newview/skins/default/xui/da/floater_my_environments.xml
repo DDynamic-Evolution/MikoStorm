@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="my_environments" title="My Environments">
+  <layout_stack name="main_layout">
+    <layout_panel name="filter_panel" label="Filters">
+      <check_box name="chk_days" label="Days"/>
+      <check_box name="chk_skies" label="Skies"/>
+      <check_box name="chk_water" label="Water"/>
+      <filter_editor name="flt_search" label="Filter Environments"/>
+    </layout_panel>
+    <layout_panel name="list_panel" label="Environments">
+      <panel name="pnl_inv_wrap" label="pnl_inv_wrap"/>
+    </layout_panel>
+    <layout_panel name="lp_showfolders">
+      <check_box name="chk_showfolders" label="Show All Folders"/>
+    </layout_panel>
+    <layout_panel name="pnl_control">
+      <panel name="pnl_bottom" label="bottom_panel">
+        <menu_button name="btn_gear" tool_tip="More options"/>
+        <menu_button name="btn_newsettings" tool_tip="Make new setting"/>
+        <button name="btn_del" tool_tip="Remove selected item"/>
+      </panel>
+    </layout_panel>
+  </layout_stack>
+</floater>

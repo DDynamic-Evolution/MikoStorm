@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="associate listing" title="Associate Listing">
+  <text name="message">
+    Listing ID:
+  </text>
+  <line_editor name="listing_id">
+    Type ID here
+  </line_editor>
+  <button name="OK" label="OK"/>
+  <button name="Cancel" label="Annuller"/>
+</floater>

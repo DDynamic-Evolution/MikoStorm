@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="save_settings_menu">
+  <menu_item_check name="save_settings" label="Gem"/>
+  <menu_item_check name="save_as_new_settings" label="Save As"/>
+  <menu_item_check name="commit_changes" label="Commit"/>
+  <menu_item_check name="apply_local" label="Apply Only To Myself"/>
+  <menu_item_check name="apply_parcel" label="Apply To Parcel"/>
+  <menu_item_check name="apply_region" label="Apply To Region"/>
+</toggleable_menu>

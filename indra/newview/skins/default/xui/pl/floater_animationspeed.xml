@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animationspeed" title="Prędkość animacji">
+  <panel name="animationspeed">
+    <text name="SpeedLabel">
+      Prędkość:
+    </text>
+    <button name="reset_btn" label="Resetuj" tool_tip="Resetuj prędkość animacji do 1.0x"/>
+  </panel>
+</floater>

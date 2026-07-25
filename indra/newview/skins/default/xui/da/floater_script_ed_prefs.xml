@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_script_colors" title="Script Editor Preferences">
+  <text name="color_pickers_label">
+    Choose desired colors:
+  </text>
+  <text name="text_label">
+    Text
+  </text>
+  <text name="cursor_label">
+    Cursor
+  </text>
+  <text name="background_label">
+    Background
+  </text>
+  <text name="section_label">
+    Sections
+  </text>
+  <text name="datatype_label">
+    Data Types
+  </text>
+  <text name="event_label">
+    Events
+  </text>
+  <text name="comment_label">
+    Comment
+  </text>
+  <text name="function_label">
+    Function
+  </text>
+  <text name="string_literal_label">
+    String Literals
+  </text>
+  <text name="constant_label">
+    Constant
+  </text>
+  <text name="i_constant_label">
+    Integer Const
+  </text>
+  <text name="s_constant_label">
+    String Const
+  </text>
+  <text name="f_constant_label">
+    Float Const
+  </text>
+  <text name="c_constant_label">
+    Compound
+  </text>
+  <text name="flow_control_label">
+    Flow Control
+  </text>
+  <text name="preprocessor_label">
+    Preprocessor
+  </text>
+  <script_editor name="Script Preview">
+    /* A sample script */
+default
+{
+    state_entry()
+    {
+        // Comment
+        string greeting = "Hello";
+        llSay(PUBLIC_CHANNEL, greeting);
+    }
+}
+  </script_editor>
+  <text name="prefs_label">
+    Script Editor Options:
+  </text>
+  <check_box name="convert_tabs_to_spaces_checkbox" label="Convert tabs to spaces"/>
+  <check_box name="preproc_checkbox" label="Enable LSL preprocessor" tool_tip="When checked, the LSL preprocessor is enabled."/>
+  <check_box name="preprocoptimizer_checkbox" label="Script optimizer" tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."/>
+  <check_box name="preprocswitch_checkbox" label="switch() statement" tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."/>
+  <check_box name="preproclazy_checkbox" label="Lazy lists" tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."/>
+  <check_box name="preprocinclude_checkbox" label="#includes from local disk" tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."/>
+  <text name="lslpreprocinclude_textbox">
+    Preprocessor include path:
+  </text>
+  <button name="SetPreprocInclude" label="..."/>
+  <text name="advanced_label">
+    Advanced Options:
+  </text>
+  <check_box name="FSllOwnerSayToScriptDebugWindow_checkbox" label="Route llOwnerSay to script debug window"/>
+  <check_box name="FSScriptEditorRecompileButton_checkbox" label="Enable recompile button (useful for #include scripts)"/>
+  <button name="close_btn" label="OK"/>
+</floater>

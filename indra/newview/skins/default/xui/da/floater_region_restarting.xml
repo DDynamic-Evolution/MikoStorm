@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="region_restarting" title="Region Restart">
+  <string name="RegionName">
+    The region you are in now ([NAME]) is about to restart.
+
+If you stay in this region you will be logged out.
+  </string>
+  <string name="RestartSeconds">
+    Seconds until restart
+[SECONDS]
+  </string>
+  <panel name="layout_panel_1">
+    <text name="region_name">
+      The region you are in now (-The longest region name-) is about to restart.
+
+If you stay in this region you will be logged out.
+    </text>
+    <text name="restart_seconds">
+      Seconds until restart
+     32767
+    </text>
+    <combo_box name="landmark combo" label="My Landmarks">
+      <combo_box.item name="item1" label="My Landmarks"/>
+    </combo_box>
+    <button name="teleport_btn" tool_tip="Teleport to Landmark"/>
+  </panel>
+</floater>

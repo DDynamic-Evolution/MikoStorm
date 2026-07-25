@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="Définir le son des messages...">
+  <text name="label_name">
+    Définir un son personnalisé pour :
+  </text>
+  <text name="label_uuid">
+    UUID du son :
+  </text>
+  <button name="preview_btn" label="Aperçu"/>
+  <button name="clear_btn" label="Effacer"/>
+  <button name="ok_btn" label="OK"/>
+  <button name="cancel_btn" label="Annuler"/>
+</floater>

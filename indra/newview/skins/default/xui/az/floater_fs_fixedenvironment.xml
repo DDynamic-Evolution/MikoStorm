@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Fixed Environment" title="Fixed Environment">
+  <string name="edit_sky">
+    Edit Sky:
+  </string>
+  <string name="edit_water">
+    Edit Water:
+  </string>
+  <layout_stack name="floater_stack">
+    <layout_panel name="info_panel">
+      <text name="info_panel_label">
+        Ad:
+      </text>
+    </layout_panel>
+    <layout_panel name="button_panel">
+      <layout_stack name="button_bar_ls">
+        <layout_panel name="load_btn_lp">
+          <button name="btn_load" label="Yüklə" tool_tip="Load a settings from inventory"/>
+          <button name="btn_import" label="Import" tool_tip="Import legacy settings from disk."/>
+          <button name="btn_commit" label="Saxla"/>
+          <button name="btn_flyout" label=""/>
+          <button name="btn_cancel" label="Ləğv et" tool_tip="Revert to last saved version"/>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</floater>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_blocked_plus">
+  <menu_item_call name="block_resident_by_name" label="Block Resident by name..."/>
+  <menu_item_call name="block_object_by_name" label="Block object by name"/>
+</toggleable_menu>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="group_titles" title="Group Titles">
+  <filter_editor name="filter_input" label="Filter Group Titles"/>
+  <scroll_list name="title_list">
+    <column name="default_marker" label="D" tool_tip="Default title worn in regions without an assignment"/>
+    <column name="grouptitle" label="Başlık"/>
+    <column name="groupname" label="Group"/>
+    <column name="regionname" label="Auto Region"/>
+  </scroll_list>
+  <button name="btnSetRegion" label="This Region" tool_tip="Assign the region you are currently in"/>
+  <button name="btnSetRegionManual" label="Type Region" tool_tip="Manually enter a region name to assign"/>
+  <button name="btnClearRegion" label="Clear Region" tool_tip="Remove region assignment from the selected title"/>
+  <button name="btnInfo" label="Bilgi" tool_tip="Show info about group of selected title"/>
+  <button name="btnActivate" label="Activate" tool_tip="Activate selected group title"/>
+  <button name="btnRefresh" tool_tip="Refresh list of available group titles"/>
+  <check_box name="use_default_title" label="Use default title in regions without assignment" tool_tip="When you enter a region with no title assignment, switch to the title marked as default. A default of <No group title> wears no tag."/>
+  <button name="btnSetDefault" label="Set as default" tool_tip="Mark the selected title as the default for regions without an assignment"/>
+</floater>

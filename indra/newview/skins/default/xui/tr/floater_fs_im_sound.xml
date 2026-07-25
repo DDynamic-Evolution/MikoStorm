@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="Mesaj sesini ayarla...">
+  <text name="label_name">
+    Özel mesaj sesi ayarla:
+  </text>
+  <text name="label_uuid">
+    Sound UUID:
+  </text>
+  <button name="preview_btn" label="Önizleme"/>
+  <button name="clear_btn" label="Temizle"/>
+  <button name="ok_btn" label="Tamam"/>
+  <button name="cancel_btn" label="İptal"/>
+</floater>

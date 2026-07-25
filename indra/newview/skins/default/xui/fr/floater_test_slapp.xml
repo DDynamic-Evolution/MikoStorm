@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="slapp_test" title="TEST SLAPP">
+  <floater.string name="remove_folder_slapp">
+    secondlife:///app/remove_folder/?folder_id=
+  </floater.string>
+  <text name="trusted_txt">
+    Source fiable
+  </text>
+  <text >
+    /wear_folder
+  </text>
+  <text >
+    secondlife:///app/wear_folder/?folder_name=Daisy
+  </text>
+  <text >
+    /add_folder
+  </text>
+  <text >
+    secondlife:///app/add_folder/?folder_name=Cardboard%20Boxbot
+  </text>
+  <text >
+    secondlife:///app/add_folder/?folder_id=59219db2-c260-87d3-213d-bb3bc298a3d8
+  </text>
+  <text >
+    /remove_folder
+  </text>
+  <text >
+    ID du dossier :
+  </text>
+  <text name="remove_folder_txt">
+    secondlife:///app/remove_folder/?folder_id=
+  </text>
+</floater>

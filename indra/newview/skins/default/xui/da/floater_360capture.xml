@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="360capture" title="360° Snapshot">
+  <panel name="ui_panel_left">
+    <text name="quality_level_label">
+      Quality level
+    </text>
+    <radio_group name="360_quality_selection">
+      <radio_item name="preview_quality" label="Preview (fast)" tool_tip="Preview quality"/>
+      <radio_item name="medium_quality" label="Mellem" tool_tip="Medium quality"/>
+      <radio_item name="high_quality" label="High" tool_tip="High quality"/>
+      <radio_item name="maximum_quality" label="Maximum" tool_tip="Maximum quality"/>
+    </radio_group>
+    <check_box name="360_hide_avatar" label="Hide all avatars"/>
+    <button name="capture_button" label="Create 360 image"/>
+    <button name="save_local_button" label="Save as..."/>
+  </panel>
+  <panel name="ui_panel_right">
+    <text name="statusbar">
+      Click and drag on the image to pan
+    </text>
+  </panel>
+</floater>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="script_experience" title="Experience">
+  <button name="Expand Experience" label="Experience"/>
+  <check_box name="enable_xp" label="Uses Experience"/>
+  <layout_stack name="xp_details">
+    <layout_panel name="xp_layout_panel">
+      <text name="lbl_script">
+        Script:
+      </text>
+      <text name="lbl_associated">
+        Associated with:
+      </text>
+      <text name="lbl_contribute">
+        You can contribute:
+      </text>
+      <text name="lbl_associate">
+        Associate with:
+      </text>
+    </layout_panel>
+    <layout_panel name="xp_choose_panel">
+      <text >
+        EasySit Animator 1.2.4
+      </text>
+      <text >
+        Kyle's Superhero RPG
+      </text>
+      <text >
+        Ja
+      </text>
+      <combo_box name="Experiences..." label="Choose Experience..."/>
+    </layout_panel>
+  </layout_stack>
+  <text name="No Experiences">
+    You are not a contributor to any experiences.
+  </text>
+</panel>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="change_item_thumbnail" title="Change Item Image">
+  <floater.string name="multiple_item_names">
+    Multiple items selected
+  </floater.string>
+  <floater.string name="title_item_thumbnail">
+    Change Item Image
+  </floater.string>
+  <floater.string name="title_folder_thumbnail">
+    Change Folder Image
+  </floater.string>
+  <floater.string name="tooltip_upload_local">
+    Upload from computer
+  </floater.string>
+  <floater.string name="tooltip_upload_snapshot">
+    Use snapshot tool
+  </floater.string>
+  <floater.string name="tooltip_use_texture">
+    Choose texture
+  </floater.string>
+  <floater.string name="tooltip_copy_to_clipboard">
+    Copy to clipboard
+  </floater.string>
+  <floater.string name="tooltip_paste_from_clipboard">
+    Paste from clipboard
+  </floater.string>
+  <floater.string name="tooltip_remove_image">
+    Remove image
+  </floater.string>
+  <text name="multiple_lbl">
+    Multiple thumbnails
+  </text>
+  <text name="tooltip_text">
+    tooltip
+  </text>
+</floater>

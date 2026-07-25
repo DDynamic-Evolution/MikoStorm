@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="save_pref_preset" title="Save Graphic Preset">
+  <text name="Preset">
+    Type a name for the preset or choose an existing preset.
+  </text>
+  <button name="save" label="Gem"/>
+  <button name="cancel" label="Annuller"/>
+</floater>

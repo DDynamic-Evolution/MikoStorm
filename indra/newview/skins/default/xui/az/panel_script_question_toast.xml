@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_script_question_toast" label="skript_sual_paneli">
+  <panel name="buttons_panel" label="düymələr_paneli"/>
+</panel>

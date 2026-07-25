@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+  <text name="back_lbl">
+    Indietro
+  </text>
+  <text name="huds_title">
+    Your active HUDs
+  </text>
+  <text name="huds_desc1">
+    Detaching HUDs you aren't using saves memory and can make the viewer run faster.
+  </text>
+  <text name="huds_desc2">
+    HUDs are often heavily scripted and also contribute to server-side lag.
+  </text>
+  <text name="huds_desc3">
+    Note: Using a HUD's minimize button does not detach it. Use the X to remove it.
+  </text>
+  <name_list name="hud_list">
+    <name_list.columns name="art_visual" label=""/>
+    <name_list.columns name="art_value" label="Time (μs)" tool_tip="Time taken to render this HUD (microseconds)"/>
+    <name_list.columns name="name" label="Nome" tool_tip="Click the 'X' to detach"/>
+  </name_list>
+</panel>

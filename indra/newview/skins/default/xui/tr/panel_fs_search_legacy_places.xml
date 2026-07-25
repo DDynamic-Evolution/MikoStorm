@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_ls_places" label="Places">
+  <panel name="panel_ls_input">
+    <text name="search_text">
+      Enter search terms:
+    </text>
+    <check_box name="pg_all" label=""/>
+    <check_box name="mature_all" label=""/>
+    <check_box name="adult_all" label=""/>
+  </panel>
+  <panel name="panel_ls_scrolllist">
+    <scroll_list name="search_results_places">
+      <columns name="icon" label=""/>
+      <columns name="place_name" label="Ad"/>
+      <columns name="dwell" label="Traffic"/>
+    </scroll_list>
+    <button name="places_back" label="Geri"/>
+    <button name="places_next" label="İleri"/>
+  </panel>
+</panel>

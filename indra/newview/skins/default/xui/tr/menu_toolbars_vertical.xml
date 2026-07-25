@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Toolbars Popup" label="Toolbar">
+  <menu_item_call name="Remove button" label="Remove this button"/>
+  <menu_item_call name="Choose Buttons" label="Toolbar buttons..."/>
+  <menu_item_check name="top_aligned" label="Top Aligned"/>
+  <menu_item_check name="center_aligned" label="Center Aligned"/>
+  <menu_item_check name="bottom_aligned" label="Bottom Aligned"/>
+  <menu_item_check name="icons_with_text" label="Icons and labels"/>
+  <menu_item_check name="icons_only" label="Icons only"/>
+  <menu_item_check name="text_only" label="Labels only"/>
+  <menu_item_check name="toolbars_locked" label="Locked"/>
+</context_menu>

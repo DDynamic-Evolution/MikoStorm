@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="phototools_camera_floater" title="Cameratools">
+  <floater.string name="rotate_tooltip">
+    Rotate Camera Around Focus
+  </floater.string>
+  <floater.string name="zoom_tooltip">
+    Zoom Camera Towards Focus
+  </floater.string>
+  <floater.string name="move_tooltip">
+    Move Camera Up and Down, Left and Right
+  </floater.string>
+  <floater.string name="free_mode_title">
+    View Object
+  </floater.string>
+  <string name="inactive_combo_text">
+    Use preset
+  </string>
+  <tab_container name="tabs">
+    <panel name="P_Cam_Controls_1" label="Cam Controls 1">
+      <panel name="cameracontrolspanel">
+        <panel name="controls1">
+          <panel name="preset_views_list">
+            <panel_camera_item name="front_view">
+              <panel_camera_item.text name="front_view_text">
+                Front View
+              </panel_camera_item.text>
+            </panel_camera_item>
+            <panel_camera_item name="group_view">
+              <panel_camera_item.text name="side_view_text">
+                Side View
+              </panel_camera_item.text>
+            </panel_camera_item>
+            <panel_camera_item name="rear_view">
+              <panel_camera_item.text name="rear_view_text">
+                Rear View
+              </panel_camera_item.text>
+            </panel_camera_item>
+            <panel_camera_item name="tpp_view">
+              <panel_camera_item.text name="tpp_view_text">
+                TPP View
+              </panel_camera_item.text>
+            </panel_camera_item>
+            <combo_box name="preset_combo">
+              <combo_box.item name="Use preset" label="Use preset"/>
+            </combo_box>
+            <button name="gear_btn" tool_tip="Camera Presets"/>
+            <button name="camera_position_btn" label="Position..."/>
+          </panel>
+          <panel name="camera_modes_list">
+            <panel_camera_item name="object_view">
+              <panel_camera_item.text name="object_view_text">
+                Object View
+              </panel_camera_item.text>
+            </panel_camera_item>
+            <panel_camera_item name="mouselook_view">
+              <panel_camera_item.text name="mouselook_view_text">
+                Mouselook View
+              </panel_camera_item.text>
+            </panel_camera_item>
+          </panel>
+          <panel name="zoom">
+            <joystick_rotate name="cam_rotate_stick" tool_tip="Orbit camera around focus"/>
+            <button name="roll_left" tool_tip="Roll camera Left"/>
+            <button name="roll_right" tool_tip="Roll camera Right"/>
+            <slider_bar name="zoom_slider" tool_tip="This simply moves the camera in and out. NOTE: It does not make the camera ZOOM in RL terms! It has no effect on the FOV. Use the 'View angle' slider for real zooming."/>
+            <joystick_track name="cam_track_stick" tool_tip="Move camera up and down, left and right."/>
+          </panel>
+        </panel>
+        <panel name="buttons">
+          <button name="presets_btn" label="" tool_tip="Preset Views"/>
+          <button name="pan_btn" label="" tool_tip="Orbit Zoom Pan"/>
+          <button name="avatarview_btn" label="" tool_tip="Camera modes"/>
+          <button name="store_camera_view_btn" label="" tool_tip="Store current camera view"/>
+          <button name="load_camera_view_btn" label="" tool_tip="Load stored camera view"/>
+        </panel>
+      </panel>
+      <panel name="P_Cam_Mov_Settings">
+        <text name="T_Cam_Mov_Settings">
+          Camera Movement Settings
+        </text>
+      </panel>
+      <panel name="P_Zoom">
+        <text name="T_Zoom" tool_tip="In real world terms this is a Zoom feature. This will change the field of view in your viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator).">
+          View angle
+        </text>
+        <button name="Reset_Camera_Angle" label="D" tool_tip="Reset to the default value."/>
+        <text name="T_Zoom_Speed" tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smother zoom.">
+          Zoom Speed
+        </text>
+        <button name="Reset_Zoom_Time" label="D" tool_tip="Reset to the default value."/>
+        <text name="T_Camera_Lag" tool_tip="Amount camera lags behind avatar motion (0 = none, 30 = avatar velocity).">
+          Camera Lag
+        </text>
+        <button name="Reset_Camera_Lag" label="D" tool_tip="Reset to the default value."/>
+        <text name="T_Camera_Offset" tool_tip="Controls how far the camera is offset/distance from the default point of view.">
+          Camera Offset
+        </text>
+        <button name="Reset_Camera_Offset" label="D" tool_tip="Reset to the default value."/>
+        <text name="T_Camera_Smoothing" tool_tip="Controls how smoothly the camera starts and stops. Higher values produce smoother (and somewhat slower) movement.">
+          Cam. Smoothing
+        </text>
+        <button name="Reset_Camera_Smoothing" label="D" tool_tip="Reset to the default value."/>
+      </panel>
+    </panel>
+    <panel name="P_Cam_Controls_2" label="Cam Controls 2">
+      <panel name="P_Mouse_Movement">
+        <text name="T_Mouse_Movement">
+          Mouse Movement Settings
+        </text>
+      </panel>
+      <panel name="P_Mouse_Movement_Settings">
+        <text name="T_Mouse_Sensitivity" tool_tip="Controls responsiveness of mouse when in mouselook mode.">
+          Mouse Sensitivity
+        </text>
+        <button name="Reset_Mouse_Sensitivity" label="D" tool_tip="Reset to the default value."/>
+        <check_box name="first_person_avatar_visible" label="Display avatar in mouselook" tool_tip="Display avatar and attachments below neck while in mouselook. Default is OFF."/>
+        <check_box name="MouseSmooth" label="Smooth Mouselook Movements" tool_tip="Smooths out motion of mouse when in mouselook mode."/>
+      </panel>
+      <panel name="P_Additional_Camera_Options">
+        <text name="T_Additional_Camera_Options">
+          Addtional Camera Options
+        </text>
+      </panel>
+      <panel name="P_Add_Cam_Opt_Settings">
+        <check_box name="clickonavatarkeepscamera" label="Clicking your avatar keeps camera position" tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
+        <check_box name="FSResetCameraOnTP" label="Reset camera position after teleport" tool_tip="Normally, the camera position gets reset when teleporting (within a region). This option prevents this behavior."/>
+        <check_box name="ignorecameraconstraints" label="Allow the camera to move w/o constraints" tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+        <check_box name="resetcameraonmovement" label="Reset camera position on avatar movement" tool_tip="Resets the camera to its default position when you move the avatar"/>
+      </panel>
+    </panel>
+    <panel name="P_3D_Mouse" label="3D Mouse">
+      <panel name="P_3D_Mouse_Settings1">
+        <slider name="FlycamAxisScale1b" label="Move L/R" tool_tip="Adjusts the sensitivity of the Left/Right movement. If you find it difficult to move with precision, use lower scale values."/>
+        <slider name="FlycamAxisScale2b" label="Move U/D" tool_tip="Adjusts the sensitivity of the Up/Down movement. If you find it difficult to move with precision, use lower scale values."/>
+        <slider name="FlycamAxisScale0b" label="Move I/O" tool_tip="Adjusts the sensitivity of the In/Out movement. If you find it difficult to move with precision, use lower scale values."/>
+        <slider name="FlycamAxisScale4" label="Pitch" tool_tip="Adjusts the sensitivity of the Pitch movement. If you find it difficult to move with precision, use lower scale values."/>
+        <slider name="FlycamAxisScale5" label="Yaw" tool_tip="Adjusts the sensitivity of the Yaw movement. If you find it difficult to move with precision, use lower scale values."/>
+        <slider name="FlycamAxisScale3" label="Roll" tool_tip="Adjusts the sensitivity of the Roll movement. If you find it difficult to move with precision, use lower scale values."/>
+        <slider name="FlycamAxisScale6" label="Zoom Speed" tool_tip="Adjusts the sensitivity of the Zoom speed. If you find it difficult to zoom with precision, use lower scale values."/>
+        <slider name="FlycamFeathering" label="Feather" tool_tip="Setting the slider all the way to the right will make the camera very rigid, giving complete control to the joystick. Setting the slider all the way to the left will make the camera very fluid like the camera weighs a lot; good for fly-by shots, not good for framing."/>
+      </panel>
+      <panel name="P_3D_Mouse_Settings2">
+        <spinner name="JoystickAxis6" label="Zoom Axis Mapping" tool_tip="Controls which mouse axis the zooming function is mapped to (set to work with)."/>
+        <check_box name="enable_joystick" label="Enable 3D Mouse" tool_tip="This turns on the 3D Mouse."/>
+        <check_box name="CB_Zoom_Control" label="Enable Zoom Control (See Tool Tip!)" tool_tip="In order for the zooming control to work, you must set the 'Zoom Axis Mapping' above to '4'."/>
+        <check_box name="CB_Auto_Leveling" label="Enable Auto Leveling (Prevents Camera Roll)"/>
+        <check_box name="CB_3D_Mouse_Avatar" label="Use the 3D Mouse to move the avatar"/>
+        <check_box name="CB_3D_Mouse_Build" label="Use the 3D Mouse to move objects (building)" tool_tip="Uses the 3D mouse to move objects when building and editing."/>
+      </panel>
+    </panel>
+  </tab_container>
+</floater>

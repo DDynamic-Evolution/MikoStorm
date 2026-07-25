@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Email Popup">
+  <menu_item_call name="email_open_external" label="Compose Email in an External client"/>
+  <menu_item_call name="email_copy" label="Copy Email to clipboard"/>
+</context_menu>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="gltf asset editor" title="[OBJECT_NAME]">
+  <layout_stack name="main_layout">
+    <layout_panel name="transforms_panel">
+      <menu_button name="clipboard_pos_btn" tool_tip="Paste options"/>
+      <text name="label position" tool_tip="Position (meters)">
+        Position (m)
+      </text>
+      <spinner name="Pos X" label="X"/>
+      <spinner name="Pos Y" label="Y"/>
+      <spinner name="Pos Z" label="Z"/>
+      <menu_button name="clipboard_size_btn" tool_tip="Paste options"/>
+      <text name="label size" tool_tip="Size (meters)">
+        Size (m)
+      </text>
+      <spinner name="Scale X" label="X"/>
+      <spinner name="Scale Y" label="Y"/>
+      <spinner name="Scale Z" label="Z"/>
+      <menu_button name="clipboard_rot_btn" tool_tip="Paste options"/>
+      <text name="label rotation" tool_tip="Rotation (degrees)">
+        Rotation (°)
+      </text>
+      <spinner name="Rot X" label="X"/>
+      <spinner name="Rot Y" label="Y"/>
+      <spinner name="Rot Z" label="Z"/>
+    </layout_panel>
+  </layout_stack>
+</floater>

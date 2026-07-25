@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Marketplace Panel" label="Marketplace">
+  <panel name="tool_panel">
+    <menu_button name="sort_btn" tool_tip="View/sort options"/>
+    <button name="add_btn" tool_tip="Create a new listing folder"/>
+    <button name="audit_btn" label="Check for Errors" tool_tip="Check your marketplace listings"/>
+  </panel>
+  <panel name="tab_container_panel">
+    <filter_editor name="filter_editor" label="Filter Marketplace Listings"/>
+  </panel>
+  <panel name="marketplace_drop_zone">
+    <text name="drop_zone_label">
+      Drop folders here to create new listings
+    </text>
+  </panel>
+</panel>

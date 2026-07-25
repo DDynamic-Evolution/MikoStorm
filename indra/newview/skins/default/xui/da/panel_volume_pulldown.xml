@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="volumepulldown_floater">
+  <slider name="System Volume" label="Master"/>
+  <slider name="UI Volume" label="Interface"/>
+  <slider name="Wind Volume" label="Ambient"/>
+  <check_box name="collisions_audio_play_btn" tool_tip="Enable default sounds from collisions"/>
+  <slider name="SFX Volume" label="Sounds"/>
+  <check_box name="gesture_audio_play_btn" tool_tip="Enable sounds from gestures"/>
+  <slider name="Music Volume" label="Music"/>
+  <check_box name="enable_music" tool_tip="Enable Streaming Music"/>
+  <slider name="Media Volume" label="Media"/>
+  <check_box name="enable_media" tool_tip="Enable Streaming Media"/>
+  <slider name="Stream3D Volume" label="3D Stream"/>
+  <check_box name="enable_stream3d_check" tool_tip="Positional 3D audio streams from prims"/>
+  <slider name="Voice Volume" label="Voice"/>
+  <check_box name="enable_voice_check" tool_tip="Enable Voice Chat"/>
+</panel>

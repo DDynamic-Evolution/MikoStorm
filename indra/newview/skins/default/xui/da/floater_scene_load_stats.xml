@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Scene Load Statistics" title="Scene Load Statistics">
+  <scroll_container name="statistics_scroll">
+    <container_view name="statistics_view">
+      <stat_view name="basic" label="Basic">
+        <stat_bar name="frame difference" label="Frame Pixel Difference"/>
+        <stat_bar name="bandwidth" label="UDP Data Received"/>
+        <stat_bar name="packet_loss" label="Packet Loss"/>
+      </stat_view>
+      <stat_view name="advanced" label="Advanced">
+        <stat_view name="render" label="Render">
+          <stat_bar name="objs" label="Total Objects"/>
+          <stat_bar name="newobjs" label="New Objects"/>
+          <stat_bar name="object_cache_hits" label="Object Cache Hit Rate"/>
+        </stat_view>
+        <stat_view name="texture" label="Texture">
+          <stat_bar name="texture_cache_hits" label="Cache Hit Rate"/>
+          <stat_bar name="texture_cache_read_latency" label="Cache Read Latency"/>
+          <stat_bar name="texture_decode_latency" label="Cache Decode Latency"/>
+          <stat_bar name="texture_write_latency" label="Cache Write Latency"/>
+          <stat_bar name="texture_fetch_latency" label="Cache Fetch Latency"/>
+          <stat_bar name="texture_fetch_time" label="Cache Fetch Time"/>
+          <stat_bar name="numimagesstat" label="Count"/>
+          <stat_bar name="numrawimagesstat" label="Raw Count"/>
+        </stat_view>
+        <stat_view name="network" label="Network">
+          <stat_bar name="packetsinstat" label="Packets In"/>
+          <stat_bar name="packetsoutstat" label="Packets Out"/>
+          <stat_bar name="objectdatareceived" label="Objects"/>
+          <stat_bar name="texturedatareceived" label="Texture"/>
+          <stat_bar name="assetudpdatareceived" label="Asset"/>
+          <stat_bar name="layersdatareceived" label="Layers"/>
+          <stat_bar name="messagedatain" label="Actual In"/>
+          <stat_bar name="messagedataout" label="Actual Out"/>
+        </stat_view>
+      </stat_view>
+      <stat_view name="sim" label="Simulator">
+        <stat_bar name="simobjects" label="Objects"/>
+        <stat_bar name="simactiveobjects" label="Active Objects"/>
+        <stat_bar name="simactivescripts" label="Active Scripts"/>
+        <stat_bar name="siminpps" label="Packets In"/>
+        <stat_bar name="simoutpps" label="Packets Out"/>
+        <stat_bar name="simpendingdownloads" label="Pending Downloads"/>
+        <stat_bar name="simpendinguploads" label="Pending Uploads"/>
+        <stat_bar name="simtotalunackedbytes" label="Total Unacked Bytes"/>
+        <stat_view name="simperf" label="Time (ms)">
+          <stat_bar name="simframemsec" label="Total Frame Time"/>
+          <stat_bar name="simnetmsec" label="Net Time"/>
+          <stat_bar name="simsimphysicsmsec" label="Physics Time"/>
+          <stat_bar name="simsimothermsec" label="Simulation Time"/>
+          <stat_bar name="simagentmsec" label="Agent Time"/>
+          <stat_bar name="simimagesmsec" label="Images Time"/>
+          <stat_bar name="simscriptmsec" label="Script Time"/>
+          <stat_bar name="simsparemsec" label="Spare Time"/>
+          <stat_view name="timedetails" label="Time Details (ms)">
+            <stat_bar name="simsimphysicsstepmsec" label="  Physics Step"/>
+            <stat_bar name="simsimphysicsshapeupdatemsec" label="  Update Phys Shapes"/>
+            <stat_bar name="simsimphysicsothermsec" label="  Physics Other"/>
+            <stat_bar name="simsleepmsec" label="  Sleep Time"/>
+            <stat_bar name="simpumpiomsec" label="  Pump IO"/>
+          </stat_view>
+        </stat_view>
+      </stat_view>
+      <stat_view name="frame_stats" label="Frame breakdown">
+        <stat_bar name="scenery_frame_pct" label="Scenery"/>
+        <stat_bar name="avatar_frame_pct" label="Avatar"/>
+        <stat_bar name="ui_frame_pct" label="UI"/>
+        <stat_bar name="huds_frame_pct" label="HUDs"/>
+        <stat_bar name="swap_frame_pct" label="Swap"/>
+        <stat_bar name="idle_frame_pct" label="Tasks"/>
+      </stat_view>
+    </container_view>
+  </scroll_container>
+</floater>

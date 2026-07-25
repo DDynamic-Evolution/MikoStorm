@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="CopyMenu">
+  <menu_item_call name="copy_display" label="Copy Display Name"/>
+  <menu_item_call name="copy_name" label="Copy Agent Name"/>
+  <menu_item_call name="copy_id" label="Copiar UUID"/>
+  <menu_item_call name="copy_uri" label="Copy URI"/>
+</toggleable_menu>

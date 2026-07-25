@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+  <text name="back_lbl">
+    Atrás
+  </text>
+  <text name="huds_title">
+    Tus HUDs activos
+  </text>
+  <text name="huds_desc1">
+    Desadjuntar los HUDs que no utiliza ahorra memoria y puede hacer que el visor funcione más rápido.
+  </text>
+  <text name="huds_desc2">
+    Los HUDs suelen tener muchos scripts y también contribuyen al lag del servidor.
+  </text>
+  <text name="huds_desc3">
+    Nota: Usar el botón de minimizar de un HUD no lo desadjunte. Use la X para quitarlo.
+  </text>
+  <name_list name="hud_list">
+    <name_list.columns name="art_visual" label=""/>
+    <name_list.columns name="art_value" label="Tiempo (μs)" tool_tip="Time taken to render this HUD (microseconds)"/>
+    <name_list.columns name="name" label="Nombre" tool_tip="Haga clic en la «X» para desadjuntar"/>
+  </name_list>
+</panel>

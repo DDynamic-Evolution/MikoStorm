@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="emojipicker" title="Choose Emoji">
+  <text name="Dummy">
+    No emoji selected
+  </text>
+</floater>

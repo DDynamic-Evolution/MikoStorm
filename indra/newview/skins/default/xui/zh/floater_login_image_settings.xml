@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="login_image_settings" title="登录图片设置">
+  <text name="description">
+    选择本地图像文件作为登录背景，替代默认的网页登录页面。留空以恢复默认网页登录页面。支持的格式：JPG、PNG、BMP、TGA。
+  </text>
+  <text name="path_label">
+    登录图片路径：
+  </text>
+  <button name="set_path_btn" label="浏览..."/>
+  <button name="clear_path_btn" label="清除"/>
+</floater>

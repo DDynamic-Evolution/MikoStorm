@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animationspeed" title="动画速度">
+  <panel name="animationspeed">
+    <text name="SpeedLabel">
+      速度：
+    </text>
+    <button name="reset_btn" label="重置" tool_tip="重置动画速度为1.0x"/>
+  </panel>
+</floater>

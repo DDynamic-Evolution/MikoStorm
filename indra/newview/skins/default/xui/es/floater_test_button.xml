@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_button">
+  <button name="generic_button" label="Generic Button"/>
+  <button name="bottom_delta_button" label="Bottom delta"/>
+  <button name="sans_serif_small_button" label="SansSerifSmall"/>
+  <button name="auto_resize_button" label="Auto Resize"/>
+  <button name="label_selected_button" label="Click Change Label"/>
+  <button name="label_shadow_button" label="No Label Shadow"/>
+  <button name="label_color_button" label="EmphasisColor Label"/>
+  <button name="label_color_selected_button" label="Toggle"/>
+  <button name="label_color_disabled_button" label="Disabled"/>
+  <button name="highlight_color_button" label="Highlight"/>
+  <button name="hover_glow_amount_button" label="No Hover Glow"/>
+</floater>

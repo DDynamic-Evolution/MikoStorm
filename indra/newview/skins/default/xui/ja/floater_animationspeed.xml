@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animationspeed" title="アニメーション速度">
+  <panel name="animationspeed">
+    <text name="SpeedLabel">
+      速度:
+    </text>
+    <button name="reset_btn" label="リセット" tool_tip="アニメーション速度を1.0xにリセット"/>
+  </panel>
+</floater>

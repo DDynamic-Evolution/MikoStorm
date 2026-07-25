@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="login_image_settings" title="Ustawienia obrazu logowania">
+  <text name="description">
+    Wybierz lokalny plik obrazu jako tło logowania zamiast domyślnej strony www. Pozostaw puste aby przywrócić domyślną stronę. Obsługiwane formaty: JPG, PNG, BMP, TGA.
+  </text>
+  <text name="path_label">
+    Ścieżka obrazu logowania:
+  </text>
+  <button name="set_path_btn" label="Przeglądaj..."/>
+  <button name="clear_path_btn" label="Wyczyść"/>
+</floater>

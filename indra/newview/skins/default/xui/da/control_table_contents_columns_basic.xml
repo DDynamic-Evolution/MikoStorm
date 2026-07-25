@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents >
+  <columns name="lst_action" label="Action"/>
+  <columns name="lst_ctrl1" label="Primary Control"/>
+  <columns name="lst_ctrl2" label="Alternate 1"/>
+  <columns name="lst_ctrl3" label="Alternate 2"/>
+</contents>

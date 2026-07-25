@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="BeamColor" title="Beam Color rotate">
+  <floater.string name="start_hue">
+    Start Hue
+  </floater.string>
+  <floater.string name="end_hue">
+    End Hue
+  </floater.string>
+  <text name="beamcolor_text">
+    Please use the mouse to select the colors for which
+you wish your beam color to start and stop on.
+Left click changes start position.
+Right click changes end position.
+  </text>
+  <color_swatch name="BeamColor_Preview" label="" tool_tip="Click to open Color Picker"/>
+  <text name="beamcolor_text2">
+    Forhåndsvisning
+  </text>
+  <slider name="BeamColor_Speed" label="Rotation Speed:" tool_tip="Controls the speed of the color cycle"/>
+  <button name="BeamColor_Save" label="Gem"/>
+  <button name="BeamColor_Load" label="Indlæs"/>
+  <button name="BeamColor_Cancel" label="Annuller"/>
+</floater>

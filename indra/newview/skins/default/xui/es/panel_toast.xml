@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="toast" title="">
+  <panel name="wrapper_panel" label="panel_contenedor">
+    <text name="toast_text">
+      Texto de notificación;
+    </text>
+  </panel>
+  <button name="hide_btn" label=""/>
+</floater>

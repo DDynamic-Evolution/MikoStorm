@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autotune">
+  <text name="back_lbl">
+    Retour
+  </text>
+  <text name="settings_title">
+    Préférences de réglage automatique
+  </text>
+  <text name="quality_lbl">
+    Avatars éloignés
+  </text>
+  <check_box name="FSAutoTuneImpostorByDistEnabled" label="Activer l'optimisation basée sur la distance" tool_tip="Lorsque activé, le lecteur ajustera le paramètre MaxNonImpostors pour limiter les avatars entièrement rendus à ceux dans le rayon défini."/>
+  <spinner name="ffa_autotune" label="Avatar complet le plus éloigné"/>
+  <text name="distant_av_advice">
+    Les avatars éloignés peuvent être automatiquement optimisés quel que soit leur coût de rendu.
+Définissez la distance à partir de laquelle un avatar sera optimisé.
+Remarque : Ce paramètre forcera MaxNonImpostors à 1 si personne n'est à proximité.
+  </text>
+  <text name="distance_lbl">
+    Limites de réglage de la distance de visibilité
+  </text>
+  <spinner name="min_dd_autotune" label="Distance minimale"/>
+  <spinner name="pref_dd_autotune" label="Distance préférée"/>
+  <text name="distance_desc1">
+    Lors de l'ajustement des paramètres de la scène, l'ajustement automatique choisira des valeurs entre les distances de dessin minimale et préférée.
+  </text>
+  <text name="sundry_lbl">
+    Réglages divers
+  </text>
+  <check_box name="alow_self_impostor" label="Autoriser l'optimisation de votre propre avatar" tool_tip="Lorsque activé, le lecteur peut rendre votre propre avatar en tant qu'imposteur."/>
+  <check_box name="show_tuned_art" label="Afficher le temps de rendu optimisé" tool_tip="Lorsque activé, la colonne Temps affiche le temps de rendu actuel et non le temps de rendu pré-ajustement."/>
+  <text name="sundry_desc1">
+    Ces options contrôlent des réglages plus subtils. Utilisez la page d'aide en ligne pour plus d'informations.
+  </text>
+</panel>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="login_image_settings" title="ログイン画像設定">
+  <text name="description">
+    デフォルトのWebログインページの代わりにログイン背景として表示するローカル画像ファイルを選択してください。空にするとデフォルトのWebログインページに戻ります。サポート形式：JPG、PNG、BMP、TGA。
+  </text>
+  <text name="path_label">
+    ログイン画像パス:
+  </text>
+  <button name="set_path_btn" label="参照..."/>
+  <button name="clear_path_btn" label="クリア"/>
+</floater>

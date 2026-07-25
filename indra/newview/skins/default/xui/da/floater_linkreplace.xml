@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="linkreplace" title="Replace Inventory Links">
+  <string name="Ready">
+    Ready...
+  </string>
+  <string name="TargetNotFound">
+    Target item not found.
+  </string>
+  <string name="ItemsIdentical">
+    Source and target are identical.
+  </string>
+  <string name="ItemsFound">
+    Found [NUM] inventory links.
+  </string>
+  <string name="ItemsRemaining">
+    Links remaining: [NUM]
+  </string>
+  <string name="ReplaceFinished">
+    Finished replacing inventory links.
+  </string>
+  <text name="source_label">
+    Old:
+  </text>
+  <inventory_link_replace_drop_target name="source_uuid_editor" tool_tip="Drag and drop the current inventory item here that should be replaced."/>
+  <text name="delete_text">
+    Links to this item will be removed.
+  </text>
+  <text name="target_label">
+    New:
+  </text>
+  <inventory_link_replace_drop_target name="target_uuid_editor" tool_tip="Drag and drop new inventory item here."/>
+  <check_box name="delete_links_only" label="Delete links only"/>
+  <text name="status_text">
+    Ready...
+  </text>
+  <button name="btn_refresh" label="Opdater"/>
+  <button name="btn_start" label="Start"/>
+  <button name="btn_stop" label="Stop"/>
+</floater>

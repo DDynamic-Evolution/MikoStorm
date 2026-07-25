@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_conversation_log" title="Conversation Log">
+  <panel name="buttons_panel">
+    <filter_editor name="people_filter_input" label="Filter People"/>
+    <menu_button name="conversations_gear_btn" tool_tip="Actions on selected person or group"/>
+    <menu_button name="conversation_view_btn" tool_tip="View/sort options"/>
+  </panel>
+</floater>

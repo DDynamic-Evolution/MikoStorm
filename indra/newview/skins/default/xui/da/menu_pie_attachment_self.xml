@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Attachment Pie">
+  <pie_slice name="Profile..." label="Profile..."/>
+  <pie_slice name="Drop" label="Slip"/>
+  <pie_menu name="Attachment Pie More" label="More >">
+    <pie_slice name="Texture Refresh" label="Tex Refresh"/>
+    <pie_slice name="ScriptInfo" label="Script Info"/>
+    <pie_slice name="Attachment Object Touch" label="Touch"/>
+    <pie_menu name="DerenderMenu" label="Derender >">
+      <pie_slice name="Derender" label="Temporary"/>
+      <pie_slice name="DerenderPermanent" label="Blacklist"/>
+    </pie_menu>
+    <pie_menu name="ExportMenu" label="Save as >">
+      <pie_slice name="Backup" label="Backup"/>
+      <pie_slice name="Collada" label="Collada"/>
+    </pie_menu>
+    <pie_slice name="Show original" label="Show in Inv."/>
+    <pie_slice name="Avatar Inspect" label="Inspect"/>
+    <pie_slice name="Debug..." label="Textures"/>
+  </pie_menu>
+  <pie_slice name="Sit Down Here" label="Sit Here"/>
+  <pie_slice name="Stand Up" label="Stand Up"/>
+  <pie_slice name="Detach" label="Aftag"/>
+  <pie_slice name="Gestures" label="Gestures..."/>
+  <pie_menu name="Appearance >" label="Appearance >">
+    <pie_slice name="Edit My Shape" label="Edit Shape"/>
+    <pie_menu name="ResetMenu" label="Reset >">
+      <pie_slice name="Reset Skeleton And Animations" label="Skel. & Anim."/>
+      <pie_slice name="Reset Skeleton" label="Skeleton"/>
+      <pie_slice name="Reset Mesh LOD" label="Mesh LOD"/>
+    </pie_menu>
+    <pie_slice name="Edit My Outfit" label="Edit Outfit"/>
+    <pie_slice name="Dump XML" label="Dump XML"/>
+    <pie_slice name="Hover Height" label="Hover Height"/>
+  </pie_menu>
+  <pie_slice name="Edit..." label="Rediger"/>
+</pie_menu>

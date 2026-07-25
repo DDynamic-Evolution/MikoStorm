@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="GroupCreation" label="Group Creation">
+  <panel.string name="current_membership">
+    (your membership)
+  </panel.string>
+  <panel name="group_info_top">
+    <text name="group_name_label">
+      Group Name:
+    </text>
+    <line_editor name="group_name_editor" label="Type your new group name here"/>
+  </panel>
+  <scroll_container name="content_scroll_container">
+    <panel name="content_panel">
+      <layout_stack name="layout">
+        <layout_panel name="group_info">
+          <panel name="group_info_top2">
+            <texture_picker name="insignia" label="" tool_tip="Click to choose a picture"/>
+            <text_editor name="charter">
+              Group Charter
+            </text_editor>
+          </panel>
+          <panel name="preferences_container">
+            <check_box name="open_enrollement" label="Anyone can join" tool_tip="Sets whether this group allows new members to join without being invited."/>
+            <check_box name="check_enrollment_fee" label="Cost to join" tool_tip="Sets whether to require an enrollment fee to join the group"/>
+            <spinner name="spin_enrollment_fee" label="L$" tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."/>
+            <combo_box name="group_mature_check" tool_tip="Maturity ratings designate the type of content and behavior allowed in a group">
+              <combo_item name="select_mature">
+                - Select maturity rating -
+              </combo_item>
+              <combo_box.item name="mature" label="Moderate Content"/>
+              <combo_box.item name="pg" label="General Content"/>
+            </combo_box>
+          </panel>
+        </layout_panel>
+        <layout_panel name="create_info">
+          <text name="fee_information">
+            The fee to create a group is based on your membership level. [https://secondlife.com/my/account/membership.php More info]
+          </text>
+        </layout_panel>
+        <layout_panel name="create_actions">
+          <layout_stack name="button_row_ls">
+            <layout_panel name="layout_crt">
+              <button name="btn_create" label="Create group for L$ [COST]" tool_tip="Create a new Group"/>
+              <button name="back" label="İptal"/>
+            </layout_panel>
+          </layout_stack>
+          <text name="info_deletion">
+            Note: Any group that has less than two members for 48 hours is automatically disbanded!
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </panel>
+  </scroll_container>
+</panel>

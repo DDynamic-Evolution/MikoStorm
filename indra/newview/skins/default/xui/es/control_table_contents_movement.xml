@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents >
+  <rows name="move_actions">
+    <columns name="lst_action" label="Move Actions"/>
+  </rows>
+  <rows name="walk_to">
+    <columns name="lst_action" tool_tip="Walk to location mouse cursor points to"/>
+  </rows>
+  <rows name="teleport_to">
+    <columns name="lst_action" tool_tip="Teleport to location mouse cursor points to, but not all locations allow direct teleportation so you might be teleported closer to destination instead"/>
+  </rows>
+</contents>

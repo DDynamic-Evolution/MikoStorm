@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="Nachrichtenton einstellen...">
+  <text name="label_name">
+    Benutzerdefinierten Ton einstellen für:
+  </text>
+  <text name="label_uuid">
+    Sound UUID:
+  </text>
+  <button name="preview_btn" label="Vorschau"/>
+  <button name="clear_btn" label="Löschen"/>
+  <button name="ok_btn" label="OK"/>
+  <button name="cancel_btn" label="Abbrechen"/>
+</floater>

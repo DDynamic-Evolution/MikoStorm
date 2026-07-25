@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+  <menu_item_check name="sort_name" label="Sort by Name"/>
+  <menu_item_check name="sort_username" label="Sort by Username"/>
+  <menu_item_check name="sort_status" label="Sort by Status"/>
+  <menu_item_check name="view_icons" label="View People Icons"/>
+  <menu_item_check name="view_permissions" label="View Permissions Granted"/>
+  <menu_item_check name="view_conversation" label="View Conversation Log..."/>
+</toggleable_menu>

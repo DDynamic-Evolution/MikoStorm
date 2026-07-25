@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="friends">
+  <layout_stack name="ls_friend_list">
+    <layout_panel name="lp_search">
+      <filter_editor name="friend_filter_input" label="Filter Friends"/>
+    </layout_panel>
+    <layout_panel name="lp_friend_list">
+      <fs_scroll_list name="friend_list">
+        <fs_scroll_list.column name="icon_online_status" tool_tip="Online status"/>
+        <fs_scroll_list.column name="user_name" label="Username" tool_tip="This contact's username."/>
+        <fs_scroll_list.column name="display_name" label="Display name" tool_tip="This contact's display name."/>
+        <fs_scroll_list.column name="full_name" label="Ad" tool_tip="This contact's chosen name."/>
+        <fs_scroll_list.column name="icon_visible_online" tool_tip="Friend can see when you're online"/>
+        <fs_scroll_list.column name="icon_visible_map" tool_tip="Friend can locate you on the map"/>
+        <fs_scroll_list.column name="icon_edit_mine" tool_tip="Friend can edit, delete or take objects"/>
+        <fs_scroll_list.column name="icon_visible_map_theirs" tool_tip="You can locate them on the map"/>
+        <fs_scroll_list.column name="icon_edit_theirs" tool_tip="You can edit this friend's objects"/>
+      </fs_scroll_list>
+    </layout_panel>
+  </layout_stack>
+  <button name="im_btn" label="IM/Call" tool_tip="Open Instant Message session"/>
+  <button name="profile_btn" label="Profile" tool_tip="Show picture, groups, and other information"/>
+  <button name="offer_teleport_btn" label="Teleport..." tool_tip="Offer this friend a teleport to your current location"/>
+  <button name="map_btn" label="Map..." tool_tip="Show current location of friend on the map"/>
+  <button name="pay_btn" label="Pay..." tool_tip="Give Linden dollars (L$) to this friend"/>
+  <button name="remove_btn" label="Remove..." tool_tip="Remove this person from your friends list"/>
+  <button name="add_btn" label="Add..." tool_tip="Offer friendship to a resident"/>
+  <text name="friend_count">
+    Friends: [COUNT]
+  </text>
+</panel>

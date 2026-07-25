@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+  <text name="back_lbl">
+    Wstecz
+  </text>
+  <text name="av_nearby_title">
+    Awatary w pobliżu
+  </text>
+  <text name="av_nearby_desc">
+    Ukryj najbardziej złożone awatary aby zwiększyć prędkość.
+  </text>
+  <slider name="RenderAvatarMaxART" label="Maksymalny czas renderowania (μs)" tool_tip="Kontroluje kiedy wizualnie złożony avatar jest uważany za zbyt długi w renderowaniu (jednostka: mikrosekundy)"/>
+  <text name="RenderAvatarMaxARTText">
+    bez limitu
+  </text>
+  <name_list name="nearby_list">
+    <name_list.columns name="complex_visual" label=""/>
+    <name_list.columns name="complex_value" label=""/>
+    <name_list.columns name="name" label=""/>
+  </name_list>
+  <text name="av_nearby_desc2">
+    Możesz też kliknąć prawym przyciskiem na avatara w świecie aby kontrolować wyświetlanie.
+  </text>
+  <button name="exceptions_btn" label="Wyjątki..."/>
+  <text name="AvatarComplexityModeLabel">
+    Wyświetlanie avatara:
+  </text>
+  <combo_box name="AvatarComplexityMode">
+    <combo_box.item name="0" label="Ogranicz wg złożoności"/>
+    <combo_box.item name="1" label="Zawsze pokazuj znajomych"/>
+    <combo_box.item name="2" label="Pokazuj tylko znajomych"/>
+  </combo_box>
+  <check_box name="hide_avatars" label="Ukryj awatary całkowicie (dobre do zdjęć krajobrazu)"/>
+  <text name="name_tags_textbox">
+    Etykiety nazw:
+  </text>
+  <radio_group name="name_tag_mode">
+    <radio_item name="radio" label="Wył."/>
+    <radio_item name="radio2" label="Wł."/>
+    <radio_item name="radio3" label="Pokaż krótko"/>
+  </radio_group>
+</panel>

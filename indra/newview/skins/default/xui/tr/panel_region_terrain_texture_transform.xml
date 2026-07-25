@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Terrain" label="Terrain">
+  <text name="region_text_lbl">
+    Region:
+  </text>
+  <text name="region_text">
+    unknown
+  </text>
+  <text name="detail_texture_text">
+    Terrain Textures
+  </text>
+  <text name="detail_material_text">
+    Terrain Materials
+  </text>
+  <check_box name="terrain_material_type" label="PBR Metallic Roughness" tool_tip="If checked, use PBR Metallic Roughness materials for terrain. Otherwise, use textures."/>
+  <text name="height_text_lbl">
+    1 (Low)
+  </text>
+  <text name="height_text_lbl4">
+    4 (High)
+  </text>
+  <layout_stack name="terrain_features_stack">
+    <layout_panel name="frame_settings_terrain">
+      <tab_container name="terrain_tabs">
+        <panel name="terrain_elevation_panel" label="Elevation"/>
+        <panel name="terrain_transform_panel" label="Transforms"/>
+      </tab_container>
+    </layout_panel>
+  </layout_stack>
+  <button name="apply_btn" label="Uygula"/>
+</panel>

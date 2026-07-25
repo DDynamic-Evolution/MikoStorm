@@ -121,6 +121,7 @@
 #include "lltrans.h"
 #include "llviewerdisplay.h" //for gWindowResized
 #include "llviewergenericmessage.h"
+#include "llurlaction.h"
 #include "llviewerhelp.h"
 #include "llviewermenufile.h"   // init_menu_file()
 #include "llviewermessage.h"
@@ -8678,6 +8679,24 @@ class LLShowHelp : public view_listener_t
     }
 };
 
+class LLOpenSLURL : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLUrlAction::executeSLURL(userdata.asString());
+        return true;
+    }
+};
+
+class LLOpenExternalURL : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        LLWeb::loadURLExternal(userdata.asString());
+        return true;
+    }
+};
+
 // <AW: OpenSim>
 bool update_grid_help()
 {
@@ -13279,6 +13298,8 @@ void initialize_menus()
     commit.add("ReportAbuse", boost::bind(&handle_report_abuse));
     commit.add("BuyCurrency", boost::bind(&handle_buy_currency));
     view_listener_t::addMenu(new LLShowHelp(), "ShowHelp");
+    view_listener_t::addMenu(new LLOpenSLURL(), "OpenSLURL");
+    view_listener_t::addMenu(new LLOpenExternalURL(), "OpenExternalURL");
     view_listener_t::addMenu(new LLToggleHelp(), "ToggleHelp");
     view_listener_t::addMenu(new LLToggleSpeak(), "ToggleSpeak");
     view_listener_t::addMenu(new LLPromptShowURL(), "PromptShowURL");

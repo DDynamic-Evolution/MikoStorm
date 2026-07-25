@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+  <text name="back_lbl">
+    Retour
+  </text>
+  <text name="settings_title">
+    Paramètres graphiques
+  </text>
+  <button name="advanced_btn" label="Ouvrir les paramètres avancés"/>
+  <button name="defaults_btn" label="Réinitialiser les réglages recommandés"/>
+  <text name="quality_lbl">
+    Qualité et vitesse
+  </text>
+  <text name="fastest_lbl">
+    Plus rapide
+  </text>
+  <text name="best_quality_lbl">
+    Meilleure qualité
+  </text>
+  <text name="quality_desc">
+    Choisir un raccourci réinitialisera toutes les modifications manuelles que vous avez effectuées.
+  </text>
+  <text name="distance_lbl">
+    Distance de visibilité
+  </text>
+  <text name="faster_lbl">
+    Plus rapide
+  </text>
+  <text name="farther_lbl">
+    Plus loin
+  </text>
+  <text name="distance_desc1">
+    Pour voir plus de terrain lorsque vous dézoomez, augmentez la distance.
+  </text>
+  <text name="environment_lbl">
+    Ombres
+  </text>
+  <text name="enhancements_desc">
+    Les ombres améliorent considérablement la qualité visuelle mais peuvent réduire la vitesse.
+  </text>
+  <text name="RenderShadowDetailText">
+    Détail des ombres :
+  </text>
+  <combo_box name="ShadowDetail">
+    <combo_box.item name="0" label="Aucune"/>
+    <combo_box.item name="1" label="Soleil/Lune"/>
+    <combo_box.item name="2" label="Soleil/Lune + Projecteurs"/>
+  </combo_box>
+  <text name="water_lbl">
+    Eau
+  </text>
+  <text name="water_desc">
+    Réduire ou désactiver l'eau transparente peut améliorer le taux de rafraîchissement.
+  </text>
+  <check_box name="TransparentWater" label="Eau transparente"/>
+  <text name="photo_lbl">
+    Photographie
+  </text>
+  <text name="photo_desc">
+    Le détail maximal est bon pour les photos, mais peut ralentir le taux de rafraîchissement.
+  </text>
+  <spinner name="render_volume_lod" label="Détail de distance :"/>
+  <text name="photo_dist_det_desc">
+    (Entrez une valeur entre 0.0 et 4.0)
+  </text>
+</panel>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_view_default">
+  <menu_item_check name="sort_by_name" label="Sort by Name"/>
+  <menu_item_check name="sort_by_recent" label="Sort by Most Recent"/>
+  <menu_item_check name="sort_folders_by_name" label="Sort Folders Always by Name"/>
+  <menu_item_check name="sort_system_folders_to_top" label="Sort System Folders to Top"/>
+  <menu_item_check name="list_view" label="List view"/>
+  <menu_item_check name="gallery_view" label="Gallery view"/>
+  <menu_item_check name="combination_view" label="Combination view"/>
+</toggleable_menu>

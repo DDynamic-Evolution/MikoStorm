@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="create_landmark" title="Create Landmark">
+  <string name="favorites_bar">
+    Favorites bar
+  </string>
+  <text name="new_folder_textbox">
+    [secondlife:/// Create new folder]
+  </text>
+  <button name="ok_btn" label="Aceptar"/>
+  <button name="cancel_btn" label="Cancelar"/>
+</floater>

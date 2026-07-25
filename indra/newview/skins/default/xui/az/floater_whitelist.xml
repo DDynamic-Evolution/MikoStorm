@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="whitelist_floater" title="Whitelist Folders and Binaries">
+  <text name="whitelist_intro">
+    Anti-virus and Anti-malware are an essential part of safe Internet use, but they can cause a variety of issues for the viewer.
+To reduce interference and improve stability and performance, we strongly advise that all users ensure that there are exclusions (known as Whitelisting) for important folders and programs that the viewer uses. 
+
+For more detailed information, visit
+https://wiki.firestormviewer.org/antivirus_whitelisting
+  </text>
+  <text name="whitelist_folder_instruction">
+    To help simplify the task the box below shows the folders the viewer is using. 
+Please add these to your AV folder exclusions as shown on the above wiki page.
+  </text>
+  <text name="whitelist_exe_instruction">
+    The following box shows the names and full paths of the viewer executables.
+Add the full paths to your AV executable exclusions as shown in the above wiki.
+  </text>
+</floater>

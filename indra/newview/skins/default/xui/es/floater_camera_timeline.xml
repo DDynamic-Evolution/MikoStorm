@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ can_resize="false"
+ can_close="false"
+ can_minimize="false"
+ can_tear_off="false"
+ height="48"
+ layout="topleft"
+ min_height="48"
+ min_width="600"
+ name="camera_timeline"
+ save_rect="true"
+ single_instance="true"
+ title=""
+ width="1200">
+
+	<!-- Scrubline (top row, full width) -->
+	<slider
+	 decimal_digits="1"
+	 follows="left|top|right"
+	 height="12"
+	 increment="0.5"
+	 initial_value="0"
+	 layout="topleft"
+	 left="3"
+	 max_val="100"
+	 min_val="0"
+	 name="timeline_slider"
+	 show_text="false"
+	 top="3"
+	 width="1194" />
+
+	<!-- Controls (bottom row) -->
+	<button follows="left|top" height="23" label="Capturar camara" layout="topleft" left="3" name="capture_btn" top="18" width="100" />
+	<button follows="left|top" height="23" label="Reproducir" layout="topleft" left_pad="3" name="play_btn" top="18" width="50" />
+	<button follows="left|top" height="23" label="Detener" layout="topleft" left_pad="3" name="stop_btn" top="18" width="50" />
+	<spinner decimal_digits="1" follows="left|top" height="23" increment="1.0" initial_value="10.0" label="Duracion" label_width="55" layout="topleft" left_pad="3" max_val="600" min_val="0.5" name="duration_spinner" top="18" width="120" />
+	<slider decimal_digits="2" follows="left|top" height="23" increment="0.25" initial_value="1.0" label="Velocidad" label_width="40" layout="topleft" left_pad="3" max_val="4.0" min_val="0.25" name="speed_slider" show_text="false" top="18" width="130" />
+	<button follows="left|top" height="23" label="Fotogramas" layout="topleft" left_pad="3" name="keyframes_btn" top="18" width="80" />
+	<text follows="left|top" height="20" layout="topleft" left_pad="3" name="status_text" top="19" width="200"> Listo </text>
+
+	<!-- Keyframe panel (bottom section, hidden by default) -->
+	<scroll_list
+	 allow_multi_select="false"
+	 column_header="true"
+	 follows="left|bottom"
+	 header_height="16"
+	 height="220"
+	 layout="topleft"
+	 left="3"
+	 name="keyframe_list"
+	 bottom="50"
+	 width="900"
+	 visible="false">
+		<list_column column="0" label="#" width="30" />
+		<list_column column="1" label="Hora" width="60" />
+		<list_column column="2" label="Posicion" width="300" />
+		<list_column column="3" label="FOV" width="60" />
+	</scroll_list>
+
+	<button follows="left|bottom" height="23" label="Eliminar" layout="topleft" left="3" name="delete_btn" bottom="27" width="70" visible="false" />
+	<button follows="left|bottom" height="23" label="Limpiar todo" layout="topleft" left_pad="3" name="clear_btn" bottom="27" width="80" visible="false" />
+	<button follows="left|bottom" height="23" label="Guardar" layout="topleft" left_pad="3" name="save_btn" bottom="27" width="70" visible="false" />
+	<button follows="left|bottom" height="23" label="Cargar" layout="topleft" left_pad="3" name="load_btn" bottom="27" width="70" visible="false" />
+	<button follows="left|bottom" height="23" label="Eliminar todo" layout="topleft" left_pad="3" name="delete_all_btn" bottom="27" width="80" visible="false" />
+
+</floater>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_settings_terrain_transform" label="Samping">
+  <text name="terrain0ScaleU_label">
+    Scale u
+  </text>
+  <spinner name="terrain0ScaleU" label="Scale u"/>
+  <spinner name="terrain1ScaleU" label="Scale u"/>
+  <spinner name="terrain2ScaleU" label="Scale u"/>
+  <spinner name="terrain3ScaleU" label="Scale u"/>
+  <text name="terrain0ScaleV_label">
+    Scale v
+  </text>
+  <spinner name="terrain0ScaleV" label="Scale v"/>
+  <spinner name="terrain1ScaleV" label="Scale u"/>
+  <spinner name="terrain2ScaleV" label="Scale u"/>
+  <spinner name="terrain3ScaleV" label="Scale u"/>
+  <text name="terrain0Rotation_label">
+    Rotation
+  </text>
+  <spinner name="terrain0Rotation" label="Rotation"/>
+  <spinner name="terrain1Rotation" label="Scale u"/>
+  <spinner name="terrain2Rotation" label="Scale u"/>
+  <spinner name="terrain3Rotation" label="Scale u"/>
+  <text name="terrain0OffsetU_label">
+    Offset u
+  </text>
+  <spinner name="terrain0OffsetU" label="Offset u"/>
+  <spinner name="terrain1OffsetU" label="Scale u"/>
+  <spinner name="terrain2OffsetU" label="Scale u"/>
+  <spinner name="terrain3OffsetU" label="Scale u"/>
+  <text name="terrain0OffsetV_label">
+    Offset v
+  </text>
+  <spinner name="terrain0OffsetV" label="Offset v"/>
+  <spinner name="terrain1OffsetV" label="Scale u"/>
+  <spinner name="terrain2OffsetV" label="Scale u"/>
+  <spinner name="terrain3OffsetV" label="Scale u"/>
+</panel>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="profile_overflow_menu">
+  <menu_item_call name="share" label="Share"/>
+  <menu_item_call name="call" label="Call"/>
+  <menu_item_call name="add_to_contact_set" label="Add to Contact Set"/>
+  <menu_item_call name="copy_name_to_clipboard" label="Copy Name"/>
+  <menu_item_call name="copy_uri_to_clipboard" label="Copy URI"/>
+  <menu_item_call name="copy_key_to_clipboard" label="Copiar UUID"/>
+  <menu_item_call name="kick" label="Kick"/>
+  <menu_item_call name="freeze" label="Freeze"/>
+  <menu_item_call name="unfreeze" label="Unfreeze"/>
+  <menu_item_call name="csr" label="CSR"/>
+  <menu_item_call name="report" label="Report"/>
+</toggleable_menu>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="experince_list_editor">
+  <panel.string name="loading">
+    loading...
+  </panel.string>
+  <panel.string name="panel_allowed">
+    Allowed Experiences:
+  </panel.string>
+  <panel.string name="panel_blocked">
+    Blocked Experiences:
+  </panel.string>
+  <panel.string name="panel_trusted">
+    Key Experiences:
+  </panel.string>
+  <panel.string name="no_results">
+    (empty)
+  </panel.string>
+  <text name="text_name">
+    Experience List
+  </text>
+  <name_list name="experience_list">
+    <name_list.columns name="experience_name" label="Navn"/>
+  </name_list>
+  <button name="btn_add" label="Add..."/>
+  <button name="btn_remove" label="Fjern"/>
+  <button name="btn_profile" label="Profile..."/>
+</panel>

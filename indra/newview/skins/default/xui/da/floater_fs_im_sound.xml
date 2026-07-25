@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="Indstil beskedlyd...">
+  <text name="label_name">
+    Indstil brugerdefineret lyd for:
+  </text>
+  <text name="label_uuid">
+    Sound UUID:
+  </text>
+  <button name="preview_btn" label="Forhåndsvisning"/>
+  <button name="clear_btn" label="Ryd"/>
+  <button name="ok_btn" label="OK"/>
+  <button name="cancel_btn" label="Annuller"/>
+</floater>

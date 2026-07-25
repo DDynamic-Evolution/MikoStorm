@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_settings_sky_hbodies" label="Sun & Moon">
+  <layout_stack name="main_ls">
+    <layout_panel name="sun_layout">
+      <text name="sun_stars_label">
+        Sun & Stars
+      </text>
+      <check_box name="sunbeacon" label="Show Beacon"/>
+      <text name="position_label">
+        Position:
+      </text>
+      <text name="image_label">
+        Image and scale:
+      </text>
+      <text name="color_label">
+        Farve:
+      </text>
+      <text name="sun_azimuth_label">
+        Azimuth:
+      </text>
+      <text name="sun_elevation_label">
+        Elevation:
+      </text>
+      <text name="glow_focus_label">
+        Glow Focus:
+      </text>
+      <text name="glow_size_label">
+        Glow Size:
+      </text>
+      <text name="star_brightness_label">
+        Star Brightness:
+      </text>
+    </layout_panel>
+    <layout_panel name="moon_layout">
+      <text name="moon_label">
+        Moon
+      </text>
+      <check_box name="moonbeacon" label="Show Beacon"/>
+      <text name="position_label">
+        Position:
+      </text>
+      <text name="moon_image_label">
+        Image and scale:
+      </text>
+      <text name="moon_azimuth_label">
+        Azimuth:
+      </text>
+      <text name="moon_elevation_label">
+        Elevation:
+      </text>
+      <text name="brightness_label">
+        Brightness:
+      </text>
+    </layout_panel>
+  </layout_stack>
+</panel>

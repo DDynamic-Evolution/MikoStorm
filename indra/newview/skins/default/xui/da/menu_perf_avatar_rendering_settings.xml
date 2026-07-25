@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Settings">
+  <menu_item_check name="always_render" label="Always full detail"/>
+  <menu_item_check name="never_render" label="Never full detail"/>
+  <menu_item_check name="default" label="Remove from exceptions"/>
+  <menu_item_call name="inspect" label="Inspect Avatar"/>
+  <menu_item_call name="zoom" label="Zoom to Avatar" tool_tip="Move camera to view this avatar."/>
+</context_menu>

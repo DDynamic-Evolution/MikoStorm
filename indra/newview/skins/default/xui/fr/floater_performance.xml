@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="AMÉLORER LA VITESSE GRAPHIQUE">
+  <panel name="panel_top">
+    <panel name="fps_subpanel">
+      <text name="fps_lbl">
+        images par seconde
+      </text>
+      <text name="fps_desc1_lbl">
+        Autorisez 5 à 10 secondes pour
+      </text>
+      <text name="fps_desc2_lbl">
+        que les changements prennent pleinement effet.
+      </text>
+    </panel>
+  </panel>
+  <panel name="panel_performance_main">
+    <panel name="autoadjustments_subpanel">
+      <text name="auto_adj_lbl">
+        Réglages automatiques (recommandé)
+      </text>
+      <text name="auto_adj_desc">
+        Permettre des ajustements automatiques pour atteindre le taux de rafraîchissement souhaité.
+      </text>
+    </panel>
+    <panel name="settings_subpanel">
+      <text name="settings_lbl">
+        Paramètres graphiques
+      </text>
+      <text name="settings_desc">
+        Choisissez les réglages de distance, d'eau, d'éclairage et plus.
+      </text>
+    </panel>
+    <panel name="nearby_subpanel">
+      <text name="avatars_nearby_lbl">
+        Avatars à proximité
+      </text>
+      <text name="avatars_nearby_desc">
+        Gérer quels avatars proches sont affichés en entier.
+      </text>
+    </panel>
+    <panel name="complexity_subpanel">
+      <text name="complexity_lbl">
+        Complexité de votre avatar
+      </text>
+      <text name="complexity_info">
+        Réduisez la complexité de votre avatar si vous n'êtes pas satisfait du taux de rafraîchissement actuel.
+      </text>
+    </panel>
+    <panel name="huds_subpanel">
+      <text name="huds_lbl">
+        Vos HUDs actifs
+      </text>
+      <text name="huds_desc">
+        Supprimer les HUDs que vous n'utilisez pas peut améliorer la vitesse.
+      </text>
+    </panel>
+  </panel>
+</floater>

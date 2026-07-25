@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Test Floater" title="Test pəncərəsi">
+  <text >
+    this
+is
+some
+text
+that
+is
+top
+aligned
+  </text>
+  <text >
+    this
+is
+some
+text
+that
+is
+center
+aligned
+  </text>
+  <text >
+    this
+is
+some
+text
+that
+is
+bottom
+aligned
+  </text>
+  <text_editor >
+    this
+is
+some
+text
+that
+is
+top
+aligned
+  </text_editor>
+  <text_editor >
+    this
+is
+some
+text
+that
+is
+center
+aligned
+  </text_editor>
+  <text_editor >
+    this
+is
+some
+text
+that
+is
+bottom
+aligned
+  </text_editor>
+</floater>

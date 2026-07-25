@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents >
+  <rows name="editing_actions">
+    <columns name="lst_action" label="Editing"/>
+  </rows>
+  <rows name="edit_avatar_spin_ccw">
+    <columns name="lst_action" tool_tip="Camera spin around avatar counterclockwise"/>
+  </rows>
+  <rows name="edit_avatar_spin_cw">
+    <columns name="lst_action" tool_tip="Camera spin around avatar clockwise"/>
+  </rows>
+  <rows name="edit_avatar_spin_over">
+    <columns name="lst_action" tool_tip="Camera spin over avatar"/>
+  </rows>
+  <rows name="edit_avatar_spin_under">
+    <columns name="lst_action" tool_tip="Camera spin under avatar"/>
+  </rows>
+</contents>

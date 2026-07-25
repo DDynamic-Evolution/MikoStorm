@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_marketplace_sort">
+  <menu_item_check name="sort_by_name" label="Sort by name"/>
+  <menu_item_check name="sort_by_recent" label="Sort by most recent"/>
+  <menu_item_check name="sort_by_stock_amount" label="Sort by stock amount (low to high)"/>
+  <menu_item_check name="show_only_listing_folders" label="Show only listing folders"/>
+</toggleable_menu>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_console" title="Pathfinding view / test">
+  <floater.string name="no_havok">
+    Pathfinding view / test
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_library_not_implemented">
+    Cannot find pathing library implementation.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_region_not_enabled">
+    This region is not enabled for pathfinding.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_region_loading">
+    Waiting for the region to finish loading.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_checking_version">
+    Checking the status of the navmesh.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_downloading">
+    Downloading the navmesh.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_updating">
+    The navmesh has changed on the server. Downloading the latest navmesh.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_has_navmesh">
+    Latest navmesh has been downloaded.
+  </floater.string>
+  <floater.string name="navmesh_viewer_status_error">
+    Unable to download navmesh successfully.
+  </floater.string>
+  <floater.string name="navmesh_simulator_status_pending">
+    Navmesh has pending changes.
+  </floater.string>
+  <floater.string name="navmesh_simulator_status_building">
+    Navmesh is building.
+  </floater.string>
+  <floater.string name="navmesh_simulator_status_some_pending">
+    Some navmesh regions have pending changes.
+  </floater.string>
+  <floater.string name="navmesh_simulator_status_some_building">
+    Some navmesh regions are building.
+  </floater.string>
+  <floater.string name="navmesh_simulator_status_pending_and_building">
+    Some navmesh regions have pending changes and others are building.
+  </floater.string>
+  <floater.string name="navmesh_simulator_status_complete">
+    Navmesh is up-to-date.
+  </floater.string>
+  <floater.string name="pathing_library_not_implemented">
+    Cannot find pathing library implementation.
+  </floater.string>
+  <floater.string name="pathing_region_not_enabled">
+    This region is not enabled for pathfinding.
+  </floater.string>
+  <floater.string name="pathing_choose_start_and_end_points">
+    Please choose start and end points.
+  </floater.string>
+  <floater.string name="pathing_choose_start_point">
+    Please choose start point.
+  </floater.string>
+  <floater.string name="pathing_choose_end_point">
+    Please choose end point.
+  </floater.string>
+  <floater.string name="pathing_path_valid">
+    Path is shown in orange.
+  </floater.string>
+  <floater.string name="pathing_path_invalid">
+    A path between the chosen points cannot be found.
+  </floater.string>
+  <floater.string name="pathing_error">
+    An error occurred during path generation.
+  </floater.string>
+  <panel name="pathfinding_console_main">
+    <text name="viewer_status_label">
+      Viewer status
+    </text>
+  </panel>
+  <panel name="pathfinding_console_simulator">
+    <text name="simulator_status_label">
+      Simulator status
+    </text>
+  </panel>
+  <tab_container name="view_test_tab_container">
+    <panel name="view_panel" label="View">
+      <text name="show_label">
+        Show:
+      </text>
+      <check_box name="show_world" label="World"/>
+      <check_box name="show_world_movables_only" label="Movables only"/>
+      <check_box name="show_navmesh" label="Navmesh"/>
+      <text name="show_walkability_label">
+        Show walkability map:
+      </text>
+      <combo_box name="show_heatmap_mode">
+        <combo_box.item name="show_heatmap_mode_none" label="Do not show"/>
+        <combo_box.item name="show_heatmap_mode_a" label="Character type A"/>
+        <combo_box.item name="show_heatmap_mode_b" label="Character type B"/>
+        <combo_box.item name="show_heatmap_mode_c" label="Character type C"/>
+        <combo_box.item name="show_heatmap_mode_d" label="Character type D"/>
+      </combo_box>
+      <check_box name="show_walkables" label="Walkables"/>
+      <check_box name="show_material_volumes" label="Material volumes"/>
+      <check_box name="show_static_obstacles" label="Static obstacles"/>
+      <check_box name="show_exclusion_volumes" label="Exclusion volumes"/>
+      <check_box name="show_water_plane" label="Water plane"/>
+      <check_box name="show_xray" label="With X-ray vision"/>
+    </panel>
+    <panel name="test_panel" label="Test path">
+      <text name="ctrl_click_label">
+        Ctrl-click to select start point.
+      </text>
+      <text name="shift_click_label">
+        Shift-click to select end point.
+      </text>
+      <text name="character_width_label">
+        Character width
+      </text>
+      <text name="character_type_label">
+        Character type
+      </text>
+      <combo_box name="path_character_type">
+        <combo_box.item name="path_character_type_none" label="Ingen"/>
+        <combo_box.item name="path_character_type_a" label="A"/>
+        <combo_box.item name="path_character_type_b" label="B"/>
+        <combo_box.item name="path_character_type_c" label="C"/>
+        <combo_box.item name="path_character_type_d" label="D"/>
+      </combo_box>
+      <button name="clear_path" label="Clear path"/>
+    </panel>
+  </tab_container>
+</floater>

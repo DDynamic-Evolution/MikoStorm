@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="conversation_log_list_item">
+  <icon name="voice_session_icon" tool_tip="Included a voice conversation"/>
+  <icon name="unread_ims_icon" tool_tip="Messages arrived while you were logged out"/>
+  <button name="delete_btn" tool_tip="Remove this entry"/>
+</panel>

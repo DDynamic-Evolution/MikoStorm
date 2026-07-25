@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_dir_places" label="Places">
+  <string name="searching_text">
+    Searching...
+  </string>
+  <string name="not_found_text">
+    None found.
+  </string>
+  <string name="found_text">
+    [COUNT] found.
+  </string>
+  <text name="find">
+    Enter search terms:
+  </text>
+  <combo_box name="Category">
+    <combo_item name="AnyCategory" label="Any Category"/>
+    <combo_item name="LindenLocation" label="Linden Location"/>
+    <combo_item name="Arts&Culture" label="Arts & Culture"/>
+    <combo_item name="Business" label="Business"/>
+    <combo_item name="Educational" label="Educational"/>
+    <combo_item name="Gaming" label="Gaming"/>
+    <combo_item name="Hangout" label="Hangout"/>
+    <combo_item name="NewcomerFriendly" label="Newcomer Friendly"/>
+    <combo_item name="Parks&Nature" label="Parks & Nature"/>
+    <combo_item name="Residential" label="Residential"/>
+    <combo_item name="Shopping" label="Shopping"/>
+    <combo_item name="Adult" label="Adult"/>
+    <combo_item name="Other" label="Other"/>
+  </combo_box>
+  <check_box name="incpg" label=""/>
+  <icon name="rating_icon_general" tool_tip="General"/>
+  <check_box name="incmature" label=""/>
+  <icon name="rating_icon_moderate" tool_tip="Moderate"/>
+  <check_box name="incadult" label=""/>
+  <icon name="rating_icon_adult" tool_tip="Adult"/>
+  <scroll_list name="results">
+    <column name="icon" label=""/>
+    <column name="name" label="Ad"/>
+    <column name="dwell" label="Traffic"/>
+  </scroll_list>
+  <button name="prev_btn" tool_tip="Previous page"/>
+  <button name="next_btn" tool_tip="Next page"/>
+</panel>

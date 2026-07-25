@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="avatar_align" title="Compass">
+  <button name="btn_rotate_left_10" label="-10°" tool_tip="Rotate your avatar 10° to the left"/>
+  <button name="btn_rotate_left_1" label="-1°" tool_tip="Rotate your avatar 1° to the left"/>
+  <button name="btn_rotate_right_1" label="+1°" tool_tip="Rotate your avatar 1° to the right"/>
+  <button name="btn_rotate_right_10" label="+10°" tool_tip="Rotate your avatar 10° to the right"/>
+  <button name="btn_rotate_left_90" label="-90°" tool_tip="Rotate your avatar 90° to the left"/>
+  <button name="btn_rotate_left_45" label="-45°" tool_tip="Rotate your avatar 45° to the left"/>
+  <button name="btn_rotate_right_45" label="+45°" tool_tip="Rotate your avatar 45° to the right"/>
+  <button name="btn_rotate_right_90" label="+90°" tool_tip="Rotate your avatar 90° to the right"/>
+  <button name="btn_nearest" label="To nearest cardinal" tool_tip="Rotate your avatar towards nearest cardinal"/>
+  <button name="btn_avatar" label="Face nearest avatar" tool_tip="Face towards the nearest avatar"/>
+</floater>

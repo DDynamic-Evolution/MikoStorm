@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+    failed-upgrade)
+        ;;
+    abort-install|abort-upgrade|abort-remove)
+        ;;
+    remove|purge)
+        # Remove installation directory
+        rm -rf /opt/mikostorm || true
+        ;;
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac

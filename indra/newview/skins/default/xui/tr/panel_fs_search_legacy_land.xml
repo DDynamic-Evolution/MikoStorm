@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_ls_land" label="Land Sales">
+  <panel name="panel_ls_input">
+    <check_box name="pg_all" label=""/>
+    <check_box name="mature_all" label=""/>
+    <check_box name="adult_all" label=""/>
+    <text name="search_text">
+      Enter search terms:
+    </text>
+    <combo_box name="land_category">
+      <combo_box.item name="All" label="All Categories"/>
+      <combo_box.item name="Auction" label="Auction"/>
+      <combo_box.item name="Mainland" label="Mainland Sales"/>
+      <combo_box.item name="Estate" label="Estate Sales"/>
+    </combo_box>
+    <check_box name="price_check" label="Price <"/>
+    <check_box name="area_check" label="Area >"/>
+    <text name="sort_text">
+      Sort results by:
+    </text>
+    <check_box name="ascending_check" label="Ascending"/>
+    <combo_box name="land_sort_combo">
+      <combo_box.item name="Name_item" label="Ad"/>
+      <combo_box.item name="Price_item" label="Fiyat"/>
+      <combo_box.item name="PPM_item" label="Price per meter"/>
+      <combo_box.item name="Area_item" label="Area"/>
+    </combo_box>
+    <button name="land_find" label="Ara"/>
+  </panel>
+  <panel name="panel_ls_scrolllist">
+    <scroll_list name="search_results_land">
+      <columns name="icon" label=""/>
+      <columns name="land_name" label="Ad"/>
+      <columns name="price" label="Fiyat"/>
+      <columns name="area" label="Area"/>
+      <columns name="ppm" label="L$/m"/>
+      <columns name="land_type" label="Tür"/>
+    </scroll_list>
+    <button name="land_back" label="Geri"/>
+    <button name="land_next" label="İleri"/>
+  </panel>
+</panel>

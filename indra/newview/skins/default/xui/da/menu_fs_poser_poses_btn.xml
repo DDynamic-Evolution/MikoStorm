@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Settings">
+  <menu_item_call name="load_selective" label="Load Selective" tool_tip="Loads only the joints that are off, and turns them on"/>
+  <menu_item_call name="rotations_positions" label="Load Selective - Rotations Only" tool_tip="Loads only rotations, only to the joints that are off, and turns them on"/>
+  <menu_item_call name="rotations" label="Load - Rotations Only" tool_tip="Loads just the rotations. Good for poses made for other avatars/shapes"/>
+  <menu_item_call name="load_all" label="Indlæs" tool_tip="Loads rotations, positions and scales"/>
+</toggleable_menu>

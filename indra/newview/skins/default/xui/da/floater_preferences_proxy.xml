@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Proxy Settings Floater" title="Proxy Settings">
+  <check_box name="web_proxy_enabled" label="Use HTTP Proxy for Web pages"/>
+  <text name="http_proxy_label">
+    HTTP Proxy:
+  </text>
+  <line_editor name="web_proxy_editor" tool_tip="The DNS name or IP address of the HTTP proxy you would like to use."/>
+  <spinner name="web_proxy_port" label="Port number:" tool_tip="The port of the HTTP proxy you would like to use."/>
+  <check_box name="socks_proxy_enabled" label="Use SOCKS 5 Proxy for UDP traffic"/>
+  <text name="socks5_proxy_label">
+    SOCKS 5 Proxy:
+  </text>
+  <line_editor name="socks_proxy_editor" tool_tip="The DNS name or IP address of the SOCKS 5 proxy you would like to use."/>
+  <spinner name="socks_proxy_port" label="Port number:" tool_tip="The port of the SOCKS 5 proxy you would like to use."/>
+  <text name="socks_auth_label">
+    SOCKS Authentication:
+  </text>
+  <radio_group name="socks5_auth_type">
+    <radio_item name="Socks5NoAuth" label="No Authentication" tool_tip="Socks5 proxy requires no authentication."/>
+    <radio_item name="Socks5UserPass" label="Username/Password" tool_tip="Socks5 proxy requires username/password authentication."/>
+  </radio_group>
+  <text name="socks5_username_label">
+    Username:
+  </text>
+  <text name="socks5_password_label">
+    Password:
+  </text>
+  <line_editor name="socks5_username" tool_tip="The username used to authenticate with your SOCKS 5 server"/>
+  <line_editor name="socks5_password" tool_tip="The password used to authenticate with your SOCKS 5 server"/>
+  <text name="other_proxy_label">
+    Other HTTP traffic proxy:
+  </text>
+  <radio_group name="other_http_proxy_type">
+    <radio_item name="OtherNoProxy" label="Do not proxy" tool_tip="Non-web HTTP traffic will NOT be sent to any proxy."/>
+    <radio_item name="OtherHTTPProxy" label="Use HTTP Proxy" tool_tip="Non-web HTTP will be sent through the configured Web proxy."/>
+    <radio_item name="OtherSocksProxy" label="Use SOCKS 5 Proxy" tool_tip="Non-web HTTP traffic will be sent through the configured Socks 5 proxy."/>
+  </radio_group>
+  <button name="OK" label="OK"/>
+  <button name="Cancel" label="Annuller"/>
+</floater>

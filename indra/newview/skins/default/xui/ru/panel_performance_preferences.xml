@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+  <text name="back_lbl">
+    Назад
+  </text>
+  <text name="settings_title">
+    Graphics settings
+  </text>
+  <button name="advanced_btn" label="Open Advanced Settings"/>
+  <button name="defaults_btn" label="Reset to recommended settings"/>
+  <text name="quality_lbl">
+    Quality & Speed
+  </text>
+  <text name="fastest_lbl">
+    Fastest
+  </text>
+  <text name="best_quality_lbl">
+    Best quality
+  </text>
+  <text name="quality_desc">
+    Choosing a shortcut will reset all manual changes you have made.
+  </text>
+  <text name="distance_lbl">
+    Visibility distance
+  </text>
+  <text name="faster_lbl">
+    Faster
+  </text>
+  <text name="farther_lbl">
+    Farther
+  </text>
+  <text name="distance_desc1">
+    To see more land when you zoom out, increase the distance.
+  </text>
+  <text name="environment_lbl">
+    Shadows
+  </text>
+  <text name="enhancements_desc">
+    Shadows significantly improve visual quality but can reduce speed.
+  </text>
+  <text name="RenderShadowDetailText">
+    Shadow Detail:
+  </text>
+  <combo_box name="ShadowDetail">
+    <combo_box.item name="0" label="Нет"/>
+    <combo_box.item name="1" label="Sun/Moon"/>
+    <combo_box.item name="2" label="Sun/Moon + Projectors"/>
+  </combo_box>
+  <text name="water_lbl">
+    Water
+  </text>
+  <text name="water_desc">
+    Reducing or turning off transparent water may improve frame rate.
+  </text>
+  <check_box name="TransparentWater" label="Transparent Water"/>
+  <text name="photo_lbl">
+    Photography
+  </text>
+  <text name="photo_desc">
+    Maximum detail is good for photos, but can slow frame rate.
+  </text>
+  <spinner name="render_volume_lod" label="Distance detail:"/>
+  <text name="photo_dist_det_desc">
+    (Enter value between 0.0 and 4.0)
+  </text>
+</panel>

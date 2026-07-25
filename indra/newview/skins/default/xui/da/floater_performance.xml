@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="IMPROVE GRAPHICS SPEED">
+  <panel name="panel_top">
+    <panel name="fps_subpanel">
+      <text name="fps_lbl">
+        frames per second
+      </text>
+      <text name="fps_desc1_lbl">
+        Allow 5-10 seconds for
+      </text>
+      <text name="fps_desc2_lbl">
+        changes to take full effect.
+      </text>
+    </panel>
+  </panel>
+  <panel name="panel_performance_main">
+    <panel name="autoadjustments_subpanel">
+      <text name="auto_adj_lbl">
+        Auto-adjust settings (recommended)
+      </text>
+      <text name="auto_adj_desc">
+        Allow automatic adjustments to reach your preferred frame rate.
+      </text>
+    </panel>
+    <panel name="settings_subpanel">
+      <text name="settings_lbl">
+        Graphics settings
+      </text>
+      <text name="settings_desc">
+        Choose settings for distance, water, lighting and more.
+      </text>
+    </panel>
+    <panel name="nearby_subpanel">
+      <text name="avatars_nearby_lbl">
+        Avatars nearby
+      </text>
+      <text name="avatars_nearby_desc">
+        Manage which nearby avatars are fully displayed.
+      </text>
+    </panel>
+    <panel name="complexity_subpanel">
+      <text name="complexity_lbl">
+        Your avatar complexity
+      </text>
+      <text name="complexity_info">
+        Reduce the complexity of your avatar if you aren't satisfied with current FPS.
+      </text>
+    </panel>
+    <panel name="huds_subpanel">
+      <text name="huds_lbl">
+        Your active HUDs
+      </text>
+      <text name="huds_desc">
+        Removing HUDs you are not using can improve speed.
+      </text>
+    </panel>
+  </panel>
+</floater>

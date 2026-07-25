@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Avatar Profile Menu">
+  <menu_item_call name="im" label="IM"/>
+  <menu_item_call name="offer_teleport" label="Offer Teleport"/>
+  <menu_item_call name="request_teleport" label="Request Teleport"/>
+  <menu_item_call name="voice_call" label="Voice call"/>
+  <menu_item_call name="chat_history" label="View chat history..."/>
+  <menu_item_call name="add_friend" label="Add Friend"/>
+  <menu_item_call name="remove_friend" label="Remove Friend"/>
+  <menu_item_call name="invite_to_group" label="Invite to group..."/>
+  <menu_item_call name="agent_permissions" label="Permissions"/>
+  <menu_item_call name="map" label="Map"/>
+  <menu_item_call name="share" label="Share"/>
+  <menu_item_call name="pay" label="Betal"/>
+  <menu_item_check name="block_unblock" label="Block/Unblock"/>
+  <menu_item_call name="copy_display_name" label="Copy Display Name"/>
+  <menu_item_call name="copy_name" label="Copy Agent Name"/>
+  <menu_item_call name="copy_id" label="Copy Agent Id"/>
+</toggleable_menu>
