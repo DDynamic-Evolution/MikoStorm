@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="opensim_panel" label="Opensim">
+  <tab_container name="tabs" label="Opensim">
+    <panel name="grid_management_panel" label="Grid Manager">
+      <text name="add_grid_text">
+        Add new grid
+      </text>
+      <line_editor name="add_grid" label="Enter a LoginURI"/>
+      <button name="clear_grid" label="Ryd"/>
+      <button name="apply_new_grid" label="Anvend"/>
+      <text name="add_grid_text">
+        Manage Grids
+      </text>
+      <scroll_list name="grid_list">
+        <scroll_list.columns name="grid_label" label="Grid name"/>
+        <scroll_list.columns name="login_uri" label="Login URI"/>
+      </scroll_list>
+      <button name="refresh_grid" label="Opdater"/>
+      <button name="remove_grid" label="Fjern"/>
+      <panel name="advanced_grid_panel" label="">
+        <text name="grid_name_text">
+          Grid Name:
+        </text>
+        <check_box name="enable_lock" label=""/>
+        <text name="grid_uri_text">
+          Grid URI:
+        </text>
+        <text name="login_page_text">
+          Login Page:
+        </text>
+        <text name="helper_uri_text">
+          Helper URI:
+        </text>
+        <text name="website_text">
+          Grid Website:
+        </text>
+        <text name="support_text">
+          Grid Support:
+        </text>
+        <text name="register_text">
+          Grid Registration:
+        </text>
+        <text name="password_text">
+          Grid Password URI:
+        </text>
+        <text name="search_text">
+          Grid Search:
+        </text>
+        <text name="message_text">
+          Grid Message URI:
+        </text>
+      </panel>
+    </panel>
+    <panel name="opensim_misc_panel" label="Miscellaneous">
+      <check_box name="DebugSearch" label="Debug Search"/>
+      <text name="search_url_debug_text">
+        Override current search url: (no override if empty)
+      </text>
+      <button name="clear_search_url_debug" label="Ryd"/>
+      <button name="pick_current_search_url" label="Pick"/>
+    </panel>
+  </tab_container>
+</panel>

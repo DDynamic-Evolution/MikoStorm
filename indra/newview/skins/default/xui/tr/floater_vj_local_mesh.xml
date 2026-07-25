@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Local Mesh" title="Local Mesh">
+  <tab_container name="local_mesh_tabs">
+    <panel name="local_mesh_assets_panel" label="Local Mesh Assets" title="Local Mesh Assets">
+      <fs_scroll_list name="l_name_list">
+        <column name="unit_status" label="Status"/>
+        <column name="unit_name" label="Ad"/>
+        <column name="unit_lods" label="LODs"/>
+        <column name="unit_objects" label="Objects"/>
+        <column name="unit_id_HIDDEN" label="ID"/>
+      </fs_scroll_list>
+    </panel>
+    <panel name="logs_panel" label="Log"/>
+    <panel name="local_mesh_settings_panel" label="Ayarlar">
+      <check_box name="local_mesh_scale_use_meters" label="Assume scale is in meters." tool_tip="Ignore the cm scale units used by tools such as Maya"/>
+      <check_box name="checkbox_apply_joint_offsets" label="Apply joint offsets." tool_tip="Apply any joint offsets in the mesh, by default these are ignored."/>
+      <check_box name="checkbox_auto_reload" label="Auto-reload changed files." tool_tip="Watch local mesh files on disk and reload them automatically when they change."/>
+      <text name="auto_reload_period_label">
+        Scan period (sec):
+      </text>
+      <spinner name="auto_reload_period" tool_tip="How often to scan watched local mesh files for changes."/>
+      <text name="lod_suffix_label">
+        LOD Suffixes:
+      </text>
+      <combo_box name="lod_suffix_combo" tool_tip="Choose a standard or manually edit... || SL default - (Lowest is LOD0, High has no suffix). || Game Engine - Unity/UE5, etc. (Lowest=LOD3, High=LOD0). || LOD Names - English LOD names, (Lowest='LOWEST', High='HIGH').">
+        <combo_item name="choose_one">
+          Current
+        </combo_item>
+        <combo_item name="suff_sl">
+          SL Standard
+        </combo_item>
+        <combo_item name="suff_unity">
+          Games Engine Standard
+        </combo_item>
+        <combo_item name="suff_descriptive">
+          LOD Names
+        </combo_item>
+      </combo_box>
+      <text name="suf_lowest_lab">
+        Lowest:
+      </text>
+      <line_editor name="suf_lowest" tool_tip="The Suffix used to identify the Lowest LOD file on disk and models within a file."/>
+      <text name="suf_low_lab">
+        Low:
+      </text>
+      <line_editor name="suf_low" tool_tip="The Suffix used to identify the Low LOD file on disk and models within a file."/>
+      <text name="suf_medium_lab">
+        Medium:
+      </text>
+      <line_editor name="suf_medium" tool_tip="The Suffix used to identify the Medium LOD file on disk and models within a file."/>
+      <text name="suf_high_lab">
+        High:
+      </text>
+      <line_editor name="suf_high" tool_tip="The Suffix used to identify the High LOD file on disk and models within a file."/>
+      <text name="suf_physics_lab">
+        Physics:
+      </text>
+      <line_editor name="suf_physics" tool_tip="The Suffix used to identify the Physics file on disk and models within a file."/>
+    </panel>
+  </tab_container>
+  <button name="btn_apply" label="Uygula"/>
+  <button name="btn_add" label="Ekle"/>
+  <button name="btn_remove" label="Kaldır"/>
+  <button name="btn_reload" label="Reload"/>
+  <button name="btn_clear" label="Temizle"/>
+  <button name="btn_rez" label="Rez Selected" tool_tip="Create a donor mesh inworld and populate with selected local mesh. This creates an empty object in-world."/>
+</floater>

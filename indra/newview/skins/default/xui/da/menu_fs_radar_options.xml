@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+  <menu_item_check name="ShowRadarMinimap" label="Show Minimap above Radar"/>
+  <menu_item_check name="LimitRadarByRange" label="Limit Results to specific Radius"/>
+  <menu_item_check name="FSRadarShowMutedAndDerendered" label="Show muted and blacklisted Avatars"/>
+  <context_menu name="radarNameFormat" label="Radar Name Format">
+    <menu_item_check name="radarFmtDN" label="Display Name"/>
+    <menu_item_check name="radarFmtUN" label="Username"/>
+    <menu_item_check name="radarFmtDNUN" label="Display Name (Username)"/>
+    <menu_item_check name="radarFmtUNDN" label="Username (Display Name)"/>
+  </context_menu>
+  <context_menu name="visible_columns" label="Displayed Columns">
+    <menu_item_check name="voice_level" label="Voice"/>
+    <menu_item_check name="in_region" label="Same Region"/>
+    <menu_item_check name="typing_status" label="Typing Status"/>
+    <menu_item_check name="sitting_status" label="Sitting Status"/>
+    <menu_item_check name="flags" label="Flags"/>
+    <menu_item_check name="has_notes" label="Notes"/>
+    <menu_item_check name="age" label="Age"/>
+    <menu_item_check name="seen" label="Seen"/>
+  </context_menu>
+  <menu_item_check name="radarColorNamesBasedOnDistance" label="Color names based on distance"/>
+  <context_menu name="report_to_menu" label="Report To">
+    <menu_item_check name="radar_nearby_chat" label="Nearby Chat"/>
+    <menu_item_check name="radar_nearby_chat" label="Notification Toasts"/>
+  </context_menu>
+  <menu_item_check name="MiniMapChatRing" label="Nearby chat distance ring in Minimap"/>
+  <menu_item_check name="RadarReportDrawRangeEnter" label="Report Entering Draw Range"/>
+  <menu_item_check name="RadarReportDrawRangeLeave" label="Report Leaving Draw Range"/>
+  <menu_item_check name="RadarReportChatRangeEnter" label="Report Entering Chat Range"/>
+  <menu_item_check name="RadarReportChatRangeLeave" label="Report Leaving Chat Range"/>
+  <menu_item_check name="RadarReportSimRangeEnter" label="Report Entering your Region"/>
+  <menu_item_check name="RadarReportSimRangeLeave" label="Report Leaving your Region"/>
+  <menu_item_check name="RadarReportAgeAlert" label="Report Avatar Age Alert"/>
+  <menu_item_check name="RadarEnterChannelAlert" label="Report Enter Alerts to Scripts"/>
+  <menu_item_check name="RadarLeaveChannelAlert" label="Report Exit Alerts to Scripts"/>
+  <menu_item_check name="FSRadarEnhanceByBridge" label="Enhance Radar with LSL-Client Bridge"/>
+  <menu_item_call name="show_blocked_list" label="Open Blocked Residents & Objects"/>
+</toggleable_menu>

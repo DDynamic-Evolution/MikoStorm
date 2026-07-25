@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="im_panel" label="im_panel">
+  <panel name="im_header" label="im_header"/>
+</panel>

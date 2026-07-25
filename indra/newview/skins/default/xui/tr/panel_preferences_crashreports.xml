@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="crash_reports" label="Crash Reports">
+  <panel.string name="PrivacyPolicyUrl">
+    https://www.firestormviewer.org/privacy-policy
+  </panel.string>
+  <check_box name="checkSendCrashReports" label="Send crash reports to MikoStorm"/>
+  <check_box name="checkSendCrashReportsAlwaysAsk" label="Always ask before sending"/>
+  <check_box name="checkSendSettings" label="Include settings files"/>
+  <text name="textSendSettings">
+    (contains username)
+  </text>
+  <check_box name="checkSendName" label="Include username"/>
+  <text name="textSendName">
+    (used to ask for additional information if needed)
+  </text>
+  <text name="textRestartRequired">
+    Changes made to any setting require a restart to become effective.
+  </text>
+  <text name="textInformation1">
+    Unless checked above crash reports only contain information relevant to the crash.
+  </text>
+  <text name="textInformation2">
+    Logs are not sent, please review the contents and email separately
+  </text>
+  <text name="textInformation3">
+    if you feel they might contain additional information.
+  </text>
+  <text name="textInformation4">
+    Privacy policy: [URL]
+  </text>
+</panel>

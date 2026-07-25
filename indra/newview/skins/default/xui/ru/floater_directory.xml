@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="directory" title="Поиск">
+  <tab_container name="Directory Tabs">
+    <panel name="panel_dir_people" label="People"/>
+    <panel name="panel_dir_groups" label="Groups"/>
+    <panel name="panel_dir_places" label="Places"/>
+    <panel name="panel_dir_land" label="Land Sales"/>
+    <panel name="panel_dir_events" label="Events"/>
+    <panel name="panel_dir_classified" label="Classifieds"/>
+    <panel name="panel_dir_web" label="Web"/>
+  </tab_container>
+  <button name="open_profile_btn" label="Open Profile"/>
+</floater>

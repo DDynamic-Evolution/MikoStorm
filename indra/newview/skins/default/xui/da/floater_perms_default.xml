@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="perms default" title="Default Creation Permissions">
+  <panel name="default permissions" label="Default Permissions">
+    <text name="label_1">
+      Next owner:
+    </text>
+    <text name="label_2">
+      Kopier
+    </text>
+    <text name="label_3">
+      Modify
+    </text>
+    <text name="label_4">
+      Transfer
+    </text>
+    <text name="label_5">
+      Share with group
+    </text>
+    <text name="label_6">
+      Allow anyone to copy
+    </text>
+    <text name="label_7" tool_tip="Set default permissions for when Objects are created">
+      Objects
+    </text>
+    <text name="label_8" tool_tip="Set default permissions for uploaded items">
+      Uploads
+    </text>
+    <text name="label_9" tool_tip="Set default permissions for when Scripts are created">
+      Scripts
+    </text>
+    <text name="label_10" tool_tip="Set default permissions for when Notecards are created">
+      Notecards
+    </text>
+    <text name="label_11" tool_tip="Set default permissions for when Gestures are created">
+      Gestures
+    </text>
+    <text name="label_12" tool_tip="Set default permissions for when Clothing or Body Parts are created">
+      Wearables
+    </text>
+    <text name="label_13" tool_tip="Set default permissions for when Environment settings are created">
+      Indstillinger
+    </text>
+    <text name="label_14" tool_tip="Set default permissions for when GLTF Materials are created">
+      Materials
+    </text>
+  </panel>
+  <button name="ok" label="OK"/>
+  <button name="cancel" label="Annuller"/>
+</floater>

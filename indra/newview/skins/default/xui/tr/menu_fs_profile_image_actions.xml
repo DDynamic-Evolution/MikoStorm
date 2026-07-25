@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Avatar Profile Image Actions">
+  <menu_item_call name="upload_photo" label="Upload Photo"/>
+  <menu_item_call name="change_photo" label="Change Photo"/>
+  <menu_item_call name="remove_photo" label="Remove Photo"/>
+</toggleable_menu>

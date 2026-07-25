@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_ls_people" label="People">
+  <panel name="panel_ls_input">
+    <text name="search_text">
+      Enter search terms:
+    </text>
+  </panel>
+  <panel name="panel_ls_scrolllist">
+    <fs_scroll_list name="search_results_people">
+      <columns name="icon" label=""/>
+      <columns name="username" label="Navn"/>
+    </fs_scroll_list>
+    <button name="people_back" label="Tilbage"/>
+    <button name="people_next" label="Næste"/>
+  </panel>
+</panel>

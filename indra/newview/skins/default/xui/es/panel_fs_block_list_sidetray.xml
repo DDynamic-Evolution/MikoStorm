@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel">
+  <panel name="blocked_buttons_panel" label="bottom_panel">
+    <filter_editor name="blocked_filter_input" label="Filtrar"/>
+    <menu_button name="blocked_gear_btn" tool_tip="Actions on selected person or object"/>
+    <menu_button name="view_btn" tool_tip="Sort options"/>
+    <menu_button name="plus_btn" tool_tip="Pick a Resident or an object to block"/>
+    <button name="unblock_btn" tool_tip="Remove Resident or object from blocked list"/>
+  </panel>
+  <text name="block_limit">
+    Blocked entries: [COUNT] ([LIMIT] max.)
+  </text>
+  <fs_scroll_list name="block_list">
+    <fs_scroll_list.columns name="item_name" label="Nombre"/>
+    <fs_scroll_list.columns name="item_type" label="Tipo"/>
+  </fs_scroll_list>
+</panel>

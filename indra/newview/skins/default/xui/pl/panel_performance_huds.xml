@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+  <text name="back_lbl">
+    Wstecz
+  </text>
+  <text name="huds_title">
+    Twoje aktywne HUD-y
+  </text>
+  <text name="huds_desc1">
+    Odpinanie nieużywanych HUD-ów oszczędza pamięć i może przyspieszyć działanie programu.
+  </text>
+  <text name="huds_desc2">
+    HUD-y często mają dużo skryptów i również przyczyniają się do lagów serwera.
+  </text>
+  <text name="huds_desc3">
+    Uwaga: Użycie przycisku minimalizacji HUD-a nie odepina go. Użyj X aby go usunąć.
+  </text>
+  <name_list name="hud_list">
+    <name_list.columns name="art_visual" label=""/>
+    <name_list.columns name="art_value" label="Czas (μs)" tool_tip="Time taken to render this HUD (microseconds)"/>
+    <name_list.columns name="name" label="Nazwa" tool_tip="Kliknij 'X' aby odpiąć"/>
+  </name_list>
+</panel>

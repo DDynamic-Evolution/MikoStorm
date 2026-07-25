@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_settings_gear">
+  <menu_item_call name="edit_settings" label="Rediger"/>
+  <menu_item_call name="Settings Apply Local" label="Apply Only To Myself"/>
+  <menu_item_call name="Settings Apply Parcel" label="Apply To Parcel"/>
+  <menu_item_call name="Settings Apply Region" label="Apply To Region"/>
+  <menu_item_call name="copy_settings" label="Kopier"/>
+  <menu_item_call name="paste_settings" label="Indsæt"/>
+  <menu_item_call name="copy_uuid" label="Copy UUID"/>
+</toggleable_menu>

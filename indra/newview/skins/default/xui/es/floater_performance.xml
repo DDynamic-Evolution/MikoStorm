@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="performance" title="MEJORAR VELOCIDAD GRÁFICA">
+  <panel name="panel_top">
+    <panel name="fps_subpanel">
+      <text name="fps_lbl">
+        cuadros por segundo
+      </text>
+      <text name="fps_desc1_lbl">
+        Permita 5-10 segundos para
+      </text>
+      <text name="fps_desc2_lbl">
+        que los cambios surtan pleno efecto.
+      </text>
+    </panel>
+  </panel>
+  <panel name="panel_performance_main">
+    <panel name="autoadjustments_subpanel">
+      <text name="auto_adj_lbl">
+        Ajustes automáticos (recomendado)
+      </text>
+      <text name="auto_adj_desc">
+        Permitir ajustes automáticos para alcanzar la tasa de refresco preferida.
+      </text>
+    </panel>
+    <panel name="settings_subpanel">
+      <text name="settings_lbl">
+        Configuración gráfica
+      </text>
+      <text name="settings_desc">
+        Elija configuración de distancia, agua, iluminación y más.
+      </text>
+    </panel>
+    <panel name="nearby_subpanel">
+      <text name="avatars_nearby_lbl">
+        Avatares cercanos
+      </text>
+      <text name="avatars_nearby_desc">
+        Gestione qué avatares cercanos se muestran completamente.
+      </text>
+    </panel>
+    <panel name="complexity_subpanel">
+      <text name="complexity_lbl">
+        Complejidad de tu avatar
+      </text>
+      <text name="complexity_info">
+        Reduzca la complejidad de su avatar si no está satisfecho con los FPS actuales.
+      </text>
+    </panel>
+    <panel name="huds_subpanel">
+      <text name="huds_lbl">
+        Tus HUDs activos
+      </text>
+      <text name="huds_desc">
+        Eliminar los HUDs que no utiliza puede mejorar la velocidad.
+      </text>
+    </panel>
+  </panel>
+</floater>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_primfeed_photo">
+  <combo_box name="resolution_combobox" tool_tip="Image resolution">
+    <combo_box.item name="CurrentWindow" label="Ventana actual"/>
+    <combo_box.item name="320x240" label="320x240"/>
+    <combo_box.item name="640x480" label="640x480"/>
+    <combo_box.item name="800x600" label="800x600"/>
+    <combo_box.item name="1024x768" label="1024x768"/>
+    <combo_box.item name="1280x1024" label="1280x1024"/>
+    <combo_box.item name="1600x1200" label="1600x1200"/>
+    <combo_box.item name="1080x2340" label="1080x2340 (9:19.5)"/>
+    <combo_box.item name="1080x2400" label="1080x2400 (9:20)"/>
+    <combo_box.item name="1080x2520" label="1080x2520 (9:21)"/>
+    <combo_box.item name="2340x1080" label="2340x1080 (19.5:9)"/>
+    <combo_box.item name="2400x1080" label="2400x1080 (20:9)"/>
+    <combo_box.item name="2520x1080" label="2520x1080 (21:9)"/>
+    <combo_box.item name="Custom" label="Personalizado"/>
+  </combo_box>
+  <combo_box name="filters_combobox" tool_tip="Image filters">
+    <combo_box.item name="NoFilter" label="No Filter"/>
+  </combo_box>
+  <spinner name="custom_snapshot_height" label=""/>
+  <check_box name="keep_aspect_ratio" label="Keep Aspect ratio"/>
+  <text name="working_lbl">
+    Refreshing...
+  </text>
+  <panel name="snapshot_frame_panel">
+    <check_box name="show_frame" label="Show Snapshot Frame" tool_tip="Show a frame on-screen that surrounds the areas of the snapshot. Parts of the scene that are outside of the snapshot will be de-saturated and slightly blurred."/>
+    <check_box name="show_guides" label="Show Composition Guide" tool_tip="Show composition helper inside the snapshot frame."/>
+    <button name="guide_settings_btn" label="#" tool_tip="Open frame guide settings"/>
+  </panel>
+  <button name="new_snapshot_btn" label="Actualizar" tool_tip="Click to refresh"/>
+  <button name="big_preview_btn" label="Vista previa" tool_tip="Click to toggle preview"/>
+  <text name="store_label">
+    Post as:
+  </text>
+  <combo_box name="stores_combobox" tool_tip="If you have one or more easy blogger stores assigned on Primfeed they will appear here."/>
+  <text name="description_label">
+    Description:
+  </text>
+  <panel name="options_panel">
+    <check_box name="add_location_cb" label="Include location"/>
+    <check_box name="primfeed_add_to_public_gallery" label="Add to public gallery"/>
+    <check_box name="primfeed_commercial_content" label="Commercial content"/>
+    <combo_box name="rating_combobox" tool_tip="Primfeed content rating">
+      <combo_box.item name="GeneralRating" label="General"/>
+      <combo_box.item name="ModerateRating" label="Moderate"/>
+      <combo_box.item name="AdultRating" label="Adult"/>
+      <combo_box.item name="AdultPlusRating" label="Adult+"/>
+    </combo_box>
+  </panel>
+  <panel name="share_options_panel">
+    <check_box name="primfeed_open_url_on_post" label="Open in browser after posting" tool_tip="Automatically open the Primfeed post in your web browser after posting."/>
+    <button name="post_photo_btn" label="Share"/>
+    <button name="cancel_photo_btn" label="Cancelar"/>
+  </panel>
+</panel>

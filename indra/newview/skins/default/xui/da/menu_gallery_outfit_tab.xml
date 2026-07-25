@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Outfit">
+  <menu_item_call name="wear_replace" label="Replace Current Outfit"/>
+  <menu_item_call name="wear_add" label="Add to Current Outfit"/>
+  <menu_item_call name="take_off" label="Remove from Current Outfit"/>
+  <menu_item_call name="thumbnail" label="Image..."/>
+  <menu_item_call name="favorites_add" label="Add to Favorites"/>
+  <menu_item_call name="favorites_remove" label="Remove from Favorites"/>
+  <menu_item_call name="edit" label="Edit Outfit"/>
+  <menu_item_call name="rename" label="Rename Outfit"/>
+  <menu_item_call name="save" label="Save to this Outfit"/>
+  <menu_item_call name="delete" label="Delete Outfit"/>
+  <menu name="New Clothes" label="New Clothes">
+    <menu_item_call name="New Shirt" label="New Shirt"/>
+    <menu_item_call name="New Pants" label="New Pants"/>
+    <menu_item_call name="New Shoes" label="New Shoes"/>
+    <menu_item_call name="New Socks" label="New Socks"/>
+    <menu_item_call name="New Jacket" label="New Jacket"/>
+    <menu_item_call name="New Skirt" label="New Skirt"/>
+    <menu_item_call name="New Gloves" label="New Gloves"/>
+    <menu_item_call name="New Undershirt" label="New Undershirt"/>
+    <menu_item_call name="New Underpants" label="New Underpants"/>
+    <menu_item_call name="New Alpha" label="New Alpha"/>
+    <menu_item_call name="New Physics" label="New Physics"/>
+    <menu_item_call name="New Tattoo" label="New Tattoo"/>
+  </menu>
+  <menu name="New Body Parts" label="New Body Parts">
+    <menu_item_call name="New Shape" label="New Shape"/>
+    <menu_item_call name="New Skin" label="New Skin"/>
+    <menu_item_call name="New Hair" label="New Hair"/>
+    <menu_item_call name="New Eyes" label="New Eyes"/>
+  </menu>
+</context_menu>

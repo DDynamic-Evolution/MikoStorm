@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_profile" label="Profile">
+  <string name="status_online">
+    Online
+  </string>
+  <string name="status_offline">
+    Offline
+  </string>
+  <string name="status_unknown">
+    Unknown
+  </string>
+  <string name="CaptionTextAcctInfo">
+    [ACCTTYPE]
+[PAYMENTINFO]
+[FIRESTORM][FSDEV][FSSUPP][FSQA][FSGW]
+  </string>
+  <string name="payment_update_link_url">
+    http://www.secondlife.com/account/billing.php?lang=en
+  </string>
+  <string name="partner_edit_link_url">
+    http://www.secondlife.com/account/partners.php?lang=en
+  </string>
+  <string name="age_format_short">
+    [REG_DATE]
+  </string>
+  <string name="age_format_full">
+    [REG_DATE]
+([AGE])
+  </string>
+  <string name="name_text_args">
+    [NAME]
+  </string>
+  <string name="display_name_text_args">
+    [DISPLAY_NAME]
+  </string>
+  <panel name="name_holder">
+    <menu_button name="copy_btn" tool_tip="Copy options"/>
+  </panel>
+  <button name="set_name" tool_tip="Set Display Name"/>
+  <icon name="can_see_online" tool_tip="Friend can see my online status"/>
+  <icon name="cant_see_online" tool_tip="Friend can not see my online status"/>
+  <icon name="can_see_on_map" tool_tip="Friend can see me on map"/>
+  <icon name="cant_see_on_map" tool_tip="Friend can not see me on map"/>
+  <icon name="can_edit_objects" tool_tip="Friend can edit my objects"/>
+  <icon name="cant_edit_objects" tool_tip="Friend can not edit my objects"/>
+  <layout_stack name="imagepositioner">
+    <layout_panel name="image_action_panel">
+      <menu_button name="image_action_btn" tool_tip="Perform profile picture related actions"/>
+    </layout_panel>
+    <layout_panel name="label_stack">
+      <layout_stack name="badgepositioner">
+        <layout_panel name="badge_layout">
+          <layout_stack name="badge_stacker">
+            <layout_panel name="top_badge_layout">
+              <icon name="top_badge_icon" tool_tip="Linden Lab Employee"/>
+            </layout_panel>
+            <layout_panel name="bottom_badge_layout">
+              <icon name="bottom_badge_icon" tool_tip="Linden Lab Employee"/>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+  <button name="btn_preview" tool_tip="Toggle preview of your profile 'about' section"/>
+  <button name="group_invite" label="+" tool_tip="Invite to Group"/>
+  <text name="Give inventory" tool_tip="Drop inventory items here to give them to this person.">
+    Drop inventory item here.
+  </text>
+  <layout_stack name="buttonstack">
+    <layout_panel name="left_buttonstack">
+      <button name="show_on_map_btn" label="Find on Map" tool_tip="Locate the Resident on the map"/>
+      <button name="pay" label="Betal" tool_tip="Pay money to the Resident"/>
+    </layout_panel>
+    <layout_panel name="middle_buttonstack">
+      <button name="teleport" label="Offer Teleport" tool_tip="Offer a teleport to the Resident"/>
+      <button name="im" label="Instant Message" tool_tip="Open instant message session"/>
+    </layout_panel>
+    <layout_panel name="right_buttonstack">
+      <button name="add_friend" label="Add Friend" tool_tip="Offer friendship to the Resident"/>
+      <button name="remove_friend" label="Remove Friend" tool_tip="Terminate friendship with the Resident"/>
+      <button name="block" label="Bloker" tool_tip="Block this Resident"/>
+      <button name="unblock" label="Fjern blokering" tool_tip="Unblock this Resident"/>
+    </layout_panel>
+  </layout_stack>
+  <check_box name="show_in_search" label="Show in search" tool_tip="Let people see you in search results"/>
+  <check_box name="hide_sl_age" label="Show full birthdate" tool_tip="Let people see your SL age"/>
+  <button name="save_description_changes" label="Gem"/>
+  <button name="discard_description_changes" label="Kassér"/>
+</panel>

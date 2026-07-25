@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_huds">
+  <text name="back_lbl">
+    Retour
+  </text>
+  <text name="huds_title">
+    Vos HUDs actifs
+  </text>
+  <text name="huds_desc1">
+    Détacher les HUDs que vous n'utilisez pas économise de la mémoire et peut accélérer le lecteur.
+  </text>
+  <text name="huds_desc2">
+    Les HUDs sont souvent très scriptés et contribuent également au lag côté serveur.
+  </text>
+  <text name="huds_desc3">
+    Remarque : Utiliser le bouton de minimisation d'un HUD ne le détache pas. Utilisez le X pour le supprimer.
+  </text>
+  <name_list name="hud_list">
+    <name_list.columns name="art_visual" label=""/>
+    <name_list.columns name="art_value" label="Temps (μs)" tool_tip="Temps de rendu de ce HUD (microsecondes)"/>
+    <name_list.columns name="name" label="Nom" tool_tip="Cliquez sur le « X » pour détacher"/>
+  </name_list>
+</panel>

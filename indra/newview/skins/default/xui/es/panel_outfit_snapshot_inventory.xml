@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_outfit_snapshot_inventory">
+  <text name="title">
+    Inventario
+  </text>
+  <text name="hint_lbl">
+    Uploading an image to your inventory costs L$[UPLOAD_COST].
+
+Fee is based on your subscription level. Higher levels are charged lower fees.
+  </text>
+  <button name="cancel_btn" label="Cancelar"/>
+  <button name="save_btn" label="Guardar"/>
+</panel>

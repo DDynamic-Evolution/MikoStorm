@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Object List popup">
+  <menu_item_call name="script_info" label="Script Info"/>
+  <menu_item_call name="touch_object" label="Touch"/>
+  <menu_item_call name="sit_on_object" label="Sit"/>
+  <menu_item_call name="teleport_to_object" label="Teleport to"/>
+  <menu_item_call name="look_at_object" label="Zoom"/>
+  <menu_item_call name="inspect_object" label="Inspect"/>
+  <menu_item_call name="edit_object" label="Rediger"/>
+  <menu_item_call name="return_object" label="Return"/>
+  <menu_item_call name="delete_object" label="Slet"/>
+  <menu_item_call name="blacklist_object" label="Blacklist"/>
+  <menu_item_call name="object_buy" label="Buy object"/>
+  <menu_item_call name="filter_my_objects" label="Filter My Objects"/>
+  <menu_item_call name="select_all" label="Vælg alle"/>
+  <menu_item_call name="clear_selection" label="Clear Selection"/>
+</context_menu>

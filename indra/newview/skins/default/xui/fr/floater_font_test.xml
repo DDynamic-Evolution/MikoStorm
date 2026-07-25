@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="contents" title="Fête des polices">
+  <text >
+    SansSerifSmall
+  </text>
+  <text >
+    SansSerifMedium
+  </text>
+  <text >
+    SansSerif, sans taille ni style (devrait être identique à medium)
+  </text>
+  <text >
+    SansSerifLarge
+  </text>
+  <text >
+    SansSerifHuge
+  </text>
+  <text >
+    SansSerifHuge style=BOLD
+  </text>
+  <text >
+    SansSerifBold taille=Huge
+  </text>
+  <text >
+    Monospace
+  </text>
+  <text >
+    Monospace taille=Large
+  </text>
+  <text >
+    SansSerifLarge style=BOLD
+  </text>
+  <text >
+    SansSerifBold
+  </text>
+  <text >
+    SansSerif style=BOLD (devrait être identique à SansSerifBold)
+  </text>
+  <text >
+    SansSerif style=ITALIC
+  </text>
+  <text >
+    SansSerif style=BOLD|ITALIC
+  </text>
+  <text >
+    SansSerif style=BOLD|ITALIC ombre=soft
+  </text>
+  <text >
+    SansSerif style=UNDERLINE
+  </text>
+  <text >
+    SansSerif style=hard
+  </text>
+  <text >
+    SansSerif ombre=soft
+  </text>
+  <text >
+    DejaVu
+  </text>
+  <text >
+    DejaVu style=BOLD
+  </text>
+  <text >
+    DejaVu style=ITALIC
+  </text>
+  <text >
+    DejaVu style=BOLD|ITALIC
+  </text>
+  <text >
+    DejaVu taille=Large style=BOLD|ITALIC
+  </text>
+  <text >
+    Helvetica
+  </text>
+  <text >
+    Helvetica style=BOLD
+  </text>
+  <text >
+    Helvetica style=ITALIC
+  </text>
+  <text >
+    Helvetica style=BOLD|ITALIC
+  </text>
+  <text >
+    Helvetica taille=Large style=BOLD|ITALIC
+  </text>
+  <text >
+    Script
+  </text>
+</floater>

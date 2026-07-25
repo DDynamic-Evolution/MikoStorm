@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_add_payment_method">
+  <floater.string name="continue_url">
+    https://secondlife.com/my/lindex/buy.php?associate_for_viewer=1
+  </floater.string>
+  <panel name="wrapper_panel" label="pannello_rivestimento">
+    <text name="title_txt">
+      Add a payment method to buy Linden dollars and enjoy more of Second Life.
+    </text>
+    <button name="continue_btn" label="Get started"/>
+    <button name="close_btn" label="Later"/>
+    <text name="image_left_desc">
+      Create an avatar you love. Choose from millions of items in stores and the Second Life Marketplace. Your style is here.
+    </text>
+    <text name="image_center_desc">
+      Donate to your favorite performers and hosts. Your support helps them create great experiences.
+    </text>
+    <text name="image_right_desc">
+      Make the home of your dreams. With millions of items available to purchase, you can make your retreat unique.
+    </text>
+  </panel>
+</floater>

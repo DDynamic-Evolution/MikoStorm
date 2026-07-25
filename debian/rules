@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --buildsystem=cmake
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/opt/mikostorm \
+		-DOPENSIM=ON \
+		-DUSE_AVX2_OPTIMIZATION=ON
+
+override_dh_auto_install:
+	dh_auto_install
+	# Install the complete package tree from the tarball layout
+	install -d debian/mikostorm/opt/mikostorm
+	cp -a build-linux-x86_64/newview/* debian/mikostorm/opt/mikostorm/ 2>/dev/null || true
+
+override_dh_auto_test:
+	# No tests in this package
+
+override_dh_installdocs:
+	dh_installdocs
+
+override_dh_auto_clean:
+	dh_auto_clean
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_gltf_material">
+  <check_box name="double sided" label="Double Sided"/>
+  <panel name="base_color_texture_pnl">
+    <text name="base_color_lbl">
+      Base Color:
+    </text>
+    <texture_picker name="base_color_texture" tool_tip="Base Color map.  Alpha channel is optional and used for transparency."/>
+    <text name="base_color_upload_fee">
+      No upload fee
+    </text>
+    <text name="base_color_tint_lbl">
+      Tint
+    </text>
+    <text name="base_color_transparency_lbl">
+      Alpha
+    </text>
+    <text name="alpha_mode_lbl">
+      Alpha mode
+    </text>
+    <combo_box name="alpha mode">
+      <combo_box.item name="None" label="Opaque"/>
+      <combo_box.item name="Alpha blending" label="Blend"/>
+      <combo_box.item name="Alpha masking" label="Mask"/>
+    </combo_box>
+    <text name="alpha_cutoff_lbl">
+      Alpha Cutoff
+    </text>
+  </panel>
+  <panel name="metallic_texture_pnl">
+    <text name="metallic_roughness_lbl">
+      Metallic-Roughness:
+    </text>
+    <texture_picker name="metallic_roughness_texture" tool_tip="GLTF metallic-roughness map with optional occlusion.  Red channel is occlusion, green channel is roughness, blue channel is metalness."/>
+    <text name="metallic_upload_fee">
+      No upload fee
+    </text>
+    <text name="metallic_factor_lbl">
+      Metallic Factor
+    </text>
+    <text name="roughness_factor_lbl">
+      Roughness Factor
+    </text>
+  </panel>
+  <panel name="emissive_texture_pnl">
+    <text name="emissive_lbl">
+      Emissive:
+    </text>
+    <text name="emissive_upload_fee">
+      No upload fee
+    </text>
+    <text name="emissive_tint_lbl">
+      Tint
+    </text>
+  </panel>
+  <panel name="normal_texture_pnl">
+    <text name="normal_lbl">
+      Normal:
+    </text>
+    <text name="normal_upload_fee">
+      No upload fee
+    </text>
+  </panel>
+</panel>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="delete_pref_preset" title="Delete Pref Preset">
+  <string name="title_graphic">
+    Delete Graphic Preset
+  </string>
+  <string name="title_camera">
+    Delete Camera Preset
+  </string>
+  <text name="Preset">
+    Select a preset
+  </text>
+  <button name="delete" label="Slet"/>
+  <button name="cancel" label="Annuller"/>
+</floater>

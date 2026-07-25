@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_profile">
+  <text name="title">
+    Profile
+  </text>
+  <combo_box name="profile_size_combo" label="Opløsning">
+    <combo_box.item name="CurrentWindow" label="Aktuelt vindue"/>
+    <combo_box.item name="640x480" label="640x480"/>
+    <combo_box.item name="800x600" label="800x600"/>
+    <combo_box.item name="1024x768" label="1024x768"/>
+    <combo_box.item name="Custom" label="Brugerdefineret"/>
+  </combo_box>
+  <spinner name="profile_snapshot_width" label="Width x Height"/>
+  <spinner name="profile_snapshot_height" label=""/>
+  <check_box name="profile_keep_aspect_check" label="Constrain proportions"/>
+  <text name="caption_label">
+    Caption:
+  </text>
+  <check_box name="add_location_cb" label="Include location"/>
+  <button name="cancel_btn" label="▶ Selection"/>
+  <button name="post_btn" label="Post"/>
+</panel>

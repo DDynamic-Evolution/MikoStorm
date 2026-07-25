@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="rlv_behaviours" title="Active RLV Restrictions">
+  <tab_container name="behaviour_tab">
+    <panel name="behaviour_panel" label="Restrictions">
+      <scroll_list name="behaviour_list" tool_tip="List of current RLVa restrictions.">
+        <scroll_list.columns name="behaviour" label="Restriction"/>
+        <scroll_list.columns name="issuer" label="Object Name"/>
+      </scroll_list>
+    </panel>
+    <panel name="exception_panel" label="Exceptions">
+      <scroll_list name="exception_list" tool_tip="List of current RLVa exceptions.">
+        <scroll_list.columns name="behaviour" label="Exception"/>
+        <scroll_list.columns name="option" label="Source"/>
+        <scroll_list.columns name="issuer" label="Object Name"/>
+      </scroll_list>
+    </panel>
+    <panel name="modifier_panel" label="Modifiers">
+      <scroll_list name="modifier_list" tool_tip="List of current RLVa modifiers.">
+        <scroll_list.columns name="modifier" label="Modifier"/>
+        <scroll_list.columns name="value" label="Valore"/>
+        <scroll_list.columns name="primary" label="Primary Object"/>
+      </scroll_list>
+    </panel>
+  </tab_container>
+  <panel name="bottom_panel" label="bottom_panel">
+    <button name="copy_btn" label="Copy to Clipboard"/>
+  </panel>
+</floater>

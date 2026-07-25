@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="login_image_settings" title="Paramètres de l'image de connexion">
+  <text name="description">
+    Sélectionnez une image locale à afficher comme arrière-plan de connexion au lieu de la page web par défaut. Laissez vide pour restaurer la page web par défaut. Formats pris en charge : JPG, PNG, BMP, TGA.
+  </text>
+  <text name="path_label">
+    Chemin de l'image de connexion :
+  </text>
+  <button name="set_path_btn" label="Parcourir..."/>
+  <button name="clear_path_btn" label="Effacer"/>
+</floater>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="设置即时消息提示音...">
+  <text name="label_name">
+    为以下对象设置自定义提示音：
+  </text>
+  <text name="label_uuid">
+    Sound UUID:
+  </text>
+  <button name="preview_btn" label="预览"/>
+  <button name="clear_btn" label="清除"/>
+  <button name="ok_btn" label="确定"/>
+  <button name="cancel_btn" label="取消"/>
+</floater>

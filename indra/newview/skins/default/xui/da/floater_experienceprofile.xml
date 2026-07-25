@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="experience_profile" title="Experience Profile">
+  <floater.string name="empty_slurl">
+    (none)
+  </floater.string>
+  <floater.string name="maturity_icon_general">
+    "Parcel_PG_Light"
+  </floater.string>
+  <floater.string name="maturity_icon_moderate">
+    "Parcel_M_Light"
+  </floater.string>
+  <floater.string name="maturity_icon_adult">
+    "Parcel_R_Light"
+  </floater.string>
+  <tab_container name="tab_container">
+    <panel name="panel_experience_info">
+      <scroll_container name="xp_scroll">
+        <panel name="scrolling_panel">
+          <layout_stack name="ls1">
+            <layout_panel name="top panel">
+              <button name="edit_btn" label="Rediger"/>
+            </layout_panel>
+            <layout_panel name="maturity panel">
+              <text name="ContentRating">
+                Rating:
+              </text>
+            </layout_panel>
+            <layout_panel name="location panel">
+              <text name="Location">
+                Location:
+              </text>
+            </layout_panel>
+            <layout_panel name="marketplace panel">
+              <text name="Marketplace">
+                Marketplace store:
+              </text>
+            </layout_panel>
+            <layout_panel name="owner panel">
+              <text name="Owner">
+                Owner:
+              </text>
+            </layout_panel>
+            <layout_panel name="group_panel">
+              <text name="Group">
+                Group:
+              </text>
+            </layout_panel>
+            <layout_panel name="perm panel">
+              <button name="allow_btn" label="Allow"/>
+              <button name="forget_btn" label="Forget"/>
+              <button name="block_btn" label="Bloker"/>
+              <text name="privileged">
+                This experience is enabled for all residents.
+              </text>
+              <button name="report_btn" label="Report Abuse"/>
+            </layout_panel>
+          </layout_stack>
+        </panel>
+      </scroll_container>
+    </panel>
+    <panel name="edit_panel_experience_info">
+      <scroll_container name="edit_xp_scroll">
+        <panel name="edit_scrolling_panel">
+          <button name="Group_btn" label="Group"/>
+          <text name="edit_ContentRating">
+            Rating:
+          </text>
+          <icons_combo_box name="edit_ContentRatingText" label="Moderate" tool_tip="Increasing the maturity rating on an experience will reset permission for all residents which have allowed the experience.">
+            <icons_combo_box.item name="Adult" label="Adult"/>
+            <icons_combo_box.item name="Mature" label="Moderate"/>
+            <icons_combo_box.item name="PG" label="General"/>
+          </icons_combo_box>
+          <text name="edit_Location">
+            Location:
+          </text>
+          <button name="location_btn" label="Set to Current"/>
+          <button name="clear_btn" label="Clear Location"/>
+          <text name="edit_marketplace">
+            Marketplace store:
+          </text>
+          <check_box name="edit_enable_btn" label="Enable Experience" tool_tip=""/>
+          <check_box name="edit_private_btn" label="Hide In Search"/>
+          <button name="cancel_btn" label="Tilbage"/>
+          <button name="save_btn" label="Gem"/>
+        </panel>
+      </scroll_container>
+    </panel>
+  </tab_container>
+</floater>

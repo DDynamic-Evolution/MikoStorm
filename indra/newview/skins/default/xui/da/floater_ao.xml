@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_overrider" title="Animation Overrider">
+  <floater.string name="ao_no_sets_loaded">
+    No Sets Loaded
+  </floater.string>
+  <floater.string name="ao_no_animations_loaded">
+    No Animations Loaded
+  </floater.string>
+  <floater.string name="ao_dnd_only_on_full_interface">
+    You can only drag and drop an animation notecard on the full interface window. Click on the wrench icon to open it.
+  </floater.string>
+  <floater.string name="ao_add_blank_label">
+    New empty set...
+  </floater.string>
+  <floater.string name="ao_add_clone_label">
+    Clone current set...
+  </floater.string>
+  <floater.string name="ao_track_main">
+    Main
+  </floater.string>
+  <floater.string name="ao_no_track_animations">
+    Empty Track - drop an animation here
+  </floater.string>
+  <floater.string name="ao_group_tooltip">
+    Animation group - these play together:
+  </floater.string>
+  <floater.string name="ao_member_tooltip">
+    Animation group entry - plays together with the rest of its group. Double-click to preview it alone.
+  </floater.string>
+  <floater.string name="ao_cm_expand">
+    Expand
+  </floater.string>
+  <floater.string name="ao_cm_collapse">
+    Collapse
+  </floater.string>
+  <floater.string name="ao_cm_rename_group">
+    Rename group...
+  </floater.string>
+  <floater.string name="ao_cm_move_out">
+    Move out of group
+  </floater.string>
+  <floater.string name="ao_cm_find_original">
+    Find Original
+  </floater.string>
+  <floater.string name="ao_cm_delete">
+    Slet
+  </floater.string>
+  <floater.string name="ao_dnd_merge">
+    Drop to group with this animation
+  </floater.string>
+  <floater.string name="ao_dnd_add_to_group">
+    Drop to add to this group
+  </floater.string>
+  <floater.string name="ao_dnd_add_to_track">
+    Drop to add to this track
+  </floater.string>
+  <floater.string name="ao_dnd_folder_group">
+    Drop folder to create an animation group
+  </floater.string>
+  <floater.string name="ao_dnd_folder_pour">
+    Drop folder to add its animations to this track
+  </floater.string>
+</floater>

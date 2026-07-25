@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="simple_snapshot" title="Element öncədən baxışı">
+  <button name="new_snapshot_btn" label="Şəkil çək"/>
+  <button name="save_btn" label="Saxla"/>
+  <button name="cancel_btn" label="Ləğv et"/>
+</floater>

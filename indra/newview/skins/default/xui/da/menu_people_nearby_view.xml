@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_group_plus">
+  <menu_item_check name="sort_by_recent_speakers" label="Sort by Recent Speakers"/>
+  <menu_item_check name="sort_name" label="Sort by Name"/>
+  <menu_item_check name="sort_distance" label="Sort by Distance"/>
+  <menu_item_check name="sort_arrival" label="Sort by Recent arrival"/>
+  <menu_item_check name="view_icons" label="View People Icons"/>
+  <menu_item_check name="view_map" label="View Map"/>
+</toggleable_menu>

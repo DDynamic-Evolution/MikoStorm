@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="bulk_upload">
+  <layout_stack name="maint_layout">
+    <layout_panel name="count_panel">
+      <text name="number_of_items">
+        Number of items to upload: [COUNT]
+      </text>
+    </layout_panel>
+    <layout_panel name="warning_panel">
+      <text name="textures_2k_warning">
+        By default, one or more selected textures will be scaled to 2048px.
+      </text>
+    </layout_panel>
+    <layout_panel name="checkbox_panel">
+      <check_box name="upload_2k" label="Scale textures to a maximum of 1024px"/>
+    </layout_panel>
+    <layout_panel name="cost_panel">
+      <text name="upload_cost">
+        Upload cost: L$[COST]
+      </text>
+    </layout_panel>
+    <layout_panel name="buttoms_panel">
+      <button name="upload_btn" label="Upload"/>
+      <button name="cancel_btn" label="Annuller"/>
+    </layout_panel>
+    <layout_panel name="link_panel">
+      <text name="new_folder_textbox">
+        How textures are scaled during upload:
+https://wiki.secondlife.com/wiki/Limits#All_Viewers
+      </text>
+    </layout_panel>
+  </layout_stack>
+</floater>

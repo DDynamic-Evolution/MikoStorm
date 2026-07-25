@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+  <text name="back_lbl">
+    Atrás
+  </text>
+  <text name="settings_title">
+    Configuración gráfica
+  </text>
+  <button name="advanced_btn" label="Abrir configuración avanzada"/>
+  <button name="defaults_btn" label="Restablecer configuración recomendada"/>
+  <text name="quality_lbl">
+    Calidad y velocidad
+  </text>
+  <text name="fastest_lbl">
+    Más rápido
+  </text>
+  <text name="best_quality_lbl">
+    Mejor calidad
+  </text>
+  <text name="quality_desc">
+    Elegir un atajo restablecerá todos los cambios manuales que haya realizado.
+  </text>
+  <text name="distance_lbl">
+    Distancia de visibilidad
+  </text>
+  <text name="faster_lbl">
+    Más rápido
+  </text>
+  <text name="farther_lbl">
+    Más lejos
+  </text>
+  <text name="distance_desc1">
+    Para ver más terreno al alejar, aumente la distancia.
+  </text>
+  <text name="environment_lbl">
+    Sombras
+  </text>
+  <text name="enhancements_desc">
+    Las sombras mejoran significativamente la calidad visual pero pueden reducir la velocidad.
+  </text>
+  <text name="RenderShadowDetailText">
+    Detalle de sombras:
+  </text>
+  <combo_box name="ShadowDetail">
+    <combo_box.item name="0" label="Ninguna"/>
+    <combo_box.item name="1" label="Sol/Luna"/>
+    <combo_box.item name="2" label="Sol/Luna + Proyectores"/>
+  </combo_box>
+  <text name="water_lbl">
+    Agua
+  </text>
+  <text name="water_desc">
+    Reducir o desactivar el agua transparente puede mejorar la tasa de refresco.
+  </text>
+  <check_box name="TransparentWater" label="Agua transparente"/>
+  <text name="photo_lbl">
+    Fotografía
+  </text>
+  <text name="photo_desc">
+    El detalle máximo es bueno para fotos, pero puede ralentizar la tasa de refresco.
+  </text>
+  <spinner name="render_volume_lod" label="Detalle de distancia:"/>
+  <text name="photo_dist_det_desc">
+    (Ingrese un valor entre 0.0 y 4.0)
+  </text>
+</panel>

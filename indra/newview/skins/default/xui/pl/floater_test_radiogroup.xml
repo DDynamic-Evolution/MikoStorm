@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_radiogroup">
+  <radio_group name="parcel_voice_channel">
+    <radio_item name="Estate" label="Use the Estate spatial channel"/>
+    <radio_item name="Private" label="Use a private spatial channel"/>
+    <radio_item name="Disabled" label="Disable spatial audio on this parcel"/>
+  </radio_group>
+  <radio_group name="simple_radio_group">
+    <radio_item name="label_radio_item" label="Label in label attribute"/>
+    <radio_item name="contents_radio_item" label="Label in text contents"/>
+  </radio_group>
+  <radio_group name="no_border_radio_group">
+    <radio_item name="foo_radio_item" label="No Border Foo"/>
+    <radio_item name="bar_item" label="No Border Bar"/>
+  </radio_group>
+</floater>

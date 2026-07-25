@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Access" label="Access">
+  <tab_container name="tabs">
+    <panel name="estate_managers_panel" label="Estate Managers">
+      <text name="estate_manager_label">
+        Estate Managers:
+      </text>
+      <name_list name="estate_manager_name_list">
+        <columns name="name" label="Navn"/>
+      </name_list>
+      <button name="add_estate_manager_btn" label="Add..."/>
+      <button name="remove_estate_manager_btn" label="Remove..."/>
+      <button name="export_estate_manager_btn" label="Export..."/>
+      <button name="import_estate_manager_btn" label="Import..." tool_tip="Import a CSV file containing only valid UUIDs - one per line, no extra characters or formatting."/>
+    </panel>
+    <panel name="allowed_panel" label="Allowed">
+      <panel name="allowed_search_panel" label="top_panel">
+        <filter_editor name="allowed_search_input" label="Search allowed agents"/>
+        <button name="copy_allowed_list_btn" label="Kopier"/>
+      </panel>
+      <text name="allow_resident_label">
+        Always allowed:
+      </text>
+      <name_list name="allowed_avatar_name_list">
+        <columns name="name" label="Navn"/>
+      </name_list>
+      <button name="add_allowed_avatar_btn" label="Add..."/>
+      <button name="remove_allowed_avatar_btn" label="Remove..."/>
+      <button name="export_allowed_list_btn" label="Export..."/>
+      <button name="import_allowed_list_btn" label="Import..." tool_tip="Import a CSV file containing only valid UUIDs - one per line, no extra characters or formatting."/>
+    </panel>
+    <panel name="allowed_groups_panel" label="Allowed Groups">
+      <panel name="allowed_group_search_panel" label="top_panel">
+        <filter_editor name="allowed_group_search_input" label="Search allowed groups"/>
+        <button name="copy_allowed_group_list_btn" label="Kopier"/>
+      </panel>
+      <text name="allow_group_label">
+        Groups always allowed:
+      </text>
+      <name_list name="allowed_group_name_list">
+        <columns name="name" label="Navn"/>
+      </name_list>
+      <button name="add_allowed_group_btn" label="Add..."/>
+      <button name="remove_allowed_group_btn" label="Remove..."/>
+      <button name="export_allowed_group_btn" label="Export..."/>
+      <button name="import_allowed_group_btn" label="Import..." tool_tip="Import a CSV file containing only valid UUIDs - one per line, no extra characters or formatting."/>
+    </panel>
+    <panel name="banned_panel" label="Banned">
+      <panel name="banned_search_panel" label="top_panel">
+        <filter_editor name="banned_search_input" label="Search banned agents"/>
+        <button name="copy_banned_list_btn" label="Kopier"/>
+      </panel>
+      <text name="ban_resident_label">
+        Always banned:
+      </text>
+      <name_list name="banned_avatar_name_list">
+        <columns name="name" label="Navn"/>
+        <columns name="last_login_date" label="Last login date"/>
+        <columns name="ban_date" label="Date banned"/>
+        <columns name="bannedby" label="Banned by"/>
+      </name_list>
+      <button name="add_banned_avatar_btn" label="Add..."/>
+      <button name="remove_banned_avatar_btn" label="Remove..."/>
+      <button name="export_banned_avatar_btn" label="Export..."/>
+      <button name="import_banned_avatar_btn" label="Import..." tool_tip="Import a CSV file containing only valid UUIDs - one per line, no extra characters or formatting."/>
+    </panel>
+  </tab_container>
+</panel>

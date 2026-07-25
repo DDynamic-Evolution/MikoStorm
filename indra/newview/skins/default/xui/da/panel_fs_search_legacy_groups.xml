@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_ls_groups" label="Groups">
+  <panel name="panel_ls_input">
+    <text name="search_text">
+      Enter search terms:
+    </text>
+    <combo_box name="groups_maturity">
+      <combo_box.item name="Desired_PG" label="General"/>
+      <combo_box.item name="Desired_Mature" label="General and Moderate"/>
+      <combo_box.item name="Desired_Adult" label="General, Moderate, Adult"/>
+    </combo_box>
+  </panel>
+  <panel name="panel_ls_scrolllist">
+    <scroll_list name="search_results_groups">
+      <columns name="icon" label=""/>
+      <columns name="group_name" label="Group Name"/>
+      <columns name="members" label="Members"/>
+      <columns name="score" label="Score"/>
+    </scroll_list>
+    <button name="groups_back" label="Tilbage"/>
+    <button name="groups_next" label="Næste"/>
+  </panel>
+</panel>

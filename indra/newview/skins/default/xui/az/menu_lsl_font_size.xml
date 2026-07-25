@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_font_size">
+  <menu_item_check name="font_small" label="Kiçik"/>
+  <menu_item_check name="font_monospace" label="Defolt"/>
+  <menu_item_check name="font_medium" label="Orta"/>
+  <menu_item_check name="font_large" label="Böyük"/>
+  <menu_item_check name="font_huge" label="Çox böyük"/>
+</toggleable_menu>

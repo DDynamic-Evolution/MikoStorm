@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_settings_sky_atmos" label="Atmosphere & Lighting">
+  <string name="hdr_string">
+    HDR Scale:
+  </string>
+  <string name="brightness_string">
+    Brightness:
+  </string>
+  <string name="hdr_tooltip">
+    Intensity of lighting effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.
+  </string>
+  <layout_stack name="main_ls">
+    <layout_panel name="top_lp">
+      <text name="ambient_color_label">
+        Ambient Color:
+      </text>
+      <text name="blue_horizon_label">
+        Blue Horizon:
+      </text>
+      <text name="blue_density_label">
+        Blue Density:
+      </text>
+    </layout_panel>
+    <layout_panel name="bottom_lp">
+      <layout_stack name="atmosphere1">
+        <layout_panel name="left_lp">
+          <text name="haze_horizon_label">
+            Haze Horizon:
+          </text>
+          <text name="haze_density_label">
+            Haze Density:
+          </text>
+          <text name="moisture_level_label">
+            Moisture Level:
+          </text>
+          <text name="droplet_radius_label">
+            Droplet Radius:
+          </text>
+          <text name="ice_level_label">
+            Ice Level:
+          </text>
+        </layout_panel>
+        <layout_panel name="right_lp">
+          <text name="density_multiplier_label">
+            Density Multiplier:
+          </text>
+          <text name="distance_multiplier_label">
+            Distance Multiplier:
+          </text>
+          <text name="maximum_altitude_label">
+            Maximum Altitude:
+          </text>
+          <text name="probe_ambiance_label" tool_tip="Irradiance control. When not zero, enables HDR lighting model.">
+            Reflection Probe Ambiance (HDR):
+          </text>
+          <slider name="probe_ambiance" tool_tip="Intensity of environment based indirect lighting. At zero HDR scale becomes Brightness"/>
+          <text name="scene_gamma_label">
+            Brightness:
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</panel>

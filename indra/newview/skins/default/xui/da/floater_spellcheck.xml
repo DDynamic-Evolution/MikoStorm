@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="spellcheck_floater" title="Spell Checker Settings">
+  <check_box name="spellcheck_enable" label="Enable spell checker"/>
+  <text name="spellcheck_main">
+    Main dictionary:
+  </text>
+  <text name="spellcheck_additional" label="Logs:">
+    Additional dictionaries:
+  </text>
+  <text name="spellcheck_available">
+    Available
+  </text>
+  <text name="spellcheck_active">
+    Active
+  </text>
+  <button name="spellcheck_remove_btn" label="Fjern"/>
+  <button name="spellcheck_import_btn" label="Import..."/>
+</floater>

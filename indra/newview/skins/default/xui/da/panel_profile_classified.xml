@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_profile_classified">
+  <panel.string name="type_mature">
+    Moderate
+  </panel.string>
+  <panel.string name="type_pg">
+    General Content
+  </panel.string>
+  <panel.string name="l$_price">
+    L$[PRICE]
+  </panel.string>
+  <panel.string name="click_through_text_fmt">
+    [TELEPORT] teleport, [MAP] map, [PROFILE] profile
+  </panel.string>
+  <panel.string name="date_fmt">
+    [mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+  </panel.string>
+  <panel.string name="auto_renew_on">
+    Enabled
+  </panel.string>
+  <panel.string name="auto_renew_off">
+    Disabled
+  </panel.string>
+  <panel.string name="location_notice">
+    (will update after save)
+  </panel.string>
+  <string name="publish_label">
+    Publish
+  </string>
+  <string name="save_label">
+    Gem
+  </string>
+  <layout_stack name="main_classifieds_stack">
+    <layout_panel name="scroll_layout_panel">
+      <scroll_container name="profile_scroll">
+        <panel name="info_scroll_content_panel">
+          <icon name="edit_icon" label="" tool_tip="Click to select an image"/>
+          <layout_stack name="info_panel">
+            <layout_panel name="main_info_panel">
+              <text_editor name="classified_name">
+                [name]
+              </text_editor>
+              <text_editor name="creation_date" tool_tip="Creation date"/>
+              <text_editor name="price_for_listing" tool_tip="Price for listing.">
+                [PRICE]
+              </text_editor>
+            </layout_panel>
+            <layout_panel name="clickthrough_layout_panel">
+              <text_editor name="click_through_text" tool_tip="Click through data"/>
+            </layout_panel>
+          </layout_stack>
+          <panel name="edit_panel">
+            <text name="Name:">
+              Title:
+            </text>
+            <text name="description_label">
+              Description:
+            </text>
+            <text name="location_label">
+              Location:
+            </text>
+            <text name="classified_location_edit">
+              loading...
+            </text>
+            <button name="set_to_curr_location_btn" label="Set to Current Location"/>
+            <combo_box name="category_edit" label=""/>
+            <icons_combo_box name="content_type_edit" label="General Content">
+              <icons_combo_box.item name="mature_ci" label="Moderate Content"/>
+              <icons_combo_box.item name="pg_ci" label="General Content"/>
+            </icons_combo_box>
+            <check_box name="auto_renew_edit" label="Auto renew each week"/>
+          </panel>
+        </panel>
+      </scroll_container>
+    </layout_panel>
+    <layout_panel name="util_buttons_lp">
+      <layout_stack name="util_buttons_stack">
+        <layout_panel name="teleport_btn_lp">
+          <button name="teleport_btn" label="Teleporter"/>
+        </layout_panel>
+        <layout_panel name="map_btn_lp">
+          <button name="show_on_map_btn" label="Map"/>
+        </layout_panel>
+        <layout_panel name="edit_btn_lp">
+          <button name="edit_btn" label="Rediger"/>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+    <layout_panel name="publish_layout_panel">
+      <layout_stack name="publish_stack">
+        <layout_panel name="save_btn_lp">
+          <button name="save_changes_btn" label="[LABEL]"/>
+        </layout_panel>
+        <layout_panel name="cancel_btn_lp">
+          <button name="cancel_btn" label="Annuller"/>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</panel>

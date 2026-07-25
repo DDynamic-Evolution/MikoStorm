@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Toolbars Popup">
+  <menu_item_call name="Remove button" label="Remove this button"/>
+  <menu_item_call name="Choose Buttons" label="Toolbar buttons..."/>
+  <menu_item_check name="icons_with_text" label="Icons and labels"/>
+  <menu_item_check name="icons_only" label="Icons only"/>
+  <menu_item_check name="toolbars_locked" label="Locked"/>
+</context_menu>

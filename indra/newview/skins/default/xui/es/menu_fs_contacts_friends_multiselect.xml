@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<context_menu name="Friends Popup">
+  <menu_item_call name="send_im" label="Send IM..."/>
+  <menu_item_call name="Add to Set" label="Add to Set..."/>
+  <menu_item_call name="offer_teleport" label="Offer Teleport"/>
+  <menu_item_call name="remove_friend" label="Remove Friends..."/>
+  <menu name="options" label="Options...">
+    <menu_item_check name="show_username" label="Show username column"/>
+    <menu_item_check name="show_displayname" label="Show display name column"/>
+    <menu_item_check name="show_fullname" label="Show full name column"/>
+    <menu_item_check name="show_permissions" label="Show permission columns"/>
+    <menu_item_check name="sort_by_username" label="Sort by username"/>
+    <menu_item_check name="sort_by_displayname" label="Sort by display name"/>
+    <menu_item_check name="format_username_displayname" label="Full name format Username (Display name)"/>
+    <menu_item_check name="format_displayname_username" label="Full name format Display name (Username)"/>
+    <menu_item_check name="friend_filter" label="Show search filter"/>
+  </menu>
+  <menu_item_check name="GlobalOnlineStatusToggle" label="Online status for friends visible"/>
+</context_menu>

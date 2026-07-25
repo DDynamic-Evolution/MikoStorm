@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="camera_preset_item">
+  <button name="delete_btn" tool_tip="Delete preset"/>
+  <button name="reset_btn" tool_tip="Reset preset to default"/>
+</panel>

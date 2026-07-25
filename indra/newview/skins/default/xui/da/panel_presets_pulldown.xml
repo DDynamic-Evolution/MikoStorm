@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="presets_pulldown">
+  <text name="Graphic Presets">
+    Graphic Presets
+  </text>
+  <button name="open_prefs_btn" label="Graphics Preferences" tool_tip="Open graphics preferences"/>
+  <button name="open_autofps_btn" label="Performance" tool_tip="Open performance window"/>
+</panel>

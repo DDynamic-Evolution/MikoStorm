@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_script_question_toast" label="panel_pytania_skryptu">
+  <panel name="buttons_panel" label="panel_przycisków"/>
+</panel>

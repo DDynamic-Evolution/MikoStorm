@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="snapshot_guide_settings" title="Frame Guide Settings">
+  <text name="color_and_appearance_label">
+    Guide Color and Appearance
+  </text>
+  <color_swatch name="guide_color" label=""/>
+  <spinner name="guide_thickness" label="Thickness (px)"/>
+  <slider name="guide_opacity" label="Opacity"/>
+  <text name="style_label">
+    Guide Style
+  </text>
+  <combo_box name="guide_style_combo" tool_tip="Choose which framing guide to display">
+    <combo_box.item name="rule_of_thirds" label="Rule of Thirds"/>
+    <combo_box.item name="golden_ratio_top_left" label="Golden Ratio (Top Left)"/>
+    <combo_box.item name="golden_ratio_top_right" label="Golden Ratio (Top Right)"/>
+    <combo_box.item name="golden_ratio_bottom_left" label="Golden Ratio (Bottom Left)"/>
+    <combo_box.item name="golden_ratio_bottom_right" label="Golden Ratio (Bottom Right)"/>
+    <combo_box.item name="diagonal" label="Diagonal"/>
+  </combo_box>
+</floater>

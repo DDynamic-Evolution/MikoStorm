@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_wearable_favorites" title="Favorite Wearables">
+  <floater.string name="empty_list">
+    Drag wearable items here to add to list.
+  </floater.string>
+  <floater.string name="search_no_items">
+    No matching items found.
+  </floater.string>
+  <panel name="buttons_panel">
+    <filter_editor name="wearable_filter_input" label="Filter Wearables"/>
+    <menu_button name="options_btn" tool_tip="Wearable favorites options"/>
+    <button name="remove_btn" tool_tip="Remove wearable from favorites list"/>
+  </panel>
+</floater>

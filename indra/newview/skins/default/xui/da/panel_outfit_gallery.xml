@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Outfit Gallery">
+  <string name="outfit_photo_string">
+    Photo of "[OUTFIT_NAME]" outfit
+  </string>
+  <string name="no_outfits_msg">
+    You don't have any outfits yet. Try [secondlife:///app/search/all/ Search]
+  </string>
+  <string name="no_matched_outfits_msg">
+    Didn't find what you're looking for? Try [secondlife:///app/search/all/[SEARCH_TERM] Search].
+  </string>
+  <text name="no_outfits_txt">
+    Searching...
+  </text>
+  <panel name="bottom_panel">
+    <text name="OutfitcountText">
+      [COUNT] Outfits
+    </text>
+    <text name="avatar_complexity_label">
+      Complexity: [WEIGHT]
+    </text>
+  </panel>
+</panel>

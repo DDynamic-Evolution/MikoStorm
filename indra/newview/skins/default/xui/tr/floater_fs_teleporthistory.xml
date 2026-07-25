@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_tphistory" title="Teleport History">
+  <filter_editor name="Filter" label="Filter Teleport History"/>
+  <menu_button name="options_gear_btn" tool_tip="Show options"/>
+  <menu_button name="sorting_menu_btn" tool_tip="Show sorting options"/>
+  <panel name="button_panel">
+    <layout_stack name="bottom_bar_ls0">
+      <layout_panel name="show_lm_panel">
+        <layout_stack name="bottom_bar_ls1">
+          <layout_panel name="teleport_btn_lp">
+            <button name="teleport_btn" label="Işınlan" tool_tip="Teleport to the selected area"/>
+          </layout_panel>
+          <layout_panel name="chat_btn_lp">
+            <button name="map_btn" label="Map" tool_tip="Show the corresponding area on the World Map"/>
+          </layout_panel>
+          <layout_panel name="profile_btn_lp">
+            <button name="profile_btn" label="Show Profile" tool_tip="Show the profile of this location"/>
+          </layout_panel>
+        </layout_stack>
+      </layout_panel>
+    </layout_stack>
+  </panel>
+</floater>

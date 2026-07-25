@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_widgets" title="Test pəncərəsi">
+  <menu_bar name="test_menu_bar" tool_tip="menu">
+    <menu name="Menu" label="Menyu">
+      <menu_item_call name="test_menu_item_1" label="Menyu elementi 1"/>
+      <menu_item_call name="test_menu_item_2" label="Menyu elementi 2"/>
+    </menu>
+  </menu_bar>
+  <text >
+    Widget siyahısı üçün http://wiki.secondlife.com/wiki/XUI_Reference-ə baxın
+  </text>
+  <button name="test_button" label="Düymə" tool_tip="button"/>
+  <flyout_button name="fly_btn" label="Açılan" tool_tip="flyout button">
+    <flyout_button.item label="Element 1"/>
+    <flyout_button.item label="Element 2"/>
+    <flyout_button.item label="Element 3"/>
+  </flyout_button>
+  <check_box name="test_checkbox" label="İşarələmə qutusu" tool_tip="checkbox"/>
+  <check_box name="test_checkbox_disabled" label="Deaktiv işarələmə qutusu" tool_tip="checkbox disabled"/>
+  <combo_box name="test_combo_box" label="Kombinasiya qutusu" tool_tip="combo box">
+    <combo_box.item name="item1" label="Kombinasiya elementi 1"/>
+    <combo_box.item name="item2" label="Kombinasiya elementi 2"/>
+  </combo_box>
+  <icon name="test_icon" tool_tip="icon"/>
+  <line_editor name="test_line_editor" tool_tip="line editor">
+    Sətir redaktoru nümunə mətni
+  </line_editor>
+  <filter_editor name="search editor" label="Axtarış üçün bura yazın" tool_tip="search editor"/>
+  <progress_bar name="test_progress_bar" tool_tip="progress bar"/>
+  <stat_view name="axis_view" label="Statistika görünüşü" tool_tip="stat view">
+    <stat_bar name="test_stat_bar" label="Test statistikası"/>
+  </stat_view>
+  <radio_group name="size_radio_group" tool_tip="radio group">
+    <radio_item name="small_radio_item" label="Radio 1"/>
+    <radio_item name="large_radio_item" label="Radio 2"/>
+  </radio_group>
+  <scroll_list tool_tip="scroll list">
+    <scroll_list.columns name="first_column" label="Sütun A"/>
+    <scroll_list.columns name="second_column" label="Sütun B"/>
+    <row >
+      <column >
+        short text
+      </column>
+      <column >
+        more short text
+      </column>
+    </row>
+    <row >
+      <column >
+        this is some longer text
+      </column>
+      <column >
+        and here is some more long text
+      </column>
+    </row>
+  </scroll_list>
+  <slider name="test_slider" label="Sürüşdürmə" tool_tip="slider"/>
+  <spinner name="test_spinner" label="Zənginləşdirici" tool_tip="spinner"/>
+  <text name="test_text" tool_tip="text">
+    Mətn (altı xətli)
+  </text>
+  <text name="test_text1" tool_tip="text">
+    Qısaltılmış mətn burada
+  </text>
+  <text_editor name="test_text_editor" tool_tip="text editor">
+    Mətn redaktoru
+  </text_editor>
+  <text name="test_text_box" tool_tip="text box">
+    Text box
+with
+multiple lines
+and too
+many
+line to actually fit
+  </text>
+  <tab_container name="group_tab_container" tool_tip="tab container">
+    <panel name="panel2" label="Səhifə 1 - Rəng">
+      <color_swatch name="swatch1" label="Rəng nümunəsi 1" tool_tip="Color Swatch: Click to open Color Picker"/>
+      <color_swatch name="swatch2" label="Rəng nümunəsi 2" tool_tip="Color Swatch: Click to open Color Picker"/>
+      <text name="test_text10" tool_tip="text">
+        Monospace Button Flyout Checkbox
+      </text>
+      <text name="test_text101" tool_tip="text">
+        SansSerifSmall.  Русский 中文 (简体)
+      </text>
+      <text name="test_text11" tool_tip="text">
+        SansSerif.  Русский 中文 (简体)
+      </text>
+      <text name="test_text12" tool_tip="text">
+        SansSerifLarge.  Русский 中文 (简体)
+      </text>
+      <text name="test_text13" tool_tip="text">
+        SansSerifHuge.  Русский 中文 (简体)
+      </text>
+    </panel>
+    <panel name="tab2" label="Səhifə 2 - İşarələmə qutusu"/>
+  </tab_container>
+</floater>

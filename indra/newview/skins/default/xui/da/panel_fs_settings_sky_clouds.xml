@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_fs_settings_sky_clouds" label="Clouds">
+  <panel name="P_Atmos_Settings">
+    <text name="cloud_color_label">
+      Cloud Color:
+    </text>
+  </panel>
+  <panel name="P_Cloud_Density">
+    <text name="cloud_coverage_label">
+      Cloud Cover:
+    </text>
+    <text name="cloud_scale_label">
+      Cloud Scale:
+    </text>
+    <text name="cloud_variance_label">
+      Cloud Variance:
+    </text>
+  </panel>
+  <panel name="P_Cloud_Density">
+    <text name="cloud_density_label" tool_tip="Cloud XY/Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds.">
+      Cloud Density:
+    </text>
+    <text name="Cloud_XY_Density_X">
+      X:
+    </text>
+    <text name="Cloud_XY_Density_Y">
+      Y:
+    </text>
+    <text name="Cloud_XY_Density_D">
+      D:
+    </text>
+  </panel>
+  <panel name="P_Cloud_Detail">
+    <text name="cloud_detail_label">
+      Cloud Detail:
+    </text>
+    <text name="Cloud_XY_Detail_X">
+      X:
+    </text>
+    <text name="Cloud_XY_Detail_Y">
+      Y:
+    </text>
+    <text name="Cloud_XY_Detail_D">
+      D:
+    </text>
+  </panel>
+  <panel name="P_Cloud_Scroll">
+    <text name="cloud_scroll_label">
+      Cloud Scroll:
+    </text>
+    <text name="cloud_image_label">
+      Cloud Image:
+    </text>
+  </panel>
+</panel>

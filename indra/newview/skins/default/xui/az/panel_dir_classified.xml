@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_dir_classified" label="Classifieds">
+  <string name="searching_text">
+    Searching...
+  </string>
+  <string name="not_found_text">
+    None found.
+  </string>
+  <string name="found_text">
+    [COUNT] found.
+  </string>
+  <text name="find">
+    Enter search terms:
+  </text>
+  <combo_box name="Category">
+    <combo_item name="AnyCategory" label="Any Category"/>
+    <combo_item name="Shopping" label="Shopping"/>
+    <combo_item name="LandRental" label="Land Rental"/>
+    <combo_item name="PropertyRental" label="Property Rental"/>
+    <combo_item name="SpecialAttraction" label="Special Attraction"/>
+    <combo_item name="NewProducts" label="New Products"/>
+    <combo_item name="Employment" label="Employment"/>
+    <combo_item name="Wanted" label="Wanted"/>
+    <combo_item name="Service" label="Service"/>
+    <combo_item name="Personal" label="Personal"/>
+  </combo_box>
+  <check_box name="incpg" label=""/>
+  <icon name="rating_icon_general" tool_tip="General"/>
+  <check_box name="incmature" label=""/>
+  <icon name="rating_icon_moderate" tool_tip="Moderate"/>
+  <check_box name="incadult" label=""/>
+  <icon name="rating_icon_adult" tool_tip="Adult"/>
+  <scroll_list name="results">
+    <column name="icon" label=""/>
+    <column name="type" label=""/>
+    <column name="name" label="Ad"/>
+    <column name="price" label="Qiymət"/>
+  </scroll_list>
+  <button name="prev_btn" tool_tip="Previous page"/>
+  <button name="next_btn" tool_tip="Next page"/>
+</panel>

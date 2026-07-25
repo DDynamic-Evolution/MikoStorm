@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Object Pie">
+  <pie_slice name="Open" label="Aç"/>
+  <pie_slice name="Build" label="Create"/>
+  <pie_slice name="Pie Object Touch" label="Touch"/>
+  <pie_slice name="Pie Object Sit" label="Sit Here"/>
+  <pie_slice name="Object Stand Up" label="Stand Up"/>
+  <pie_slice name="Buy..." label="Satın al"/>
+  <pie_menu name="Take Submenu" label="Take >">
+    <pie_slice name="Take Copy Separate" label="Copies: Separately"/>
+    <pie_slice name="Take Copy" label="Take copy"/>
+    <pie_slice name="Take" label="Al"/>
+    <pie_slice name="Take combined" label="Take: Combined"/>
+    <pie_slice name="Take Copy combined" label="Copy: Combined"/>
+    <pie_slice name="Take Separate" label="Take: Separately"/>
+  </pie_menu>
+  <pie_slice name="Pay..." label="Öde"/>
+  <pie_menu name="Object Pie More 1" label="More >">
+    <pie_slice name="Delete" label="Sil"/>
+    <pie_slice name="Wear" label="Giy"/>
+    <pie_slice name="Take Copy" label="Take Copy"/>
+    <pie_menu name="Pie Object Attach HUD" label="Attach HUD >"/>
+    <pie_menu name="Pie Object Attach" label="Attach >">
+      <pie_menu name="Enhanced Skeleton" label="Ext. Skeleton >">
+        <pie_slice name="Right Wing" label="Right Wing"/>
+        <pie_slice name="Groin" label="Groin"/>
+        <pie_slice name="Tail Base" label="Tail Base"/>
+        <pie_slice name="Tail Tip" label="Tail Tip"/>
+        <pie_slice name="Left Wing" label="Left Wing"/>
+        <pie_slice name="Left Hind Foot" label="L Hind Foot"/>
+        <pie_menu name="Enhanced Skeleton More" label="More >">
+          <pie_slice name="Alt Right Ear" label="Alt R Ear"/>
+          <pie_slice name="Alt Right Eye" label="Alt R Eye"/>
+          <pie_slice name="Tongue" label="Tongue"/>
+          <pie_slice name="Alt Left Eye" label="Alt L Eye"/>
+          <pie_slice name="Alt Left Ear" label="Alt L Ear"/>
+          <pie_slice name="Left Ring Finger" label="L Ring Finger"/>
+          <pie_slice name="Jaw" label="Jaw"/>
+          <pie_slice name="Right Ring Finger" label="R Ring Finger"/>
+        </pie_menu>
+        <pie_slice name="Right Hind Foot" label="R Hind Foot"/>
+      </pie_menu>
+    </pie_menu>
+    <pie_slice name="Return..." label="Return"/>
+    <pie_menu name="Object Pie More 2" label="More >">
+      <pie_menu name="ResetMenu" label="Reset >">
+        <pie_slice name="Texture Refresh" label="Tex Refresh"/>
+        <pie_slice name="Reset Skeleton" label="Skeleton"/>
+      </pie_menu>
+      <pie_menu name="DerenderMenu" label="Derender >">
+        <pie_slice name="DerenderPermanent" label="Blacklist"/>
+        <pie_slice name="Derender" label="Temporary"/>
+      </pie_menu>
+      <pie_slice name="Report Abuse..." label="Report..."/>
+      <pie_menu name="ExportMenu" label="Save as >">
+        <pie_slice name="Backup" label="Backup"/>
+        <pie_slice name="Collada" label="Collada"/>
+        <pie_slice name="Dump XML" label="Dump XML"/>
+      </pie_menu>
+      <pie_menu name="Pathfinding" label="Pathfinding >">
+        <pie_slice name="show_in_linksets" label="Show in linksets"/>
+        <pie_slice name="show_in_characters" label="Show in characters"/>
+      </pie_menu>
+      <pie_menu name="mute_menu" label="Mute >">
+        <pie_slice name="Object Mute" label="Sessiz"/>
+        <pie_slice name="Mute Particle" label="Part. Owner"/>
+      </pie_menu>
+      <pie_menu name="ScriptsMenu" label="Scripts >">
+        <pie_slice name="CompileMono" label="Compile (Mono)"/>
+        <pie_slice name="CompileLSL" label="Compile (LSL)"/>
+        <pie_slice name="Object Reset Scripts" label="Reset Scripts"/>
+        <pie_slice name="Object Set Scripts to Running" label="Run Scripts"/>
+        <pie_slice name="Object Set Scripts to Not Running" label="Stop Scripts"/>
+        <pie_slice name="Remove Scripts From Selection" label="Remove Scripts"/>
+        <pie_slice name="ScriptInfo" label="Script Info"/>
+      </pie_menu>
+      <pie_slice name="Object Inspect" label="Inspect"/>
+    </pie_menu>
+    <pie_slice name="Buy..." label="Satın al"/>
+  </pie_menu>
+  <pie_slice name="Edit..." label="Düzenle"/>
+</pie_menu>

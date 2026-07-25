@@ -66,6 +66,7 @@ private:
     void captureCamera();
     void deleteSelectedKeyframe();
     void clearAllKeyframes();
+    void deleteAllKeyframes();
     void insertKeyframe(const CameraKeyframe& kf);
     void redistributeTimes();
 
@@ -93,21 +94,26 @@ private:
     void onTimelineScrub();
     void onSpeedChanged();
     void onDurationChanged();
+    void toggleKeyframes();
+    void positionAboveToolbar();
 
-    // UI controls
-    LLScrollListCtrl* mKeyframeList;
-    LLButton* mCaptureBtn;
-    LLButton* mDeleteBtn;
-    LLButton* mClearBtn;
+    // UI controls - control bar
     LLSliderCtrl* mTimelineSlider;
-    LLTextBox* mTimeDisplay;
+    LLButton* mCaptureBtn;
     LLButton* mPlayBtn;
     LLButton* mStopBtn;
-    LLSliderCtrl* mSpeedSlider;
     LLSpinCtrl* mDurationSpinner;
+    LLSliderCtrl* mSpeedSlider;
+    LLButton* mKeyframesBtn;
+    LLTextBox* mStatusText;
+
+    // UI controls - keyframe panel
+    LLScrollListCtrl* mKeyframeList;
+    LLButton* mDeleteBtn;
+    LLButton* mClearBtn;
     LLButton* mSaveBtn;
     LLButton* mLoadBtn;
-    LLTextBox* mStatusText;
+    LLButton* mDeleteAllBtn;
 
     // State
     std::vector<CameraKeyframe> mKeyframes;
@@ -117,6 +123,7 @@ private:
     F32 mPlaybackDuration;   // Total duration in seconds
     LLFrameTimer mPlaybackTimer;
     bool mScrubbing;
+    bool mKeyframesVisible;
 
     // Saved camera state for restore
     LLVector3 mSavedCameraOrigin;

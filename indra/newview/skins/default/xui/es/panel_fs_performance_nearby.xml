@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+  <text name="back_lbl">
+    Atrás
+  </text>
+  <text name="av_nearby_title">
+    Avatares cercanos
+  </text>
+  <text name="tot_av_count">
+    Total: 50 (120000.10μs)
+  </text>
+  <text name="av_nearby_desc">
+    Oculte los avatares más complejos para aumentar la velocidad.
+  </text>
+  <slider name="IndirectMaxComplexity" label="Maximum complexity (K)" tool_tip="Controls at what point a visually complex avatar is drawn as a Impostor"/>
+  <slider name="FSRenderAvatarMaxART" label="Tiempo de renderizado máximo (μs)" tool_tip="Controla cuándo se considera que un avatar visualmente complejo tarda demasiado en renderizar (unidad: microsegundos)"/>
+  <text name="FSRenderAvatarMaxARTText">
+    sin límite
+  </text>
+  <name_list name="nearby_list">
+    <name_list.columns name="art_visual" label="" tool_tip="Bar graph showing current render time (includes auto-tuning) as % of slowest."/>
+    <name_list.columns name="art_value" label="Tiempo (μs)" tool_tip="Avatar Render Time. Actual time taken to render this avatar before any auto-tuning (in microseconds)."/>
+    <name_list.columns name="adj_art_value" label="Adj. Time (μs)" tool_tip="Avatar Render Time. Actual time taken to render this avatar after adjustments (in microseconds)."/>
+    <name_list.columns name="complex_value" label="ARC" tool_tip="Complexity (ARC) based on standard rules."/>
+    <name_list.columns name="state" label="" tool_tip="Shows any tuning. I=Impostor, S=no shadow."/>
+    <name_list.columns name="name" label="Nombre"/>
+    <name_list.columns name="breakdown" label="Breakdown" tool_tip="Where the rendering time is spent (Geom/Shad/Other)"/>
+  </name_list>
+  <text name="av_nearby_desc2">
+    También puede hacer clic derecho en un avatar en el mundo para controlar la visualización.
+  </text>
+  <text name="av_nearby_desc3">
+    Note: Your own avatar includes viewer overheads. Use the attachment tab to see how you affect others.
+  </text>
+  <text name="AvatarComplexityMode_Label">
+    Avatar Display:
+  </text>
+  <combo_box name="AvatarComplexityMode">
+    <combo_box.item name="complexity_limit_everone" label="Limit by Complexity"/>
+    <combo_box.item name="complexity_always_show_friends" label="Always show Friends"/>
+    <combo_box.item name="complexity_only_show_friends" label="Only show Friends"/>
+  </combo_box>
+  <button name="exceptions_btn" label="Excepciones..."/>
+  <check_box name="hide_avatars" label="Hide avatars completely."/>
+  <text name="name_tags_textbox">
+    Etiquetas de nombre:
+  </text>
+  <radio_group name="name_tag_mode">
+    <radio_item name="radio" label="Desactivado"/>
+    <radio_item name="radio2" label="Activado"/>
+    <radio_item name="radio3" label="Mostrar brevemente"/>
+  </radio_group>
+</panel>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_universal_panel">
+  <scroll_container name="avatar_universal_scroll">
+    <panel name="avatar_universal_color_panel">
+      <texture_picker name="Head Universal Tattoo" label="Head Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Upper Universal Tattoo" label="Upper Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Lower Universal Tattoo" label="Lower Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Skirt Tattoo" label="Skirt Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Hair Tattoo" label="Hair Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Eyes Tattoo" label="Eyes Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Left Arm Tattoo" label="Left Arm Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Left Leg Tattoo" label="Left Leg Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Aux1 Tattoo" label="Aux1 Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Aux2 Tattoo" label="Aux2 Tattoo" tool_tip="Click to choose a picture"/>
+      <texture_picker name="Aux3 Tattoo" label="Aux3 Tattoo" tool_tip="Click to choose a picture"/>
+      <color_swatch name="Color/Tint" label="Color/Tint" tool_tip="Click to open color picker"/>
+    </panel>
+  </scroll_container>
+</panel>

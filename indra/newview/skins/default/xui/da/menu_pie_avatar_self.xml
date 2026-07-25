@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Self Pie">
+  <pie_slice name="Profile..." label="Profile"/>
+  <pie_slice name="Groups..." label="Groups"/>
+  <pie_menu name="Take Off >" label="Take Off >">
+    <pie_menu name="Clothes >" label="Clothes >">
+      <pie_slice name="Shirt" label="Shirt"/>
+      <pie_slice name="Pants" label="Pants"/>
+      <pie_slice name="Shoes" label="Shoes"/>
+      <pie_slice name="Socks" label="Socks"/>
+      <pie_slice name="Jacket" label="Jacket"/>
+      <pie_slice name="Gloves" label="Gloves"/>
+      <pie_menu name="Clothes More" label="More >">
+        <pie_slice name="Self Undershirt" label="Undershirt"/>
+        <pie_slice name="All Clothes" label="All Clothes"/>
+        <pie_slice name="Self Underpants" label="Underpants"/>
+        <pie_slice name="Self Tattoo" label="Tattoo"/>
+        <pie_slice name="Self Physics" label="Physics"/>
+        <pie_slice name="Self Alpha" label="Alpha"/>
+      </pie_menu>
+      <pie_slice name="Skirt" label="Skirt"/>
+    </pie_menu>
+    <pie_menu name="Pie Object Detach HUD" label="HUD >"/>
+    <pie_menu name="Pie Object Detach" label="Detach >">
+      <pie_menu name="Enhanced Skeleton" label="Ext. Skeleton >">
+        <pie_slice name="Right Wing" label="Right Wing"/>
+        <pie_slice name="Groin" label="Groin"/>
+        <pie_slice name="Tail Base" label="Tail Base"/>
+        <pie_slice name="Tail Tip" label="Tail Tip"/>
+        <pie_slice name="Left Wing" label="Left Wing"/>
+        <pie_slice name="Left Hind Foot" label="L Hind Foot"/>
+        <pie_menu name="Enhanced Skeleton More" label="More >">
+          <pie_slice name="Alt Right Ear" label="Alt R Ear"/>
+          <pie_slice name="Alt Right Eye" label="Alt R Eye"/>
+          <pie_slice name="Tongue" label="Tongue"/>
+          <pie_slice name="Alt Left Eye" label="Alt L Eye"/>
+          <pie_slice name="Alt Left Ear" label="Alt L Ear"/>
+          <pie_slice name="Left Ring Finger" label="L Ring Finger"/>
+          <pie_slice name="Jaw" label="Jaw"/>
+          <pie_slice name="Right Ring Finger" label="R Ring Finger"/>
+        </pie_menu>
+        <pie_slice name="Right Hind Foot" label="R Hind Foot"/>
+      </pie_menu>
+    </pie_menu>
+    <pie_slice name="Detach All" label="Detach All"/>
+  </pie_menu>
+  <pie_slice name="Sit Down Here" label="Sit Down"/>
+  <pie_slice name="Stand Up" label="Stand Up"/>
+  <pie_slice name="ScriptInfo" label="Script Info"/>
+  <pie_slice name="Gestures" label="Gestures..."/>
+  <pie_menu name="Appearance >" label="Appearance >">
+    <pie_slice name="Edit My Shape" label="Edit Shape"/>
+    <pie_menu name="ResetMenu" label="Reset >">
+      <pie_slice name="Reset Skeleton And Animations" label="Skel. & Anim."/>
+      <pie_slice name="Reset Skeleton" label="Skeleton"/>
+      <pie_slice name="Reset Mesh LOD" label="Mesh LOD"/>
+    </pie_menu>
+    <pie_slice name="Texture Refresh" label="Tex Refresh"/>
+    <pie_slice name="Edit My Outfit" label="Edit Outfit"/>
+    <pie_slice name="Dump XML" label="Dump XML"/>
+    <pie_slice name="Hover Height" label="Hover Height"/>
+  </pie_menu>
+  <pie_slice name="Debug..." label="Textures"/>
+</pie_menu>

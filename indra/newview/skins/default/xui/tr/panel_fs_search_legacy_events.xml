@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_ls_events" label="Events">
+  <panel name="panel_ls_input">
+    <text name="search_text">
+      Enter search terms:
+    </text>
+    <radio_group name="events_search_mode">
+      <radio_item name="current" label="Ongoing and Upcoming"/>
+      <radio_item name="date" label="By Date"/>
+    </radio_group>
+    <text name="events_date">
+      4/20
+    </text>
+    <combo_box name="events_category">
+      <combo_box.item name="any" label="Any Category"/>
+      <combo_box.item label=""/>
+      <combo_box.item name="discussion" label="Discussion"/>
+      <combo_box.item name="sports" label="Sports"/>
+      <combo_box.item name="dj" label="Live DJ"/>
+      <combo_box.item name="music" label="Live Music"/>
+      <combo_box.item name="commercial" label="Commercial"/>
+      <combo_box.item name="nightlife" label="Nightlife/Entertainment"/>
+      <combo_box.item name="games" label="Games/Contests"/>
+      <combo_box.item name="pageants" label="Pageants"/>
+      <combo_box.item name="education" label="Education"/>
+      <combo_box.item name="arts" label="Arts and Culture"/>
+      <combo_box.item name="charity" label="Charity/Support Groups"/>
+      <combo_box.item name="misc" label="Miscellaneous"/>
+    </combo_box>
+    <check_box name="pg_all" label=""/>
+    <check_box name="mature_all" label=""/>
+    <check_box name="adult_all" label=""/>
+  </panel>
+  <panel name="panel_ls_scrolllist">
+    <scroll_list name="search_results_events">
+      <columns name="icon" label=""/>
+      <columns name="name" label="Event Name"/>
+      <columns name="date" label="Date/Time"/>
+      <columns name="time" label="Zaman"/>
+    </scroll_list>
+    <button name="events_yesterday" label="Yesterday"/>
+    <button name="events_today" label="Today"/>
+    <button name="events_tomorrow" label="Tomorrow"/>
+    <button name="events_back" label="Geri"/>
+    <button name="events_next" label="İleri"/>
+  </panel>
+</panel>

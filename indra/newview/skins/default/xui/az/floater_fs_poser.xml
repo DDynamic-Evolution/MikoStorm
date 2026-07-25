@@ -1,0 +1,1480 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_poser" title="Avatar and Animesh Poser">
+  <string name="icon_category">
+    Inv_BodyShape
+  </string>
+  <string name="icon_object">
+    Inv_Object
+  </string>
+  <string name="icon_rotation_bvh_locked_edited">
+    Script_Running
+  </string>
+  <string name="icon_rotation_bvh_locked_unedited">
+    Script_NotRunning
+  </string>
+  <string name="icon_rotation_bvh_unlocked">
+    Script_Error
+  </string>
+  <string name="icon_rotation_is_world_locked">
+    Locked_Icon
+  </string>
+  <string name="icon_rotation_does_not_export">
+    Conv_toolbar_close
+  </string>
+  <string name="icon_rotation_is_own_work">
+    Check_Mark
+  </string>
+  <string name="icon_save_button">
+    Icon_Dock_Foreground
+  </string>
+  <string name="icon_save_failed_button">
+    Parcel_Exp_Color
+  </string>
+  <string name="icon_save_query">
+    Məlumat
+  </string>
+  <string name="icon_permission_granted">
+    Check_Mark
+  </string>
+  <string name="icon_permission_pending">
+    Məlumat
+  </string>
+  <string name="StartPoseLabel">
+    Start Posing
+  </string>
+  <string name="StopPoseLabel">
+    Stop Posing
+  </string>
+  <string name="CancelRequestLabel">
+    Cancel Request
+  </string>
+  <string name="joint_transform_mPelvis">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTorso">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mSpine1">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mSpine2">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mChest">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mSpine3">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mSpine4">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mNeck">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mHead">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mSkull">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mCollarLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mCollarRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mShoulderLeft">
+    SWAP_ROLL_AND_PITCH NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mShoulderRight">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_mElbowLeft">
+    SWAP_ROLL_AND_PITCH NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mElbowRight">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_mWristLeft">
+    SWAP_ROLL_AND_PITCH NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mWristRight">
+    SWAP_ROLL_AND_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mFaceJaw">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mEyeRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mEyeLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHipLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mKneeLeft">
+    NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mAnkleLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFootLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mToeLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHipRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mKneeRight">
+    NEGATE_PITCH NEGATE_ROLL
+  </string>
+  <string name="joint_transform_mAnkleRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFootRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mToeRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceTeethLower">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceTeethUpper">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipCornerRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipCornerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipUpperLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipUpperCenter">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipUpperRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipLowerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipLowerCenter">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceLipLowerRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyeLidUpperLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyeLidUpperRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyecornerInnerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyecornerInnerRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyeLidLowerLeft">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyeLidLowerRight">
+    NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyebrowOuterLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyebrowOuterRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyebrowCenterLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyebrowCenterRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyebrowInnerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEyebrowInnerRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceCheekUpperLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceCheekLowerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceCheekUpperRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceCheekLowerRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandThumb1Left">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_mHandThumb1Right">
+    SWAP_ROLL_AND_PITCH NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandThumb2Left">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_mHandThumb2Right">
+    SWAP_ROLL_AND_PITCH NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandThumb3Left">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_mHandThumb3Right">
+    SWAP_ROLL_AND_PITCH NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandIndex1Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandIndex1Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandIndex2Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandIndex2Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandIndex3Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandIndex3Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandMiddle1Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandMiddle1Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandMiddle2Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandMiddle2Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandMiddle3Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandMiddle3Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandRing1Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandRing1Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandRing2Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandRing2Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandRing3Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandRing3Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandPinky1Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandPinky1Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandPinky2Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandPinky2Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mHandPinky3Left">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_mHandPinky3Right">
+    SWAP_X2Z_Y2X_Z2Y NEGATE_PITCH
+  </string>
+  <string name="joint_transform_LEFT_PEC">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_RIGHT_PEC">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_HEAD">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_NECK">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_BELLY">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_CHEST">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_PELVIS">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_UPPER_BACK">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_L_CLAVICLE">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_R_CLAVICLE">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_LEFT_HANDLE">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_RIGHT_HANDLE">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_L_UPPER_ARM">
+    SWAP_X2Y_Y2Z_Z2X NEGATE_PITCH NEGATE_YAW
+  </string>
+  <string name="joint_transform_R_UPPER_ARM">
+    SWAP_X2Y_Y2Z_Z2X
+  </string>
+  <string name="joint_transform_L_LOWER_ARM">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_R_LOWER_ARM">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_L_HAND">
+    SWAP_ROLL_AND_PITCH
+  </string>
+  <string name="joint_transform_R_HAND">
+    SWAP_X2Z_Y2X_Z2Y
+  </string>
+  <string name="joint_transform_L_UPPER_LEG">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_R_UPPER_LEG">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_L_LOWER_LEG">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_R_LOWER_LEG">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_L_FOOT">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_R_FOOT">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTail1">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTail2">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTail3">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTail4">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTail5">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mTail6">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceTongueBase">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceTongueTip">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEar1Left">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEar2Left">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEar1Right">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceEar2Right">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceNoseBase">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceNoseBridge">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceNoseLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceNoseCenter">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceNoseRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceForeheadLeft">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceForeheadCenter">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_transform_mFaceForeheadRight">
+    SWAP_YAW_AND_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mPelvis">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mTorso">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mChest">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mNeck">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHead">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mCollarLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mShoulderLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mElbowLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mWristLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mCollarRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mShoulderRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mElbowRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mWristRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mHipLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mKneeLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mAnkleLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mFootLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mToeLeft">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mHipRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mKneeRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mAnkleRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mFootRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mToeRight">
+    NEGATE_ROLL NEGATE_PITCH
+  </string>
+  <string name="joint_frame_mHandThumb1Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandThumb1Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandThumb2Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandThumb2Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandThumb3Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandThumb3Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandIndex1Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandIndex1Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandIndex2Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandIndex2Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandIndex3Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandIndex3Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandMiddle1Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandMiddle1Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandMiddle2Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandMiddle2Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandMiddle3Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandMiddle3Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandRing1Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandRing1Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandRing2Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandRing2Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandRing3Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandRing3Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandPinky1Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandPinky1Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandPinky2Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandPinky2Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandPinky3Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mHandPinky3Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mEyeRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mEyeLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceTeethLower">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceTeethUpper">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipCornerRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipCornerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipUpperLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipUpperCenter">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipUpperRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipLowerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipLowerCenter">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceLipLowerRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyeLidUpperLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyeLidUpperRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyecornerInnerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyecornerInnerRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyeLidLowerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyeLidLowerRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyebrowOuterLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyebrowOuterRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyebrowCenterLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyebrowCenterRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyebrowInnerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEyebrowInnerRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceCheekUpperLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceCheekLowerLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceCheekUpperRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceCheekLowerRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceTongueBase">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceTongueTip">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEar1Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEar2Left">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEar1Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceEar2Right">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceNoseBase">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceNoseBridge">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceNoseLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceNoseCenter">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceNoseRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceForeheadLeft">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceForeheadCenter">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceForeheadRight">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_frame_mFaceJaw">
+    SWAP_YAW_AND_ROLL NEGATE_ALL
+  </string>
+  <string name="joint_delta_rotate_mHipLeft">
+    true
+  </string>
+  <string name="joint_delta_rotate_mHipRight">
+    true
+  </string>
+  <string name="joint_delta_rotate_mKneeLeft">
+    true
+  </string>
+  <string name="joint_delta_rotate_mKneeRight">
+    true
+  </string>
+  <string name="joint_delta_rotate_mElbowLeft">
+    true
+  </string>
+  <string name="joint_delta_rotate_mElbowRight">
+    true
+  </string>
+  <string name="joint_delta_rotate_mWristLeft">
+    true
+  </string>
+  <string name="joint_delta_rotate_mWristRight">
+    true
+  </string>
+  <string name="header_mHead">
+    Body
+  </string>
+  <string name="header_mFaceForeheadLeft">
+    Forehead/Brows
+  </string>
+  <string name="header_mEyeLeft">
+    Eyes/Eye Lids
+  </string>
+  <string name="header_mFaceCheekUpperLeft">
+    Cheeks/Lips
+  </string>
+  <string name="header_mHandThumb1Left">
+    Left Hand
+  </string>
+  <string name="header_mCollarLeft">
+    Left Arm
+  </string>
+  <string name="header_mHandThumb1Right">
+    Right Hand
+  </string>
+  <string name="header_mCollarRight">
+    Right Arm
+  </string>
+  <string name="header_mHipLeft">
+    Legs
+  </string>
+  <string name="header_mTail1">
+    Tail
+  </string>
+  <string name="header_mHindLimbsRoot">
+    Hind Limbs
+  </string>
+  <string name="header_mWingsRoot">
+    Wings
+  </string>
+  <string name="header_mFaceEar1Left">
+    Ears/Nose
+  </string>
+  <string name="header_mSkull">
+    Body
+  </string>
+  <string name="header_HEAD">
+    Body
+  </string>
+  <string name="header_L_UPPER_ARM">
+    Arms
+  </string>
+  <string name="header_L_UPPER_LEG">
+    Legs
+  </string>
+  <string name="title_mPelvis">
+    Whole Avatar
+  </string>
+  <string name="title_mTorso">
+    Torso
+  </string>
+  <string name="title_mSpine1">
+    Spine 1
+  </string>
+  <string name="title_mSpine2">
+    Spine 2
+  </string>
+  <string name="title_mSpine3">
+    Spine 3
+  </string>
+  <string name="title_mSpine4">
+    Spine 4
+  </string>
+  <string name="title_mChest">
+    Chest
+  </string>
+  <string name="title_mNeck">
+    Neck
+  </string>
+  <string name="title_mHead">
+    Head
+  </string>
+  <string name="title_mSkull">
+    Skull
+  </string>
+  <string name="title_mEyeRight">
+    Right Eye
+  </string>
+  <string name="title_mEyeLeft">
+    Left Eye
+  </string>
+  <string name="title_mFaceForeheadLeft">
+    Forehead Left Side
+  </string>
+  <string name="title_mFaceForeheadRight">
+    Forehead Right Side
+  </string>
+  <string name="title_mFaceEyebrowOuterLeft">
+    Eyebrow Outer Left
+  </string>
+  <string name="title_mFaceEyebrowCenterLeft">
+    Eyebrow Middle Left
+  </string>
+  <string name="title_mFaceEyebrowInnerLeft">
+    Eyebrow Inner Left
+  </string>
+  <string name="title_mFaceEyebrowOuterRight">
+    Eyebrow Outer Right
+  </string>
+  <string name="title_mFaceEyebrowCenterRight">
+    Eyebrow Middle Right
+  </string>
+  <string name="title_mFaceEyebrowInnerRight">
+    Eyebrow Inner Right
+  </string>
+  <string name="title_mFaceEyeLidUpperLeft">
+    EyeLid Upper Left
+  </string>
+  <string name="title_mFaceEyecornerInnerLeft">
+    Eye Inner Corner Left
+  </string>
+  <string name="title_mFaceEyeLidLowerLeft">
+    EyeLid Lower Left
+  </string>
+  <string name="title_mFaceEyeLidUpperRight">
+    EyeLid Upper Right
+  </string>
+  <string name="title_mFaceEyecornerInnerRight">
+    Eye Inner Corner Right
+  </string>
+  <string name="title_mFaceEyeLidLowerRight">
+    EyeLid Lower Right
+  </string>
+  <string name="title_mFaceEar1Left">
+    Ear Upper Left
+  </string>
+  <string name="title_mFaceEar2Left">
+    Ear Lower Left
+  </string>
+  <string name="title_mFaceEar1Right">
+    Ear Upper Right
+  </string>
+  <string name="title_mFaceEar2Right">
+    Ear Lower Right
+  </string>
+  <string name="title_mFaceNoseBase">
+    Nose Base
+  </string>
+  <string name="title_mFaceNoseBridge">
+    Nose Bridge
+  </string>
+  <string name="title_mFaceNoseLeft">
+    Nose Left
+  </string>
+  <string name="title_mFaceNoseCenter">
+    Nose Middle
+  </string>
+  <string name="title_mFaceNoseRight">
+    Nose Right
+  </string>
+  <string name="title_mFaceCheekLowerLeft">
+    Cheek Lower Left
+  </string>
+  <string name="title_mFaceCheekUpperLeft">
+    Cheek Upper Left
+  </string>
+  <string name="title_mFaceCheekLowerRight">
+    Cheek Lower Right
+  </string>
+  <string name="title_mFaceCheekUpperRight">
+    Cheek Upper Right
+  </string>
+  <string name="title_mFaceJaw">
+    Jaw
+  </string>
+  <string name="title_mFaceTeethLower">
+    Teeth Lower
+  </string>
+  <string name="title_mFaceLipLowerLeft">
+    Lip Lower Left
+  </string>
+  <string name="title_mFaceLipLowerRight">
+    Lip Lower Right
+  </string>
+  <string name="title_mFaceLipLowerCenter">
+    Lip Lower Middle
+  </string>
+  <string name="title_mFaceTongueBase">
+    Tongue Base
+  </string>
+  <string name="title_mFaceTongueTip">
+    Tongue Tip
+  </string>
+  <string name="title_mFaceJawShaper">
+    Jaw Shaper
+  </string>
+  <string name="title_mFaceForeheadCenter">
+    Forehead Middle
+  </string>
+  <string name="title_mFaceTeethUpper">
+    Teeth Upper
+  </string>
+  <string name="title_mFaceLipUpperLeft">
+    Lip Upper Left
+  </string>
+  <string name="title_mFaceLipUpperRight">
+    Lip Upper Right
+  </string>
+  <string name="title_mFaceLipCornerLeft">
+    Lip Corner Left
+  </string>
+  <string name="title_mFaceLipCornerRight">
+    Lip Corner Right
+  </string>
+  <string name="title_mFaceLipUpperCenter">
+    Lip Upper Middle
+  </string>
+  <string name="title_mCollarLeft">
+    Collar
+  </string>
+  <string name="title_mShoulderLeft">
+    Whole Arm
+  </string>
+  <string name="title_mElbowLeft">
+    Forearm
+  </string>
+  <string name="title_mWristLeft">
+    Wrist
+  </string>
+  <string name="title_mHandMiddle1Left">
+    Middle Finger Base
+  </string>
+  <string name="title_mHandMiddle2Left">
+    Middle Finger Mid
+  </string>
+  <string name="title_mHandMiddle3Left">
+    Middle Finger Tip
+  </string>
+  <string name="title_mHandIndex1Left">
+    Index Finger Base
+  </string>
+  <string name="title_mHandIndex2Left">
+    Index Finger Mid
+  </string>
+  <string name="title_mHandIndex3Left">
+    Index Finger Tip
+  </string>
+  <string name="title_mHandRing1Left">
+    Ring Finger Base
+  </string>
+  <string name="title_mHandRing2Left">
+    Ring Finger Mid
+  </string>
+  <string name="title_mHandRing3Left">
+    Ring Finger Tip
+  </string>
+  <string name="title_mHandPinky1Left">
+    Pinky Finger Base
+  </string>
+  <string name="title_mHandPinky2Left">
+    Pinky Finger Mid
+  </string>
+  <string name="title_mHandPinky3Left">
+    Pinky Finger Tip
+  </string>
+  <string name="title_mHandThumb1Left">
+    Thumb Base
+  </string>
+  <string name="title_mHandThumb2Left">
+    Thumb Mid
+  </string>
+  <string name="title_mHandThumb3Left">
+    Thumb Tip
+  </string>
+  <string name="title_mCollarRight">
+    Collar
+  </string>
+  <string name="title_mShoulderRight">
+    Whole Arm
+  </string>
+  <string name="title_mElbowRight">
+    Forearm
+  </string>
+  <string name="title_mWristRight">
+    Wrist
+  </string>
+  <string name="title_mHandMiddle1Right">
+    Middle Finger Base
+  </string>
+  <string name="title_mHandMiddle2Right">
+    Middle Finger Mid
+  </string>
+  <string name="title_mHandMiddle3Right">
+    Middle Finger Tip
+  </string>
+  <string name="title_mHandIndex1Right">
+    Index Finger Base
+  </string>
+  <string name="title_mHandIndex2Right">
+    Index Finger Mid
+  </string>
+  <string name="title_mHandIndex3Right">
+    Index Finger Tip
+  </string>
+  <string name="title_mHandRing1Right">
+    Ring Finger Base
+  </string>
+  <string name="title_mHandRing2Right">
+    Ring Finger Mid
+  </string>
+  <string name="title_mHandRing3Right">
+    Ring Finger Tip
+  </string>
+  <string name="title_mHandPinky1Right">
+    Pinky Finger Base
+  </string>
+  <string name="title_mHandPinky2Right">
+    Pinky Finger Mid
+  </string>
+  <string name="title_mHandPinky3Right">
+    Pinky Finger Tip
+  </string>
+  <string name="title_mHandThumb1Right">
+    Thumb Base
+  </string>
+  <string name="title_mHandThumb2Right">
+    Thumb Mid
+  </string>
+  <string name="title_mHandThumb3Right">
+    Thumb Tip
+  </string>
+  <string name="title_mWingsRoot">
+    Root
+  </string>
+  <string name="title_mWing1Left">
+    Left 1
+  </string>
+  <string name="title_mWing2Left">
+    Left 2
+  </string>
+  <string name="title_mWing3Left">
+    Left 3
+  </string>
+  <string name="title_mWing4Left">
+    Left 4
+  </string>
+  <string name="title_mWing4FanLeft">
+    Left Fan
+  </string>
+  <string name="title_mWing1Right">
+    Right 1
+  </string>
+  <string name="title_mWing2Right">
+    Right 2
+  </string>
+  <string name="title_mWing3Right">
+    Right 3
+  </string>
+  <string name="title_mWing4Right">
+    Right 4
+  </string>
+  <string name="title_mWing4FanRight">
+    Right Fan
+  </string>
+  <string name="title_mHipRight">
+    Right Whole Leg
+  </string>
+  <string name="title_mKneeRight">
+    Right Knee
+  </string>
+  <string name="title_mAnkleRight">
+    Right Ankle
+  </string>
+  <string name="title_mFootRight">
+    Right Foot
+  </string>
+  <string name="title_mToeRight">
+    Right Toe
+  </string>
+  <string name="title_mHipLeft">
+    Left Whole Leg
+  </string>
+  <string name="title_mKneeLeft">
+    Left Knee
+  </string>
+  <string name="title_mAnkleLeft">
+    Left Ankle
+  </string>
+  <string name="title_mFootLeft">
+    Left Foot
+  </string>
+  <string name="title_mToeLeft">
+    Left Toe
+  </string>
+  <string name="title_mTail1">
+    Tail Base
+  </string>
+  <string name="title_mTail2">
+    Tail 2
+  </string>
+  <string name="title_mTail3">
+    Tail 3
+  </string>
+  <string name="title_mTail4">
+    Tail 4
+  </string>
+  <string name="title_mTail5">
+    Tail 5
+  </string>
+  <string name="title_mTail6">
+    Tail Tip
+  </string>
+  <string name="title_mGroin">
+    Groin
+  </string>
+  <string name="title_mHindLimbsRoot">
+    Root
+  </string>
+  <string name="title_mHindLimb1Left">
+    Left Base
+  </string>
+  <string name="title_mHindLimb2Left">
+    Left 2
+  </string>
+  <string name="title_mHindLimb3Left">
+    Left 3
+  </string>
+  <string name="title_mHindLimb4Left">
+    Left 4
+  </string>
+  <string name="title_mHindLimb1Right">
+    Right Base
+  </string>
+  <string name="title_mHindLimb2Right">
+    Right 2
+  </string>
+  <string name="title_mHindLimb3Right">
+    Right 3
+  </string>
+  <string name="title_mHindLimb4Right">
+    Right 4
+  </string>
+  <string name="title_HEAD">
+    Head
+  </string>
+  <string name="title_NECK">
+    Neck
+  </string>
+  <string name="title_CHEST">
+    Chest
+  </string>
+  <string name="title_BUTT">
+    Bottom
+  </string>
+  <string name="title_BELLY">
+    Belly
+  </string>
+  <string name="title_LEFT_PEC">
+    Left Pec
+  </string>
+  <string name="title_RIGHT_PEC">
+    Right Pec
+  </string>
+  <string name="title_L_CLAVICLE">
+    Left Clavicle
+  </string>
+  <string name="title_R_CLAVICLE">
+    Right Clavicle
+  </string>
+  <string name="title_L_UPPER_ARM">
+    Left Upper Arm
+  </string>
+  <string name="title_R_UPPER_ARM">
+    Right Upper Arm
+  </string>
+  <string name="title_L_LOWER_ARM">
+    Left Lower Arm
+  </string>
+  <string name="title_R_LOWER_ARM">
+    Right Lower Arm
+  </string>
+  <string name="title_L_HAND">
+    Left Hand
+  </string>
+  <string name="title_R_HAND">
+    Right Hand
+  </string>
+  <string name="title_UPPER_BACK">
+    Upper Back
+  </string>
+  <string name="title_LEFT_HANDLE">
+    Left Waist
+  </string>
+  <string name="title_RIGHT_HANDLE">
+    Right Waist
+  </string>
+  <string name="title_PELVIS">
+    Pelvis
+  </string>
+  <string name="title_L_UPPER_LEG">
+    Left Upper Leg
+  </string>
+  <string name="title_R_UPPER_LEG">
+    Right Upper Leg
+  </string>
+  <string name="title_L_LOWER_LEG">
+    Left Lower Leg
+  </string>
+  <string name="title_R_LOWER_LEG">
+    Right Lower Leg
+  </string>
+  <string name="title_L_FOOT">
+    Left Foot
+  </string>
+  <string name="title_R_FOOT">
+    Right Foot
+  </string>
+  <string name="bvh_joint_transform_mHead">
+    SWAP_X2Y_Y2Z_Z2X
+  </string>
+  <string name="LoadPoseLabel">
+    Load Pose
+  </string>
+  <string name="SavePoseLabel">
+    Save Pose
+  </string>
+  <string name="LoadDiffLabel">
+    Load Diff
+  </string>
+  <string name="SaveDiffLabel">
+    Save Diff
+  </string>
+  <string name="OverWriteLabel">
+    Overwrite?
+  </string>
+  <floater.string name="FiledateFormat">
+    [year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
+  </floater.string>
+  <floater.string name="FiledateFormatAMPM">
+    [year,datetime,local]/[mthnum,datetime,local]/[day,datetime,local] [hour12,datetime,local]:[min,datetime,local]:[second,datetime,local] [ampm,datetime,local]
+  </floater.string>
+  <layout_stack name="poser_stack">
+    <layout_panel name="regular_controls_layout">
+      <panel name="joints_parent_panel">
+        <tab_container name="joints_tabs">
+          <panel name="positionRotation_panel" title="Move">
+            <panel name="move_tab_panel">
+              <text name="av_position_updown_label">
+                Up/Down:
+              </text>
+              <slider name="av_position_updown" tool_tip="Move the selected avatar up or down"/>
+              <text name="av_position_leftright_label">
+                Left/Right:
+              </text>
+              <slider name="av_position_leftright" tool_tip="Move the selected avatar left or right"/>
+              <text name="av_position_inout_label">
+                In/Out:
+              </text>
+              <slider name="av_position_inout" tool_tip="Move the selected avatar in or out"/>
+              <check_box name="unlock_pelvis_for_bvh_save_checkbox" label="Unlock Pelvis in BVH" tool_tip="When you save this pose to BVH, the Pelvis will not be 'locked'. This means other animations in-world can 'move' the whole avatar. Use this if your pose is meant to play 'on top of' another pose."/>
+              <scroll_list name="entireAv_joint_scroll">
+                <scroll_list.columns name="icon" label=""/>
+                <scroll_list.columns name="joint" label="Body Part"/>
+              </scroll_list>
+            </panel>
+          </panel>
+          <panel name="body_joints_panel" title="Body">
+            <scroll_list name="body_joints_scroll">
+              <scroll_list.columns name="icon" label=""/>
+              <scroll_list.columns name="joint" label="Body Part"/>
+            </scroll_list>
+          </panel>
+          <panel name="face_joints_panel" title="Face">
+            <scroll_list name="face_joints_scroll">
+              <scroll_list.columns name="icon" label=""/>
+              <scroll_list.columns name="joint" label="Body Part"/>
+            </scroll_list>
+          </panel>
+          <tab_container name="hands_tabs" title="Hands">
+            <panel name="hands_joints_panel" title="Adjust">
+              <scroll_list name="hand_joints_scroll">
+                <scroll_list.columns name="icon" label=""/>
+                <scroll_list.columns name="joint" label="Body Part"/>
+              </scroll_list>
+            </panel>
+            <panel name="hands_presets_panel" title="Presets">
+              <scroll_list name="hand_presets_scroll">
+                <scroll_list.columns name="load_file_name_column" label="Preset Name"/>
+                <scroll_list.columns name="load_file_date_column" label="Tarix"/>
+                <scroll_list.columns name="load_file_date_sort_column" label="Tarix"/>
+              </scroll_list>
+              <button name="button_loadHandPoseLeft" label="Set Left" tool_tip="Click to set your left hand to the selected preset"/>
+              <button name="button_loadHandPoseRight" label="Set Right" tool_tip="Click to set your right hand to the selected preset"/>
+            </panel>
+          </tab_container>
+          <panel name="misc_joints_panel" title="Misc">
+            <scroll_list name="misc_joints_scroll">
+              <scroll_list.columns name="icon" label=""/>
+              <scroll_list.columns name="joint" label="Body Part"/>
+            </scroll_list>
+          </panel>
+          <panel name="collision_volumes_panel" title="Physics">
+            <scroll_list name="collision_volumes_scroll">
+              <scroll_list.columns name="icon" label=""/>
+              <scroll_list.columns name="joint" label="Physics"/>
+            </scroll_list>
+          </panel>
+          <panel name="avatarSelection_panel" title="Model">
+            <scroll_list name="avatarSelection_scroll" tool_tip="Select the Avatar or Animesh you want to animate.">
+              <scroll_list.columns name="icon" label=""/>
+              <scroll_list.columns name="name" label="Select Someone to Pose..."/>
+              <scroll_list.columns name="uuid" label="UUID"/>
+              <scroll_list.columns name="saveFileName" label="SaveFileName"/>
+            </scroll_list>
+            <button name="refresh_avatars" label="" tool_tip="Refresh the list of avatars and animeshes"/>
+            <button name="pose_self_button" label="Me" tool_tip="Pose your own avatar"/>
+            <button name="start_stop_posing_button" label="Başla" tool_tip="Start posing the selected avatar or animesh, if you are allowed to."/>
+            <button name="set_t_pose_button" label="Set to T-Pose" tool_tip="Click to set the selected avatar to a 'T-Pose'"/>
+          </panel>
+          <panel name="settings_panel" title="Parametrlər">
+            <text name="trackpad_sensitivity_label">
+              Trackpad Sensitivity:
+            </text>
+            <slider name="trackpad_sensitivity_slider" tool_tip="Adjusts the sensitivity of the trackball"/>
+            <check_box name="stop_posing_on_close_checkbox" label="Stop posing when closed" tool_tip="Not stopping your pose can be helpful if you do a lot of work, and don't want to accidentally lose it."/>
+            <check_box name="also_save_bvh_checkbox" label="Write BVH when saving" tool_tip="When you save your pose, also write a BVH file. BVH can be uploaded via the 'Build > Upload > Animation' to pose yourself or others in-world. This needs joints to reset their 'base' to zero, because BVH requires original work."/>
+            <check_box name="confirm_overwrite_on_save_checkbox" label="Confirm Overwrite" tool_tip="When you save a pose, if the file already exists, you need to click the save button again to confirm you are sure you want to overwrite."/>
+            <check_box name="natural_direction_checkbox" label="Use natural alignment" tool_tip="The skeleton has unnatural joint rotations by default. This complicates posing. When checked, the joints will rotate in a more natural way."/>
+            <check_box name="show_joint_markers_checkbox" label="Show joint markers" tool_tip="Show small indicators to aid joint selection when posing."/>
+            <check_box name="dof_edit_mode_checkbox" label="Enable DoF in Edit Mode" tool_tip="When using the Manipulator, Depth of Field normally disables automatically. This keeps Depth of Field on when editing poses or prims."/>
+          </panel>
+        </tab_container>
+        <button name="toggleVisualManipulators" tool_tip="Toggle the visual manipulators on and off"/>
+      </panel>
+      <panel name="joint_manipulation_panel">
+        <tab_container name="modifier_tabs">
+          <panel name="trackball_panel" label="Rotate">
+            <fs_virtual_trackpad name="limb_rotation" tool_tip="Change the rotation of the currently selected body part(s). Hold Ctrl to move slow. Roll the wheel to adjust the 3rd axis. Use Shift or Alt to swap which rotations change"/>
+            <text name="limb_pitch_label">
+              Up/Down:
+            </text>
+            <slider name="limb_pitch_slider" label=""/>
+            <text name="limb_yaw_label">
+              Left/Right:
+            </text>
+            <slider name="limb_yaw_slider" label=""/>
+            <text name="limb_roll_label">
+              Roll:
+            </text>
+            <slider name="limb_roll_slider" label=""/>
+          </panel>
+          <panel name="position_panel" title="Move / Scale">
+            <text name="pos_x_label">
+              Position X:
+            </text>
+            <slider name="Advanced_Position_X" label=""/>
+            <text name="pos_y_label">
+              Position Y:
+            </text>
+            <slider name="Advanced_Position_Y" label=""/>
+            <text name="pos_z_label">
+              Position Z:
+            </text>
+            <slider name="Advanced_Position_Z" label=""/>
+            <text name="scale_x_label">
+              Scale X:
+            </text>
+            <slider name="Advanced_Scale_X" label=""/>
+            <text name="scale_y_label">
+              Scale Y:
+            </text>
+            <slider name="Advanced_Scale_Y" label=""/>
+            <text name="scale_z_label">
+              Scale Z:
+            </text>
+            <slider name="Advanced_Scale_Z" label=""/>
+          </panel>
+        </tab_container>
+        <panel name="trackball_button_panel">
+          <button name="undo_change" tool_tip="Undo the last change"/>
+          <button name="button_redo_change" tool_tip="Re-do the last change"/>
+          <button name="poser_joint_reset" tool_tip="Click to reset the selected body part(s) to when you first started posing"/>
+          <button name="delta_mode_toggle" tool_tip="If changing multiple joints, each changes by the same amount instead of getting the same change. Also used for breaking Gimbal Lock."/>
+          <button name="toggle_LockWorldRotation" tool_tip="Lock rotation in the world for the selected limb(s). Limbs that are world-locked keep the same rotation in-world when their parent-limbs move. Eg: lock your eyes and turn your head, your eyes keep looking (mostly) in the same direction."/>
+          <button name="button_toggleMirrorRotation" label="Mirror" tool_tip="Mirror changes to the opposite joint."/>
+          <button name="button_toggleSympatheticRotation" label="Kopyala" tool_tip="Copy changes to the opposite joint."/>
+          <button name="poser_world_frame_toggle" label="W" tool_tip="Make rotational changes relative to World"/>
+          <button name="poser_avatar_frame_toggle" label="A" tool_tip="Make rotational changes relative to Avatar"/>
+          <button name="poser_screen_frame_toggle" label="S" tool_tip="Make rotational changes relative to Screen"/>
+          <button name="button_symmetrize_left_to_right" label="Copy L > R" tool_tip="Click to copy change from left side to right side."/>
+          <button name="button_symmetrize_right_to_left" label="Copy R > L" tool_tip="Click to copy change from right side to left side."/>
+        </panel>
+      </panel>
+      <panel name="poses_loadSave">
+        <scroll_list name="poses_scroll" tool_tip="Load a pose for who you are animating.">
+          <scroll_list.columns name="load_file_name_column" label="Ad"/>
+          <scroll_list.columns name="load_file_date_column" label="Tarix"/>
+          <scroll_list.columns name="load_file_date_sort_column" label="Tarix"/>
+        </scroll_list>
+        <line_editor name="pose_save_name" label="Enter Pose Name To Save..."/>
+      </panel>
+      <panel name="right_avatar_panel">
+        <text name="right_avatar_label">
+          Avatars in Range:
+        </text>
+        <scroll_list name="right_avatar_list">
+          <scroll_list.columns name="icon" label=""/>
+          <scroll_list.columns name="name" label="Ad"/>
+          <scroll_list.columns name="uuid" label="UUID"/>
+          <scroll_list.columns name="saveFileName" label="SaveFileName"/>
+        </scroll_list>
+        <button name="right_avatar_refresh" label="" tool_tip="Refresh the list of avatars in range"/>
+        <button name="right_start_stop_btn" label="Start Posing" tool_tip="Start or stop posing the selected avatar"/>
+      </panel>
+    </layout_panel>
+    <layout_panel name="button_controls_layout">
+      <panel name="button_controls_panel">
+        <button name="FlipPose_avatar" tool_tip="Flip the whole pose left/right"/>
+        <button name="FlipJoint_avatar" tool_tip="Mirror the selected body part(s) left/right"/>
+        <button name="button_RecaptureParts" label="Recap" tool_tip="If the selected body part(s) is/are OFF, this Recaptures what those body parts are doing right now."/>
+        <button name="toggle_PosingSelectedBones" label="Part(s) On/Off" tool_tip="Turn the Poser on or off for the selected body part(s). When off, that body part animates like normal (with your AO or a pose-ball/etc.)"/>
+        <button name="toggleLoadSavePanel" label="Own Poses" tool_tip="Load, save and manage the poses you make"/>
+        <button name="open_poseDir_button" tool_tip="Manage your pose directory"/>
+        <menu_button name="load_poses_button" label="Load Pose" tool_tip="Load the currently selected pose."/>
+        <button name="save_poses_button" label="Save Diff" tool_tip="A Diff is just your changes to an existing Pose. Start from a T-Pose to save a new work."/>
+      </panel>
+    </layout_panel>
+  </layout_stack>
+</floater>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_search" title="Firestorm Search">
+  <floater.string name="string.location">
+    Location: [LOCATION]
+  </floater.string>
+  <floater.string name="string.traffic">
+    Traffic: [DWELL]
+  </floater.string>
+  <floater.string name="string.area">
+    Area: [AREA]
+  </floater.string>
+  <floater.string name="string.members">
+    Members: [MEMBER_COUNT]
+  </floater.string>
+  <floater.string name="string.founder">
+    Founder: [FOUNDER]
+  </floater.string>
+  <floater.string name="string.age">
+    Age: [AGE]
+  </floater.string>
+  <floater.string name="string.partner">
+    Partner: [PARTNER]
+  </floater.string>
+  <floater.string name="string.listing_price">
+    Listing Price: [LISTING_PRICE]
+  </floater.string>
+  <floater.string name="string.slurl">
+    [SLURL]
+  </floater.string>
+  <floater.string name="string.duration">
+    Duration: [DURATION]
+  </floater.string>
+  <floater.string name="string.covercharge">
+    Cover: [COVERCHARGE]
+  </floater.string>
+  <tab_container name="ls_tabs">
+    <panel name="panel_ls_web" label="Websearch"/>
+    <panel name="panel_ls_people" label="People"/>
+    <panel name="panel_ls_groups" label="Groups"/>
+    <panel name="panel_ls_places" label="Places"/>
+    <panel name="panel_ls_land" label="Land Sales"/>
+    <panel name="panel_ls_events" label="Events"/>
+    <panel name="panel_ls_classifieds" label="Classifieds"/>
+  </tab_container>
+  <panel name="panel_ls_details">
+    <button name="people_profile_btn" label="Open Profile"/>
+    <button name="people_message_btn" label="Send Message"/>
+    <button name="people_friend_btn" label="Add Friend"/>
+    <button name="group_profile_btn" label="Open Profile"/>
+    <button name="group_message_btn" label="Join Chat"/>
+    <button name="group_join_btn" label="Join Group"/>
+    <button name="teleport_btn" label="Teleporter"/>
+    <button name="map_btn" label="Show on Map"/>
+    <button name="event_reminder_btn" label="Remind me"/>
+  </panel>
+</floater>

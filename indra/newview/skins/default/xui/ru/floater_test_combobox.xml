@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_combobox">
+  <text >
+    Real world usage (login location):
+  </text>
+  <combo_box name="start_location_combo">
+    <combo_box.item name="MyLastLocation" label="My Last Location"/>
+    <combo_box.item name="MyHome" label="My Home"/>
+    <combo_box.item name="Typeregionname" label="<Type region name>"/>
+  </combo_box>
+  <text >
+    Minimal combobox:
+  </text>
+  <combo_box name="minimal_combo">
+    <combo_box.item name="item1" label="First Item"/>
+    <combo_box.item name="item2" label="Second Item"/>
+  </combo_box>
+  <text >
+    Allow text input:
+  </text>
+  <combo_box name="text_entry_combo">
+    <combo_box.item name="item1" label="First Item"/>
+    <combo_box.item name="item2" label="Second Item"/>
+  </combo_box>
+  <text >
+    Allow text input, default to second item:
+  </text>
+  <combo_box name="text_entry_combo2">
+    <combo_box.item name="item1" label="First Item"/>
+    <combo_box.item name="item2" label="Second Item"/>
+  </combo_box>
+  <text >
+    Two character max input:
+  </text>
+  <combo_box name="state_combo">
+    <combo_box.item name="item1" label="CA"/>
+    <combo_box.item name="item2" label="NY"/>
+    <combo_box.item name="item3" label="TX"/>
+  </combo_box>
+  <text >
+    Multiple columns:
+  </text>
+  <combo_box name="multi_column_combo">
+    <combo_item name="combo_item1">
+      <column name="label" label="|Abc|"/>
+      <column name="longtext" label="Match full text"/>
+    </combo_item>
+    <combo_item name="combo_item2">
+      <column name="label" label="*Abc*"/>
+      <column name="longtext" label="Match substring"/>
+    </combo_item>
+    <combo_item name="combo_item3">
+      <column name="label" label="/ *. /"/>
+      <column name="longtext" label="Match regular expression"/>
+    </combo_item>
+  </combo_box>
+</floater>

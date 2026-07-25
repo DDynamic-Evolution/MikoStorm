@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="simple_snapshot" title="Element-forhåndsvisning">
+  <button name="new_snapshot_btn" label="Tag billede"/>
+  <button name="save_btn" label="Gem"/>
+  <button name="cancel_btn" label="Annuller"/>
+</floater>

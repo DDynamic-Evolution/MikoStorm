@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+  <text name="back_lbl">
+    Geri
+  </text>
+  <text name="settings_title">
+    Graphics settings
+  </text>
+  <text name="quality_lbl">
+    Quality vs speed
+  </text>
+  <text name="FasterText">
+    Faster
+  </text>
+  <text name="BetterText">
+    Better Quality
+  </text>
+  <text name="ShadersPrefText">
+    Low
+  </text>
+  <text name="ShadersPrefText2">
+    Mid
+  </text>
+  <text name="ShadersPrefText3">
+    High
+  </text>
+  <text name="ShadersPrefText4">
+    Ultra
+  </text>
+  <text name="quality_desc">
+    Choosing a preset will reset all manual changes you have made.
+  </text>
+  <text name="distance_lbl">
+    Visibility distance
+  </text>
+  <text name="faster_lbl">
+    Faster
+  </text>
+  <text name="farther_lbl">
+    Farther
+  </text>
+  <text name="distance_desc1">
+    Keep this low for better performance, increase it to see further afield.
+  </text>
+  <text name="environment_lbl">
+    Environment
+  </text>
+  <text name="enhancements_desc">
+    Reducing / eliminating shadows can be a boost to FPS but impacts
+the ambience and appearance of the scene.
+  </text>
+  <text name="RenderShadowDetailText">
+    Shadow sources:
+  </text>
+  <combo_box name="ShadowDetail">
+    <combo_box.item name="0" label="Yoxdur"/>
+    <combo_box.item name="1" label="Sun/Moon"/>
+    <combo_box.item name="2" label="Sun/Moon + Projectors"/>
+  </combo_box>
+  <text name="water_lbl">
+    Water
+  </text>
+  <text name="water_desc">
+    Reducing water effects quality can greatly improve frame rate.
+  </text>
+  <text name="ReflectionsText">
+    Water Reflections:
+  </text>
+  <combo_box name="Reflections">
+    <combo_box.item name="-2" label="None; opaque"/>
+    <combo_box.item name="-1" label="None; transparent"/>
+    <combo_box.item name="0" label="Minimal"/>
+    <combo_box.item name="1" label="Terrain and trees"/>
+    <combo_box.item name="2" label="All static objects"/>
+    <combo_box.item name="3" label="All avatars and objects"/>
+    <combo_box.item name="4" label="Everything"/>
+  </combo_box>
+  <text name="photo_lbl">
+    Photography
+  </text>
+  <text name="photo_desc">
+    Photographers need high quality, but this is often
+at the cost of frame rate. [APP_NAME] phototools can
+help you find the right balance.
+  </text>
+  <button name="open_phototools" label="Phototools" tool_tip="Open the dedicated photo tools for advanced photo settings."/>
+</panel>

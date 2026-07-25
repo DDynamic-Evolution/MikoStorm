@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="simple_snapshot" title="Öğe önizlemesi">
+  <button name="new_snapshot_btn" label="Fotoğraf çek"/>
+  <button name="save_btn" label="Kaydet"/>
+  <button name="cancel_btn" label="İptal"/>
+</floater>

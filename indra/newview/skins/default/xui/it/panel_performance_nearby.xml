@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_nearby">
+  <text name="back_lbl">
+    Indietro
+  </text>
+  <text name="av_nearby_title">
+    Avatars nearby
+  </text>
+  <text name="av_nearby_desc">
+    Hide the most complex avatars to boost speed.
+  </text>
+  <slider name="RenderAvatarMaxART" label="Maximum render time (μs)" tool_tip="Controls when a visually complex avatar is considered to be taking too long to render (unit: microseconds)"/>
+  <text name="RenderAvatarMaxARTText">
+    no limit
+  </text>
+  <name_list name="nearby_list">
+    <name_list.columns name="complex_visual" label=""/>
+    <name_list.columns name="complex_value" label=""/>
+    <name_list.columns name="name" label=""/>
+  </name_list>
+  <text name="av_nearby_desc2">
+    You can also right-click on an avatar in-world to control display.
+  </text>
+  <button name="exceptions_btn" label="Exceptions..."/>
+  <text name="AvatarComplexityModeLabel">
+    Avatar display:
+  </text>
+  <combo_box name="AvatarComplexityMode">
+    <combo_box.item name="0" label="Limit by complexity"/>
+    <combo_box.item name="1" label="Always show friends"/>
+    <combo_box.item name="2" label="Only show friends"/>
+  </combo_box>
+  <check_box name="hide_avatars" label="Hide avatars completely (good for landscape photos)"/>
+  <text name="name_tags_textbox">
+    Name tags:
+  </text>
+  <radio_group name="name_tag_mode">
+    <radio_item name="radio" label="Disattivo"/>
+    <radio_item name="radio2" label="Attivo"/>
+    <radio_item name="radio3" label="Show briefly"/>
+  </radio_group>
+</panel>

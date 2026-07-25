@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_pathfinding_characters" title="Pathfinding Characters">
+  <floater.string name="messaging_get_inprogress">
+    Querying for pathfinding characters ...
+  </floater.string>
+  <floater.string name="messaging_get_error">
+    Error detected while querying for pathfinding characters.
+  </floater.string>
+  <floater.string name="messaging_complete_none_found">
+    No pathfinding characters.
+  </floater.string>
+  <floater.string name="messaging_complete_available">
+    [NUM_SELECTED] characters selected out of [NUM_TOTAL].
+  </floater.string>
+  <floater.string name="messaging_not_enabled">
+    This region is not enabled for pathfinding.
+  </floater.string>
+  <floater.string name="character_cpu_time">
+    [CPU_TIME] µs
+  </floater.string>
+  <floater.string name="character_owner_loading">
+    [Loading]
+  </floater.string>
+  <floater.string name="character_owner_unknown">
+    [Unknown]
+  </floater.string>
+  <floater.string name="character_owner_group">
+    [group]
+  </floater.string>
+  <panel name="pathfinding_chars_main">
+    <scroll_list name="objects_scroll_list">
+      <scroll_list.columns name="name" label="Navn"/>
+      <scroll_list.columns name="description" label="Beskrivelse"/>
+      <scroll_list.columns name="owner" label="Ejer"/>
+      <scroll_list.columns name="cpu_time" label="CPU"/>
+      <scroll_list.columns name="altitude" label="Altitude"/>
+    </scroll_list>
+    <text name="messaging_status">
+      Characters:
+    </text>
+    <button name="refresh_objects_list" label="Refresh list"/>
+    <button name="select_all_objects" label="Select all"/>
+    <button name="select_none_objects" label="Select none"/>
+  </panel>
+  <panel name="pathfinding_chars_actions">
+    <text name="actions_label">
+      Actions on selected characters:
+    </text>
+    <check_box name="show_beacon" label="Show beacon"/>
+    <check_box name="show_physics_capsule" label="Show physics capsule"/>
+    <button name="take_objects" label="Tag"/>
+    <button name="take_copy_objects" label="Take copy"/>
+    <button name="teleport_me_to_object" label="Teleport me to it" tool_tip="Enabled only when one character is selected."/>
+    <button name="return_objects" label="Return"/>
+    <button name="delete_objects" label="Slet"/>
+  </panel>
+</floater>

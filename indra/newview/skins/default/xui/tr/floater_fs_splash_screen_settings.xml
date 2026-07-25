@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="splash_screen_settings" title="Splash Screen Settings">
+  <text name="description">
+    Configure splash screen display options here. These settings will take effect after the next viewer restart.
+  </text>
+  <text name="section_visibility">
+    Section Visibility:
+  </text>
+  <check_box name="hide_top_bar" label="Hide top bar"/>
+  <check_box name="hide_blogs" label="Hide blogs section"/>
+  <check_box name="hide_destinations" label="Hide destinations section"/>
+  <text name="section_accessibility">
+    Accessibility Options:
+  </text>
+  <check_box name="use_gray_mode" label="Enable grayscale mode"/>
+  <check_box name="use_high_contrast" label="Enable high contrast mode"/>
+  <check_box name="use_all_caps" label="Enable all caps mode"/>
+  <check_box name="use_larger_fonts" label="Use larger fonts"/>
+  <check_box name="no_transparency" label="Disable transparency effects"/>
+</floater>

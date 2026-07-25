@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_im_sound" title="Настроить звук сообщения...">
+  <text name="label_name">
+    Настроить пользовательский звук для:
+  </text>
+  <text name="label_uuid">
+    Sound UUID:
+  </text>
+  <button name="preview_btn" label="Предпросмотр"/>
+  <button name="clear_btn" label="Очистить"/>
+  <button name="ok_btn" label="ОК"/>
+  <button name="cancel_btn" label="Отмена"/>
+</floater>

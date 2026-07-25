@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animationspeed" title="Animasiya sürəti">
+  <panel name="animationspeed">
+    <text name="SpeedLabel">
+      Sürət:
+    </text>
+    <button name="reset_btn" label="Sıfırla" tool_tip="Animasiya sürətini 1.0x-ə sıfırla"/>
+  </panel>
+</floater>

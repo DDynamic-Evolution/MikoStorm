@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="prefs_graphics_advanced" title="Advanced Graphics Preferences">
+  <text name="GeneralText">
+    General
+  </text>
+  <slider name="DrawDistance" label="Draw distance:"/>
+  <slider name="MaxParticleCount" label="Max. particle count:"/>
+  <slider name="RenderPostProcess" label="Post process quality:"/>
+  <text name="PostProcessText">
+    Low
+  </text>
+  <slider name="MaxLights" label="Max. nearby lights:"/>
+  <text name="MaxTextureResolutionLabel">
+    Maximum LOD resolution:
+  </text>
+  <combo_box name="MaxTextureResolution" tool_tip="Maximum resolution for 'level of detail' textures">
+    <combo_box.item name="512" label="512"/>
+    <combo_box.item name="1024" label="1024"/>
+    <combo_box.item name="2048" label="2048"/>
+  </combo_box>
+  <check_box name="vsync" label="Enable VSync" tool_tip="Synchronizes the frame rate to the refresh rate of the monitor, can result in increased stutter and input lag."/>
+  <text name="AvatarText">
+    Avatar
+  </text>
+  <text name="AvatarComplexityModeLabel">
+    Avatar display:
+  </text>
+  <combo_box name="AvatarComplexityMode">
+    <combo_box.item name="0" label="Limit by complexity"/>
+    <combo_box.item name="1" label="Always show friends"/>
+    <combo_box.item name="2" label="Only show friends"/>
+  </combo_box>
+  <slider name="IndirectMaxComplexity" label="Maximum complexity:" tool_tip="Controls at what point a visually complex avatar is drawn as a JellyDoll"/>
+  <slider name="IndirectMaxNonImpostors" label="Max. # animated avatars:"/>
+  <slider name="AvatarMeshDetail" label="Detail:"/>
+  <text name="AvatarMeshDetailText">
+    Low
+  </text>
+  <slider name="AvatarPhysicsDetail" label="Physics:"/>
+  <text name="AvatarPhysicsDetailText">
+    Low
+  </text>
+  <text name="HardwareText">
+    Hardware
+  </text>
+  <check_box name="ani" label="Anisotropic Filtering (slower when enabled)"/>
+  <check_box name="texture compression" label="Enable Texture Compression (requires restart)" tool_tip="Compresses textures in video memory, allowing for higher resolution textures to be loaded at the cost of some color quality."/>
+  <check_box name="use HiDPI" label="Enable support for HiDPI displays (requires restart)" tool_tip="Enable OpenGL for High-Resolution Drawing."/>
+  <text name="antialiasing label">
+    Antialiasing:
+  </text>
+  <combo_box name="fsaa" label="Antialiasing">
+    <combo_box.item name="FSAADisabled" label="Disabled"/>
+    <combo_box.item name="FXAA" label="FXAA"/>
+    <combo_box.item name="SMAA" label="SMAA"/>
+  </combo_box>
+  <text name="antialiasing quality label">
+    Antialiasing Quality:
+  </text>
+  <combo_box name="fsaa quality" label="Antialiasing">
+    <combo_box.item name="Low" label="Low"/>
+    <combo_box.item name="Medium" label="Mellem"/>
+    <combo_box.item name="High" label="High"/>
+    <combo_box.item name="Ultra" label="Ultra"/>
+  </combo_box>
+  <text name="MeshText">
+    Mesh
+  </text>
+  <slider name="TerrainMeshDetail" label="Terrain Mesh Detail:"/>
+  <text name="TerrainMeshDetailText">
+    Low
+  </text>
+  <slider name="TreeMeshDetail" label="Trees:"/>
+  <text name="TreeMeshDetailText">
+    Low
+  </text>
+  <slider name="ObjectMeshDetail" label="Objects:"/>
+  <text name="ObjectMeshDetailText">
+    Low
+  </text>
+  <slider name="FlexibleMeshDetail" label="Flexiprims:"/>
+  <text name="FlexibleMeshDetailText">
+    Low
+  </text>
+  <text name="antialiasing restart">
+    (requires restart)
+  </text>
+  <text name="ShadersText">
+    Shaders
+  </text>
+  <check_box name="TransparentWater" label="Transparent Water"/>
+  <slider name="SkyMeshDetail" label="Sky:"/>
+  <text name="SkyMeshDetailText">
+    Low
+  </text>
+  <check_box name="UseSSAO" label="Screen Space Ambient Occlusion"/>
+  <check_box name="UseDoF" label="Depth of Field"/>
+  <check_box name="VintageMode" label="HDR and Emissive"/>
+  <text name="RenderShadowDetailText">
+    Shadows:
+  </text>
+  <combo_box name="ShadowDetail">
+    <combo_box.item name="0" label="Ingen"/>
+    <combo_box.item name="1" label="Sun/Moon"/>
+    <combo_box.item name="2" label="Sun/Moon + Projectors"/>
+  </combo_box>
+  <check_box name="ScreenSpaceReflections" label="Screen Space Reflections"/>
+  <text name="ReflectionDetailText">
+    Reflection Detail:
+  </text>
+  <combo_box name="ReflectionDetail">
+    <combo_box.item name="0" label="Static Only"/>
+    <combo_box.item name="1" label="Static+Dynamic"/>
+    <combo_box.item name="2" label="Realtime"/>
+  </combo_box>
+  <text name="ReflectionProbeText">
+    Reflection Coverage:
+  </text>
+  <combo_box name="ReflectionLevel">
+    <combo_box.item name="0" label="Ingen"/>
+    <combo_box.item name="1" label="Manual only"/>
+    <combo_box.item name="2" label="Manual + terrain"/>
+    <combo_box.item name="3" label="Full scene"/>
+  </combo_box>
+  <text name="ReflectionProbeCount">
+    Max Reflection Probes:
+  </text>
+  <combo_box name="ProbeCount" label="Max. Reflection Probes:">
+    <combo_box.item name="1" label="Ingen"/>
+    <combo_box.item name="32" label="Low"/>
+    <combo_box.item name="64" label="Mellem"/>
+    <combo_box.item name="128" label="High"/>
+    <combo_box.item name="256" label="Ultra"/>
+  </combo_box>
+  <slider name="RenderExposure" label="Exposure:"/>
+  <check_box name="Mirrors" label="Mirrors"/>
+  <text name="MirrorResolutionText">
+    Mirror Resolution:
+  </text>
+  <combo_box name="MirrorResolution">
+    <combo_box.item name="0" label="256"/>
+    <combo_box.item name="1" label="512"/>
+    <combo_box.item name="2" label="1024"/>
+    <combo_box.item name="3" label="2048"/>
+  </combo_box>
+  <text name="HeroProbeUpdateText">
+    Mirror Update Rate:
+  </text>
+  <combo_box name="HeroProbeUpdateRate">
+    <combo_box.item name="6" label="Low"/>
+    <combo_box.item name="3" label="Mellem"/>
+    <combo_box.item name="1" label="High"/>
+    <combo_box.item name="0" label="Ultra"/>
+  </combo_box>
+  <slider name="RenderSharpness" label="Sharpening:"/>
+  <text name="TonemapTypeText">
+    Tone Mapper:
+  </text>
+  <combo_box name="TonemapType">
+    <combo_box.item name="0" label="Khronos Neutral"/>
+    <combo_box.item name="1" label="ACES"/>
+  </combo_box>
+  <slider name="TonemapMix" label="Tone Mapping Mix:" tool_tip="Mix between linear and tone mapped colors"/>
+  <button name="Defaults" label="Reset to recommended settings"/>
+  <button name="OK" label="OK"/>
+  <button name="Cancel" label="Annuller"/>
+  <check_box name="RenderAvatarMaxComplexity" label="RenderAvatarMaxComplexity"/>
+  <check_box name="RenderAvatarMaxNonImpostors" label="RenderAvatarMaxNonImpostors"/>
+</floater>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="Chat Options Menu">
+  <menu_item_check name="nearby_people" label="Show Radar..."/>
+  <menu_item_check name="nearby_voice" label="Show Nearby Voice..."/>
+  <menu_item_check name="block_list" label="Show Block List..."/>
+  <menu_item_check name="plain_text_chat_history" label="Use V1 style chat headers"/>
+  <menu_item_check name="chat_header_icons" label="Show profile icons in chat headers"/>
+  <context_menu name="font_size" label="Font size...">
+    <menu_item_check name="font_size_small" label="Lille"/>
+    <menu_item_check name="font_size_medium" label="Mellem"/>
+    <menu_item_check name="font_size_large" label="Stor"/>
+    <menu_item_check name="font_size_huge" label="Meget stor"/>
+  </context_menu>
+  <menu_item_check name="typing_chevron" label="Additional chevron (>) as typing indicator"/>
+  <menu_item_check name="new_message_notification" label="Show new message notification"/>
+  <menu_item_check name="show_chat_bar" label="Show chat bar"/>
+  <menu_item_check name="show_channel_selection" label="Show channel selection"/>
+  <menu_item_check name="show_emoji_button" label="Show emoji button"/>
+  <menu_item_check name="show_send_button" label="Show chat type / send button"/>
+  <menu_item_check name="show_im_send_button" label="Show send button in IM sessions"/>
+</toggleable_menu>

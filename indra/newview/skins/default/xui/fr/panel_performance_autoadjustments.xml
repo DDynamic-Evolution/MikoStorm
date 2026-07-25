@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autoadjustments">
+  <text name="back_lbl">
+    Retour
+  </text>
+  <text name="settings_title">
+    Réglages automatiques
+  </text>
+  <button name="defaults_btn" label="Réinitialiser les réglages recommandés"/>
+  <text name="targetfps_desc">
+    Taux de rafraîchissement souhaité
+  </text>
+  <spinner name="target_fps" tool_tip="Le lecteur essaiera d'atteindre cet objectif en ajustant vos paramètres graphiques."/>
+  <text name="display_desc">
+    Votre écran supporte jusqu'à [FPS_LIMIT] fps.
+  </text>
+  <text name="settings_desc">
+    Les réglages affectent
+  </text>
+  <combo_box name="TuningFPSStrategy">
+    <combo_box.item name="av_only" label="Avatars uniquement"/>
+    <combo_box.item name="av_and_scene" label="Avatars et monde"/>
+    <combo_box.item name="scene_only" label="Monde uniquement"/>
+  </combo_box>
+  <button name="start_autotune" label="Ajuster maintenant" tool_tip="Le lecteur essaiera d'ajuster les réglages pour atteindre le taux de rafraîchissement cible puis s'arrêtera."/>
+  <button name="stop_autotune" label="Annuler" tool_tip="Arrêter l'ajustement des réglages."/>
+  <text name="wip_desc">
+    En cours...
+  </text>
+  <check_box name="AutoTuneContinuous" label="Ajuster en continu" tool_tip="Le lecteur adaptera continuellement les réglages pour atteindre le taux de rafraîchissement cible jusqu'à l'arrêt, même avec le floater fermé."/>
+  <radio_group name="autotune_lock_type">
+    <radio_item name="one_session_lock" label="Cette session uniquement"/>
+    <radio_item name="next_session_lock" label="Sessions futures"/>
+  </radio_group>
+  <check_box name="vsync" label="Activer la synchronisation verticale" tool_tip="Activer la synchronisation verticale pour réduire les déchirures et saccades de l'écran."/>
+  <text name="vsync_desc">
+    Correspond au taux de rafraîchissement de l'écran.
+  </text>
+  <text name="vsync_desc_limit">
+    Remarque : L'activation de la synchronisation verticale limite le taux de rafraîchissement à [FPS_LIMIT] fps.
+  </text>
+  <text name="simplify_dist_desc">
+    Réduire le détail des avatars éloignés améliorera la vitesse graphique.
+  </text>
+  <check_box name="AutoTuneImpostorByDistEnabled" label="Simplifier les avatars au-delà de" tool_tip="Lorsque activé, le lecteur ajustera le paramètre MaxNonImpostors pour limiter les avatars entièrement rendus à ceux dans le rayon défini."/>
+  <text name="dist_meters">
+    mètres
+  </text>
+  <text name="dist_limits_desc">
+    Choisissez la plage de distance que les réglages automatiques affecteront.
+  </text>
+  <text name="min_dist_lbl">
+    Distance minimale
+  </text>
+  <text name="pref_dist_lbl">
+    Distance maximale
+  </text>
+</panel>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_region_restart_schedule" title="Region Restart Schedule">
+  <floater.string name="am_string">
+    am
+  </floater.string>
+  <floater.string name="pm_string">
+    pm
+  </floater.string>
+  <text name="days_general">
+    Restart the region on following days:
+  </text>
+  <check_box name="s_chk" label="" tool_tip="Sunday"/>
+  <check_box name="m_chk" label="" tool_tip="Monday"/>
+  <check_box name="t_chk" label="" tool_tip="Tuesday"/>
+  <check_box name="w_chk" label="" tool_tip="Wednesday"/>
+  <check_box name="r_chk" label="" tool_tip="Thursday"/>
+  <check_box name="f_chk" label="" tool_tip="Friday"/>
+  <check_box name="a_chk" label="" tool_tip="Saturday"/>
+  <text name="su_label">
+    Su
+  </text>
+  <text name="mo_label">
+    Mo
+  </text>
+  <text name="tu_label">
+    Tu
+  </text>
+  <text name="we_label">
+    We
+  </text>
+  <text name="th_label">
+    Th
+  </text>
+  <text name="fr_label">
+    Fr
+  </text>
+  <text name="sa_label">
+    Sa
+  </text>
+  <text name="at_label">
+    at
+  </text>
+  <button name="am_pm_btn" label="am"/>
+  <text name="utc_label">
+    UTC
+  </text>
+  <button name="save_btn" label="Сохранить"/>
+  <button name="cancel_btn" label="Отмена"/>
+</floater>

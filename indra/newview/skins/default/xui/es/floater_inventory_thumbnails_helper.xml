@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="contents" title="Inventory Thumbnails Helper">
+  <scroll_list name="inventory_thumbnails_list" tool_tip="Paste items from your inventory">
+    <scroll_list.columns name="item_name" label="Inventory Item"/>
+    <scroll_list.columns name="existing_texture" label="Existing Texture"/>
+    <scroll_list.columns name="new_texture" label="New Texture"/>
+  </scroll_list>
+  <button name="paste_items_btn" label="Paste items from Inventory"/>
+  <button name="paste_textures_btn" label="Paste textures from Inventory"/>
+  <button name="write_thumbnails_btn" label="Write Thumbnails"/>
+  <button name="log_missing_thumbnails_btn" label="Log items with no thumbnail"/>
+  <button name="clear_thumbnails_btn" label="Clear thumbnails from pasted items"/>
+</floater>

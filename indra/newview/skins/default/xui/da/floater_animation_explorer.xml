@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="animation_explorer" title="Animation Explorer">
+  <scroll_list name="animation_list">
+    <scroll_list.column name="played_by" label="Played by"/>
+    <scroll_list.column name="played" label="Played"/>
+    <scroll_list.column name="priority" label="Priority"/>
+    <scroll_list.column name="timestamp" label="Timestamp"/>
+    <scroll_list.column name="animation_id" label="Animation ID"/>
+    <scroll_list.column name="object_id" label="Object ID"/>
+  </scroll_list>
+  <panel name="buttons_panel">
+    <button name="stop_btn" label="Stop"/>
+    <button name="stop_and_revoke_btn" label="Stop and Revoke"/>
+    <button name="blacklist_btn" label="Blacklist"/>
+    <check_box name="no_owned_animations_check" label="No Owned Animations" tool_tip="When checked this will filter out all animations that are owned by your avatar, like AO animations or system default animations."/>
+  </panel>
+</floater>

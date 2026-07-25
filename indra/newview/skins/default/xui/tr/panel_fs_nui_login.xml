@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+  <panel.string name="forgot_password_url">
+    http://secondlife.com/account/request.php
+  </panel.string>
+  <string name="ServerComboTooltip">
+    An existing grid or a grid URI
+  </string>
+  <layout_stack name="ui_stack">
+    <layout_panel name="ui_container">
+      <layout_stack name="vert_stack_left">
+        <layout_panel name="1st_row">
+          <layout_stack name="1st_row_stack">
+            <layout_panel name="login">
+              <combo_box name="username_combo" label="Username" tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"/>
+              <check_box name="remember_username_check" label="Remember username"/>
+            </layout_panel>
+            <layout_panel name="delete_container">
+              <button name="remove_user_btn" label="" tool_tip="Remove this username"/>
+            </layout_panel>
+            <layout_panel name="password_container">
+              <line_editor name="password_edit" label="Password"/>
+              <check_box name="remember_check" label="Remember password"/>
+              <button name="password_show_btn" tool_tip="Show password text"/>
+              <button name="password_hide_btn" tool_tip="Hide password text"/>
+            </layout_panel>
+            <layout_panel name="start_location_panel">
+              <combo_box name="start_location_combo" label="Start location">
+                <combo_box.item name="MyLastLocation" label="Last location"/>
+                <combo_box.item name="MyHome" label="Home"/>
+                <combo_box.item name="Typeregionname" label="<Type region name>"/>
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+        <layout_panel name="2nd_row">
+          <layout_stack name="2nd_row_stack">
+            <layout_panel name="grid_panel">
+              <text name="grid_login_text">
+                Grid:
+              </text>
+              <text name="grid_builder_text">
+                + Click to add more grids
+              </text>
+            </layout_panel>
+            <layout_panel name="mode_selection">
+              <text name="mode_selection_text">
+                Mod:
+              </text>
+              <combo_box name="mode_combo" tool_tip="Select which style of viewer you are most familiar with to set your defaults to appropriately.">
+                <combo_box.item name="MikoStorm" label="MikoStorm"/>
+                <combo_box.item name="Phoenix" label="Phoenix"/>
+                <combo_box.item name="V3" label="[VIEWER_GENERATION]"/>
+                <combo_box.item name="Hybrid" label="Hybrid"/>
+                <combo_box.item name="Text" label="Text"/>
+              </combo_box>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+      </layout_stack>
+      <button name="connect_btn" label="Log In"/>
+      <text name="create_new_account_text">
+        Create an account
+      </text>
+      <text name="forgot_password_text">
+        Forgot password?
+      </text>
+    </layout_panel>
+  </layout_stack>
+</panel>

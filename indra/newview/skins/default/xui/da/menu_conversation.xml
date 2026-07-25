@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_conversation_participant">
+  <menu_item_call name="close_conversation" label="Close conversation"/>
+  <menu_item_call name="open_voice_conversation" label="Open voice conversation"/>
+  <menu_item_call name="disconnect_from_voice" label="Disconnect from voice"/>
+  <menu_item_call name="close_selected_conversations" label="Close Selected"/>
+  <menu_item_call name="view_profile" label="View Profile"/>
+  <menu_item_call name="im" label="IM"/>
+  <menu_item_call name="offer_teleport" label="Offer teleport"/>
+  <menu_item_call name="request_teleport" label="Request teleport"/>
+  <menu_item_call name="voice_call" label="Voice call"/>
+  <menu_item_call name="chat_history" label="Chat transcript..."/>
+  <menu_item_call name="add_friend" label="Add friend"/>
+  <menu_item_call name="remove_friend" label="Remove friend"/>
+  <menu_item_call name="remove_friends" label="Remove friends"/>
+  <menu_item_call name="invite_to_group" label="Invite to group..."/>
+  <menu_item_call name="zoom_in" label="Zoom In"/>
+  <menu_item_call name="map" label="Map"/>
+  <menu_item_call name="share" label="Share"/>
+  <menu_item_call name="pay" label="Betal"/>
+  <menu_item_call name="report_abuse" label="Report Abuse"/>
+  <menu_item_check name="block_unblock" label="Block Voice"/>
+  <menu_item_check name="MuteText" label="Block Text"/>
+  <menu_item_call name="group_profile" label="Group Profile"/>
+  <menu_item_call name="activate_group" label="Activate Group"/>
+  <menu_item_call name="leave_group" label="Leave Group"/>
+  <context_menu name="Moderator Options" label="Moderator Options">
+    <menu_item_check name="AllowTextChat" label="Allow text chat"/>
+    <menu_item_call name="ModerateVoiceMuteSelected" label="Mute this participant"/>
+    <menu_item_call name="ModerateVoiceUnMuteSelected" label="Unmute this participant"/>
+    <menu_item_call name="ModerateVoiceMute" label="Mute everyone"/>
+    <menu_item_call name="ModerateVoiceUnmute" label="Unmute everyone"/>
+  </context_menu>
+  <menu_item_call name="BanMember" label="Ban member"/>
+</toggleable_menu>

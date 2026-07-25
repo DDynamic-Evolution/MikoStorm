@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Display panel" label="UI-Pref">
+  <tab_container name="tabs" label="MikoStorm Prefs">
+    <panel name="UI Prefs Panel" label="3D World">
+      <text name="HoverTipText">
+        Hover Tips:
+      </text>
+      <check_box name="ShowHoverTips" label="Show Hover Tips" tool_tip="Set this to show hover tips on avatars and some other things - set this one first (CTRL+SHIFT+T)"/>
+      <check_box name="ShowAllHoverTips" label="on All Objects" tool_tip="Set this to show hover tips on in-world objects"/>
+      <check_box name="ShowLandHoverTips" label="on Land" tool_tip="Set this to show hover tips on land"/>
+      <check_box name="FSAdvancedTooltips" label="Show extended information in hovertips"/>
+      <check_box name="FSShowGroupTitleInTooltip" label="Show avatar group titles in hovertips"/>
+      <text name="tooltip_textbox">
+        Hovertip Trigger Delays:
+      </text>
+      <slider name="ToolTipDelay_slider" label="Tooltips:" tool_tip="Delay after that tooltips for user interface elements such as buttons are shown. (Default: 0.7)"/>
+      <text name="ToolTipDelay_text">
+        seconds
+      </text>
+      <slider name="AvatarInspectorTooltipDelay_slider" label="Avatars:" tool_tip="Delay after that hovertips for avatars are shown. (Default: 0.35)"/>
+      <text name="AvatarInspectorTooltipDelay_text">
+        seconds
+      </text>
+      <slider name="ObjectInspectorTooltipDelay_slider" label="Objects:" tool_tip="Delay after that hovertips for objects are shown. (Default: 0.35)"/>
+      <text name="ObjectInspectorTooltipDelay_text">
+        seconds
+      </text>
+      <text name="FSHudTextLabel">
+        Floating Text Options:
+      </text>
+      <slider name="FSHudTextFadeDistance" label="Floating text fade distance (in m):" tool_tip="Sets the distance where floating text (hovertext) starts to fade"/>
+      <slider name="FSHudTextFadeRange" label="Floating text fade range (in m):" tool_tip="Sets the range it takes for a floating text (hovertext) to fade from fully visible to completely invisible"/>
+      <check_box name="FSHudTextUseHoverHighlight" label="Hover over object to highlight floating text:" tool_tip="When an object is being hovered over, highlight the floating text (hovertext) by moving the text to the foreground and disable its alpha"/>
+      <text name="FSHudTextShowBackgroundLabel">
+        Show floating text background:
+      </text>
+      <combo_box name="FSHudTextShowBackgroundDropdown" tool_tip="Displays a black/white background behind the floating text (hovertext) to make it more readable. The opacity can be changed under Colors > Miscellaneous">
+        <combo_box.item name="ScriptDialogOption_0" label="Kapalı"/>
+        <combo_box.item name="ScriptDialogOption_1" label="Only Highlighted Object"/>
+        <combo_box.item name="ScriptDialogOption_2" label="All Objects"/>
+      </combo_box>
+    </panel>
+    <panel name="ui-2d-overlay" label="2D Overlay">
+      <text name="UI Size:">
+        UI Scaling:
+      </text>
+      <text name="HUD Size:">
+        HUD Scaling:
+      </text>
+      <slider name="floater_transparency" label="Floater Opacity:"/>
+      <text name="ScriptDialogsPerObjectLabel">
+        Script Dialogs per Object:
+      </text>
+      <combo_box name="ScriptDialogPerObjectDropdown">
+        <combo_box.item name="ScriptDialogOption_0" label="One per Object"/>
+        <combo_box.item name="ScriptDialogOption_1" label="One per Channel"/>
+        <combo_box.item name="ScriptDialogOption_2" label="One per Channel for Attachments"/>
+        <combo_box.item name="ScriptDialogOption_3" label="One per Channel for HUDs"/>
+        <combo_box.item name="ScriptDialogOption_4" label="Unconstrained for HUDs"/>
+        <combo_box.item name="ScriptDialogOption_5" label="Unconstrained"/>
+      </combo_box>
+      <check_box name="FSRemoveScriptBlockButton" label="Remove "Block" button"/>
+      <text name="ScriptDialogsPositionLabel">
+        Script Dialogs Position:
+      </text>
+      <combo_box name="ScriptDialogsPositionDropdown" tool_tip="Choose where script dialogs (menus) come up on your screen.">
+        <combo_box.item name="ScriptDialogPositionOption_1" label="Docked to Chiclet"/>
+        <combo_box.item name="ScriptDialogPositionOption_2" label="Top Left"/>
+        <combo_box.item name="ScriptDialogPositionOption_3" label="Top Right"/>
+        <combo_box.item name="ScriptDialogPositionOption_4" label="Bottom Left"/>
+        <combo_box.item name="ScriptDialogPositionOption_5" label="Bottom Right"/>
+      </combo_box>
+      <check_box name="FSAnimatedScriptDialogs" label="Animate Script Dialogs" tool_tip="Set this to make script dialogs animate when opening (Classic V1.x behavior). Only works when dialogs open from the top down."/>
+      <slider name="FSRowsPerScriptDialog" label="Visible rows per script dialog:" tool_tip="The maximum number of rows in a script dialog that will be visible at the same time."/>
+      <check_box name="UsePieMenu" label="Use Pie Menu" tool_tip="Use the classic V1 ring menu instead of rectangular context menus when right clicking on land, avatars, objects or attachments."/>
+      <check_box name="PieMenuPopupFontEffect" label="Enable text animation" tool_tip="Enables the text within the pie menu being part of the animation when the pie menu opens."/>
+      <check_box name="PieMenuOuterRingShade" label="Enable outer ring shade" tool_tip="Enables an additional outer ring shade that helps visualizing sub menus."/>
+      <text name="ShowGroupNoticesTopRightLabel">
+        Group Notices and chiclets location:
+      </text>
+      <radio_group name="ShowGroupNoticesTopRight" tool_tip="Choose where group notifications and chiclet icons will appear on the screen.">
+        <radio_item name="radio" label="Bottom Right"/>
+        <radio_item name="radio1" label="Top Right"/>
+      </radio_group>
+      <text name="GroupTopRightRequiresRestart">
+        (requires restart)
+      </text>
+      <check_box name="FSDisableIMChiclets" label="Hide group and IM chat chiclets" tool_tip="If checked, MikoStorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen)."/>
+      <check_box name="FSLegacyNotificationWell" label="Use legacy list layout for Notifications window" tool_tip="If checked, MikoStorm will use the legacy list view to display stored notifications."/>
+      <text name="FSLegacyNotificationWellRequiresRestart">
+        (requires restart)
+      </text>
+      <check_box name="FSLegacyNotificationWellAutoResize" label="Auto-resize Conversations and legacy Notifications lists" tool_tip="If checked, MikoStorm will always resize the Conversations and legacy Notifications lists automatically when items get added or removed."/>
+      <check_box name="FSRemapLinuxShortcuts" label="Remap shortcuts already used by Linux (Linux only; requires restart)" tool_tip="If enabled, shortcuts that are already used by the Linux operating system (such as CTRL-ALT-Fx) will be remapped."/>
+      <check_box name="FSStatisticsNoFocus" label="Prevent statistics window from gaining focus" tool_tip="If enabled, the statistics window will never receive focus when another window is closed (actions such as changing graph layout for items are still possible when enabled)."/>
+      <check_box name="FSShowInventoryThumbnailTooltips" label="Show thumbnails of inventory items in tooltips" tool_tip="If enabled, hovering over inventory items containing a thumbnail will show the thumbnail in a tooltip."/>
+      <slider name="FSInventoryThumbnailTooltipsDelay" label="Thumbnail tooltip delay:" tool_tip="The delay for tooltips showing thumbnails of inventory item"/>
+      <text name="FSInventoryThumbnailTooltipsDelayText">
+        sec
+      </text>
+      <slider name="ButtonsFlashCount" label="Number of times IM tabs flash:"/>
+      <slider name="ButtonFlashRate" label="IM tab flash period:" tool_tip="Time in seconds a single flash of IM tabs takes - used for IM notifications"/>
+      <text name="ButtonFlashRateText">
+        sec
+      </text>
+    </panel>
+    <panel name="UI-interface-top-bars" label="Top Bars">
+      <text name="statusbar_textbox">
+        Status bar:
+      </text>
+      <check_box name="ShowNetStats" label="Show traffic indicator in upper right corner of the screen" tool_tip="Show traffic indicator in top menu"/>
+      <check_box name="FSStatbarLegacyMeanPerSec" label="Use legacy period mean per second display for traffic indicator" tool_tip="If enabled, MikoStorm will use the legacy method of showing the period mean per second value in the traffic indicator instead of the current observed value"/>
+      <check_box name="FSUseStatsInsteadOfLagMeter" label="Clicking on traffic indicator opens Statistics instead of the Lag Meter"/>
+      <check_box name="FSEnableVolumeControls" label="Show media controls in top menu" tool_tip="If checked, MikoStorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
+      <check_box name="ShowMenuBarLocation" label="Show location in top menu"/>
+      <check_box name="FSStatusbarShowSimulatorVersion" label="Show simulator version in top menu" tool_tip="Shows the current simulator version in the V1-like status bar."/>
+      <check_box name="show_omnifilter_controls_check" label="Show onmifilter controls" tool_tip="Controls include enable|disable omnifilter, toggle omnifilter rules editor and change active rule set."/>
+      <check_box name="show_search_menu_check" label="Show menu search"/>
+      <check_box name="FSShowCurrencyBalanceInStatusbar" label="Show currency balance"/>
+      <check_box name="FSStatusBarMenuButtonPopupOnRollover" label="Enable mouse rollover popup on status bar menu icons"/>
+      <text name="statusbar_timeformat_textbox">
+        Clock format:
+      </text>
+      <combo_box name="FSStatusBarTimeFormat" tool_tip="Selects the time format used on main menu bar.">
+        <combo_box.item name="Language" label="Language default"/>
+        <combo_box.item name="12_Hour" label="12 Hour"/>
+        <combo_box.item name="12_Hour_Seconds" label="12 Hour incl. Seconds"/>
+        <combo_box.item name="12_Hour_TZ" label="12 Hour incl. Timezone"/>
+        <combo_box.item name="12_Hour_TZ_Seconds" label="12 Hour incl. Seconds & Timezone"/>
+        <combo_box.item name="24_Hour" label="24 Hour"/>
+        <combo_box.item name="24_Hour_Seconds" label="24 Hour incl. Seconds"/>
+        <combo_box.item name="24_Hour_TZ" label="24 Hour incl. Timezone"/>
+        <combo_box.item name="24_Hour_TZ_Seconds" label="24 Hour incl. Seconds & Timezone"/>
+      </combo_box>
+      <text name="navfav_textbox">
+        Navigation & Favourites bars:
+      </text>
+      <check_box name="ShowNavbarFavoritesPanel" label="Show Favorites Bar"/>
+      <check_box name="ShowNavbarNavigationPanel" label="Show Navigation and Search Bar"/>
+      <check_box name="ShowSearchTopBar" label="Show Search Bar"/>
+    </panel>
+    <panel name="UI-interface-windows-tab" label="Interface Windows">
+      <check_box name="FSInspectAvatarSlurlOpensProfile" label="Open avatar profile directly when clicking on its name" tool_tip="If enabled, MikoStorm will open the profile of an avatar directly when clicking on a link with its name"/>
+      <check_box name="FSDisableBlockListAutoOpen" label="Disable automatic opening of block list" tool_tip="Disables the automatic opening of the block list when blocking avatars or objects."/>
+      <check_box name="FSUseV2Friends" label="'Friends' and 'Groups' in 'Comm' menu opens the [SHORT_VIEWER_GENERATION] based windows" tool_tip="If enabled, Friends / Groups will open through the People panel - otherwise they will open in the Contacts panel."/>
+      <check_box name="FSUseLegacyObjectProperties" label="Use legacy object properties" tool_tip="If enabled, the legacy object profile window will be used when opening object properties."/>
+      <check_box name="FSUseSmallCameraFloater" label="Use small camera window" tool_tip="If enabled, the smaller, legacy camera window without camera preset controls will be used."/>
+      <check_box name="DisableCameraJoystickCenterReset" label="Disable camera controls reset buttons" tool_tip="Prevents the center bullseye of the orbit and move camera controls from resetting the camera."/>
+      <text name="standalone_textbox">
+        Use stand-alone windows for:
+      </text>
+      <check_box name="FSUseStandaloneGroupFloater" label="Group profiles" tool_tip="If enabled, group profiles will open in separate windows."/>
+      <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Teleport history" tool_tip="If enabled, using the shortcut for teleport history will open the history in a separate window."/>
+      <check_box name="FSUseStandaloneBlocklistFloater" label="Block/mute list" tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
+      <check_box name="FSUseStandalonePlaceDetailsFloater" label="Landmarks, place details and teleport history details" tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
+      <text name="ExtendedTeleportHistoryLabel">
+        Extend teleport history by:
+      </text>
+      <check_box name="FSTeleportHistoryShowPosition" label="Konum" tool_tip="If enabled, the local coordinates within the region will be shown in the teleport history."/>
+      <check_box name="FSTeleportHistoryShowDate" label="Tarih" tool_tip="If enabled, the date and time of the teleport will be shown in the teleport history."/>
+      <text name="textFriendlistOptions">
+        Contact list options:
+      </text>
+      <text name="textFriendlistColumns">
+        Visible name columns:
+      </text>
+      <check_box name="FSFriendListColumnShowUserName" label="Username" tool_tip="The contact list will show a column with the friend's username."/>
+      <check_box name="FSFriendListColumnShowDisplayName" label="Display name" tool_tip="The contact list will show a column with the friend's display name."/>
+      <check_box name="FSFriendListColumnShowFullName" label="Full name" tool_tip="The contact list will show a column with the friend's full name."/>
+      <text name="textFriendListSortOrder">
+        Sort list by:
+      </text>
+      <radio_group name="FSFriendListSortOrder" tool_tip="">
+        <radio_item name="username" label="Username"/>
+        <radio_item name="displayname" label="Display name"/>
+      </radio_group>
+      <text name="textFriendListFullNameFormat">
+        Show full name as:
+      </text>
+      <radio_group name="FSFriendListFullNameFormat" tool_tip="">
+        <radio_item name="username_displayname" label="Username (Display name)"/>
+        <radio_item name="displayname_username" label="Display name (Username)"/>
+      </radio_group>
+      <check_box name="FSFriendListColumnShowPermissions" label="Show permissions column" tool_tip="The contact list will show the columns with the permissions you granted this avatar and vice versa."/>
+      <check_box name="FSContactListShowSearch" label="Show search filter" tool_tip="The contact list will show a search textbox to filter the list."/>
+      <text name="textInventoryOptions">
+        Inventory options:
+      </text>
+      <check_box name="DebugHideEmptySystemFolders" label="Hide empty system folders from inventory" tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc."/>
+      <check_box name="FSShowInboxFolder" label="Show the Received Items folder in normal inventory" tool_tip="If enabled, the inventory windows will also show the Received Items folder"/>
+      <check_box name="FSAlwaysShowInboxButton" label="Always show Received Items button at bottom of inventory" tool_tip="If enabled, the Received Items button is always shown at the bottom of the inventory windows, even if the folder is shown in the inventory."/>
+      <check_box name="FSSplitInventorySearchOverTabs" label="Allow separate search terms on each tab in inventory" tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory."/>
+    </panel>
+    <panel name="UI-toasts-tab" label="Toasts">
+      <text name="ToastSettings">
+        Notification Display Settings (popups, console, toasts):
+      </text>
+      <slider name="ToastSpace" label="Space between lowest Toast and bottom:" tool_tip="Space in pixels between the bottom of the UI and the bottom toast"/>
+      <text name="ToastSpaceText">
+        pixels
+      </text>
+      <slider name="ToastLifetime" label="Notification Toast life:" tool_tip="Number of seconds that a notification toast is displayed before fading"/>
+      <text name="ToastLifetimeText">
+        seconds
+      </text>
+      <slider name="TipToastLifetime" label="Tip Toast life:" tool_tip="Number of seconds that a tip toast is displayed before fading"/>
+      <text name="TipToastLifetimeText">
+        seconds
+      </text>
+      <slider name="NearbyToastLifetime" label="Nearby Chat Toast life:" tool_tip="Number of seconds that a nearby chat popup is displayed before fading"/>
+      <text name="NearbyToastLifetimeText">
+        seconds
+      </text>
+      <slider name="FSNearbyChatToastsOffset" label="Nearby Chat Toast z-offset:" tool_tip="Controls the z-offset of nearby chat toasts"/>
+      <text name="FSNearbyChatToastsOffsetText">
+        pixels
+      </text>
+      <slider name="NearbyToastFadingTime" label="Nearby Chat Toast fade time:" tool_tip="Number of seconds that a nearby chat popup takes to fade completely"/>
+      <text name="NearbyToastFadingTimeText">
+        seconds
+      </text>
+      <slider name="StartupToastLifetime" label="Startup Toast life:" tool_tip="Number of seconds that a toast is shown on startup before fading"/>
+      <text name="StartupToastLifetimeText">
+        seconds
+      </text>
+      <slider name="ToastFadingTime" label="Normal Toast fade time:" tool_tip="Number of seconds that a normal toast is displayed before fading"/>
+      <text name="ToastFadingTimeText">
+        seconds
+      </text>
+      <slider name="ToastGap" label="Gap between Toasts:" tool_tip="Gap between adjacent toasts in pixels"/>
+      <text name="ToastGapText">
+        pixels
+      </text>
+      <slider name="OverflowToastHeight" label="Height of Overflow Toast:" tool_tip="Height of an overflow toast in pixels"/>
+      <text name="OverflowToastHeightText">
+        pixels
+      </text>
+      <slider name="NearbyToastWidth" label="Width of Nearby Chat Toast:" tool_tip="Width of a the nearby chat popups in percent of screen width"/>
+      <check_box name="FSShowToastsInFront" label="Show toasts in front of other windows"/>
+      <check_box name="FSUseNewRegionRestartNotification" label="Use new region restart notification"/>
+      <check_box name="FSNoScreenShakeOnRegionRestart" label="Don't shake my screen when region restart alert message is shown"/>
+      <check_box name="FSReportRegionRestartToChat" label="Send region restart info to channel:"/>
+    </panel>
+    <panel name="UI-font-tab" label="Font">
+      <text name="tooltip_textbox1">
+        Font Scheme:
+      </text>
+      <text name="tooltip_textbox2">
+        (Requires restart)
+      </text>
+      <text name="tooltip_textbox5">
+        Font Size Adjustment:
+      </text>
+      <text name="tooltip_textbox6">
+        pt (requires restart)
+Default 0. Larger values may not work well.
+      </text>
+      <text name="tooltip_textbox8">
+        Line spacing:
+      </text>
+      <text name="tooltip_textbox9">
+        pixels (requires restart)
+default 0.
+      </text>
+      <text name="tooltip_textbox3">
+        Chat Line spacing:
+      </text>
+      <text name="tooltip_textbox4">
+        pixels (requires restart)
+[VIEWER_GENERATION] default 0. Viewer 1 default 2.
+      </text>
+      <text name="Label_FolderItemViewHeight">
+        Folder Item Height:
+      </text>
+      <text name="Label_FolderItemViewHeight_Scale">
+        pixels (requires restart)
+[VIEWER_GENERATION] default 20. Viewer 1 default 18.
+      </text>
+      <text name="text_box_notecard_font">
+        Notecard Editor Font:
+      </text>
+      <combo_box name="FSNotecardFontName" tool_tip="Name of the font used in the notecard editor">
+        <combo_item name="Sans Serif" label="Sans Serif"/>
+        <combo_item name="Monospace" label="Monospace"/>
+        <combo_item name="Scripting" label="Scripting"/>
+        <combo_item name="Cascadia" label="Cascadia Code"/>
+      </combo_box>
+      <combo_box name="FSNotecardFontSize" tool_tip="Size of the font used in the notecard editor">
+        <combo_item name="Monospace" label="Monospace"/>
+        <combo_item name="Scripting" label="Scripting"/>
+        <combo_item name="Cascadia" label="Cascadia Code"/>
+        <combo_item name="Small" label="Küçük"/>
+        <combo_item name="Medium" label="Orta"/>
+        <combo_item name="Large" label="Büyük"/>
+      </combo_box>
+      <text name="emoji_font_settings_label">
+        Emoji Font Settings: (restart required for full effect)
+      </text>
+      <check_box name="FSUseBWEmojis" label="Display emojis in monochrome"/>
+      <check_box name="FSUsePrettyEmojiButton" label="Use pretty Emoji button"/>
+    </panel>
+  </tab_container>
+</panel>

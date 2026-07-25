@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Object Import">
+  <floater.string name="floater_title">
+    Import [FILENAME]
+  </floater.string>
+  <floater.string name="file_status">
+    [LINKSETS] linksets. [PRIMS] prims. [TEXTURES] textures.
+        [SOUNDS] sounds. [ANIMATIONS] animations.
+  </floater.string>
+  <floater.string name="file_status_error">
+    Error reading file. Select another file.
+  </floater.string>
+  <floater.string name="file_version_error">
+    Error parsing file, wrong format or version.
+  </floater.string>
+  <floater.string name="file_status_running">
+    Linkset [LINKSET] of [LINKSETS], prim [PRIM] of [PRIMS]
+  </floater.string>
+  <floater.string name="file_status_done">
+    Finished importing.
+  </floater.string>
+  <floater.string name="texture_uploading">
+    Uploading texture [TEXTURE] of [TEXTURETOTAL].
+  </floater.string>
+  <floater.string name="sound_uploading">
+    Uploading sound [SOUND] of [SOUNDTOTAL].
+  </floater.string>
+  <floater.string name="animation_uploading">
+    Uploading animation [ANIMATION] of [ANIMATIONTOTAL].
+  </floater.string>
+  <floater.string name="asset_uploading">
+    Uploading asset [ASSET] of [ASSETTOTAL].
+  </floater.string>
+  <floater.string name="upload_cost">
+    Total cost of uploads: L$ [COST].
+  </floater.string>
+  <floater.string name="object">
+    object
+  </floater.string>
+  <floater.string name="objects">
+    objects
+  </floater.string>
+  <text name="filename_text">
+    [FILENAME]
+  </text>
+  <text name="creation_date_text">
+    Created on [DATE_STRING]
+  </text>
+  <text name="author_text">
+    by [AUTHOR] [GRID]
+  </text>
+  <text name="client_text">
+    Client: [CLIENT] v.[VERSION]
+  </text>
+  <text name="file_status_text">
+    Select a file.
+  </text>
+  <check_box name="do_not_attach" label="Do not attach object"/>
+  <check_box name="region_position" label="Restore Region Position"/>
+  <check_box name="upload_asset" label="Upload Content"/>
+  <check_box name="temp_asset" label="Temp"/>
+  <button name="import_btn" label="Import"/>
+</floater>

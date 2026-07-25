@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_fs_settings_water" label="Water">
+  <panel name="P_Wave_Fog" label="Fog">
+    <text name="water_fog_label" tool_tip="Water Fog Color - This changes the color of the volume tint of the water, essentially defining the color of the water itself. If your water has no fog, it will appear crystal clear and colorless.">
+      Water Fog Color
+    </text>
+    <text name="normal_map_label" tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best.">
+      Normal Map
+    </text>
+  </panel>
+  <panel name="P_Wave_Fog_2" label="Fog">
+    <text name="density_exponent_label">
+      Density Exponent:
+    </text>
+    <text name="underwater_modifier_label">
+      Underwater Modifier:
+    </text>
+    <text name="FresnelScaleText">
+      Fresel Scale:
+    </text>
+    <text name="FresnelOffsetText">
+      Fresnel Offset:
+    </text>
+  </panel>
+  <panel name="P_Water_Wave" label="Wave">
+    <text name="large_wave_speed_label">
+      Large Wave Speed
+    </text>
+    <text name="small_wave_speed_label">
+      Small Wave Speed
+    </text>
+    <text name="reflection_wavelet_scale_label">
+      Reflection Wavelet Scale
+    </text>
+    <slider name="water_normal_scale_x" label="X:"/>
+    <slider name="water_normal_scale_y" label="Y:"/>
+    <slider name="water_normal_scale_z" label="Z:"/>
+  </panel>
+  <panel name="P_Water_Reflection" label="Refraction">
+    <text name="refraction_scale_above_label">
+      Refract Scale (Above):
+    </text>
+    <text name="refraction_scale_below_label">
+      Refract Scale (Below):
+    </text>
+    <text name="blur_multiplier_label">
+      Blur Multiplier:
+    </text>
+  </panel>
+</panel>

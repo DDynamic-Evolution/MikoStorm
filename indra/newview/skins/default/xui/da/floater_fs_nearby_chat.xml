@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="nearby_chat" title="Nearby Chat">
+  <floater.string name="chatbox_label">
+    To nearby chat
+  </floater.string>
+  <layout_stack name="ls_control_panel">
+    <layout_panel name="lp_chat_history_btn">
+      <button name="chat_history_btn" tool_tip="Open the nearby chat transcript."/>
+    </layout_panel>
+    <layout_panel name="lp_chat_history_muted_btn">
+      <button name="chat_history_muted_btn" tool_tip="Shows the muted chat in nearby chat transcript."/>
+    </layout_panel>
+    <layout_panel name="lp_options_btn">
+      <menu_button name="chat_options_btn" tool_tip="Chat Options"/>
+    </layout_panel>
+    <layout_panel name="lp_chat_search_btn">
+      <button name="chat_search_btn" tool_tip="Search nearby chat"/>
+    </layout_panel>
+  </layout_stack>
+  <layout_stack name="ls_chat">
+    <layout_panel name="panel_im_control_lp">
+      <layout_stack name="im_panels">
+        <layout_panel name="unread_messages_holder">
+          <text name="unread_messages_text">
+            Unread Messages: [NUM]
+          </text>
+        </layout_panel>
+        <layout_panel name="chat_layout_panel">
+          <layout_stack name="input_panels">
+            <layout_panel name="emoji_button_layout_panel">
+              <button name="emoji_picker_toggle_btn" label="" tool_tip="Show emoji panel"/>
+              <button name="emoji_recent_panel_toggle_btn" tool_tip="Shows/hides recent emojis"/>
+            </layout_panel>
+            <layout_panel name="input_button_layout_panel">
+              <spinner name="ChatChannel" label="" tool_tip="Channel to send chat on. Enabled in Preferences -> Chat -> Firestorm -> Show channel selection in chat bar."/>
+            </layout_panel>
+            <layout_panel name="chat_type_layout_panel">
+              <combo_box name="chat_type" tool_tip="Whisper = 10m, Say = 20m, Shout = 100m">
+                <combo_box.item name="chat_type_whisper" label="Whisper"/>
+                <combo_box.item name="chat_type_say" label="Say"/>
+                <combo_box.item name="chat_type_shout" label="Shout"/>
+              </combo_box>
+              <button name="send_chat" label="Say" tool_tip="Whisper = 10m, Say = 20m, Shout = 100m"/>
+            </layout_panel>
+          </layout_stack>
+        </layout_panel>
+        <layout_panel name="emoji_recent_layout_panel">
+          <text name="emoji_recent_empty_text">
+            Recently used emojis will appear here
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</floater>

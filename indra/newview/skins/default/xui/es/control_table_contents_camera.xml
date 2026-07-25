@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<contents >
+  <rows name="camera_actions">
+    <columns name="lst_action" label="Cámara"/>
+  </rows>
+  <rows name="spin_around_ccw">
+    <columns name="lst_action" tool_tip="Camera spin around counterclockwise"/>
+  </rows>
+  <rows name="spin_around_cw">
+    <columns name="lst_action" tool_tip="Camera spin around clockwise"/>
+  </rows>
+  <rows name="roll_left">
+    <columns name="lst_action" tool_tip="Camera roll left"/>
+  </rows>
+  <rows name="roll_right">
+    <columns name="lst_action" tool_tip="Camera roll right"/>
+  </rows>
+  <rows name="spin_around_ccw_sitting">
+    <columns name="lst_action" tool_tip="Camera spin around counterclockwise sitting"/>
+  </rows>
+  <rows name="spin_around_cw_sitting">
+    <columns name="lst_action" tool_tip="Camera spin around clockwise sitting"/>
+  </rows>
+</contents>

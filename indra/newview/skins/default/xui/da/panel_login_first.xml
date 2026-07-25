@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_login">
+  <panel.string name="forgot_password_url">
+    http://secondlife.com/account/request.php
+  </panel.string>
+  <panel.string name="sign_up_url">
+    https://join.secondlife.com/
+  </panel.string>
+  <layout_stack name="logo_stack">
+    <layout_panel name="parent_panel2">
+      <layout_stack name="widget_stack">
+        <layout_panel name="widget_container">
+          <combo_box name="username_combo" label="Username" tool_tip="The username you chose when you registered, like bobsmith12 or Steller Sunshine"/>
+          <line_editor name="password_edit" label="Password"/>
+          <button name="connect_btn" label="Log In"/>
+          <text name="sign_up_text">
+            Sign up
+          </text>
+          <check_box name="remember_name" label="Remember me" tool_tip="Already remembered user can be forgotten from Me > Preferences > Advanced > Remembered Usernames."/>
+          <check_box name="remember_password" label="Remember password"/>
+          <text name="forgot_password_text">
+            Forgotten password
+          </text>
+        </layout_panel>
+      </layout_stack>
+    </layout_panel>
+  </layout_stack>
+</panel>

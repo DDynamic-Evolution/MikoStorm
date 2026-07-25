@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_complexity">
+  <text name="back_lbl">
+    Zurück
+  </text>
+  <text name="attachments_title">
+    Avatar attachment complexity
+  </text>
+  <text name="tot_att_count">
+    Total: 50 (120000.10μs)
+  </text>
+  <text name="attachments_desc1">
+    Attachments make your avatar more complex and slower to render.
+  </text>
+  <text name="attachments_desc2">
+    This screen allows you to view the attachments of your own avatar.
+  </text>
+  <text name="attachments_desc3">
+    You may remove your own attachments quickly and easily by hitting the 'X'.
+  </text>
+  <name_list name="obj_list">
+    <name_list.columns name="art_visual" label=""/>
+    <name_list.columns name="art_value" label="Time (μs)" tool_tip="Time taken to render this attachment (microseconds)"/>
+    <name_list.columns name="complex_value" label="ARC" tool_tip="Item complexity (ARC)"/>
+    <name_list.columns name="name" label="Attachment name" tool_tip="Click the 'X' to detach"/>
+  </name_list>
+</panel>

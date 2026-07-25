@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="login_image_settings" title="Anmeldebild-Einstellungen">
+  <text name="description">
+    Wählen Sie eine lokale Bilddatei als Anmeldehintergrund statt der Standard-Webseite. Leer lassen, um die Standardseite wiederherzustellen. Unterstützte Formate: JPG, PNG, BMP, TGA.
+  </text>
+  <text name="path_label">
+    Pfad zum Anmeldebild:
+  </text>
+  <button name="set_path_btn" label="Durchsuchen..."/>
+  <button name="clear_path_btn" label="Löschen"/>
+</floater>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_preferences">
+  <text name="back_lbl">
+    Wstecz
+  </text>
+  <text name="settings_title">
+    Ustawienia graficzne
+  </text>
+  <button name="advanced_btn" label="Otwórz zaawansowane ustawienia"/>
+  <button name="defaults_btn" label="Resetuj do zalecanych ustawień"/>
+  <text name="quality_lbl">
+    Jakość i prędkość
+  </text>
+  <text name="fastest_lbl">
+    Najszybszy
+  </text>
+  <text name="best_quality_lbl">
+    Najlepsza jakość
+  </text>
+  <text name="quality_desc">
+    Wybranie skrótu zresetuje wszystkie ręczne zmiany które wykonałeś.
+  </text>
+  <text name="distance_lbl">
+    Odległość widoczności
+  </text>
+  <text name="faster_lbl">
+    Szybciej
+  </text>
+  <text name="farther_lbl">
+    Dalej
+  </text>
+  <text name="distance_desc1">
+    Aby zobaczyć więcej terenu przy przybliżeniu, zwiększ odległość.
+  </text>
+  <text name="environment_lbl">
+    Cienie
+  </text>
+  <text name="enhancements_desc">
+    Cienie znacząco poprawiają jakość wizualną ale mogą zmniejszyć prędkość.
+  </text>
+  <text name="RenderShadowDetailText">
+    Szczegóły cieni:
+  </text>
+  <combo_box name="ShadowDetail">
+    <combo_box.item name="0" label="Brak"/>
+    <combo_box.item name="1" label="Słońce/Księżyc"/>
+    <combo_box.item name="2" label="Słońce/Księżyc + Projektory"/>
+  </combo_box>
+  <text name="water_lbl">
+    Woda
+  </text>
+  <text name="water_desc">
+    Zmniejszenie lub wyłączenie przezroczystej wody może poprawić liczbę klatek.
+  </text>
+  <check_box name="TransparentWater" label="Przezroczysta woda"/>
+  <text name="photo_lbl">
+    Fotografia
+  </text>
+  <text name="photo_desc">
+    Maksymalne szczegóły są dobre do zdjęć ale mogą spowolnić liczbę klatek.
+  </text>
+  <spinner name="render_volume_lod" label="Szczegóły odległości:"/>
+  <text name="photo_dist_det_desc">
+    (Wprowadź wartość między 0.0 a 4.0)
+  </text>
+</panel>

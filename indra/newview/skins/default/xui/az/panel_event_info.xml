@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_event_info" title="Event">
+  <string name="none">
+    none
+  </string>
+  <string name="notify">
+    Notify
+  </string>
+  <string name="dont_notify">
+    Don't Notify
+  </string>
+  <text name="event_name">
+    (none)
+  </text>
+  <text name="event_category_label">
+    Növ:
+  </text>
+  <text name="event_category">
+    (none)
+  </text>
+  <text name="event_mature_label">
+    Mature Content:
+  </text>
+  <text name="event_mature_yes">
+    Bəli
+  </text>
+  <text name="event_mature_no">
+    Xeyr
+  </text>
+  <text name="event_date_label">
+    Tarix:
+  </text>
+  <text name="event_date">
+    (none)
+  </text>
+  <text name="event_duration_label">
+    Event Duration:
+  </text>
+  <text name="event_duration">
+    (none)
+  </text>
+  <text name="event_runby_label">
+    Run By:
+  </text>
+  <text name="event_runby">
+    (none)
+  </text>
+  <text name="event_location_label">
+    Location:
+  </text>
+  <text name="event_location">
+    (none)
+  </text>
+  <text name="event_cover_label">
+    Cover Charge:
+  </text>
+  <text name="event_cover">
+    (none)
+  </text>
+  <text name="event_desc_label">
+    Description:
+  </text>
+  <button name="teleport_btn" label="Teleport et"/>
+  <button name="map_btn" label="Show on Map"/>
+  <button name="notify_btn" label="Notify"/>
+</panel>

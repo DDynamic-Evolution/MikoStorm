@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_widgets" title="Floater de test">
+  <menu_bar name="test_menu_bar" tool_tip="menu">
+    <menu name="Menu" label="Menu">
+      <menu_item_call name="test_menu_item_1" label="Élément de menu 1"/>
+      <menu_item_call name="test_menu_item_2" label="Élément de menu 2"/>
+    </menu>
+  </menu_bar>
+  <text >
+    Pour la liste des widgets, voir http://wiki.secondlife.com/wiki/XUI_Reference
+  </text>
+  <button name="test_button" label="Bouton" tool_tip="bouton"/>
+  <flyout_button name="fly_btn" label="Dépliant" tool_tip="bouton dépliant">
+    <flyout_button.item label="Élément 1"/>
+    <flyout_button.item label="Élément 2"/>
+    <flyout_button.item label="Élément 3"/>
+  </flyout_button>
+  <check_box name="test_checkbox" label="Case à cocher" tool_tip="case à cocher"/>
+  <check_box name="test_checkbox_disabled" label="Case à cocher désactivée" tool_tip="case à cocher désactivée"/>
+  <combo_box name="test_combo_box" label="Liste déroulante" tool_tip="liste déroulante">
+    <combo_box.item name="item1" label="Élément de liste 1"/>
+    <combo_box.item name="item2" label="Élément de liste 2"/>
+  </combo_box>
+  <icon name="test_icon" tool_tip="icône"/>
+  <line_editor name="test_line_editor" tool_tip="éditeur de ligne">
+    Texte d'exemple pour l'éditeur de ligne
+  </line_editor>
+  <filter_editor name="search editor" label="Tapez ici pour rechercher" tool_tip="éditeur de recherche"/>
+  <progress_bar name="test_progress_bar" tool_tip="barre de progression"/>
+  <stat_view name="axis_view" label="Vue des statistiques" tool_tip="vue statistique">
+    <stat_bar name="test_stat_bar" label="Stat de test"/>
+  </stat_view>
+  <radio_group name="size_radio_group" tool_tip="groupe de boutons radio">
+    <radio_item name="small_radio_item" label="Radio 1"/>
+    <radio_item name="large_radio_item" label="Radio 2"/>
+  </radio_group>
+  <scroll_list tool_tip="liste défilante">
+    <scroll_list.columns name="first_column" label="Colonne A"/>
+    <scroll_list.columns name="second_column" label="Colonne B"/>
+    <row >
+      <column >
+        texte court
+      </column>
+      <column >
+        plus de texte court
+      </column>
+    </row>
+    <row >
+      <column >
+        ceci est un texte plus long
+      </column>
+      <column >
+        et voici encore plus de texte long
+      </column>
+    </row>
+  </scroll_list>
+  <slider name="test_slider" label="Curseur" tool_tip="curseur"/>
+  <spinner name="test_spinner" label="Compteur" tool_tip="compteur"/>
+  <text name="test_text" tool_tip="texte">
+    Texte (souligné)
+  </text>
+  <text name="test_text1" tool_tip="texte">
+    Texte tronqué ici
+  </text>
+  <text_editor name="test_text_editor" tool_tip="éditeur de texte">
+    Éditeur de texte
+  </text_editor>
+  <text name="test_text_box" tool_tip="zone de texte">
+    Zone de texte
+avec
+plusieurs lignes
+et trop
+de
+lignes pour tenir
+  </text>
+  <tab_container name="group_tab_container" tool_tip="conteneur d'onglets">
+    <panel name="panel2" label="Onglet 1 - Couleur">
+      <color_swatch name="swatch1" label="Échantillon de couleur 1" tool_tip="Échantillon de couleur : cliquez pour ouvrir le sélecteur de couleur"/>
+      <color_swatch name="swatch2" label="Échantillon de couleur 2" tool_tip="Échantillon de couleur : cliquez pour ouvrir le sélecteur de couleur"/>
+      <text name="test_text10" tool_tip="texte">
+        Monospace Bouton Dépliant Case à cocher
+      </text>
+      <text name="test_text101" tool_tip="texte">
+        SansSerifSmall.  Русский 中文 (简体)
+      </text>
+      <text name="test_text11" tool_tip="texte">
+        SansSerif.  Русский 中文 (简体)
+      </text>
+      <text name="test_text12" tool_tip="texte">
+        SansSerifLarge.  Русский 中文 (简体)
+      </text>
+      <text name="test_text13" tool_tip="texte">
+        SansSerifHuge.  Русский 中文 (简体)
+      </text>
+    </panel>
+    <panel name="tab2" label="Onglet 2 - Case à cocher"/>
+  </tab_container>
+</floater>

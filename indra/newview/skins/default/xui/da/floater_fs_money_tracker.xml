@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker" title="Money Tracker">
+  <name_list name="payment_list">
+    <name_list.columns name="time" label="Tid"/>
+    <name_list.columns name="name" label="Navn"/>
+    <name_list.columns name="amount" label="Amount"/>
+  </name_list>
+  <text name="summary">
+    Paid: L$ [PAID] - Received: L$ [RECEIVED]
+  </text>
+  <check_box name="FSAlwaysTrackPayments" label="Track when closed" tool_tip="Always track payments, even if the money tracker is closed."/>
+  <button name="Clear" label="Ryd"/>
+</floater>

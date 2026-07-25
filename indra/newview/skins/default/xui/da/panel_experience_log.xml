@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_experience_log" label="Events">
+  <layout_stack name="ls1">
+    <layout_panel name="list panel">
+      <scroll_list name="experience_log_list">
+        <columns name="time" label="Tid"/>
+        <columns name="event" label="Event"/>
+        <columns name="experience_name" label="Experience"/>
+        <columns name="object_name" label="Object"/>
+      </scroll_list>
+      <button name="btn_notify" label="Notify"/>
+      <button name="btn_profile_xp" label="Profile"/>
+      <button name="btn_report_xp" label="Report"/>
+    </layout_panel>
+    <layout_panel name="button_panel">
+      <check_box name="notify_all" label="Notify All Events   Days"/>
+      <button name="btn_clear" label="Ryd"/>
+      <button name="btn_prev" label="<"/>
+      <button name="btn_next" label=">"/>
+    </layout_panel>
+  </layout_stack>
+</panel>

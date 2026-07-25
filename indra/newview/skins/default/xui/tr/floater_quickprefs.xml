@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="quickprefs" title="Quick Preferences">
+  <panel name="quickprefs">
+    <layout_stack name="wl_options_stack">
+      <layout_panel name="wl_options_panel">
+        <text name="HoverHeightLabel" tool_tip="Set the hover height of your avatar">
+          Hover Height:
+        </text>
+        <text name="Maximum bandwidth" tool_tip="Set your Network bandwidth in Kbps (kilobits per second)">
+          Max Bandwidth:
+        </text>
+        <text name="Maximum complexity" tool_tip="Controls at what point a visually complex avatar is drawn as a jelly doll">
+          Max Complexity:
+        </text>
+        <text name="IndirectMaxComplexityText">
+          No Limit
+        </text>
+        <text name="WL Sky" tool_tip="Presets for your sky">
+          Sky:
+        </text>
+        <button name="WLPrevPreset" label=""/>
+        <button name="WLNextPreset" label=""/>
+        <text name="WL Water" tool_tip="Presets for your water">
+          Water:
+        </text>
+        <button name="WWPrevPreset" label=""/>
+        <button name="WWNextPreset" label=""/>
+        <text name="Day Cycle" tool_tip="Presets for your day cycle">
+          Day Cycle:
+        </text>
+        <button name="DCPrevPreset" label=""/>
+        <button name="DCNextPreset" label=""/>
+        <button name="btn_personal_lighting" label="Personal Lighting..."/>
+        <button name="ResetToRegionDefault" label="" tool_tip="Reset the environment options to shared environment."/>
+        <button name="button_edit" label="" tool_tip="Click here to configure your Quick Preferences controls"/>
+      </layout_panel>
+    </layout_stack>
+  </panel>
+  <panel name="edit_overlay_panel">
+    <button name="move_up_button" tool_tip="Move selected control one slot up"/>
+    <button name="add_new_button" tool_tip="Add a new quick preferences control"/>
+    <line_editor name="label_edit" label="Control label:" tool_tip="Type the label for the control here"/>
+    <button name="move_down_button" tool_tip="Move selected control one slot down"/>
+    <combo_box name="control_name_combo" tool_tip="Select control from the list of debug settings">
+      <combo_box.item name="control_name_list_header" label="=== Choose ==="/>
+    </combo_box>
+    <text name="control_type_label">
+      Tür:
+    </text>
+    <combo_box name="control_type_combo_box" tool_tip="Select the type of user interface control you want to use for this setting">
+      <combo_box.item name="Checkbox" label="Onay kutusu"/>
+      <combo_box.item name="Text" label="Text"/>
+      <combo_box.item name="Spinner" label="Sayacı"/>
+      <combo_box.item name="Slider" label="Kaydırıcı"/>
+      <combo_box.item name="Radio" label="Radio"/>
+      <combo_box.item name="Color 3" label="Color 3"/>
+      <combo_box.item name="Color 4" label="Color 4"/>
+    </combo_box>
+    <check_box name="control_integer_checkbox" label="Integer" tool_tip="Activate this checkbox if your setting is an integer value, i.e. it has only whole numbers"/>
+    <spinner name="control_min_edit" label="Min:" tool_tip="The lowest value you will be allowed to select"/>
+    <spinner name="control_max_edit" label="Max:" tool_tip="The highest value you will be allowed to select"/>
+    <spinner name="control_increment_edit" label="Incr:" tool_tip="The increment for your value when you click the up/down arrow on a spinner or use the cursor keys on a slider"/>
+    <button name="Restore_Btn" label="Sıfırla" tool_tip="Restore the default settings"/>
+    <button name="button_close" tool_tip="Close the edit overlay panel"/>
+  </panel>
+</floater>

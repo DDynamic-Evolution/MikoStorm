@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_new_feature_notification" title="NEW FEATURE">
+  <floater.string name="title_txt_inventory">
+    New inventory features
+  </floater.string>
+  <floater.string name="description_txt_inventory">
+    You can now mark items and folders as favorites. Favorited items will appear in the Favorites tab of inventory and by default will be highlighted with a star in the main inventory view.
+  </floater.string>
+  <text name="title_txt">
+    New feature
+  </text>
+  <text name="description_txt">
+    Feature description
+  </text>
+  <button name="close_btn" label="Got it!"/>
+</floater>

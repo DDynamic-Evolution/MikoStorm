@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="photogrammetry" title="Fotogrametri yakalama">
+  <text name="capture_settings_label">
+    Yakalama ayarları
+  </text>
+  <spinner name="capture_delay" label="Gecikme (sn)"/>
+  <spinner name="total_images" label="Toplam görsel"/>
+  <spinner name="num_vertical" label="Yükseklik seviyeleri"/>
+  <spinner name="height_min" label="Min yükseklik (m)"/>
+  <spinner name="height_max" label="Maks yükseklik (m)"/>
+  <text name="image_settings_label">
+    Görsel ayarları
+  </text>
+  <combo_box name="resolution_combo" label="Çözünürlük">
+    <combo_item name="current">
+      Mevcut pencere
+    </combo_item>
+    <combo_item name="1920x1080">
+      1920 x 1080
+    </combo_item>
+    <combo_item name="2560x1440">
+      2560 x 1440
+    </combo_item>
+    <combo_item name="3840x2160">
+      3840 x 2160 (4K)
+    </combo_item>
+    <combo_item name="4096x2160">
+      4096 x 2160
+    </combo_item>
+    <combo_item name="7680x4320">
+      7680 x 4320 (8K)
+    </combo_item>
+    <combo_item name="1080x2340">
+      1080 x 2340 (9:19.5)
+    </combo_item>
+    <combo_item name="1080x2400">
+      1080 x 2400 (9:20)
+    </combo_item>
+    <combo_item name="1080x2520">
+      1080 x 2520 (9:21)
+    </combo_item>
+    <combo_item name="2340x1080">
+      2340 x 1080 (19.5:9)
+    </combo_item>
+    <combo_item name="2400x1080">
+      2400 x 1080 (20:9)
+    </combo_item>
+    <combo_item name="2520x1080">
+      2520 x 1080 (21:9)
+    </combo_item>
+    <combo_item name="custom">
+      Özel
+    </combo_item>
+  </combo_box>
+  <spinner name="custom_width" label="Özel genişlik"/>
+  <spinner name="custom_height" label="Özel yükseklik"/>
+  <button name="browse_btn" label="Gözat"/>
+  <text name="estimated_size_label">
+    Est. size:
+  </text>
+  <button name="start_btn" label="Yakalamayı başlat"/>
+  <button name="stop_btn" label="Durdur"/>
+</floater>

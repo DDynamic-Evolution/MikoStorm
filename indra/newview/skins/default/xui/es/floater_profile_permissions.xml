@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="profile_permissions">
+  <check_box name="online_check" label="See when I am online"/>
+  <check_box name="map_check" label="Find me on the world map"/>
+  <check_box name="objects_check" label="Edit, delete or take my objects"/>
+  <button name="perms_btn_ok" label="Aceptar"/>
+  <button name="perms_btn_cancel" label="Cancelar"/>
+</floater>

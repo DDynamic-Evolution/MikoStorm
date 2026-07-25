@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Toybox" title="Toolbar Buttons">
+  <text name="toybox label 1">
+    Add or remove buttons by dragging them to or from the toolbars.
+  </text>
+  <text name="toybox label 2">
+    Buttons will appear as shown or as icon-only depending on each toolbar's settings.
+  </text>
+  <button name="btn_clear_all" label="Clear all toolbars"/>
+  <button name="btn_restore_defaults" label="Restore defaults"/>
+  <check_box name="check_toolbars_locked" label="Locked" tool_tip="Check this box to lock the toolbars, so the buttons can't be dragged or removed by accident."/>
+</floater>

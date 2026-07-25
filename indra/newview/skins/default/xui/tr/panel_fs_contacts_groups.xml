@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="groups">
+  <filter_editor name="group_filter_input" label="Filter Groups"/>
+  <button name="chat_btn" label="IM/Call" tool_tip="Open Instant Message session"/>
+  <button name="info_btn" label="Profile"/>
+  <button name="titles_btn" label="Group Titles"/>
+  <button name="activate_btn" label="Activate"/>
+  <button name="favorite_btn" label="Pin" tool_tip="Add or remove group from favorites"/>
+  <button name="leave_btn" label="Ayrıl"/>
+  <button name="create_btn" label="Create..."/>
+  <button name="search_btn" label="Search..."/>
+  <button name="invite_btn" label="Invite..."/>
+</panel>

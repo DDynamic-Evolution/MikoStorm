@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="toast" title="">
+  <panel name="wrapper_panel" label="包装面板">
+    <text name="toast_text">
+      通知文本；
+    </text>
+  </panel>
+  <button name="hide_btn" label=""/>
+</floater>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_protected_folders" title="Protected Folders">
+  <floater.string name="UnknownFolder">
+    (Unknown Folder)
+  </floater.string>
+  <panel name="buttons_panel">
+    <filter_editor name="filter_input" label="Filter Protected Folders"/>
+    <button name="remove_btn" tool_tip="Remove folder from protected folder list"/>
+  </panel>
+  <panel name="panel_fs_protected_folders">
+    <scroll_list name="folder_list">
+      <scroll_list.columns name="name" label="Navn"/>
+    </scroll_list>
+  </panel>
+</floater>

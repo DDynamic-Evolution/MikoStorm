@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_fs_contact_set_configure" title="Contact set settings">
+  <floater.string name="title">
+    [NAME] settings
+  </floater.string>
+  <panel name="top_panel">
+    <text name="set_label">
+      Contact Set Settings:
+    </text>
+    <button name="rename_btn" label="Renombrar"/>
+    <color_swatch name="set_swatch" label="Set Color" tool_tip="Haga clic para abrir el selector de color"/>
+    <check_box name="show_set_notifications" label="Show notifications"/>
+    <check_box name="sort_by_online_status" label="Sort by online status"/>
+  </panel>
+  <panel name="bottom_panel">
+    <text name="global_label">
+      Global Settings:
+    </text>
+    <check_box name="FSContactSetsListShowIcons" label="Show profile icons in Contact Sets lists"/>
+    <color_swatch name="global_swatch" label="Default Set Color" tool_tip="Haga clic para abrir el selector de color"/>
+    <color_swatch name="offline_swatch" label="" tool_tip="Color used for offline contacts in Contact Sets lists that do not belong to any Contact Set. A custom Contact Set color takes precedence."/>
+    <check_box name="FSContactSetsListColorizeOffline" label="Custom offline contact color"/>
+    <text name="label_online">
+      Online notifications:
+    </text>
+    <check_box name="ChatOnlineNotification" label="Show Online Notices for ALL friends as toasts"/>
+    <check_box name="OnlineOfflinetoNearbyChat" label="Show Online Notices for ALL friends in nearby chat"/>
+    <check_box name="FSContactSetsNotificationToast" label="Show Online Notices for certain Sets as toast"/>
+    <check_box name="FSContactSetsNotificationNearbyChat" label="Show Online Notices for certain Sets in nearby chat"/>
+    <text name="label_colors">
+      Custom Colors:
+    </text>
+    <check_box name="FSContactSetsColorizeMiniMap" label="Color mini map icon based on their Contact Set"/>
+    <check_box name="FSContactSetsColorizeNameTag" label="Color name tag based on their Contact Set"/>
+    <check_box name="FSContactSetsColorizeRadar" label="Color radar and nearby people lists based on their Contact Set"/>
+    <check_box name="FSContactSetsColorizeChat" label="Color chat based on their Contact Set"/>
+    <check_box name="FSContactSetsColorizeFriends" label="Color friends list entry based on their Contact Set"/>
+  </panel>
+  <panel name="side_panel">
+    <check_box name="set_autoresponse_busy_enabled" label="Use custom Busy-mode autoresponse for this set"/>
+    <check_box name="set_autoresponse_mode_enabled" label="Use custom Autoresponse-mode message for this set"/>
+    <check_box name="set_autoresponse_nonfriends_enabled" label="Use custom Non-friends autoresponse for this set"/>
+  </panel>
+</floater>

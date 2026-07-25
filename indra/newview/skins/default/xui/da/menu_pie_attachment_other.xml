@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<pie_menu name="Avatar Pie">
+  <pie_slice name="Profile..." label="Profile..."/>
+  <pie_menu name="mute_menu" label="Mute >">
+    <pie_slice name="Avatar Mute" label="Dæmp"/>
+    <pie_slice name="Mute Particle" label="Part. Owner"/>
+  </pie_menu>
+  <pie_slice name="Go to" label="Go to"/>
+  <pie_slice name="abuse" label="Report..."/>
+  <pie_menu name="add_avatar" label="Add >">
+    <pie_slice name="Add Friend" label="As Friend..."/>
+    <pie_slice name="Add to set" label="To Set..."/>
+  </pie_menu>
+  <pie_slice name="Pay..." label="Pay..."/>
+  <pie_menu name="Avatar Pie More 1" label="More >">
+    <pie_slice name="Freeze..." label="Freeze"/>
+    <pie_slice name="Give Calling Card" label="Give Card"/>
+    <pie_slice name="Group Invite..." label="Invite to Group"/>
+    <pie_slice name="Face towards" label="Face towards"/>
+    <pie_slice name="Eject..." label="Eject..."/>
+    <pie_menu name="Avatar Pie More 2" label="More >">
+      <pie_slice name="Debug..." label="Textures"/>
+      <pie_slice name="ScriptInfo" label="Script Info"/>
+      <pie_slice name="Call" label="Call"/>
+      <pie_slice name="Zoom In" label="Zoom In"/>
+      <pie_slice name="Texture Refresh" label="Tex Refresh"/>
+      <pie_menu name="ResetMenu" label="Reset >">
+        <pie_slice name="Reset Skeleton And Animations" label="Skel. & Anim."/>
+        <pie_slice name="Reset Skeleton" label="Skeleton"/>
+        <pie_slice name="Reset Mesh LOD" label="Mesh LOD"/>
+      </pie_menu>
+      <pie_menu name="ExportMenu" label="Save as >">
+        <pie_slice name="Backup" label="Backup"/>
+        <pie_slice name="Collada" label="Collada"/>
+        <pie_slice name="Dump XML" label="Dump XML"/>
+      </pie_menu>
+      <pie_menu name="RenderMenu" label="Display >">
+        <pie_slice name="RenderNormally" label="Normally"/>
+        <pie_slice name="DoNotRender" label="Never"/>
+        <pie_slice name="AlwaysRenderFully" label="Fully"/>
+      </pie_menu>
+    </pie_menu>
+    <pie_slice name="Avatar Inspect" label="Inspect"/>
+    <pie_menu name="DerenderMenu" label="Derender >">
+      <pie_slice name="DerenderPermanent" label="Blacklist"/>
+      <pie_slice name="Derender" label="Temporary"/>
+    </pie_menu>
+  </pie_menu>
+  <pie_slice name="Send IM..." label="IM"/>
+</pie_menu>

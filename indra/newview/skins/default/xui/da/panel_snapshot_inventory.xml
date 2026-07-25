@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_snapshot_inventory">
+  <text name="title">
+    Inventory
+  </text>
+  <combo_box name="texture_size_combo" label="Opløsning">
+    <combo_box.item name="Small(128x128)" label="Small (128x128)"/>
+    <combo_box.item name="Medium(256x256)" label="Medium (256x256)"/>
+    <combo_box.item name="Large(512x512)" label="Large (512x512)"/>
+    <combo_box.item name="Very Large(1024x1024)" label="Very Large (1024x1024)"/>
+    <combo_box.item name="Huge(2048x2048)" label="Huge (2048x2048)"/>
+    <combo_box.item name="CurrentWindow" label="Aktuelt vindue"/>
+    <combo_box.item name="Custom" label="Brugerdefineret"/>
+  </combo_box>
+  <spinner name="inventory_snapshot_width" label="Width x Height"/>
+  <spinner name="inventory_snapshot_height" label=""/>
+  <check_box name="inventory_keep_aspect_check" label="Constrain proportions"/>
+  <check_box name="inventory_temp_upload" label="Temp upload"/>
+  <text name="hint_lbl">
+    To save your image as a texture select one of the square formats.
+
+Upload cost: L$ [UPLOAD_COST]
+  </text>
+  <button name="cancel_btn" label="▶ Selection"/>
+  <button name="save_btn" label="Gem"/>
+</panel>

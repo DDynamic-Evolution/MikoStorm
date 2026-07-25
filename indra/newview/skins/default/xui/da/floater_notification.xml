@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="notification" title="Notifications Console">
+  <text_editor name="payload">
+    Indlæser...
+  </text_editor>
+  <combo_box name="response" label="Response"/>
+</floater>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autoadjustments">
+  <text name="back_lbl">
+    Atrás
+  </text>
+  <text name="settings_title">
+    Ajustes automáticos
+  </text>
+  <button name="defaults_btn" label="Restablecer configuración recomendada"/>
+  <text name="targetfps_desc">
+    Tasa de refresco deseada
+  </text>
+  <spinner name="target_fps" tool_tip="El visor intentará lograrlo ajustando su configuración gráfica."/>
+  <text name="display_desc">
+    Su pantalla admite hasta [FPS_LIMIT] fps.
+  </text>
+  <text name="settings_desc">
+    Los ajustes afectan
+  </text>
+  <combo_box name="TuningFPSStrategy">
+    <combo_box.item name="av_only" label="Solo avatares"/>
+    <combo_box.item name="av_and_scene" label="Avatares y mundo"/>
+    <combo_box.item name="scene_only" label="Solo mundo"/>
+  </combo_box>
+  <button name="start_autotune" label="Ajustar ahora" tool_tip="El visor intentará ajustar la configuración para alcanzar el FPS objetivo y luego detenerse."/>
+  <button name="stop_autotune" label="Cancelar" tool_tip="Detener ajuste de configuración."/>
+  <text name="wip_desc">
+    Trabajando...
+  </text>
+  <check_box name="AutoTuneContinuous" label="Ajustar continuamente" tool_tip="El visor adaptará continuamente la configuración para alcanzar el FPS objetivo hasta que se detenga, incluso con el floater cerrado."/>
+  <radio_group name="autotune_lock_type">
+    <radio_item name="one_session_lock" label="Solo esta sesión"/>
+    <radio_item name="next_session_lock" label="Sesiones futuras"/>
+  </radio_group>
+  <check_box name="vsync" label="Habilitar VSync" tool_tip="Habilitar la sincronización vertical para reducir desgarros y tirones de pantalla."/>
+  <text name="vsync_desc">
+    Iguala la tasa de refresco del monitor con la de cuadros.
+  </text>
+  <text name="vsync_desc_limit">
+    Nota: Activar VSync limita la tasa de refresco a [FPS_LIMIT] fps.
+  </text>
+  <text name="simplify_dist_desc">
+    Reducir el detalle de avatares lejanos mejorará la velocidad gráfica.
+  </text>
+  <check_box name="AutoTuneImpostorByDistEnabled" label="Simplificar avatares más allá de" tool_tip="Cuando está habilitado, el visor ajustará MaxNonImpostors para limitar los avatares renderizados completamente a los que están dentro del radio definido."/>
+  <text name="dist_meters">
+    metros
+  </text>
+  <text name="dist_limits_desc">
+    Elija el rango de distancia que los ajustes automáticos afectarán.
+  </text>
+  <text name="min_dist_lbl">
+    Distancia mínima
+  </text>
+  <text name="pref_dist_lbl">
+    Distancia máxima
+  </text>
+</panel>

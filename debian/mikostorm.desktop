@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=MikoStorm Viewer
+GenericName=Virtual World Client
+Comment=Client for 3D virtual worlds
+Exec=/opt/mikostorm/mikostorm %u
+Icon=/opt/mikostorm/mikostorm_icon.png
+Terminal=false
+Categories=Network;Internet;
+MimeType=x-scheme-handler/hop;x-scheme-handler/secondlife;
+StartupNotify=true
+StartupWMClass=do-not-directly-run-mikostorm-bin

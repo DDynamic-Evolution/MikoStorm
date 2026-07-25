@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<toggleable_menu name="menu_search_visibility">
+  <menu_item_check name="search_outfits" label="Search outfit folders"/>
+  <menu_item_check name="search_trash" label="Search Trash"/>
+  <menu_item_check name="search_library" label="Search Library"/>
+  <menu_item_check name="include_links" label="Include links"/>
+</toggleable_menu>

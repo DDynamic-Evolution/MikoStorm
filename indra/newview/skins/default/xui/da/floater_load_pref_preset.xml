@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="load_pref_preset" title="Load Pref Preset">
+  <string name="title_graphic">
+    Load Graphic Preset
+  </string>
+  <string name="title_camera">
+    Load Camera Preset
+  </string>
+  <text name="Preset">
+    Select a preset
+  </text>
+  <button name="ok" label="OK"/>
+  <button name="cancel" label="Annuller"/>
+</floater>

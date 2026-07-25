@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_performance_autoadjustments">
+  <text name="back_lbl">
+    Назад
+  </text>
+  <text name="settings_title">
+    Auto-adjust settings
+  </text>
+  <button name="defaults_btn" label="Reset to recommended settings"/>
+  <text name="targetfps_desc">
+    Desired frame rate
+  </text>
+  <spinner name="target_fps" tool_tip="The viewer will attempt to achieve this by adjusting your graphics settings."/>
+  <text name="display_desc">
+    Your display supports up to [FPS_LIMIT] fps.
+  </text>
+  <text name="settings_desc">
+    Settings affect
+  </text>
+  <combo_box name="TuningFPSStrategy">
+    <combo_box.item name="av_only" label="Avatars Only"/>
+    <combo_box.item name="av_and_scene" label="Avatars and World"/>
+    <combo_box.item name="scene_only" label="World Only"/>
+  </combo_box>
+  <button name="start_autotune" label="Auto-adjust now" tool_tip="The viewer will attempt to adjust settings to meet the target FPS then stop."/>
+  <button name="stop_autotune" label="Отмена" tool_tip="Stop adjusting settings."/>
+  <text name="wip_desc">
+    Working on it...
+  </text>
+  <check_box name="AutoTuneContinuous" label="Adjust continuously" tool_tip="The viewer will continually adapt the settings to meet the target FPS until stopped even with the floater closed."/>
+  <radio_group name="autotune_lock_type">
+    <radio_item name="one_session_lock" label="This login session only"/>
+    <radio_item name="next_session_lock" label="Future login sessions"/>
+  </radio_group>
+  <check_box name="vsync" label="Enable VSync" tool_tip="Enable Vertical synchronization to reduce screen tearing and stuttering."/>
+  <text name="vsync_desc">
+    Matches monitor refresh rate with frame rate.
+  </text>
+  <text name="vsync_desc_limit">
+    Note: Turning on VSync limits frame rate to [FPS_LIMIT] fps.
+  </text>
+  <text name="simplify_dist_desc">
+    Reducing detail shown on avatars that are far away will improve graphics speed.
+  </text>
+  <check_box name="AutoTuneImpostorByDistEnabled" label="Simplify avatars beyond" tool_tip="When enabled the viewer will adjust the MaxNonImpostors setting to limit fully rendered avatars to those within the defined radius."/>
+  <text name="dist_meters">
+    meters
+  </text>
+  <text name="dist_limits_desc">
+    Choose the distance range that automatic settings will affect.
+  </text>
+  <text name="min_dist_lbl">
+    Minimum distance
+  </text>
+  <text name="pref_dist_lbl">
+    Maximum distance
+  </text>
+</panel>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_test_widgets" title="测试窗口">
+  <menu_bar name="test_menu_bar" tool_tip="menu">
+    <menu name="Menu" label="菜单">
+      <menu_item_call name="test_menu_item_1" label="菜单项1"/>
+      <menu_item_call name="test_menu_item_2" label="菜单项2"/>
+    </menu>
+  </menu_bar>
+  <text >
+    小部件列表请参阅 http://wiki.secondlife.com/wiki/XUI_Reference
+  </text>
+  <button name="test_button" label="按钮" tool_tip="button"/>
+  <flyout_button name="fly_btn" label="弹出" tool_tip="flyout button">
+    <flyout_button.item label="项目1"/>
+    <flyout_button.item label="项目2"/>
+    <flyout_button.item label="项目3"/>
+  </flyout_button>
+  <check_box name="test_checkbox" label="复选框" tool_tip="checkbox"/>
+  <check_box name="test_checkbox_disabled" label="禁用的复选框" tool_tip="checkbox disabled"/>
+  <combo_box name="test_combo_box" label="下拉列表" tool_tip="combo box">
+    <combo_box.item name="item1" label="下拉列表项1"/>
+    <combo_box.item name="item2" label="下拉列表项2"/>
+  </combo_box>
+  <icon name="test_icon" tool_tip="icon"/>
+  <line_editor name="test_line_editor" tool_tip="line editor">
+    行编辑器示例文本
+  </line_editor>
+  <filter_editor name="search editor" label="在此输入以搜索" tool_tip="search editor"/>
+  <progress_bar name="test_progress_bar" tool_tip="progress bar"/>
+  <stat_view name="axis_view" label="统计视图" tool_tip="stat view">
+    <stat_bar name="test_stat_bar" label="测试统计"/>
+  </stat_view>
+  <radio_group name="size_radio_group" tool_tip="radio group">
+    <radio_item name="small_radio_item" label="Radio 1"/>
+    <radio_item name="large_radio_item" label="Radio 2"/>
+  </radio_group>
+  <scroll_list tool_tip="scroll list">
+    <scroll_list.columns name="first_column" label="列A"/>
+    <scroll_list.columns name="second_column" label="列B"/>
+    <row >
+      <column >
+        short text
+      </column>
+      <column >
+        more short text
+      </column>
+    </row>
+    <row >
+      <column >
+        this is some longer text
+      </column>
+      <column >
+        and here is some more long text
+      </column>
+    </row>
+  </scroll_list>
+  <slider name="test_slider" label="滑块" tool_tip="slider"/>
+  <spinner name="test_spinner" label="计数器" tool_tip="spinner"/>
+  <text name="test_text" tool_tip="text">
+    文本（下划线）
+  </text>
+  <text name="test_text1" tool_tip="text">
+    截断的文本在这里
+  </text>
+  <text_editor name="test_text_editor" tool_tip="text editor">
+    文本编辑器
+  </text_editor>
+  <text name="test_text_box" tool_tip="text box">
+    Text box
+with
+multiple lines
+and too
+many
+line to actually fit
+  </text>
+  <tab_container name="group_tab_container" tool_tip="tab container">
+    <panel name="panel2" label="标签页1 - 颜色">
+      <color_swatch name="swatch1" label="颜色样本1" tool_tip="Color Swatch: Click to open Color Picker"/>
+      <color_swatch name="swatch2" label="颜色样本2" tool_tip="Color Swatch: Click to open Color Picker"/>
+      <text name="test_text10" tool_tip="text">
+        Monospace Button Flyout Checkbox
+      </text>
+      <text name="test_text101" tool_tip="text">
+        SansSerifSmall.  Русский 中文 (简体)
+      </text>
+      <text name="test_text11" tool_tip="text">
+        SansSerif.  Русский 中文 (简体)
+      </text>
+      <text name="test_text12" tool_tip="text">
+        SansSerifLarge.  Русский 中文 (简体)
+      </text>
+      <text name="test_text13" tool_tip="text">
+        SansSerifHuge.  Русский 中文 (简体)
+      </text>
+    </panel>
+    <panel name="tab2" label="标签页2 - 复选框"/>
+  </tab_container>
+</floater>

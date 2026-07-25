@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="BeamCreator" title="Beam Shape Creator">
+  <text name="beamcreator_text">
+    To create a new beam, left click the panel below to
+define a beam ray of the selected color, or right click to
+remove a ray. Press the Save button when done.
+  </text>
+  <color_swatch name="beam_color_swatch" label="Beam Color" tool_tip="Click to open Color Picker to change dot color"/>
+  <button name="beamshape_save" label="Kaydet"/>
+  <button name="beamshape_load" label="Yükle"/>
+  <button name="beamshape_clear" label="Temizle"/>
+  <button name="cancel" label="İptal"/>
+</floater>
