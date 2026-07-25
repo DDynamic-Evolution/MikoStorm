@@ -1,6 +1,6 @@
 # MikoStorm – Fast. Modern. Open Source
 
-[![Release](https://github.com/DDynamic-Evolution/MikoStorm/releases) 
+[!Release](https://github.com/DDynamic-Evolution/MikoStorm/releases) 
 
 <p align="center">
   <img src="images/mikostorm.png" width="512" height="512">
