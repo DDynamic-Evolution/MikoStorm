@@ -49,7 +49,9 @@
 static const std::string TIMELINE_SAVE_SUBDIRECTORY = "camera_timelines";
 static const std::string TIMELINE_FILE_EXT = ".camera_timeline.xml";
 
-static const S32 BAR_HEIGHT = 64;
+static const S32 BAR_HEIGHT = 96;
+static const S32 TIMELINE_WIDTH = 1000;
+static const S32 TOOLBAR_OFFSET = 100;
 static const S32 KEYFRAME_PANEL_HEIGHT = 280;
 
 LLFloaterCameraTimeline::LLFloaterCameraTimeline(const LLSD& key)
@@ -178,8 +180,9 @@ void LLFloaterCameraTimeline::positionAboveToolbar()
     S32 window_width = gViewerWindow->getWindowWidthScaled();
     S32 new_height = BAR_HEIGHT;
 
-    reshape(window_width, new_height);
-    setOrigin(0, toolbar_height);
+    reshape(TIMELINE_WIDTH, new_height);
+    S32 x = (window_width - TIMELINE_WIDTH) / 2;
+    setOrigin(x, toolbar_height + TOOLBAR_OFFSET);
 }
 
 // --- Keyframe Panel Toggle ---
@@ -198,13 +201,13 @@ void LLFloaterCameraTimeline::toggleKeyframes()
     S32 window_width = gViewerWindow->getWindowWidthScaled();
     S32 new_height = mKeyframesVisible ? (BAR_HEIGHT + KEYFRAME_PANEL_HEIGHT) : BAR_HEIGHT;
 
-    reshape(window_width, new_height);
+    reshape(TIMELINE_WIDTH, new_height);
 
     if (mKeyframesVisible)
     {
         // Position keyframe panel children at 75% width, centered
-        S32 panel_width = (S32)(window_width * 0.75f);
-        S32 panel_left = (window_width - panel_width) / 2;
+        S32 panel_width = (S32)(TIMELINE_WIDTH * 0.75f);
+        S32 panel_left = (TIMELINE_WIDTH - panel_width) / 2;
 
         mKeyframeList->reshape(panel_width, mKeyframeList->getRect().getHeight());
         mKeyframeList->setOrigin(panel_left, mKeyframeList->getRect().mBottom);
@@ -221,7 +224,8 @@ void LLFloaterCameraTimeline::toggleKeyframes()
     {
         LLToolBar* toolbar_bottom = gToolBarView->getToolbar(LLToolBarEnums::TOOLBAR_BOTTOM);
         S32 toolbar_height = toolbar_bottom ? toolbar_bottom->getRect().getHeight() : 0;
-        setOrigin(0, toolbar_height);
+        S32 x = (window_width - TIMELINE_WIDTH) / 2;
+        setOrigin(x, toolbar_height + TOOLBAR_OFFSET);
     }
 
     mKeyframesBtn->setLabel(mKeyframesVisible ? "Keyframes <<" : "Keyframes >>");
