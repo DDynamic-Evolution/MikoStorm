@@ -112,6 +112,8 @@ public:
 
     void setFloaterVisible(const LLUUID& notification_id, bool visible);
 
+    void reloadFloaters();
+
 protected:
 
     /**
@@ -249,7 +251,7 @@ public:
     virtual void draw();
 // </FS:Zi>
 
-// <FS:Zi> script dialogs position
+    // <FS:Zi> script dialogs position
     enum eDialogPosition
     {
         POS_DOCKED = 1,
@@ -261,6 +263,10 @@ public:
 // </FS:Zi>
 
     void onStackClicked();      // <FS:Zi> Dialog Stacking browser
+
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static void addToDockableContainer(const LLUUID& notification_id);
+    // </FS:minerjr> [FIRE-35859]
 };
 
 #endif //LL_SCRIPTFLOATER_H
