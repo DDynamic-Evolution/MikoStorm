@@ -54,6 +54,7 @@
 #include "llworldmapmessage.h"          // @tpto
 #include "llviewertexturelist.h"        // @setcam_texture
 #include "pipeline.h"                   // @setsphere
+#include "llvoavatarself.h"             // @rebake
 
 // RLVa includes
 #include "rlvactions.h"
@@ -3211,6 +3212,35 @@ ERlvCmdRet RlvForceHandler<RLV_BHVR_SETOVERLAY_TWEEN>::onCommand(const RlvComman
         pOverlayEffect->tweenColor(LLColor3(overlayColor.mV), tweenDuration);
         pRlvObj->setModifierValue(ERlvLocalBhvrModifier::OverlayTint, overlayColor);
     }
+
+    return RLV_RET_SUCCESS;
+}
+
+// Handles: @rebake=force
+template<> template<>
+ERlvCmdRet RlvForceHandler<RLV_BHVR_REBAKE>::onCommand(const RlvCommand& rlvCmd)
+{
+    if (rlvCmd.hasOption())
+        return RLV_RET_FAILED_OPTION;
+
+    if (!isAgentAvatarValid())
+        return RLV_RET_FAILED;
+
+    gAgentAvatarp->forceBakeAllTextures(true);
+    if (gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
+    {
+        if (!gAgent.getRegionCapability("IncrementCOFVersion").empty())
+        {
+            LLAppearanceMgr::instance().syncCofVersionAndRefresh();
+        }
+        else
+        {
+            LLAppearanceMgr::instance().requestServerAppearanceUpdate();
+        }
+        avatar_tex_refresh(gAgentAvatarp);
+    }
+    reset_mesh_lod(gAgentAvatarp);
+    gAgentAvatarp->setIsCrossingRegion(false);
 
     return RLV_RET_SUCCESS;
 }
