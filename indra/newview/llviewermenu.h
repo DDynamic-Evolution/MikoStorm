@@ -45,6 +45,14 @@ class LLViewerObject;
 void set_use_wireframe(bool useWireframe);
 // [/RLVa:KB]
 
+// <FS:CR> FIRE-11800
+class LLVOAvatar;
+void avatar_tex_refresh(LLVOAvatar* avatar);
+// </FS:CR>
+// <FS:Ansariel> Reset Mesh LOD
+void reset_mesh_lod(LLVOAvatar* avatar);
+// </FS:Ansariel>
+
 void initialize_edit_menu();
 void initialize_spellcheck_menu();
 void initialize_volume_controls_callbacks(); //<FS:KC> Centralize a some of these volume panel callbacks

@@ -399,7 +399,6 @@ bool enable_detach(const LLSD& = LLSD());
 void menu_toggle_attached_lights();
 void menu_toggle_attached_particles();
 
-void avatar_tex_refresh(LLVOAvatar* avatar);    // <FS:CR> FIRE-11800
 
 class LLMenuParcelObserver : public LLParcelObserver
 {
@@ -10161,7 +10160,7 @@ class FSResetPerAccountControl : public view_listener_t
 
 // <FS:Ansariel> Reset Mesh LOD; Forcing highest LOD on each mesh briefly should fix
 //               broken meshes bursted into triangles
-static void reset_mesh_lod(LLVOAvatar* avatar)
+void reset_mesh_lod(LLVOAvatar* avatar)
 {
     for (LLVOAvatar::attachment_map_t::iterator it = avatar->mAttachmentPoints.begin(); it != avatar->mAttachmentPoints.end(); it++)
     {
