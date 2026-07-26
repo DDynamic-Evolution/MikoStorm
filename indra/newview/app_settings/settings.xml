@@ -1191,6 +1191,44 @@
       <integer>3</integer>
     </map>
 
+  <!-- <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window -->
+  <key>FSSDUseDockFloater</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, the Script Dialogs will dock in a shared window.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
+  <key>FSSDPositionBackup</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal, holds the backup of ScriptDialogsPosition when using dock floater.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>3</integer>
+    </map>
+
+  <key>FSSDShowOnDocked</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, when a Script Dialog is docked the focus is set to Script Dialog in the dock window.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+  <!-- </FS:minerjr> [FIRE-35859] -->
+
   <key>DialogStackIconVisible</key>
     <map>
       <key>Comment</key>
@@ -19184,6 +19222,7 @@ Change of this parameter will affect the layout of buttons in notification toast
           <string>avatar_picker</string>
           <string>stats</string>
           <string>script_floater</string>
+          <string>fs_script_dialog_container</string>
           <string>world_map</string>
           <string>preferences</string>
           <string>primfeed</string>

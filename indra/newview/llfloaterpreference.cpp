@@ -126,6 +126,7 @@
 
 #include "llsearchableui.h"
 #include "llperfstats.h"
+#include "llscriptfloater.h" // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
 
 // Firestorm Includes
 #include "exogroupmutelist.h"
@@ -828,6 +829,11 @@ bool LLFloaterPreference::postBuild()
     gSavedSettings.getControl("FSTagShowARW")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onAvatarTagSettingsChanged, this));
     onAvatarTagSettingsChanged();
     // </FS:Ansariel>
+
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    gSavedSettings.getControl("FSSDUseDockFloater")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateScriptDialogsPosition, this));
+    updateScriptDialogsPosition();
+    // </FS:minerjr> [FIRE-35859]
 
     // <FS:Ansariel> Correct enabled state of Animated Script Dialogs option
     gSavedSettings.getControl("ScriptDialogsPosition")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::updateAnimatedScriptDialogs, this));
@@ -3424,6 +3430,30 @@ void LLFloaterPreference::updateAnimatedScriptDialogs()
     childSetEnabled("FSAnimatedScriptDialogs", position == 2 || position == 3);
 }
 // </FS:Ansariel>
+
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+void LLFloaterPreference::updateScriptDialogsPosition()
+{
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+
+    if (use_container_window)
+    {
+        gSavedSettings.setS32("FSSDPositionBackup", gSavedSettings.getS32("ScriptDialogsPosition"));
+        gSavedSettings.setS32("ScriptDialogsPosition", 1);
+        childSetEnabled("ScriptDialogsPositionDropdown", !use_container_window);
+    }
+    else
+    {
+        childSetEnabled("ScriptDialogsPositionDropdown", !use_container_window);
+        gSavedSettings.setS32("ScriptDialogsPosition", gSavedSettings.getS32("FSSDPositionBackup"));
+    }
+
+    if (LLScriptFloaterManager::getInstance())
+    {
+        LLScriptFloaterManager::getInstance()->reloadFloaters();
+    }
+}
+// </FS:minerjr> [FIRE-35859]
 
 //------------------------------Updater---------------------------------------
 

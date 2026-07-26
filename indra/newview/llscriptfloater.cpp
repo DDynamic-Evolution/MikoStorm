@@ -53,6 +53,10 @@
 #include "omnifilterengine.h"   // Omnifilter support
 // </FS:Zi>
 
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+#include "fsfloaterscriptdialogcontainer.h"
+// </FS:minerjr>
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -89,6 +93,15 @@ LLScriptFloater::LLScriptFloater(const LLSD& key)
 
 bool LLScriptFloater::toggle(const LLUUID& notification_id)
 {
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    if (use_container_window)
+    {
+        addToDockableContainer(notification_id);
+        return true;
+    }
+    // </FS:minerjr>
+
     LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", notification_id);
 
     // show existing floater
@@ -256,6 +269,15 @@ void LLScriptFloater::onClose(bool app_quitting)
 
 void LLScriptFloater::setDocked(bool docked, bool pop_on_undock /* = true */)
 {
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    if (use_container_window)
+    {
+        addToDockableContainer(mNotificationId);
+        return;
+    }
+    // </FS:minerjr>
+
     LLDockableFloater::setDocked(docked, pop_on_undock);
 
     savePosition();
@@ -315,6 +337,15 @@ void LLScriptFloater::savePosition()
 
 void LLScriptFloater::restorePosition()
 {
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    if (use_container_window)
+    {
+        addToDockableContainer(mNotificationId);
+        return;
+    }
+    // </FS:minerjr>
+
     LLScriptFloaterManager::FloaterPositionInfo fpi;
     if(LLScriptFloaterManager::getInstance()->getFloaterPosition(mObjectId, fpi))
     {
@@ -763,6 +794,18 @@ void LLScriptFloaterManager::onRemoveNotification(const LLUUID& notification_id)
 
     DialogStack::instance().pop(notification_id);   // <FS:Zi> Dialog Stacking browser
 
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    if (use_container_window)
+    {
+        FSFloaterScriptDialogContainer* container = FSFloaterScriptDialogContainer::findInstance();
+        if (container)
+        {
+            container->removeFloater(notification_id);
+        }
+    }
+    // </FS:minerjr>
+
     // remove related chiclet
     if (LLChicletBar::instanceExists())
     {
@@ -1063,6 +1106,15 @@ void LLScriptFloater::draw()
 // <FS:Zi> script dialogs position
 LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 {
+    // <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+    static LLCachedControl<bool> use_container_window(gSavedSettings, "FSSDUseDockFloater", false);
+    if (use_container_window)
+    {
+        addToDockableContainer(notification_id);
+        return nullptr;
+    }
+    // </FS:minerjr>
+
     LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
     floater->setNotificationId(notification_id);
     floater->createForm(notification_id);
@@ -1171,5 +1223,51 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
     return floater;
 }
 // </FS:Zi>
+
+// <FS:minerjr> [FIRE-35859] - Group Script Dialogs into one Multi-Floater window
+void LLScriptFloater::addToDockableContainer(const LLUUID& notification_id)
+{
+    LLNotificationPtr notification = LLNotifications::instance().find(notification_id);
+    if (!notification)
+    {
+        return;
+    }
+
+    FSFloaterScriptDialogContainer* container = FSFloaterScriptDialogContainer::getInstance();
+    if (!container)
+    {
+        return;
+    }
+
+    LLScriptFloater* floater = LLFloaterReg::getTypedInstance<LLScriptFloater>("script_floater", notification_id);
+    if (!floater)
+    {
+        return;
+    }
+
+    floater->setNotificationId(notification_id);
+    floater->createForm(notification_id);
+    floater->setAutoFocus(false);
+    floater->setSavePosition(false);
+    floater->setCanDock(false);
+
+    container->addNewSession(floater);
+}
+
+void LLScriptFloaterManager::reloadFloaters()
+{
+    // Reload all script dialog floaters to reposition based on current settings
+    script_notification_map_t::const_iterator it = mNotifications.begin();
+    while (it != mNotifications.end())
+    {
+        LLScriptFloater* floater = LLFloaterReg::findTypedInstance<LLScriptFloater>("script_floater", it->first);
+        if (floater)
+        {
+            floater->restorePosition();
+        }
+        ++it;
+    }
+}
+// </FS:minerjr> [FIRE-35859]
 
 // EOF
