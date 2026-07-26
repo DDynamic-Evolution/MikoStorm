@@ -123,7 +123,7 @@ bool LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
     mMouseDownX = x;
     mMouseDownY = y;
     LLTimer pick_timer;
-    bool pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+    bool pick_rigged = gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
     LLPickInfo transparent_pick = gViewerWindow->pickImmediate(x, y, true /*includes transparent*/, pick_rigged, false, true, false);
     LLPickInfo visible_pick = gViewerWindow->pickImmediate(x, y, false, pick_rigged);
     LLViewerObject *transp_object = transparent_pick.getObject();
@@ -752,7 +752,7 @@ bool LLToolPie::teleportToClickedLocation()
     {
         // We do not handle hover in mouselook as we do in other modes, so
         // use croshair's position to do a pick
-        bool pick_rigged = false;
+        bool pick_rigged = gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
         mHoverPick = gViewerWindow->pickImmediate(gViewerWindow->getWorldViewRectScaled().getWidth() / 2,
                                                   gViewerWindow->getWorldViewRectScaled().getHeight() / 2,
                                                   false,
@@ -848,7 +848,7 @@ void LLToolPie::selectionPropertiesReceived()
 
 bool LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-    bool pick_rigged = false; //gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
+    bool pick_rigged = gSavedSettings.getBOOL("AnimatedObjectsAllowLeftClick");
     // <FS:minerjr> [FIRE-35019] Add LLHUDNameTag background to floating text and hover highlights 
     // We want to unhighlight the previous hover object's parent before we get the next hover pick and lose the reference
     // (Possible optimization - check if the current object and previous ones are the same, and if so, don't set the text is highlighed flag to false)
