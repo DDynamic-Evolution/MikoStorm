@@ -6607,6 +6607,62 @@ void LLAppViewer::idleNetwork()
         }
         mAgentRegionLastID = this_region_id;
         mAgentRegionLastAlive = this_region_alive;
+
+        // Network health warning when performance is critically low
+        static LLCachedControl<bool> netWarningEnabled(gSavedSettings, "FSNetworkWarningEnabled");
+        static LLCachedControl<F32> netWarningPingThreshold(gSavedSettings, "FSNetworkWarningPingThreshold");
+        static LLCachedControl<F32> netWarningLossThreshold(gSavedSettings, "FSNetworkWarningPacketLossThreshold");
+        static LLCachedControl<S32> netWarningCooldown(gSavedSettings, "FSNetworkWarningCooldown");
+        static F64 sLastNetworkWarningTime = 0;
+        static LLUUID sLastNetworkWarningRegion;
+
+        if (netWarningEnabled() && this_region_alive
+            && LLStartUp::getStartupState() == STATE_STARTED)
+        {
+            F64 now = LLMessageSystem::getMessageTimeSeconds();
+            LLUUID current_region_id = agent_region->getRegionID();
+
+            if (current_region_id != sLastNetworkWarningRegion)
+            {
+                sLastNetworkWarningTime = 0;
+                sLastNetworkWarningRegion = current_region_id;
+            }
+
+            if ((now - sLastNetworkWarningTime) >= (F64)netWarningCooldown())
+            {
+                LLCircuitData *cdp = gMessageSystem->mCircuitInfo.findCircuit(agent_region->getHost());
+                if (cdp)
+                {
+                    F32 ping_ms = (F32)cdp->getPingDelay().value();
+                    F32 packet_loss = (F32)LLViewerStats::instance().getRecording().getMean(LLStatViewer::PACKETS_LOST_PERCENT) * 100.f;
+
+                    bool warning = false;
+                    std::string reason;
+
+                    if (ping_ms >= netWarningPingThreshold())
+                    {
+                        warning = true;
+                        reason = llformat("%.0f ms ping", ping_ms);
+                    }
+                    else if (packet_loss >= netWarningLossThreshold())
+                    {
+                        warning = true;
+                        reason = llformat("%.1f%% packet loss", packet_loss);
+                    }
+
+                    if (warning)
+                    {
+                        LLSD args;
+                        args["MESSAGE"] = llformat(
+                            "Network performance critically low (%s). "
+                            "You may lose connection to the region.",
+                            reason.c_str());
+                        LLNotificationsUtil::add("SystemMessageTip", args);
+                        sLastNetworkWarningTime = now;
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -303,5 +303,53 @@
 	<integer>0</integer>
   </map>
 
+  <key>FSNetworkWarningEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>Warn when network performance to region is critically low</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSNetworkWarningPingThreshold</key>
+  <map>
+    <key>Comment</key>
+    <string>Ping in ms above which network warning triggers</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>800.0</real>
+  </map>
+
+  <key>FSNetworkWarningPacketLossThreshold</key>
+  <map>
+    <key>Comment</key>
+    <string>Packet loss percent above which network warning triggers</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>15.0</real>
+  </map>
+
+  <key>FSNetworkWarningCooldown</key>
+  <map>
+    <key>Comment</key>
+    <string>Minimum seconds between repeated network warnings</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>30</integer>
+  </map>
+
 </map>
 </llsd>

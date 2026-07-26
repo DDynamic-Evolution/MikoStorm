@@ -311,6 +311,64 @@
          left="10"
          width="500"
          tool_tip="Disables hardware acceleration in the CEF browser engine. May fix SLPlugin.exe crashes. Only affects newly opened browser instances."/>
+        <check_box
+         top_pad="10"
+         control_name="FSNetworkWarningEnabled"
+         follows="left|top"
+         height="16"
+         label="Warn when network performance is critically low"
+         name="FSNetworkWarningEnabled"
+         left="10"
+         width="500"
+         tool_tip="Shows a toast notification when ping or packet loss reaches critical levels, warning that you may lose connection to the region."/>
+        <spinner
+         enabled_control="FSNetworkWarningEnabled"
+         control_name="FSNetworkWarningPingThreshold"
+         decimal_digits="0"
+         follows="left|top"
+         height="18"
+         increment="50"
+         initial_value="800"
+         left="25"
+         max_val="5000"
+         min_val="200"
+         name="FSNetworkWarningPingThreshold"
+         top_pad="3"
+         width="250"
+         label="Ping threshold (ms):"
+         tool_tip="Warning triggers when ping exceeds this value in milliseconds."/>
+        <spinner
+         enabled_control="FSNetworkWarningEnabled"
+         control_name="FSNetworkWarningPacketLossThreshold"
+         decimal_digits="1"
+         follows="left|top"
+         height="18"
+         increment="1"
+         initial_value="15"
+         left="25"
+         max_val="100"
+         min_val="1"
+         name="FSNetworkWarningPacketLossThreshold"
+         top_pad="3"
+         width="250"
+         label="Packet loss threshold (%):"
+         tool_tip="Warning triggers when packet loss exceeds this percentage."/>
+        <spinner
+         enabled_control="FSNetworkWarningEnabled"
+         control_name="FSNetworkWarningCooldown"
+         decimal_digits="0"
+         follows="left|top"
+         height="18"
+         increment="5"
+         initial_value="30"
+         left="25"
+         max_val="300"
+         min_val="5"
+         name="FSNetworkWarningCooldown"
+         top_pad="3"
+         width="250"
+         label="Warning cooldown (sec):"
+         tool_tip="Minimum seconds between repeated warnings to avoid spam."/>
      </panel>
 
 
