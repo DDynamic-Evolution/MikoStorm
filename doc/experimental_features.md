@@ -108,6 +108,22 @@ Warns before opening suspicious URLs.
 
 ---
 
+## Camera Timeline
+
+Record and play back camera movements for machinima and photography.
+
+- **Location:** Toolbar button (Toybox) — click the camera timeline icon
+- **How to use:**
+  1. Position your camera and click **Capture Camera** to set a keyframe
+  2. Move to the next position and capture again (minimum 2 keyframes needed)
+  3. Click **Play** to watch the smooth interpolated playback
+  4. Expand the **Keyframes >>** panel to view, delete, save, or load keyframes
+- **Settings:** Adjustable duration (0.5–600s) and playback speed (0.25x–4.0x)
+- **Save/Load:** Export timelines as `.camera_timeline.xml` files for reuse and sharing
+- **Note:** The camera is restored to its pre-playback position when playback stops
+
+---
+
 ## Hide Local Chat
 
 Toggle nearby chat visibility in the chat console.

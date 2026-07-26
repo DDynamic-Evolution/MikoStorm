@@ -33,6 +33,7 @@ You can post them here on github or send me a mail. Email is in my profile here 
 ### Documentation
 
 - [Experimental Features](doc/experimental_features.md) — How to use all experimental features
+- [Camera Timeline](#camera-timeline) — Record and playback camera movements
 
 ### ADDITIONAL FEATURES
 
@@ -260,6 +261,57 @@ curl -X POST http://localhost:13231/mcp \
 - No external network access
 - Optional Bearer token authentication
 - All tool calls are executed on the main thread with proper synchronization
+
+---
+
+## Camera Timeline
+
+Record and play back camera movements for machinima and photography. Capture your camera's position, rotation, and field of view as keyframes, then play them back with smooth interpolated motion.
+
+### How to Open
+
+Click the **Camera Timeline** icon in the toolbar (Toybox). The floater appears as a bar above the bottom toolbar.
+
+### Quick Start
+
+1. Position your camera where you want the first keyframe
+2. Click **Capture Camera** to record the keyframe
+3. Move your camera to the next position and capture again
+4. Click **Play** to watch the playback (minimum 2 keyframes required)
+5. Use **Save/Load** to store timelines as XML files for reuse
+
+### Controls
+
+| Control | Description |
+|---------|-------------|
+| **Capture Camera** | Records current camera position, rotation, and FOV as a keyframe |
+| **Play** | Starts timeline playback (requires 2+ keyframes) |
+| **Stop** | Stops playback and restores camera to its pre-playback state |
+| **Duration** | Total timeline length in seconds (0.5–600s, default: 30s) |
+| **Speed** | Playback speed multiplier (0.25x–4.0x, default: 1.0x) |
+| **Timeline Slider** | Scrub through the timeline to preview camera positions |
+| **Keyframes >>** | Expands the keyframe management panel |
+
+### Keyframe Panel
+
+Expand the panel to view and manage your keyframes:
+
+- **Keyframe list** — Shows index, time (seconds), position (x,y,z), and FOV for each keyframe
+- **Delete** — Remove the selected keyframe
+- **Clear All** — Remove all keyframes
+- **Save** — Export timeline to a `.camera_timeline.xml` file
+- **Load** — Import a previously saved timeline
+
+### Interpolation
+
+Camera motion uses **smooth step easing** (`3t² - 2t³`) for natural acceleration and deceleration at each keyframe boundary. Position uses linear interpolation, rotation uses spherical linear interpolation (SLERP), and FOV is linearly interpolated.
+
+### Tips
+
+- Capture keyframes at regular intervals for smoother, more predictable motion
+- Use the timeline slider to preview the interpolated position at any point before playing
+- Save your timelines to share with other MikoStorm users
+- The camera always restores to its original position when playback stops
 
 ---
 
