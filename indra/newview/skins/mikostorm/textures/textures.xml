@@ -124,7 +124,14 @@
 	<texture name="Pathfinding_Disabled_Light" file_name="legacy/Pathfinding_Disabled_Light.png" preload="false" />
 
 	<texture name="Contacts_Online_Status_Button"			file_name="legacy/ff_online_status_button.tga" />
-	<texture name="Permission_Visible_Online_Mine_Button"	file_name="legacy/ff_visible_online_button.tga" />
+	<texture name="Permission_Visible_Online_Mine_Button"			file_name="legacy/ff_visible_online_button.tga" />
+
+	<!-- DropDown button icons (brightened for dark theme) -->
+	<texture name="DropDown_Off"		file_name="widgets/DropDown_Off.png" preload="false" />
+	<texture name="DropDown_On"			file_name="widgets/DropDown_On.png" preload="false" />
+	<texture name="DropDown_Over"		file_name="widgets/DropDown_Over.png" preload="false" />
+	<texture name="DropDown_Press"		file_name="widgets/DropDown_Press.png" preload="false" />
+	<texture name="DropDown_Disabled"	file_name="widgets/DropDown_Disabled.png" preload="false" />
 	<texture name="Permission_Visible_Online_Theirs_Button"	file_name="legacy/ff_visible_online_button_theirs.tga" />
 	<texture name="Permission_Visible_Map_Mine_Button"		file_name="legacy/ff_visible_map_button.tga" />
 	<texture name="Permission_Visible_Map_Theirs_Button"	file_name="legacy/ff_visible_map_button_theirs.tga" />

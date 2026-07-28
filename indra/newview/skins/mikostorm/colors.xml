@@ -867,7 +867,7 @@
 
   <color
       name="Phototools_Header"
-      reference="EmphasisColor" />
+      value="0.15 0.15 0.15 1.0" />
   <color
       name="ScriptSelectedColor"
       reference="simpleeditor_bg_selected" />

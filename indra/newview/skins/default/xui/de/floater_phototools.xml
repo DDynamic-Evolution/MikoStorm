@@ -643,5 +643,35 @@
 				</tab_container>
 			</panel>
 		</panel>
+
+		<panel name="P_Presets" label="Vorst.">
+			<panel name="PT_Presets_Header">
+				<text name="T_Presets_Header">
+					Foto-Voreinstellungen
+				</text>
+			</panel>
+
+			<panel name="P_Presets_Active">
+				<text name="PhotoPresetActiveLabel">
+					Aktiv: Keine
+				</text>
+			</panel>
+
+			<panel name="P_Presets_Combo">
+				<combo_box name="PhotoPresetCombo" allow_text_entry="true"/>
+			</panel>
+
+			<panel name="P_Presets_Buttons">
+				<button name="PhotoPresetSaveBtn" label="Speichern"/>
+				<button name="PhotoPresetLoadBtn" label="Laden"/>
+				<button name="PhotoPresetDeleteBtn" label="Löschen"/>
+			</panel>
+
+			<panel name="PT_Presets_Info">
+				<text name="T_Presets_Info">
+					Speichert alle Fototools-Einstellungen (Schatten, AO, DoF, Leuchten, Belichtung, etc.)
+				</text>
+			</panel>
+		</panel>
 	</tab_container>
 </floater>

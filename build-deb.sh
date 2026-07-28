@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-VERSION="1.15.23"
+VERSION="1.15.26"
 PKG_NAME="mikostorm"
 BUILD_DIR="build-linux-x86_64/newview"
 PACKAGED_DIR="${BUILD_DIR}/packaged"
