@@ -371,7 +371,8 @@
      left="2"
      name="TimeText"
      tool_tip="Current time (Pacific)"
-     width="96">
+     width="66">
+     <!-- <MA> reduced from 96 -->
         24:00:00 AM PST
     </text>
     <button

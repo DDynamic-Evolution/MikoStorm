@@ -37,6 +37,7 @@ static const std::string PRESETS_DEFAULT_UPPER = "DEFAULT";
 static const std::string PRESETS_DIR = "presets";
 static const std::string PRESETS_GRAPHIC = "graphic";
 static const std::string PRESETS_CAMERA = "camera";
+static const std::string PRESETS_PHOTO = "photo";
 static const std::string PRESETS_REAR = "Rear";
 static const std::string PRESETS_FRONT = "Front";
 static const std::string PRESETS_SIDE = "Side";
@@ -72,6 +73,7 @@ public:
     void startWatching(const std::string& subdirectory);
     void triggerChangeCameraSignal();
     void triggerChangeSignal();
+    void triggerChangePhotoSignal();
     static std::string getPresetsDir(const std::string& subdirectory);
     bool setPresetNamesInComboBox(const std::string& subdirectory, LLComboBox* combo, EDefaultOptions default_option);
     void loadPresetNamesFromDir(const std::string& subdirectory, preset_name_list_t& presets, EDefaultOptions default_option);
@@ -91,6 +93,7 @@ public:
     // Emitted when a preset gets loaded, deleted, or saved.
     boost::signals2::connection setPresetListChangeCameraCallback(const preset_list_signal_t::slot_type& cb);
     boost::signals2::connection setPresetListChangeCallback(const preset_list_signal_t::slot_type& cb);
+    boost::signals2::connection setPresetListChangePhotoCallback(const preset_list_signal_t::slot_type& cb);
 
     // Emitted when a preset gets loaded or saved.
 
@@ -98,6 +101,7 @@ public:
 
     preset_list_signal_t mPresetListChangeCameraSignal;
     preset_list_signal_t mPresetListChangeSignal;
+    preset_list_signal_t mPresetListChangePhotoSignal;
 
     // <FS:Ansariel> Graphic preset controls independent from XUI
     void setIsLoadingPreset(bool is_loading) { mIsLoadingPreset = is_loading; }
@@ -123,6 +127,12 @@ public:
     bool mIsDrawDistanceSteppingActive;
     std::vector<std::string> mGraphicPresetControls;
     // </FS:Ansariel>
+
+    // Photo preset controls
+    void initPhotoPresetControlNames();
+    void initPhotoPresetControls();
+    void handlePhotoPresetControlChanged(LLControlVariablePtr control, const LLSD& new_value, const LLSD& old_value);
+    std::vector<std::string> mPhotoPresetControls;
 };
 
 #endif // LL_PRESETSMANAGER_H

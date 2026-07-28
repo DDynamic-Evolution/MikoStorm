@@ -45,6 +45,7 @@
 #include "llinventoryfunctions.h"
 #include "lllayoutstack.h"
 #include "llnotificationsutil.h"
+#include "llpresetsmanager.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltoolbarview.h"
@@ -246,6 +247,18 @@ void FloaterQuickPrefs::initCallbacks()
         getChild<LLSlider>("SB_Effect")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeRenderSSAOEffectSlider, this));
         getChild<LLSpinCtrl>("S_Effect")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeRenderSSAOEffectSpinner, this));
         getChild<LLButton>("Reset_Effect")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetRenderSSAOEffectX, this));
+
+        // Photo presets
+        LL_INFOS() << "PhotoPreset: mPhotoPresetSaveBtn=" << mPhotoPresetSaveBtn << LL_ENDL;
+        LL_INFOS() << "PhotoPreset: mPhotoPresetLoadBtn=" << mPhotoPresetLoadBtn << LL_ENDL;
+        LL_INFOS() << "PhotoPreset: mPhotoPresetDeleteBtn=" << mPhotoPresetDeleteBtn << LL_ENDL;
+        LL_INFOS() << "PhotoPreset: mPhotoPresetCombo=" << mPhotoPresetCombo << LL_ENDL;
+        LL_INFOS() << "PhotoPreset: mPhotoPresetActiveLabel=" << mPhotoPresetActiveLabel << LL_ENDL;
+        mPhotoPresetSaveBtn->setCommitCallback(boost::bind(&FloaterQuickPrefs::onPhotoPresetSave, this));
+        mPhotoPresetLoadBtn->setCommitCallback(boost::bind(&FloaterQuickPrefs::onPhotoPresetLoad, this));
+        mPhotoPresetDeleteBtn->setCommitCallback(boost::bind(&FloaterQuickPrefs::onPhotoPresetDelete, this));
+        mPhotoPresetCombo->setCommitCallback(boost::bind(&FloaterQuickPrefs::onPhotoPresetLoad, this));
+        LLPresetsManager::instance().setPresetListChangePhotoCallback(boost::bind(&FloaterQuickPrefs::onPhotoPresetsListChange, this));
     }
     else
     {
@@ -606,6 +619,14 @@ bool FloaterQuickPrefs::postBuild()
         mSliderRenderSSAOEffectX = getChild<LLSlider>("SB_Effect");
         mSpinnerRenderSSAOEffectX = getChild<LLSpinCtrl>("S_Effect");
 
+        // Photo presets
+        mPhotoPresetCombo = getChild<LLComboBox>("PhotoPresetCombo");
+        mPhotoPresetSaveBtn = getChild<LLButton>("PhotoPresetSaveBtn");
+        mPhotoPresetLoadBtn = getChild<LLButton>("PhotoPresetLoadBtn");
+        mPhotoPresetDeleteBtn = getChild<LLButton>("PhotoPresetDeleteBtn");
+        mPhotoPresetActiveLabel = getChild<LLTextBox>("PhotoPresetActiveLabel");
+
+        refreshPhotoPresetList();
         refreshSettings();
     }
     else
@@ -636,7 +657,8 @@ bool FloaterQuickPrefs::postBuild()
     // bail out here if this is a reused Phototools floater
     if (getIsPhototools())
     {
-        return LLTransientDockableFloater::postBuild();
+        refreshPhotoPresetList();
+        return true;
     }
 
     // find the layout_stack to insert the controls into
@@ -2216,4 +2238,118 @@ void FloaterQuickPrefs::updateMaxComplexityLabel(const LLSD& newvalue)
     U32 value = newvalue.asInteger();
 
     LLAvatarComplexityControls::setText(value, mMaxComplexityLabel);
+}
+
+// Photo presets
+void FloaterQuickPrefs::refreshPhotoPresetList()
+{
+    LL_INFOS() << "refreshPhotoPresetList called" << LL_ENDL;
+
+    if (!mPhotoPresetCombo)
+    {
+        LL_INFOS() << "refreshPhotoPresetList: mPhotoPresetCombo is null" << LL_ENDL;
+        return;
+    }
+
+    std::string active_preset = gSavedSettings.getString("PresetPhotoActive");
+    LL_INFOS() << "refreshPhotoPresetList: active_preset='" << active_preset << "'" << LL_ENDL;
+
+    LLPresetsManager::getInstance()->setPresetNamesInComboBox(PRESETS_PHOTO, mPhotoPresetCombo, DEFAULT_SHOW);
+
+    LL_INFOS() << "refreshPhotoPresetList: after setPresetNamesInComboBox, item count=" << mPhotoPresetCombo->getItemCount() << LL_ENDL;
+
+    if (!active_preset.empty())
+    {
+        mPhotoPresetCombo->setSimple(active_preset);
+        LL_INFOS() << "refreshPhotoPresetList: set active preset to '" << active_preset << "'" << LL_ENDL;
+    }
+
+    // Update active preset label
+    if (mPhotoPresetActiveLabel)
+    {
+        if (!active_preset.empty())
+        {
+            mPhotoPresetActiveLabel->setText(LLStringExplicit("Active: ") + active_preset);
+        }
+        else
+        {
+            mPhotoPresetActiveLabel->setText(LLStringExplicit("Active: None"));
+        }
+    }
+}
+
+void FloaterQuickPrefs::onPhotoPresetSave()
+{
+    LL_INFOS() << "PhotoPresetSave clicked" << LL_ENDL;
+
+    std::string name = mPhotoPresetCombo ? mPhotoPresetCombo->getSimple() : "";
+    LL_INFOS() << "PhotoPresetSave name='" << name << "'" << LL_ENDL;
+
+    if (name.empty())
+    {
+        LL_INFOS() << "PhotoPresetSave name empty, returning" << LL_ENDL;
+        return;
+    }
+
+    // Check if mPhotoPresetCombo has any items (for debugging)
+    if (mPhotoPresetCombo)
+    {
+        LL_INFOS() << "PhotoPresetSave combo item count before save: " << mPhotoPresetCombo->getItemCount() << LL_ENDL;
+    }
+
+    if (LLPresetsManager::getInstance()->savePreset(PRESETS_PHOTO, name))
+    {
+        LL_INFOS() << "PhotoPresetSave: save succeeded, setting active and refreshing" << LL_ENDL;
+        // Refresh list after save
+        refreshPhotoPresetList();
+    }
+    else
+    {
+        LL_INFOS() << "PhotoPresetSave: save FAILED" << LL_ENDL;
+        LLSD args;
+        args["NAME"] = name;
+        LLNotificationsUtil::add("PresetNotSaved", args);
+    }
+}
+
+void FloaterQuickPrefs::onPhotoPresetLoad()
+{
+    LL_INFOS() << "PhotoPresetLoad clicked" << LL_ENDL;
+
+    std::string name = mPhotoPresetCombo ? mPhotoPresetCombo->getSimple() : "";
+    LL_INFOS() << "PhotoPresetLoad name='" << name << "'" << LL_ENDL;
+
+    if (name.empty())
+    {
+        LL_INFOS() << "PhotoPresetLoad name empty, returning" << LL_ENDL;
+        return;
+    }
+
+    LLPresetsManager::getInstance()->loadPreset(PRESETS_PHOTO, name);
+}
+
+void FloaterQuickPrefs::onPhotoPresetDelete()
+{
+    LL_INFOS() << "PhotoPresetDelete clicked" << LL_ENDL;
+
+    std::string name = mPhotoPresetCombo ? mPhotoPresetCombo->getSimple() : "";
+    LL_INFOS() << "PhotoPresetDelete name='" << name << "'" << LL_ENDL;
+
+    if (name.empty())
+    {
+        LL_INFOS() << "PhotoPresetDelete name empty, returning" << LL_ENDL;
+        return;
+    }
+
+    if (!LLPresetsManager::getInstance()->deletePreset(PRESETS_PHOTO, name))
+    {
+        LLSD args;
+        args["NAME"] = name;
+        LLNotificationsUtil::add("PresetNotDeleted", args);
+    }
+}
+
+void FloaterQuickPrefs::onPhotoPresetsListChange()
+{
+    refreshPhotoPresetList();
 }

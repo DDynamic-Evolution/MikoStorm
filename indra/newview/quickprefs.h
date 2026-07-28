@@ -109,6 +109,13 @@ public:
     void refreshSettings();
     bool getIsPhototools() const { return getName() == PHOTOTOOLS_FLOATER; };
 
+    // Photo presets
+    void refreshPhotoPresetList();
+    void onPhotoPresetSave();
+    void onPhotoPresetLoad();
+    void onPhotoPresetDelete();
+    void onPhotoPresetsListChange();
+
     void dockToToolbarButton();
 
 private:
@@ -148,6 +155,13 @@ private:
 
     LLSliderCtrl*       mMaxComplexitySlider;
     LLTextBox*          mMaxComplexityLabel;
+
+    // Photo presets
+    LLComboBox*         mPhotoPresetCombo;
+    LLButton*           mPhotoPresetSaveBtn;
+    LLButton*           mPhotoPresetLoadBtn;
+    LLButton*           mPhotoPresetDeleteBtn;
+    LLTextBox*          mPhotoPresetActiveLabel;
 
     LLSettingsSky::ptr_t        mLiveSky;
     LLSettingsWater::ptr_t      mLiveWater;

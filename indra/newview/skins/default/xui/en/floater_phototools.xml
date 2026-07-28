@@ -13,7 +13,7 @@
  save_dock_state="true"
  single_instance="true"
  title="Phototools"
- width="288">
+ width="384">
 
 	<tab_container
 	 follows="all"
@@ -26,10 +26,10 @@
 	 tab_allow_rearrange="false"
 	 tab_group="0"
 	 tab_position="top"
-	 tab_min_width="47"
-	 tab_max_width="47"
+	 tab_min_width="54"
+	 tab_max_width="54"
 	 top="0"
-	 width="288">
+	 width="384">
 
 		<panel
 		 follows="all"
@@ -4960,6 +4960,142 @@
 						</panel>
 					</panel>
 				</tab_container>
+			</panel>
+		</panel>
+
+		<panel
+		 follows="all"
+		 name="P_Presets"
+		 label="Prst"
+		 layout="topleft">
+
+			<panel
+			 name="PT_Presets_Header"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="3"
+			 left="0"
+			 width="384"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="false"
+			 border_thickness="0"
+			 background_visible="true">
+				<text
+				 name="T_Presets_Header"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 font="SansSerif"
+				 height="17"
+				 width="370">
+					Photo Presets
+				</text>
+			</panel>
+
+			<panel
+			 name="P_Presets_Active"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="3"
+			 left="3"
+			 right="-3"
+			 height="20"
+			 border_visible="false"
+			 background_visible="false">
+				<text
+				 name="PhotoPresetActiveLabel"
+				 follows="left|top"
+				 layout="topleft"
+				 left="2"
+				 font="SansSerifBold"
+				 height="17"
+				 width="370">
+					Active: None
+				</text>
+			</panel>
+
+			<panel
+			 name="P_Presets_Combo"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="3"
+			 left="3"
+			 right="-3"
+			 height="24"
+			 border_visible="false"
+			 background_visible="false">
+				<combo_box
+				 name="PhotoPresetCombo"
+				 allow_text_entry="true"
+				 follows="left|right|top"
+				 layout="topleft"
+				 left="0"
+				 top="0"
+				 width="280"
+				 height="22"/>
+			</panel>
+
+			<panel
+			 name="P_Presets_Buttons"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="3"
+			 left="3"
+			 right="-3"
+			 height="26"
+			 border_visible="false"
+			 background_visible="false">
+				<button
+				 name="PhotoPresetSaveBtn"
+				 follows="left|top"
+				 height="22"
+				 label="Save"
+				 layout="topleft"
+				 left="0"
+				 top="0"
+				 width="90"/>
+				<button
+				 name="PhotoPresetLoadBtn"
+				 follows="left|top"
+				 height="22"
+				 label="Load"
+				 layout="topleft"
+				 left="95"
+				 top="0"
+				 width="90"/>
+				<button
+				 name="PhotoPresetDeleteBtn"
+				 follows="left|top"
+				 height="22"
+				 label="Delete"
+				 layout="topleft"
+				 left="190"
+				 top="0"
+				 width="90"/>
+			</panel>
+
+			<panel
+			 name="PT_Presets_Info"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="7"
+			 left="3"
+			 right="-3"
+			 height="20"
+			 border_visible="false"
+			 background_visible="false">
+				<text
+				 name="T_Presets_Info"
+				 follows="left|top"
+				 layout="topleft"
+				 left="2"
+				 font="SansSerif"
+				 height="17"
+				 width="370"
+				 xml:lang="en">
+					Saves all Phototools settings (Shadows, AO, DoF, Glow, Exposure, etc.)
+				</text>
 			</panel>
 		</panel>
 	</tab_container>

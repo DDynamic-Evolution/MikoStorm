@@ -52,6 +52,9 @@ LLPresetsManager::LLPresetsManager()
     // STATE_WORLD_INIT phase during startup when the status bar is initialized
     initGraphicPresetControls();
 
+    // Photo preset controls
+    initPhotoPresetControls();
+
     // <FS:Ansariel> Start watching camera controls as soon as the preset
     // manager gets initialized
     startWatching(PRESETS_CAMERA);
@@ -70,6 +73,11 @@ void LLPresetsManager::triggerChangeCameraSignal()
 void LLPresetsManager::triggerChangeSignal()
 {
     mPresetListChangeSignal();
+}
+
+void LLPresetsManager::triggerChangePhotoSignal()
+{
+    mPresetListChangePhotoSignal();
 }
 
 void LLPresetsManager::createMissingDefault(const std::string& subdirectory)
@@ -166,6 +174,7 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& subdirectory, p
 {
     bool IS_CAMERA = (PRESETS_CAMERA == subdirectory);
     bool IS_GRAPHIC = (PRESETS_GRAPHIC == subdirectory);
+    bool IS_PHOTO = (PRESETS_PHOTO == subdirectory);
 
     std::string dir = LLPresetsManager::getInstance()->getPresetsDir(subdirectory);
     LL_INFOS("AppInit") << "Loading list of preset names from " << dir << LL_ENDL;
@@ -201,6 +210,30 @@ void LLPresetsManager::loadPresetNamesFromDir(const std::string& subdirectory, p
                 mPresetNames.push_back(name);
             }
             if (IS_GRAPHIC)
+            {
+                if (PRESETS_DEFAULT != name)
+                {
+                    mPresetNames.push_back(name);
+                }
+                else
+                {
+                    switch (default_option)
+                    {
+                    case DEFAULT_SHOW:
+                        mPresetNames.push_back(LLTrans::getString(PRESETS_DEFAULT));
+                        break;
+
+                    case DEFAULT_TOP:
+                        mPresetNames.push_front(LLTrans::getString(PRESETS_DEFAULT));
+                        break;
+
+                    case DEFAULT_HIDE:
+                    default:
+                        break;
+                    }
+                }
+            }
+            if (IS_PHOTO)
             {
                 if (PRESETS_DEFAULT != name)
                 {
@@ -294,6 +327,7 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
 {
     bool IS_CAMERA = (PRESETS_CAMERA == subdirectory);
     bool IS_GRAPHIC = (PRESETS_GRAPHIC == subdirectory);
+    bool IS_PHOTO = (PRESETS_PHOTO == subdirectory);
 
     if (LLTrans::getString(PRESETS_DEFAULT) == name)
     {
@@ -341,6 +375,14 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
         name_list.clear();
         getControlNames(name_list);
         name_list.push_back("PresetCameraActive");
+    }
+    else if (IS_PHOTO)
+    {
+        if (!createDefault)
+        {
+            gSavedSettings.setString("PresetPhotoActive", name);
+            name_list = mPhotoPresetControls;
+        }
     }
     else
     {
@@ -470,6 +512,13 @@ bool LLPresetsManager::savePreset(const std::string& subdirectory, std::string n
                 // signal interested parties
                 triggerChangeCameraSignal();
             }
+
+            if (IS_PHOTO)
+            {
+                gSavedSettings.setString("PresetPhotoActive", name);
+                // signal interested parties
+                triggerChangePhotoSignal();
+            }
         }
         else
         {
@@ -573,6 +622,16 @@ void LLPresetsManager::loadPreset(const std::string& subdirectory, std::string n
                 gSavedSettings.setBOOL("EditCameraMovement", edit_camera_movement);
             }
         }
+        if(PRESETS_PHOTO == subdirectory)
+        {
+            gSavedSettings.setString("PresetPhotoActive", name);
+
+            if (FloaterQuickPrefs* phototools = LLFloaterReg::findTypedInstance<FloaterQuickPrefs>(PHOTOTOOLS_FLOATER))
+            {
+                phototools->refreshSettings();
+            }
+            triggerChangePhotoSignal();
+        }
     }
     else
     {
@@ -623,6 +682,16 @@ bool LLPresetsManager::deletePreset(const std::string& subdirectory, std::string
         }
         // signal interested parties
         triggerChangeCameraSignal();
+    }
+
+    if(PRESETS_PHOTO == subdirectory)
+    {
+        if (gSavedSettings.getString("PresetPhotoActive") == name)
+        {
+            gSavedSettings.setString("PresetPhotoActive", "");
+        }
+        // signal interested parties
+        triggerChangePhotoSignal();
     }
 
     return sts;
@@ -681,6 +750,11 @@ boost::signals2::connection LLPresetsManager::setPresetListChangeCameraCallback(
 boost::signals2::connection LLPresetsManager::setPresetListChangeCallback(const preset_list_signal_t::slot_type& cb)
 {
     return mPresetListChangeSignal.connect(cb);
+}
+
+boost::signals2::connection LLPresetsManager::setPresetListChangePhotoCallback(const preset_list_signal_t::slot_type& cb)
+{
+    return mPresetListChangePhotoSignal.connect(cb);
 }
 
 
@@ -748,3 +822,65 @@ void LLPresetsManager::handleGraphicPresetControlChanged(LLControlVariablePtr co
     }
 }
 // </FS:Ansariel>
+
+// Photo preset controls
+void LLPresetsManager::initPhotoPresetControlNames()
+{
+    mPhotoPresetControls.clear();
+
+    const std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "photo_preset_controls.xml");
+    if (LLFile::isfile(filename))
+    {
+        LLSD controls;
+
+        llifstream file(filename.c_str());
+        LLSDSerialize::fromXML(controls, file);
+        file.close();
+
+        for (LLSD::array_const_iterator it = controls.beginArray(); it != controls.endArray(); ++it)
+        {
+            mPhotoPresetControls.push_back((*it).asString());
+        }
+    }
+    else
+    {
+        LL_WARNS() << "Photo preset controls file missing" << LL_ENDL;
+    }
+}
+
+void LLPresetsManager::initPhotoPresetControls()
+{
+    LL_INFOS() << "Initializing photo preset controls" << LL_ENDL;
+
+    initPhotoPresetControlNames();
+
+    for (std::vector<std::string>::iterator it = mPhotoPresetControls.begin(); it != mPhotoPresetControls.end(); ++it)
+    {
+        std::string control_name = *it;
+        if (gSavedSettings.controlExists(control_name))
+        {
+            gSavedSettings.getControl(control_name)->getSignal()->connect(boost::bind(&LLPresetsManager::handlePhotoPresetControlChanged, this, _1, _2, _3));
+        }
+        else if (gSavedPerAccountSettings.controlExists(control_name))
+        {
+            gSavedPerAccountSettings.getControl(control_name)->getSignal()->connect(boost::bind(&LLPresetsManager::handlePhotoPresetControlChanged, this, _1, _2, _3));
+        }
+        else
+        {
+            LL_WARNS() << "Photo preset control \"" << control_name << "\" does not exist." << LL_ENDL;
+        }
+    }
+}
+
+void LLPresetsManager::handlePhotoPresetControlChanged(LLControlVariablePtr control, const LLSD& new_value, const LLSD& old_value)
+{
+    LL_DEBUGS() << "Handling photo preset control change: control = " << control->getName() << " - new = " << new_value << " - old = " << old_value << LL_ENDL;
+
+    if (!mIsLoadingPreset)
+    {
+        LL_DEBUGS() << "Trigger photo preset control changed signal" << LL_ENDL;
+
+        gSavedSettings.setString("PresetPhotoActive", "");
+        triggerChangePhotoSignal();
+    }
+}
