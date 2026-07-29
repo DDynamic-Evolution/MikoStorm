@@ -22,6 +22,19 @@ This project is a one man show! So be patient
 
 Working on it
 
+## Changelog
+
+### 1.16.1 (2026-07-29)
+
+#### Improvements
+
+- **Render Initialization:** Replaced GLH loader with glad for OpenGL 4.5. Removed ~1200 lines of hand-written PFN* declarations. Added glad headers directly to source tree. Fixed crash caused by GL calls before glad loader initialization. ([llgl.cpp](indra/llrender/llgl.cpp), [llglheaders.h](indra/llrender/llglheaders.h), [llwindowsdl2.cpp](indra/llwindow/llwindowsdl2.cpp))
+
+#### Bug Fixes
+
+- **Restart Avoider:** Added maximum retry limit (10 attempts) for returning to the original region.
+- **Per-Contact IM Sounds:** Fixed custom IM sounds not playing and not being removable.
+
 ### No 32Bit version
 
 There is and never will be a 32bit version
