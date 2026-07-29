@@ -10,6 +10,7 @@ include(LLImage)
 include(LLWindow)
 
 set(llrender_SOURCE_FILES
+    glad/glad.c
     llcubemap.cpp
     llcubemaparray.cpp
     llfontbitmapcache.cpp
@@ -39,6 +40,8 @@ set(llrender_SOURCE_FILES
 set(llrender_HEADER_FILES
     CMakeLists.txt
 
+    glad/glad.h
+    glad/khrplatform.h
     llcubemap.h
     llcubemaparray.h
     llfontgl.h

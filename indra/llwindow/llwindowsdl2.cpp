@@ -763,6 +763,13 @@ bool LLWindowSDL::createContext(int x, int y, int width, int height, int bits, b
             return false;
         }
 
+        if (!gladLoadGL())
+        {
+            LL_WARNS() << "gladLoadGL() failed after context creation" << LL_ENDL;
+            setupFailure("Failed to load OpenGL function pointers", "Error", OSMB_OK);
+            return false;
+        }
+
         // FIRE-32559: This *should* work, but for some reason aftrer login vsync always acts as if it's disabled, so
         // the flag will get set again later in void LLViewerWindow::setStartupComplete() -Zi
         toggleVSync(enable_vsync);
