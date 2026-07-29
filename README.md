@@ -20,7 +20,7 @@ This project is a one man show! So be patient
 
 ### Not on the TPV List.. why?
 
-Working on it
+There are applications back from february which are not assigned... not really into waiting forever. 
 
 ## Changelog
 
