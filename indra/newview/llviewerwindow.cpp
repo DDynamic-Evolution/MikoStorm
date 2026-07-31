@@ -732,7 +732,7 @@ public:
             LLRender::sUICalls = LLRender::sUIVerts = 0;
             ypos += y_inc;
 
-            addText(xpos,ypos, llformat("%d/%d Nodes visible", gPipeline.mNumVisibleNodes, LLSpatialGroup::sNodeCount));
+            addText(xpos,ypos, llformat("%d/%d Nodes visible", (S32)gPipeline.mNumVisibleNodes, LLSpatialGroup::sNodeCount));
 
             ypos += y_inc;
 

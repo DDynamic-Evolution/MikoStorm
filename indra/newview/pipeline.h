@@ -42,6 +42,7 @@
 #include "llheroprobemanager.h"
 
 #include <stack>
+#include <atomic>
 
 class LLViewerTexture;
 class LLFace;
@@ -198,9 +199,11 @@ public:
     // Object related methods
     void        markVisible(LLDrawable *drawablep, LLCamera& camera);
     void        markOccluder(LLSpatialGroup* group);
+    void        markOccluderLocal(LLSpatialGroup* group, U32 slot);
 
     void        doOcclusion(LLCamera& camera);
     void        markNotCulled(LLSpatialGroup* group, LLCamera &camera);
+    void        markNotCulledLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot);
     void        markMoved(LLDrawable *drawablep, bool damped_motion = false);
     void        markShift(LLDrawable *drawablep);
     void        markTextured(LLDrawable *drawablep);
@@ -664,7 +667,7 @@ public:
     bool                     mBackfaceCull;
     S32                      mMatrixOpCount;
     S32                      mTextureMatrixOps;
-    S32                      mNumVisibleNodes;
+    std::atomic<S32>         mNumVisibleNodes;
 
     S32                      mDebugTextureUploadCost;
     S32                      mDebugSculptUploadCost;

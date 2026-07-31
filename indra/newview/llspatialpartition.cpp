@@ -1050,7 +1050,8 @@ void LLSpatialPartition::shift(const LLVector4a &offset)
 class LLOctreeCull : public LLViewerOctreeCull
 {
 public:
-    LLOctreeCull(LLCamera* camera) : LLViewerOctreeCull(camera) {}
+    LLOctreeCull(LLCamera* camera, U32 slot = U32_MAX, bool skip_occlusion = false)
+        : LLViewerOctreeCull(camera), mSlot(slot), mSkipOcclusion(skip_occlusion) {}
 
     virtual bool earlyFail(LLViewerOctreeGroup* base_group)
     {
@@ -1060,14 +1061,17 @@ public:
         }
 
         LLSpatialGroup* group = (LLSpatialGroup*)base_group;
-        group->checkOcclusion();
+        if (!mSkipOcclusion)
+        {
+            group->checkOcclusion();
+        }
 
         if (group->getOctreeNode() &&
             group->getOctreeNode()->getParent() &&  //never occlusion cull the root node
             LLPipeline::sUseOcclusion &&            //ignore occlusion if disabled
             group->isOcclusionState(LLSpatialGroup::OCCLUDED))
         {
-            gPipeline.markOccluder(group);
+            markOccluder(group);
             return true;
         }
 
@@ -1100,20 +1104,47 @@ public:
     {
         LL_PROFILE_ZONE_SCOPED;
         LLSpatialGroup* group = (LLSpatialGroup*)base_group;
-        /*if (group->needsUpdate() ||
-            group->getVisible(LLViewerCamera::sCurCameraID) < LLDrawable::getCurrentFrame() - 1)
-        {
-            group->doOcclusion(mCamera);
-        }*/
-        gPipeline.markNotCulled(group, *mCamera);
+        markNotCulled(group);
     }
+
+protected:
+    // <MikoStorm> Parallel culling: mSlot == U32_MAX means main-thread mode
+    // writing straight into the result; otherwise write to the per-slot
+    // scratch buffer. mSkipOcclusion skips the GL readback (already done by
+    // the occlusion pre-pass).
+    void markOccluder(LLSpatialGroup* group)
+    {
+        if (mSlot == U32_MAX)
+        {
+            gPipeline.markOccluder(group);
+        }
+        else
+        {
+            gPipeline.markOccluderLocal(group, mSlot);
+        }
+    }
+
+    void markNotCulled(LLSpatialGroup* group)
+    {
+        if (mSlot == U32_MAX)
+        {
+            gPipeline.markNotCulled(group, *mCamera);
+        }
+        else
+        {
+            gPipeline.markNotCulledLocal(group, *mCamera, mSlot);
+        }
+    }
+
+    U32 mSlot;
+    bool mSkipOcclusion;
 };
 
 class LLOctreeCullNoFarClip : public LLOctreeCull
 {
 public:
-    LLOctreeCullNoFarClip(LLCamera* camera)
-        : LLOctreeCull(camera) { }
+    LLOctreeCullNoFarClip(LLCamera* camera, U32 slot = U32_MAX, bool skip_occlusion = false)
+        : LLOctreeCull(camera, slot, skip_occlusion) { }
 
     virtual S32 frustumCheck(const LLViewerOctreeGroup* group)
     {
@@ -1130,8 +1161,8 @@ public:
 class LLOctreeCullShadow : public LLOctreeCull
 {
 public:
-    LLOctreeCullShadow(LLCamera* camera)
-        : LLOctreeCull(camera) { }
+    LLOctreeCullShadow(LLCamera* camera, U32 slot = U32_MAX, bool skip_occlusion = false)
+        : LLOctreeCull(camera, slot, skip_occlusion) { }
 
     virtual S32 frustumCheck(const LLViewerOctreeGroup* group)
     {
@@ -1251,6 +1282,59 @@ public:
     }
 
     bool mResult;
+};
+
+// <MikoStorm> Parallel culling: occlusion pre-pass. Runs on the main thread
+// (GL queries must be read back there) and sets the OCCLUDED flags for the
+// tree, so the parallel frustum-cull pass can skip all GL calls. The
+// frustum test mirrors LLOctreeCull so the same node set is visited as the
+// original single-threaded cull.
+class LLOctreeOcclusionPrePass : public LLViewerOctreeCull
+{
+public:
+    LLOctreeOcclusionPrePass(LLCamera* camera) : LLViewerOctreeCull(camera) { }
+
+    virtual bool earlyFail(LLViewerOctreeGroup* base_group)
+    {
+        if (LLPipeline::sReflectionRender)
+        {
+            return false;
+        }
+
+        LLSpatialGroup* group = (LLSpatialGroup*)base_group;
+        group->checkOcclusion();
+
+        return group->getOctreeNode() &&
+               group->getOctreeNode()->getParent() &&  //never occlusion cull the root node
+               LLPipeline::sUseOcclusion &&            //ignore occlusion if disabled
+               group->isOcclusionState(LLSpatialGroup::OCCLUDED);
+    }
+
+    virtual S32 frustumCheck(const LLViewerOctreeGroup* group)
+    {
+        LL_PROFILE_ZONE_SCOPED;
+        S32 res = AABBInFrustumNoFarClipGroupBounds(group);
+        if (res != 0)
+        {
+            res = llmin(res, AABBSphereIntersectGroupExtents(group));
+        }
+        return res;
+    }
+
+    virtual S32 frustumCheckObjects(const LLViewerOctreeGroup* group)
+    {
+        LL_PROFILE_ZONE_SCOPED;
+        S32 res = AABBInFrustumNoFarClipObjectBounds(group);
+        if (res != 0)
+        {
+            res = llmin(res, AABBSphereIntersectObjectExtents(group));
+        }
+        return res;
+    }
+
+    virtual void processGroup(LLViewerOctreeGroup*)
+    {
+    }
 };
 
 class LLOctreeSelect : public LLOctreeCull
@@ -1470,6 +1554,56 @@ S32 LLSpatialPartition::cull(LLCamera &camera, bool do_occlusion)
     else
     {
         LLOctreeCull culler(&camera);
+        culler.traverse(mOctree);
+    }
+
+    return 0;
+}
+
+// <MikoStorm> Parallel culling: main-thread occlusion readback pass.
+void LLSpatialPartition::preCheckOcclusion(LLCamera& camera)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_SPATIAL;
+    if (LLPipeline::sUseOcclusion < 2)
+    {
+        return; // occlusion queries are only read back when fully enabled
+    }
+
+    LLSpatialGroup* group = (LLSpatialGroup*) mOctree->getListener(0);
+    group->rebound();
+
+    LLOctreeOcclusionPrePass prepass(&camera);
+    prepass.traverse(mOctree);
+}
+
+// <MikoStorm> Parallel culling: worker-thread frustum cull. Occlusion state
+// must already have been set by preCheckOcclusion() on the main thread.
+S32 LLSpatialPartition::parallelCull(LLCamera &camera, U32 slot)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_SPATIAL;
+#if LL_OCTREE_PARANOIA_CHECK
+    ((LLSpatialGroup*)mOctree->getListener(0))->checkStates();
+#endif
+    LLSpatialGroup* group = (LLSpatialGroup*) mOctree->getListener(0);
+    group->rebound();
+
+#if LL_OCTREE_PARANOIA_CHECK
+    ((LLSpatialGroup*)mOctree->getListener(0))->validate();
+#endif
+
+    if (LLPipeline::sShadowRender)
+    {
+        LLOctreeCullShadow culler(&camera, slot, true);
+        culler.traverse(mOctree);
+    }
+    else if (mInfiniteFarClip || (!LLPipeline::sUseFarClip && !gCubeSnapshot))
+    {
+        LLOctreeCullNoFarClip culler(&camera, slot, true);
+        culler.traverse(mOctree);
+    }
+    else
+    {
+        LLOctreeCull culler(&camera, slot, true);
         culler.traverse(mOctree);
     }
 
@@ -4400,6 +4534,115 @@ void LLCullResult::pushDrawInfo(U32 type, LLDrawInfo* draw_info)
     }
     ++mRenderMapSize[type];
     mRenderMapEnd[type] = &(mRenderMap[type][mRenderMapSize[type]]);
+}
+
+// <MikoStorm> Parallel culling: per-slot scratch buffers.
+void LLCullResult::resizeThreadBuffers(U32 count)
+{
+    mThreadBuffers.resize(count);
+}
+
+void LLCullResult::clearThreadBuffers()
+{
+    for (U32 s = 0; s < (U32)mThreadBuffers.size(); ++s)
+    {
+        ThreadLocalBuffer& b = mThreadBuffers[s];
+        b.mVisibleGroups.clear();
+        b.mAlphaGroups.clear();
+        b.mRiggedAlphaGroups.clear();
+        b.mOcclusionGroups.clear();
+        b.mDrawableGroups.clear();
+        b.mVisibleList.clear();
+        b.mVisibleBridge.clear();
+        for (U32 i = 0; i < LLRenderPass::NUM_RENDER_TYPES; ++i)
+        {
+            b.mRenderMap[i].clear();
+        }
+    }
+}
+
+void LLCullResult::flushThreadBuffers()
+{
+    for (U32 s = 0; s < (U32)mThreadBuffers.size(); ++s)
+    {
+        ThreadLocalBuffer& b = mThreadBuffers[s];
+        for (U32 i = 0; i < (U32)b.mVisibleGroups.size(); ++i)
+        {
+            pushVisibleGroup(b.mVisibleGroups[i]);
+        }
+        for (U32 i = 0; i < (U32)b.mAlphaGroups.size(); ++i)
+        {
+            pushAlphaGroup(b.mAlphaGroups[i]);
+        }
+        for (U32 i = 0; i < (U32)b.mRiggedAlphaGroups.size(); ++i)
+        {
+            pushRiggedAlphaGroup(b.mRiggedAlphaGroups[i]);
+        }
+        for (U32 i = 0; i < (U32)b.mOcclusionGroups.size(); ++i)
+        {
+            pushOcclusionGroup(b.mOcclusionGroups[i]);
+        }
+        for (U32 i = 0; i < (U32)b.mDrawableGroups.size(); ++i)
+        {
+            pushDrawableGroup(b.mDrawableGroups[i]);
+        }
+        for (U32 i = 0; i < (U32)b.mVisibleList.size(); ++i)
+        {
+            pushDrawable(b.mVisibleList[i]);
+        }
+        for (U32 i = 0; i < (U32)b.mVisibleBridge.size(); ++i)
+        {
+            pushBridge(b.mVisibleBridge[i]);
+        }
+        for (U32 type = 0; type < LLRenderPass::NUM_RENDER_TYPES; ++type)
+        {
+            drawinfo_list_t& v = b.mRenderMap[type];
+            for (U32 i = 0; i < (U32)v.size(); ++i)
+            {
+                pushDrawInfo(type, v[i]);
+            }
+        }
+    }
+}
+
+void LLCullResult::pushVisibleGroupLocal(LLSpatialGroup* group, U32 slot)
+{
+    mThreadBuffers[slot].mVisibleGroups.push_back(group);
+}
+
+void LLCullResult::pushAlphaGroupLocal(LLSpatialGroup* group, U32 slot)
+{
+    mThreadBuffers[slot].mAlphaGroups.push_back(group);
+}
+
+void LLCullResult::pushRiggedAlphaGroupLocal(LLSpatialGroup* group, U32 slot)
+{
+    mThreadBuffers[slot].mRiggedAlphaGroups.push_back(group);
+}
+
+void LLCullResult::pushOcclusionGroupLocal(LLSpatialGroup* group, U32 slot)
+{
+    mThreadBuffers[slot].mOcclusionGroups.push_back(group);
+}
+
+void LLCullResult::pushDrawableGroupLocal(LLSpatialGroup* group, U32 slot)
+{
+    mThreadBuffers[slot].mDrawableGroups.push_back(group);
+}
+
+void LLCullResult::pushDrawableLocal(LLDrawable* drawable, U32 slot)
+{
+    mThreadBuffers[slot].mVisibleList.push_back(drawable);
+}
+
+void LLCullResult::pushBridgeLocal(LLSpatialBridge* bridge, U32 slot)
+{
+    mThreadBuffers[slot].mVisibleBridge.push_back(bridge);
+}
+
+void LLCullResult::pushDrawInfoLocal(U32 type, LLDrawInfo* draw_info, U32 slot)
+{
+    mThreadBuffers[slot].mRenderMap[type].push_back(draw_info);
 }
 
 
