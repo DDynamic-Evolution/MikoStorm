@@ -415,6 +415,13 @@ public:
     /*virtual*/ S32 cull(LLCamera &camera, bool do_occlusion=false); // Cull on arbitrary frustum
     S32 cull(LLCamera &camera, std::vector<LLDrawable *>* results, bool for_select); // Cull on arbitrary frustum
 
+    // <MikoStorm> Parallel culling: preCheckOcclusion() must run on the main
+    // thread first (reads back GL occlusion queries). parallelCull() then
+    // performs the frustum cull on a worker thread, writing into the
+    // per-slot scratch buffer.
+    void preCheckOcclusion(LLCamera& camera);
+    S32 parallelCull(LLCamera &camera, U32 slot);
+
     bool isVisible(const LLVector3& v);
     bool isHUDPartition() ;
 
@@ -541,6 +548,21 @@ public:
     void pushBridge(LLSpatialBridge* bridge);
     void pushDrawInfo(U32 type, LLDrawInfo* draw_info);
 
+    // <MikoStorm> Parallel culling: per-slot scratch buffers so worker
+    // threads can record cull results without locking.
+    void resizeThreadBuffers(U32 count);
+    void clearThreadBuffers();
+    void flushThreadBuffers();
+
+    void pushVisibleGroupLocal(LLSpatialGroup* group, U32 slot);
+    void pushAlphaGroupLocal(LLSpatialGroup* group, U32 slot);
+    void pushRiggedAlphaGroupLocal(LLSpatialGroup* group, U32 slot);
+    void pushOcclusionGroupLocal(LLSpatialGroup* group, U32 slot);
+    void pushDrawableGroupLocal(LLSpatialGroup* group, U32 slot);
+    void pushDrawableLocal(LLDrawable* drawable, U32 slot);
+    void pushBridgeLocal(LLSpatialBridge* bridge, U32 slot);
+    void pushDrawInfoLocal(U32 type, LLDrawInfo* draw_info, U32 slot);
+
     U32 getVisibleGroupsSize()      { return mVisibleGroupsSize; }
     U32 getAlphaGroupsSize()        { return mAlphaGroupsSize; }
     U32 getRiggedAlphaGroupsSize() { return mRiggedAlphaGroupsSize; }
@@ -554,6 +576,21 @@ public:
 private:
 
     template <class T, class V> void pushBack(T &head, U32& count, V* val);
+
+    // <MikoStorm> Per-slot scratch storage for parallel culling.
+    struct ThreadLocalBuffer
+    {
+        sg_list_t       mVisibleGroups;
+        sg_list_t       mAlphaGroups;
+        sg_list_t       mRiggedAlphaGroups;
+        sg_list_t       mOcclusionGroups;
+        sg_list_t       mDrawableGroups;
+        drawable_list_t mVisibleList;
+        bridge_list_t   mVisibleBridge;
+        drawinfo_list_t mRenderMap[LLRenderPass::NUM_RENDER_TYPES];
+    };
+
+    std::vector<ThreadLocalBuffer> mThreadBuffers;
 
     U32                 mVisibleGroupsSize;
     U32                 mAlphaGroupsSize;

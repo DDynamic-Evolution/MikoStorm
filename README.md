@@ -24,6 +24,12 @@ There are applications back from february which are not assigned... not really i
 
 ## Changelog
 
+### 1.16.2 (2026-07-31)
+
+#### Improvements
+
+- **Parallel Octree Culling:** Removed the single-core bottleneck in `updateCull()`. Octree culling is now a two-pass operation: a main-thread occlusion pre-pass (reads back GL queries) followed by a fully parallel frustum-cull across a worker thread pool (`RenderCull`, up to 8 workers), with per-slot scratch result buffers merged on the main thread. HUD and shadow passes fall back to the original serial path. ([llparallelfor.h](indra/llcommon/llparallelfor.h), [pipeline.cpp](indra/newview/pipeline.cpp), [llspatialpartition.cpp](indra/newview/llspatialpartition.cpp))
+
 ### 1.16.1 (2026-07-29)
 
 #### Improvements

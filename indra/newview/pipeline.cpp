@@ -47,6 +47,7 @@
 #include "llrender.h"
 #include "llstartup.h"
 #include "llwindow.h"   // swapBuffers()
+#include "llparallelfor.h"
 
 // newview includes
 #include "llagent.h"
@@ -375,6 +376,23 @@ bool    LLPipeline::sRenderTextures = true;
 static LLPipelineListener sPipelineListener;
 
 static LLCullResult* sCull = NULL;
+
+// <MikoStorm> Parallel rendering: thread pool used for octree culling and
+// state sorting. Created lazily on first use; width is cores-1 (min 1, max 8)
+// unless overridden via the "ThreadPoolSizes" setting.
+LL::ThreadPool& getCullThreadPool()
+{
+    static LL::ThreadPool* pool = NULL;
+    static bool initialized = []()
+        {
+            S32 cores = std::thread::hardware_concurrency();
+            S32 cull_threads = llclamp(cores - 1, 1, 8);
+            pool = new LL::ThreadPool("RenderCull", (size_t)cull_threads);
+            pool->start();
+            return true;
+        }();
+    return *pool;
+}
 
 void validate_framebuffer_object();
 
@@ -2751,6 +2769,16 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_att
 
     sCull->clear();
 
+    // <MikoStorm> Parallel culling: two-pass cull. Pass 1 (main thread) reads
+    // back the GL occlusion queries, Pass 2 (worker threads) does the
+    // frustum culling without any GL calls, then the per-slot scratch
+    // buffers are merged on the main thread.
+    LL::ThreadPool& cull_pool = getCullThreadPool();
+    const U32 n_threads = llclamp((U32)cull_pool.getWidth(), 1u, 8u);
+    const bool parallel_cull = !hud_attachments && n_threads > 1 && sCull != NULL;
+
+    std::vector<LLSpatialPartition*> cull_tasks;
+
     for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
             iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
     {
@@ -2763,7 +2791,16 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_att
             {
                 if (!hud_attachments ? LLViewerRegion::PARTITION_BRIDGE == i || hasRenderType(part->mDrawableType) : hasRenderType(part->mDrawableType))
                 {
-                    part->cull(camera);
+                    if (parallel_cull)
+                    {
+                        // Pass 1 (main thread): GL occlusion query readback.
+                        part->preCheckOcclusion(camera);
+                        cull_tasks.push_back(part);
+                    }
+                    else
+                    {
+                        part->cull(camera);
+                    }
                 }
             }
         }
@@ -2776,6 +2813,23 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_att
             //vo_part->cull(camera, sUseOcclusion > 0);
             vo_part->cull(camera, sUseOcclusion > 0 && !gAgent.getFSAreaSearchActive());
         }
+    }
+
+    if (parallel_cull && !cull_tasks.empty())
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("updateCull - parallel frustum cull");
+        sCull->resizeThreadBuffers((U32)cull_tasks.size());
+        sCull->clearThreadBuffers();
+
+        // chunk_size == 1 keeps the chunk (slot) index == element index, so
+        // the serial fallback path and the parallel path agree on the slot.
+        LL::parallel_for(cull_tasks.begin(), cull_tasks.end(),
+            [&camera](LLSpatialPartition*& part, size_t slot)
+            {
+                part->parallelCull(camera, (U32)slot);
+            }, cull_pool, 1);
+
+        sCull->flushThreadBuffers();
     }
 
     if (hasRenderType(LLPipeline::RENDER_TYPE_SKY) &&
@@ -2831,6 +2885,64 @@ void LLPipeline::markNotCulled(LLSpatialGroup* group, LLCamera& camera)
         markOccluder(group);
     }
     mNumVisibleNodes++;
+}
+
+// <MikoStorm> Parallel culling: like markNotCulled(), but records results
+// into the per-slot scratch buffer instead of the main result lists.
+void LLPipeline::markNotCulledLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot)
+{
+    if (group->isEmpty())
+    {
+        return;
+    }
+
+    group->setVisible();
+
+    if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+    {
+        group->updateDistance(camera);
+    }
+
+    assertInitialized();
+
+    if (!group->getSpatialPartition()->mRenderByGroup)
+    { //render by drawable
+        sCull->pushDrawableGroupLocal(group, slot);
+    }
+    else
+    {   //render by group
+        sCull->pushVisibleGroupLocal(group, slot);
+    }
+
+    if (group->needsUpdate() ||
+        group->getVisible(LLViewerCamera::sCurCameraID) < LLDrawable::getCurrentFrame() - 1)
+    {
+        markOccluderLocal(group, slot);
+    }
+    mNumVisibleNodes++;
+}
+
+void LLPipeline::markOccluderLocal(LLSpatialGroup* group, U32 slot)
+{
+    if (sUseOcclusion > 1 && group && !group->isOcclusionState(LLSpatialGroup::ACTIVE_OCCLUSION))
+    {
+        LLSpatialGroup* parent = group->getParent();
+
+        if (!parent || !parent->isOcclusionState(LLSpatialGroup::OCCLUDED))
+        { //only mark top most occluders as active occlusion
+            sCull->pushOcclusionGroupLocal(group, slot);
+            group->setOcclusionState(LLSpatialGroup::ACTIVE_OCCLUSION);
+
+            if (parent &&
+                !parent->isOcclusionState(LLSpatialGroup::ACTIVE_OCCLUSION) &&
+                parent->getElementCount() == 0 &&
+                parent->needsUpdate())
+            {
+                sCull->pushOcclusionGroupLocal(group, slot);
+                parent->setOcclusionState(LLSpatialGroup::ACTIVE_OCCLUSION);
+            }
+        }
+    }
 }
 
 void LLPipeline::markOccluder(LLSpatialGroup* group)
