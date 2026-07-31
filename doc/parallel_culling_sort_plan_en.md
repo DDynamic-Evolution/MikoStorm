@@ -401,11 +401,11 @@ On an 8-core system (1 main + 7 workers):
 
 ## Implementation Order
 
-1. **Phase 0**: `LLCullResult` thread-local buffer + `gCullThreadPool`
+1. **Phase 0**: `LLCullResult` thread-local buffer + `gCullThreadPool` — ✅ done
 2. **Phase 3.1**: parallelize `rebuildGeom()` (isolated, simple gain)
-3. **Phase 1**: parallel octree culling (Tier 1: partition level)
+3. **Phase 1**: parallel octree culling (Tier 1: partition level) — ✅ done
 4. **Phase 2**: parallel state sort + per-thread pool queues
-5. **Phase 3.2**: parallel render map construction
+5. **Phase 3.2**: parallel render map construction — ✅ done (rebuildGeom stays on a main-thread pre-pass; draw-info/alpha gathering runs in parallel via `push*Local` + `flushThreadBuffers`; `sIndicesDrawnCount` is atomic)
 6. **Phase 1 Tier 2**: octree subtree splitting for better utilization
 7. **Fine-tuning**: chunk sizes, thread counts, profiling
 
