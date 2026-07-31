@@ -3969,85 +3969,125 @@ void LLPipeline::postSort(LLCamera &camera)
     // build render map
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("build render map");
-    for (LLCullResult::sg_iterator i = sCull->beginVisibleGroups(); i != sCull->endVisibleGroups(); ++i)
-    {
-        LLSpatialGroup *group = *i;
 
-        if (group->isDead())
+        // <MikoStorm> Parallel render map build (Phase 3.2). rebuildGeom() and
+        // updateDistance() may touch GL/GPU state and are therefore kept on the
+        // main thread, while the (much larger) gathering of draw info and alpha
+        // groups is split across the cull thread pool, writing into the
+        // per-slot scratch buffers that are merged back afterwards.
         {
-            continue;
-        }
-
-        if ((sUseOcclusion && group->isOcclusionState(LLSpatialGroup::OCCLUDED)) ||
-            (RenderAutoHideSurfaceAreaLimit > 0.f &&
-             group->mSurfaceArea > RenderAutoHideSurfaceAreaLimit * llmax(group->mObjectBoxSize, 10.f)))
-        {
-            continue;
-        }
-
-        if (group->hasState(LLSpatialGroup::NEW_DRAWINFO) && group->hasState(LLSpatialGroup::GEOM_DIRTY) && !gCubeSnapshot)
-        {  // no way this group is going to be drawable without a rebuild
-            group->rebuildGeom();
-        }
-
-        for (LLSpatialGroup::draw_map_t::iterator j = group->mDrawMap.begin(); j != group->mDrawMap.end(); ++j)
-        {
-            LLSpatialGroup::drawmap_elem_t &src_vec = j->second;
-            if (!hasRenderType(j->first))
+            LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("build render map - rebuild");
+            for (LLCullResult::sg_iterator i = sCull->beginVisibleGroups(); i != sCull->endVisibleGroups(); ++i)
             {
-                continue;
-            }
+                LLSpatialGroup *group = *i;
 
-            for (LLSpatialGroup::drawmap_elem_t::iterator k = src_vec.begin(); k != src_vec.end(); ++k)
-            {
-                LLDrawInfo *info = *k;
-
-                sCull->pushDrawInfo(j->first, info);
-                if (!sShadowRender && !sReflectionRender && !gCubeSnapshot)
+                if (group->isDead())
                 {
-                    addTrianglesDrawn(info->mCount);
+                    continue;
+                }
+
+                if ((sUseOcclusion && group->isOcclusionState(LLSpatialGroup::OCCLUDED)) ||
+                    (RenderAutoHideSurfaceAreaLimit > 0.f &&
+                     group->mSurfaceArea > RenderAutoHideSurfaceAreaLimit * llmax(group->mObjectBoxSize, 10.f)))
+                {
+                    continue;
+                }
+
+                if (group->hasState(LLSpatialGroup::NEW_DRAWINFO) && group->hasState(LLSpatialGroup::GEOM_DIRTY) && !gCubeSnapshot)
+                {  // no way this group is going to be drawable without a rebuild
+                    group->rebuildGeom();
                 }
             }
         }
 
-        if (hasRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA))
+        LL::ThreadPool& cull_pool = getCullThreadPool();
+        const size_t n_groups = (size_t)std::distance(sCull->beginVisibleGroups(), sCull->endVisibleGroups());
+        if (n_groups > 0)
         {
-            LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("Collect Alpha groups");
-            LLSpatialGroup::draw_map_t::iterator alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA);
+            sCull->resizeThreadBuffers((U32)n_groups);
+            sCull->clearThreadBuffers();
 
-            if (alpha != group->mDrawMap.end())
-            {  // store alpha groups for sorting
-                LLSpatialBridge *bridge = group->getSpatialPartition()->asBridge();
-                if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+            // chunk_size == 16 keeps the number of posted tasks low (groups
+            // within a chunk run sequentially into one slot). Order is
+            // preserved for any chunk size because chunks merge in slot order
+            // and elements are visited in order inside each chunk; sizing the
+            // scratch buffers to n_groups keeps the serial fallback path
+            // (slot == element index) in bounds as well.
+            LL::parallel_for(sCull->beginVisibleGroups(), sCull->endVisibleGroups(),
+                [&camera, this](LLSpatialGroup*& group, size_t slot)
                 {
-                    if (bridge)
+                    if (group->isDead())
                     {
-                        LLCamera trans_camera = bridge->transformCamera(camera);
-                        group->updateDistance(trans_camera);
+                        return;
                     }
-                    else
+
+                    if ((sUseOcclusion && group->isOcclusionState(LLSpatialGroup::OCCLUDED)) ||
+                        (RenderAutoHideSurfaceAreaLimit > 0.f &&
+                         group->mSurfaceArea > RenderAutoHideSurfaceAreaLimit * llmax(group->mObjectBoxSize, 10.f)))
                     {
-                        group->updateDistance(camera);
+                        return;
                     }
-                }
 
-                if (hasRenderType(LLDrawPool::POOL_ALPHA))
-                {
-                    sCull->pushAlphaGroup(group);
-                }
-            }
+                    for (LLSpatialGroup::draw_map_t::iterator j = group->mDrawMap.begin(); j != group->mDrawMap.end(); ++j)
+                    {
+                        LLSpatialGroup::drawmap_elem_t &src_vec = j->second;
+                        if (!hasRenderType(j->first))
+                        {
+                            continue;
+                        }
 
-            LLSpatialGroup::draw_map_t::iterator rigged_alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA_RIGGED);
+                        for (LLSpatialGroup::drawmap_elem_t::iterator k = src_vec.begin(); k != src_vec.end(); ++k)
+                        {
+                            LLDrawInfo *info = *k;
 
-            if (rigged_alpha != group->mDrawMap.end())
-            {  // store rigged alpha groups for LLDrawPoolAlpha prepass (skip distance update, rigged attachments use depth buffer)
-                if (hasRenderType(LLDrawPool::POOL_ALPHA))
-                {
-                    sCull->pushRiggedAlphaGroup(group);
-                }
-            }
+                            sCull->pushDrawInfoLocal(j->first, info, (U32)slot);
+                            if (!sShadowRender && !sReflectionRender && !gCubeSnapshot)
+                            {
+                                addTrianglesDrawn(info->mCount);
+                            }
+                        }
+                    }
+
+                    if (hasRenderType(LLPipeline::RENDER_TYPE_PASS_ALPHA))
+                    {
+                        LLSpatialGroup::draw_map_t::iterator alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA);
+
+                        if (alpha != group->mDrawMap.end())
+                        {  // store alpha groups for sorting
+                            LLSpatialBridge *bridge = group->getSpatialPartition()->asBridge();
+                            if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+                            {
+                                if (bridge)
+                                {
+                                    LLCamera trans_camera = bridge->transformCamera(camera);
+                                    group->updateDistance(trans_camera);
+                                }
+                                else
+                                {
+                                    group->updateDistance(camera);
+                                }
+                            }
+
+                            if (hasRenderType(LLDrawPool::POOL_ALPHA))
+                            {
+                                sCull->pushAlphaGroupLocal(group, (U32)slot);
+                            }
+                        }
+
+                        LLSpatialGroup::draw_map_t::iterator rigged_alpha = group->mDrawMap.find(LLRenderPass::PASS_ALPHA_RIGGED);
+
+                        if (rigged_alpha != group->mDrawMap.end())
+                        {  // store rigged alpha groups for LLDrawPoolAlpha prepass (skip distance update, rigged attachments use depth buffer)
+                            if (hasRenderType(LLDrawPool::POOL_ALPHA))
+                            {
+                                sCull->pushRiggedAlphaGroupLocal(group, (U32)slot);
+                            }
+                        }
+                    }
+                }, cull_pool, 16);
+
+            sCull->flushThreadBuffers();
         }
-    }
     }
 
     /*bool use_transform_feedback = gTransformPositionProgram.mProgramObject && !mMeshDirtyGroup.empty();
@@ -4749,18 +4789,20 @@ void LLPipeline::renderGeomShadow(LLCamera& camera)
 }
 
 
-static U32 sIndicesDrawnCount = 0;
+static std::atomic<U32> sIndicesDrawnCount = 0;
 
 void LLPipeline::addTrianglesDrawn(S32 index_count)
 {
-    sIndicesDrawnCount += index_count;
+    // <MikoStorm> Atomic so the parallel render map build can accumulate the
+    // triangle count from worker threads.
+    sIndicesDrawnCount.fetch_add((U32)index_count, std::memory_order_relaxed);
 }
 
 void LLPipeline::recordTrianglesDrawn()
 {
     assertInitialized();
-    U32 count = sIndicesDrawnCount / 3;
-    sIndicesDrawnCount = 0;
+    U32 count = sIndicesDrawnCount.load(std::memory_order_relaxed) / 3;
+    sIndicesDrawnCount.store(0, std::memory_order_relaxed);
     add(LLStatViewer::TRIANGLES_DRAWN, LLUnits::Triangles::fromValue(count));
 }
 
