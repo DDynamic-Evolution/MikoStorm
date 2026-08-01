@@ -16,6 +16,10 @@ MikoStorm aims to provide a viewer with many missing or unique features that enh
 
 This project is a one man show! So be patient
 
+### Builds
+
+We develop on **Linux** because it offers a much better and much friendlier build environment. Compiling on **Windows** is a big hassle and needs many adjustments, so there will be **fewer Windows builds** than Linux builds. See [Building on Windows](doc/building_windows.md) and [Building on Linux](doc/building_linux.md) for details.
+
 <img width="1839" height="919" alt="screen" src="https://github.com/user-attachments/assets/44ebaa9b-3fc1-490f-926e-2c3b8156c395" />
 
 ### Not on the TPV List.. why?

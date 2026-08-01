@@ -1,5 +1,8 @@
 # Build instructions for Windows
 
+> [!WARNING]
+> Compiling MikoStorm on **Windows** is a big hassle and requires **many adjustments** to make it work. Development is done on **Linux**, which offers a much better and much friendlier build environment. This is also the reason why there will be **fewer Windows builds** than Linux builds. Linux builds are the primary and best-supported ones.
+
 This page describes all necessary steps to build the MikoStorm viewer for Windows. For building instructions up to (and including) release 6.5.3, see the archived version for [building with Python 2.7](https://wiki.firestormviewer.org/archive:fs_compiling_firestorm_windows_py_27).
 
 > [!IMPORTANT]
