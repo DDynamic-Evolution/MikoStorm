@@ -3272,6 +3272,49 @@ void LLPipeline::markVisible(LLDrawable *drawablep, LLCamera& camera)
     }
 }
 
+// <MikoStorm> Parallel stateSort: like markVisible(), but records results
+// into the per-slot scratch buffer instead of the main result lists.
+void LLPipeline::markVisibleLocal(LLDrawable *drawablep, LLCamera& camera, U32 slot)
+{
+    if(drawablep && !drawablep->isDead())
+    {
+        if (drawablep->isSpatialBridge())
+        {
+            const LLDrawable* root = ((LLSpatialBridge*) drawablep)->mDrawable;
+            llassert(root); // trying to catch a bad assumption
+
+            if (root && //  // this test may not be needed, see above
+                    root->getVObj()->isAttachment())
+            {
+                LLDrawable* rootparent = root->getParent();
+                if (rootparent) // this IS sometimes NULL
+                {
+                    LLViewerObject *vobj = rootparent->getVObj();
+                    llassert(vobj); // trying to catch a bad assumption
+                    if (vobj) // this test may not be needed, see above
+                    {
+                        LLVOAvatar* av = vobj->asAvatar();
+                        if (av &&
+                            ((!sImpostorRender && av->isImpostor()) //ignore impostor flag during impostor pass
+                             //|| av->isInMuteList() // <FS:Ansariel> Partially undo MAINT-5700: Draw imposter for muted avatars
+                             || (LLVOAvatar::AOA_JELLYDOLL == av->getOverallAppearance() && !av->needsImpostorUpdate()) ))
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+            sCull->pushBridgeLocal((LLSpatialBridge*) drawablep, slot);
+        }
+        else
+        {
+            sCull->pushDrawableLocal(drawablep, slot);
+        }
+
+        drawablep->setVisible(camera);
+    }
+}
+
 void LLPipeline::markMoved(LLDrawable *drawablep, bool damped_motion)
 {
     if (!drawablep)
@@ -3492,6 +3535,211 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
     //LLVertexBuffer::unbind();
 
     grabReferences(result);
+
+    LL::ThreadPool& cull_pool = getCullThreadPool();
+    const U32 n_threads = llclamp((U32)cull_pool.getWidth(), 1u, 8u);
+    const bool parallel_sort = !LLPipeline::sShadowRender && !gCubeSnapshot && n_threads > 1 && sCull != NULL;
+
+    if (!parallel_sort)
+    {
+        // <MikoStorm> Serial fallback: used for shadow/cube/HUD passes and
+        // when the thread pool has no workers.
+        stateSortSerial(camera, result);
+        postSort(camera);
+        return;
+    }
+
+    // <MikoStorm> Parallel stateSort (Phase 2). GL-bound work stays on the
+    // main thread as prepasses: checkOcclusion()/markOccluder() (occlusion
+    // query readback) and rebuildMesh() (vertex buffer updates). The
+    // per-drawable visibility/LOD work and the pool enqueues are split across
+    // the cull thread pool; faces go into per-slot pool queues that are merged
+    // back on the main thread in slot order, preserving the serial ordering.
+
+    std::vector<LLSpatialGroup*> drawable_sort_tasks;
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - drawable groups occlusion prepass");
+        for (LLCullResult::sg_iterator iter = sCull->beginDrawableGroups(); iter != sCull->endDrawableGroups(); ++iter)
+        {
+            LLSpatialGroup* group = *iter;
+            if (group->isDead())
+            {
+                continue;
+            }
+            group->checkOcclusion();
+            if (sUseOcclusion > 1 && group->isOcclusionState(LLSpatialGroup::OCCLUDED))
+            {
+                markOccluder(group);
+            }
+            else
+            {
+                drawable_sort_tasks.push_back(group);
+            }
+        }
+    }
+
+    if (!drawable_sort_tasks.empty())
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - drawable groups (parallel)");
+        sCull->resizeThreadBuffers((U32)drawable_sort_tasks.size());
+        sCull->clearThreadBuffers();
+
+        LL::parallel_for(drawable_sort_tasks.begin(), drawable_sort_tasks.end(),
+            [&camera, this](LLSpatialGroup*& group, size_t slot)
+            {
+                group->setVisible();
+                for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
+                {
+                    LLDrawable* drawablep = (LLDrawable*)(*i)->getDrawable();
+                    markVisibleLocal(drawablep, camera, (U32)slot);
+                }
+            }, cull_pool, 16);
+
+        sCull->flushThreadBuffers();
+
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - drawable groups rebuild mesh");
+        for (LLSpatialGroup* group : drawable_sort_tasks)
+        {
+            group->rebuildMesh();
+        }
+    }
+
+    if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("WorldCamera");
+        LLSpatialGroup* last_group = NULL;
+        bool fov_changed = LLViewerCamera::getInstance()->isDefaultFOVChanged();
+        for (LLCullResult::bridge_iterator i = sCull->beginVisibleBridge(); i != sCull->endVisibleBridge(); ++i)
+        {
+            LLCullResult::bridge_iterator cur_iter = i;
+            LLSpatialBridge* bridge = *cur_iter;
+            LLSpatialGroup* group = bridge->getSpatialGroup();
+
+            if (last_group == NULL)
+            {
+                last_group = group;
+            }
+
+            if (!bridge->isDead() && group && !group->isOcclusionState(LLSpatialGroup::OCCLUDED))
+            {
+                stateSort(bridge, camera, fov_changed);
+            }
+
+            if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD &&
+                last_group != group && last_group->changeLOD())
+            {
+                last_group->mLastUpdateDistance = last_group->mDistance;
+            }
+
+            last_group = group;
+        }
+
+        if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD &&
+            last_group && last_group->changeLOD())
+        {
+            last_group->mLastUpdateDistance = last_group->mDistance;
+        }
+    }
+    std::vector<LLSpatialGroup*> visible_sort_tasks;
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - visible groups occlusion prepass");
+        for (LLCullResult::sg_iterator iter = sCull->beginVisibleGroups(); iter != sCull->endVisibleGroups(); ++iter)
+        {
+            LLSpatialGroup* group = *iter;
+            if (group->isDead())
+            {
+                continue;
+            }
+            group->checkOcclusion();
+            if (sUseOcclusion > 1 && group->isOcclusionState(LLSpatialGroup::OCCLUDED))
+            {
+                markOccluder(group);
+            }
+            else
+            {
+                visible_sort_tasks.push_back(group);
+            }
+        }
+    }
+
+    if (!visible_sort_tasks.empty())
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("StateSort: visible groups (parallel)");
+        for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)
+        {
+            (*iter)->resizeThreadQueues((U32)visible_sort_tasks.size());
+        }
+
+        LL::parallel_for(visible_sort_tasks.begin(), visible_sort_tasks.end(),
+            [&camera, this](LLSpatialGroup*& group, size_t slot)
+            {
+                group->setVisible();
+                stateSortLocal(group, camera, (U32)slot);
+            }, cull_pool, 16);
+
+        for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)
+        {
+            (*iter)->mergeThreadQueues();
+        }
+
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - visible groups rebuild mesh");
+        for (LLSpatialGroup* group : visible_sort_tasks)
+        {
+            group->rebuildMesh();
+        }
+    }
+
+    {
+        LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWABLE("stateSort (parallel)");
+        const size_t n_drawables = (size_t)std::distance(sCull->beginVisibleList(), sCull->endVisibleList());
+        if (n_drawables > 0)
+        {
+            for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)
+            {
+                (*iter)->resizeThreadQueues((U32)n_drawables);
+            }
+
+            LL::parallel_for(sCull->beginVisibleList(), sCull->endVisibleList(),
+                [&camera, this](LLDrawable*& drawablep, size_t slot)
+                {
+                    if (!drawablep->isDead())
+                    {
+                        stateSort(drawablep, camera, (U32)slot);
+                    }
+                }, cull_pool, 16);
+
+            for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)
+            {
+                (*iter)->mergeThreadQueues();
+            }
+        }
+    }
+
+    postSort(camera);
+}
+
+// <MikoStorm> Parallel stateSort: the original serial implementation.
+void LLPipeline::stateSortSerial(LLCamera& camera, LLCullResult& result)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
+    LL_PROFILE_GPU_ZONE("stateSort");
+
+    if (hasAnyRenderType(LLPipeline::RENDER_TYPE_AVATAR,
+                      LLPipeline::RENDER_TYPE_CONTROL_AV,
+                      LLPipeline::RENDER_TYPE_TERRAIN,
+                      LLPipeline::RENDER_TYPE_TREE,
+                      LLPipeline::RENDER_TYPE_SKY,
+                      LLPipeline::RENDER_TYPE_VOIDWATER,
+                      LLPipeline::RENDER_TYPE_WATER,
+                      LLPipeline::END_RENDER_TYPES))
+    {
+        //clear faces from face pools
+        gPipeline.resetDrawOrders();
+    }
+
+    //LLVertexBuffer::unbind();
+
+    grabReferences(result);
     {
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("checkOcclusionAndRebuildMesh");
     for (LLCullResult::sg_iterator iter = sCull->beginDrawableGroups(); iter != sCull->endDrawableGroups(); ++iter)
@@ -3595,18 +3843,21 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
             }
         }
     }
-
-    postSort(camera);
 }
 
 void LLPipeline::stateSort(LLSpatialGroup* group, LLCamera& camera)
+{
+    stateSortLocal(group, camera, U32_MAX);
+}
+
+void LLPipeline::stateSortLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot)
 {
     if (group->changeLOD())
     {
         for (LLSpatialGroup::element_iter i = group->getDataBegin(); i != group->getDataEnd(); ++i)
         {
             LLDrawable* drawablep = (LLDrawable*)(*i)->getDrawable();
-            stateSort(drawablep, camera);
+            stateSort(drawablep, camera, slot);
         }
 
         if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
@@ -3626,7 +3877,7 @@ void LLPipeline::stateSort(LLSpatialBridge* bridge, LLCamera& camera, bool fov_c
     }
 }
 
-void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
+void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
     if (!drawablep
@@ -3713,7 +3964,7 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera)
             {
                 if (facep->getPool())
                 {
-                    facep->getPool()->enqueue(facep);
+                    facep->getPool()->enqueue(facep, slot);
                 }
                 else
                 {
