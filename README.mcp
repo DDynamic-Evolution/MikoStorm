@@ -73,6 +73,7 @@ async with HttpConnection("http://localhost:13231/mcp") as session:
 |------|-----------|--------------|
 | `chat_say` | message, channel (optional) | Say in local chat |
 | `chat_shout` | message, channel (optional) | Shout (100m) |
+| `chat_im` | target (UUID/name), message | Send an instant message |
 
 ### World / Info
 | Tool | Parameters | Description |
@@ -80,17 +81,21 @@ async with HttpConnection("http://localhost:13231/mcp") as session:
 | `get_position` | — | Current position + region (JSON) |
 | `get_region_info` | — | Current region info (JSON) |
 | `get_nearby_agents` | — | Nearby avatars (JSON) |
+| `get_nearby_objects` | max_results, include_attachments | Nearby objects (JSON) |
+| `get_parcel_info` | — | Current parcel info (JSON) |
+| `get_self_info` | — | Own avatar name/group/state (JSON) |
 
 ### Inventory
 | Tool | Parameters | Description |
 |------|-----------|--------------|
 | `inventory_list` | — | List root inventory (JSON) |
+| `inventory_search` | query, folder, type, max_results | Search inventory by name |
 | `notecard_write` | name, content | Create a notecard with text content |
 
-### Planned
-- `chat_im` — Send IM
-- `inventory_search` — Search inventory
-- `attachment_list` — Currently worn attachments
+### Avatar / Appearance
+| Tool | Parameters | Description |
+|------|-----------|--------------|
+| `attachment_list` | — | List currently worn attachments (JSON) |
 
 ## Resources
 
@@ -99,6 +104,9 @@ async with HttpConnection("http://localhost:13231/mcp") as session:
 | `mikostorm://position` | Current position (JSON) |
 | `mikostorm://region` | Region info (JSON) |
 | `mikostorm://nearby` | Nearby agents (JSON) |
+| `mikostorm://attachments` | Worn attachments (JSON) |
+| `mikostorm://parcel` | Current parcel info (JSON) |
+| `mikostorm://inventory` | Root inventory (JSON) |
 
 ## Security
 

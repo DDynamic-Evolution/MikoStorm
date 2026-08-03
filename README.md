@@ -148,6 +148,7 @@ http://localhost:13231/mcp
 |------|-------------|------------|
 | `chat_say` | Send a message in local chat | `message` (required), `channel` (optional, default: 0) |
 | `chat_shout` | Send a shout in local chat (up to 100m range) | `message` (required), `channel` (optional, default: 0) |
+| `chat_im` | Send an instant message to another avatar | `target` (UUID or name, required), `message` (required) |
 
 #### Avatar Tools
 
@@ -166,6 +167,9 @@ http://localhost:13231/mcp
 | `get_position` | Get current avatar position, region, and rotation | None |
 | `get_region_info` | Get information about the current region | None |
 | `get_nearby_agents` | List nearby avatars with positions and distances | None |
+| `get_nearby_objects` | List nearby objects with positions and distances | `max_results`, `include_attachments` (optional) |
+| `get_parcel_info` | Get information about the current parcel | None |
+| `get_self_info` | Get own avatar name, group, and state | None |
 
 #### Inventory Tools
 
@@ -173,6 +177,8 @@ http://localhost:13231/mcp
 |------|-------------|------------|
 | `notecard_write` | Create a new notecard in your inventory | `name`, `content` (required) |
 | `inventory_list` | List inventory folders and items at the root level | None |
+| `inventory_search` | Search inventory folders and items by name | `query` (required), `folder`, `type`, `max_results` (optional) |
+| `attachment_list` | List currently worn attachments | None |
 
 ### Available Resources
 
@@ -183,6 +189,9 @@ Resources provide read-only access to viewer state:
 | `mikostorm://position` | Current avatar position and region |
 | `mikostorm://region` | Current region information |
 | `mikostorm://nearby` | List of nearby avatars |
+| `mikostorm://attachments` | Currently worn attachments |
+| `mikostorm://parcel` | Current parcel information |
+| `mikostorm://inventory` | Root-level inventory listing |
 
 ### Example Configuration
 
