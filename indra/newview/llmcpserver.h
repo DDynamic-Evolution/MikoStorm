@@ -42,6 +42,14 @@ private:
     LLSD makeError(int code, const std::string& message, const LLSD& data = LLSD());
     LLSD makeResult(const LLSD& result);
 
+    LLSD runOnMain(std::function<LLSD()> fn);
+    LLSD collectNearbyAgents() const;
+    LLSD collectAttachments() const;
+    LLSD collectParcelInfo() const;
+    LLSD collectSelfInfo() const;
+    LLSD collectNearbyObjects(const LLSD& params) const;
+    LLSD inventorySearch(const LLSD& params) const;
+
     struct Tool {
         std::string name;
         std::string description;
