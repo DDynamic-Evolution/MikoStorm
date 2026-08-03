@@ -198,6 +198,7 @@ public:
 
     // Object related methods
     void        markVisible(LLDrawable *drawablep, LLCamera& camera);
+    void        markVisibleLocal(LLDrawable *drawablep, LLCamera& camera, U32 slot);
     void        markOccluder(LLSpatialGroup* group);
     void        markOccluderLocal(LLSpatialGroup* group, U32 slot);
 
@@ -286,9 +287,11 @@ public:
     static F32 calcPixelArea(const LLVector4a& center, const LLVector4a& size, LLCamera &camera);
 
     void stateSort(LLCamera& camera, LLCullResult& result);
+    void stateSortSerial(LLCamera& camera, LLCullResult& result);
     void stateSort(LLSpatialGroup* group, LLCamera& camera);
+    void stateSortLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot);
     void stateSort(LLSpatialBridge* bridge, LLCamera& camera, bool fov_changed = false);
-    void stateSort(LLDrawable* drawablep, LLCamera& camera);
+    void stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot = U32_MAX);
     void postSort(LLCamera& camera);
 
     void forAllVisibleDrawables(void (*func)(LLDrawable*));
@@ -673,7 +676,7 @@ public:
     S32                      mDebugSculptUploadCost;
     S32                      mDebugMeshUploadCost;
 
-    S32                      mNumVisibleFaces;
+    std::atomic<S32>         mNumVisibleFaces;
 
     S32                     mPoissonOffset;
 
