@@ -994,6 +994,12 @@ protected:
     // <MikoStorm> Parallel stateSort: per-slot collection of drawables whose
     // distance/LOD update (GL-bound) is deferred to the main thread.
     std::vector<std::vector<LLDrawable*>> mStateSortLODTasks;
+    // <MikoStorm> Parallel stateSort: per-slot collection of spatial bridges
+    // whose inner-octree cull (gPipeline.markNotCulled) calls the serial
+    // pushVisibleGroup()/pushDrawableGroup() on the global cull result. That
+    // is not thread-safe, so it is deferred to the main thread and drained
+    // after each parallel phase.
+    std::vector<std::vector<LLSpatialBridge*>> mStateSortBridgeTasks;
     LLDrawPool* mLastRebuildPool;
 
     // For quick-lookups into mPools (mapped by texture pointer)
