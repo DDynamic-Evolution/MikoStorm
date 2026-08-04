@@ -3670,12 +3670,27 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
             (*iter)->resizeThreadQueues((U32)visible_sort_tasks.size());
         }
 
+        mStateSortLODTasks.resize(visible_sort_tasks.size());
+        for (std::vector<LLDrawable*>& tasks : mStateSortLODTasks)
+        {
+            tasks.clear();
+        }
+
         LL::parallel_for(visible_sort_tasks.begin(), visible_sort_tasks.end(),
             [&camera, this](LLSpatialGroup*& group, size_t slot)
             {
                 group->setVisible();
                 stateSortLocal(group, camera, (U32)slot);
             }, cull_pool, 16);
+
+        LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - visible groups LOD (main thread)");
+        for (std::vector<LLDrawable*>& tasks : mStateSortLODTasks)
+        {
+            for (LLDrawable* drawablep : tasks)
+            {
+                stateSortLOD(drawablep, camera);
+            }
+        }
 
         for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)
         {
@@ -3699,6 +3714,12 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
                 (*iter)->resizeThreadQueues((U32)n_drawables);
             }
 
+            mStateSortLODTasks.resize(n_drawables);
+            for (std::vector<LLDrawable*>& tasks : mStateSortLODTasks)
+            {
+                tasks.clear();
+            }
+
             LL::parallel_for(sCull->beginVisibleList(), sCull->endVisibleList(),
                 [&camera, this](LLDrawable*& drawablep, size_t slot)
                 {
@@ -3707,6 +3728,15 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
                         stateSort(drawablep, camera, (U32)slot);
                     }
                 }, cull_pool, 16);
+
+            LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWABLE("stateSort - visible list LOD (main thread)");
+            for (std::vector<LLDrawable*>& tasks : mStateSortLODTasks)
+            {
+                for (LLDrawable* drawablep : tasks)
+                {
+                    stateSortLOD(drawablep, camera);
+                }
+            }
 
             for (pool_set_t::iterator iter = mPools.begin(); iter != mPools.end(); ++iter)
             {
@@ -3936,21 +3966,18 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot)
         }
     }
 
-    if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+    // <MikoStorm> updateDistance() -> updateLOD() -> updateMeshData() /
+    // rebuildGeom() touches GL (flushBuffers). That must never run on a cull
+    // worker thread, so the parallel stateSort defers it to the main thread
+    // via mStateSortLODTasks; the serial path (slot == U32_MAX) runs inline.
+    if (slot == U32_MAX)
     {
-        //if (drawablep->isVisible()) isVisible() check here is redundant, if it wasn't visible, it wouldn't be here
-        {
-            if (!drawablep->isActive())
-            {
-                bool force_update = false;
-                drawablep->updateDistance(camera, force_update);
-            }
-            else if (drawablep->isAvatar())
-            {
-                bool force_update = false;
-                drawablep->updateDistance(camera, force_update); // calls vobj->updateLOD() which calls LLVOAvatar::updateVisibility()
-            }
-        }
+        stateSortLOD(drawablep, camera);
+    }
+    else if (slot < mStateSortLODTasks.size() &&
+             (!drawablep->isActive() || drawablep->isAvatar()))
+    {
+        mStateSortLODTasks[slot].push_back(drawablep);
     }
 
     if (!drawablep->getVOVolume())
@@ -3975,6 +4002,26 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot)
     }
 
     mNumVisibleFaces += drawablep->getNumFaces();
+}
+
+// <MikoStorm> GL-bound distance/LOD update (updateLOD can call updateMeshData
+// -> flushBuffers). Must run on the main thread, never on a cull worker.
+void LLPipeline::stateSortLOD(LLDrawable* drawablep, LLCamera& camera)
+{
+    if (LLViewerCamera::sCurCameraID != LLViewerCamera::CAMERA_WORLD || gCubeSnapshot)
+    {
+        return;
+    }
+    if (!drawablep->isActive())
+    {
+        bool force_update = false;
+        drawablep->updateDistance(camera, force_update);
+    }
+    else if (drawablep->isAvatar())
+    {
+        bool force_update = false;
+        drawablep->updateDistance(camera, force_update); // calls vobj->updateLOD() which calls LLVOAvatar::updateVisibility()
+    }
 }
 
 

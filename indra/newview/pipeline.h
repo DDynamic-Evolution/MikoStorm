@@ -292,6 +292,7 @@ public:
     void stateSortLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot);
     void stateSort(LLSpatialBridge* bridge, LLCamera& camera, bool fov_changed = false);
     void stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot = U32_MAX);
+    void stateSortLOD(LLDrawable* drawablep, LLCamera& camera);
     void postSort(LLCamera& camera);
 
     void forAllVisibleDrawables(void (*func)(LLDrawable*));
@@ -990,6 +991,9 @@ protected:
     };
     typedef std::set<LLDrawPool*, compare_pools > pool_set_t;
     pool_set_t mPools;
+    // <MikoStorm> Parallel stateSort: per-slot collection of drawables whose
+    // distance/LOD update (GL-bound) is deferred to the main thread.
+    std::vector<std::vector<LLDrawable*>> mStateSortLODTasks;
     LLDrawPool* mLastRebuildPool;
 
     // For quick-lookups into mPools (mapped by texture pointer)
