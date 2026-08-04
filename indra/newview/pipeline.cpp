@@ -3311,7 +3311,18 @@ void LLPipeline::markVisibleLocal(LLDrawable *drawablep, LLCamera& camera, U32 s
             sCull->pushDrawableLocal(drawablep, slot);
         }
 
-        drawablep->setVisible(camera);
+        if (drawablep->isSpatialBridge())
+        {
+            // <MikoStorm> LLSpatialBridge::setVisible() culls the bridge's
+            // inner octree via the serial gPipeline.markNotCulled(), which
+            // writes into the global cull result. That must never run on a
+            // cull worker thread; defer it to the main thread instead.
+            mStateSortBridgeTasks[slot].push_back((LLSpatialBridge*) drawablep);
+        }
+        else
+        {
+            drawablep->setVisible(camera);
+        }
     }
 }
 
@@ -3584,6 +3595,12 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
         sCull->resizeThreadBuffers((U32)drawable_sort_tasks.size());
         sCull->clearThreadBuffers();
 
+        mStateSortBridgeTasks.resize(drawable_sort_tasks.size());
+        for (std::vector<LLSpatialBridge*>& tasks : mStateSortBridgeTasks)
+        {
+            tasks.clear();
+        }
+
         LL::parallel_for(drawable_sort_tasks.begin(), drawable_sort_tasks.end(),
             [&camera, this](LLSpatialGroup*& group, size_t slot)
             {
@@ -3596,6 +3613,17 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
             }, cull_pool, 16);
 
         sCull->flushThreadBuffers();
+
+        // <MikoStorm> Drain the spatial bridges whose inner-octree cull was
+        // deferred from the worker threads; LLSpatialBridge::setVisible()
+        // calls the serial markNotCulled() path.
+        for (std::vector<LLSpatialBridge*>& tasks : mStateSortBridgeTasks)
+        {
+            for (LLSpatialBridge* bridge : tasks)
+            {
+                bridge->setVisible(camera);
+            }
+        }
 
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - drawable groups rebuild mesh");
         for (LLSpatialGroup* group : drawable_sort_tasks)
@@ -3676,12 +3704,29 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
             tasks.clear();
         }
 
+        mStateSortBridgeTasks.resize(visible_sort_tasks.size());
+        for (std::vector<LLSpatialBridge*>& tasks : mStateSortBridgeTasks)
+        {
+            tasks.clear();
+        }
+
         LL::parallel_for(visible_sort_tasks.begin(), visible_sort_tasks.end(),
             [&camera, this](LLSpatialGroup*& group, size_t slot)
             {
                 group->setVisible();
                 stateSortLocal(group, camera, (U32)slot);
             }, cull_pool, 16);
+
+        // <MikoStorm> Drain the spatial bridges whose inner-octree cull was
+        // deferred from the worker threads; LLSpatialBridge::setVisible()
+        // calls the serial markNotCulled() path.
+        for (std::vector<LLSpatialBridge*>& tasks : mStateSortBridgeTasks)
+        {
+            for (LLSpatialBridge* bridge : tasks)
+            {
+                bridge->setVisible(camera);
+            }
+        }
 
         LL_PROFILE_ZONE_NAMED_CATEGORY_PIPELINE("stateSort - visible groups LOD (main thread)");
         for (std::vector<LLDrawable*>& tasks : mStateSortLODTasks)
@@ -3720,6 +3765,12 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
                 tasks.clear();
             }
 
+            mStateSortBridgeTasks.resize(n_drawables);
+            for (std::vector<LLSpatialBridge*>& tasks : mStateSortBridgeTasks)
+            {
+                tasks.clear();
+            }
+
             LL::parallel_for(sCull->beginVisibleList(), sCull->endVisibleList(),
                 [&camera, this](LLDrawable*& drawablep, size_t slot)
                 {
@@ -3728,6 +3779,17 @@ void LLPipeline::stateSort(LLCamera& camera, LLCullResult &result)
                         stateSort(drawablep, camera, (U32)slot);
                     }
                 }, cull_pool, 16);
+
+            // <MikoStorm> Drain the spatial bridges whose inner-octree cull
+            // was deferred from the worker threads; LLSpatialBridge::setVisible()
+            // calls the serial markNotCulled() path.
+            for (std::vector<LLSpatialBridge*>& tasks : mStateSortBridgeTasks)
+            {
+                for (LLSpatialBridge* bridge : tasks)
+                {
+                    bridge->setVisible(camera);
+                }
+            }
 
             LL_PROFILE_ZONE_NAMED_CATEGORY_DRAWABLE("stateSort - visible list LOD (main thread)");
             for (std::vector<LLDrawable*>& tasks : mStateSortLODTasks)
@@ -3962,7 +4024,18 @@ void LLPipeline::stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot)
     {
         if (!drawablep->isState(LLDrawable::INVISIBLE|LLDrawable::FORCE_INVISIBLE))
         {
-            drawablep->setVisible(camera, NULL, false);
+            if (slot != U32_MAX && drawablep->isSpatialBridge())
+            {
+                // <MikoStorm> LLSpatialBridge::setVisible() culls the bridge's
+                // inner octree via the serial gPipeline.markNotCulled(), which
+                // writes into the global cull result. Defer it to the main
+                // thread when running on a cull worker.
+                mStateSortBridgeTasks[slot].push_back((LLSpatialBridge*) drawablep);
+            }
+            else
+            {
+                drawablep->setVisible(camera, NULL, false);
+            }
         }
     }
 
