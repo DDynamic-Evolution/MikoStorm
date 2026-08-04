@@ -28,6 +28,12 @@ There are applications back from february which are not assigned... not really i
 
 ## Changelog
 
+### 1.16.24 (2026-08-04)
+
+#### Bug Fixes
+
+- **Teleport Crash Fix:** Fixed a crash when teleporting (SIGSEGV on arrival). The parallel state sort (1.16.23) ran the drawable distance/LOD update on cull worker threads, which can call GL (avatar `updateMeshData()`/`flushBuffers()`). That GL-bound work now runs on the main thread via a deferred per-slot pass, preserving the serial draw order. ([pipeline.cpp](indra/newview/pipeline.cpp), [pipeline.h](indra/newview/pipeline.h))
+
 ### 1.16.23 (2026-08-04)
 
 #### Improvements!
