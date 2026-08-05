@@ -1000,6 +1000,12 @@ protected:
     // is not thread-safe, so it is deferred to the main thread and drained
     // after each parallel phase.
     std::vector<std::vector<LLSpatialBridge*>> mStateSortBridgeTasks;
+    // <MikoStorm> Parallel culling: groups whose distance/alpha-dirty update
+    // was deferred from the cull workers. LLSpatialGroup::updateDistance()
+    // -> calcDistance() may call gPipeline.markRebuild(), which pushes into
+    // the shared mGroupQ1; that is not thread-safe, so it is deferred to the
+    // main thread and drained after the parallel frustum cull.
+    std::vector<std::vector<LLSpatialGroup*>> mCullDistanceTasks;
     LLDrawPool* mLastRebuildPool;
 
     // For quick-lookups into mPools (mapped by texture pointer)
