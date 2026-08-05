@@ -2821,6 +2821,14 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_att
         sCull->resizeThreadBuffers((U32)cull_tasks.size());
         sCull->clearThreadBuffers();
 
+        // <MikoStorm> Per-slot collection of groups whose updateDistance() is
+        // deferred from the cull workers (see markNotCulledLocal()).
+        mCullDistanceTasks.resize(cull_tasks.size());
+        for (std::vector<LLSpatialGroup*>& tasks : mCullDistanceTasks)
+        {
+            tasks.clear();
+        }
+
         // chunk_size == 1 keeps the chunk (slot) index == element index, so
         // the serial fallback path and the parallel path agree on the slot.
         LL::parallel_for(cull_tasks.begin(), cull_tasks.end(),
@@ -2830,6 +2838,20 @@ void LLPipeline::updateCull(LLCamera& camera, LLCullResult& result, bool hud_att
             }, cull_pool, 1);
 
         sCull->flushThreadBuffers();
+
+        // <MikoStorm> Drain the deferred distance updates. updateDistance()
+        // -> calcDistance() may call gPipeline.markRebuild(), which writes
+        // the shared mGroupQ1, so it must run on the main thread.
+        if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+        {
+            for (std::vector<LLSpatialGroup*>& tasks : mCullDistanceTasks)
+            {
+                for (LLSpatialGroup* group : tasks)
+                {
+                    group->updateDistance(camera);
+                }
+            }
+        }
     }
 
     if (hasRenderType(LLPipeline::RENDER_TYPE_SKY) &&
@@ -2900,7 +2922,19 @@ void LLPipeline::markNotCulledLocal(LLSpatialGroup* group, LLCamera& camera, U32
 
     if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
     {
-        group->updateDistance(camera);
+        // <MikoStorm> updateDistance() -> calcDistance() may call
+        // gPipeline.markRebuild() for alpha-dirty groups, which pushes into
+        // the shared mGroupQ1. That must never run on a cull worker thread;
+        // collect the groups and run updateDistance() on the main thread
+        // after the parallel frustum cull.
+        if (slot < mCullDistanceTasks.size())
+        {
+            mCullDistanceTasks[slot].push_back(group);
+        }
+        else
+        {
+            group->updateDistance(camera);
+        }
     }
 
     assertInitialized();
