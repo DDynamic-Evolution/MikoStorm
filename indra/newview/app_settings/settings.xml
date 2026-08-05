@@ -27037,10 +27037,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>473405</integer>
     </map>
-    <key>FSRestartAvoidEnabled</key>
+    <key>RestartAvoidanceEnable</key>
     <map>
       <key>Comment</key>
-      <string>Enable automatic region restart avoidance</string>
+      <string>Enable automatic restart avoidance. When a region restart is announced for the current region, the viewer auto-teleports to the configured landing location and returns once the home region is back online.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -27048,27 +27048,104 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>FSRestartAvoidDestinations</key>
+    <key>RestartAvoidanceWaitLeave</key>
     <map>
       <key>Comment</key>
-      <string>List of emergency destinations (region/x/y/z per line)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>String</string>
-      <key>Value</key>
-      <string></string>
-    </map>
-    <key>FSRestartAvoidDelay</key>
-    <map>
-      <key>Comment</key>
-      <string>Seconds to wait before auto-teleport on region restart</string>
+      <string>Seconds to wait before leaving the region once a restart has been announced.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
       <integer>30</integer>
+    </map>
+    <key>RestartAvoidanceWaitReturn</key>
+    <map>
+      <key>Comment</key>
+      <string>Seconds to wait after the home region is detected online before attempting to return.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>120</integer>
+    </map>
+    <key>RestartAvoidanceHomeCheck</key>
+    <map>
+      <key>Comment</key>
+      <string>Interval in seconds between home region online checks while evacuated.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>30</integer>
+    </map>
+    <key>RestartAvoidanceRetryFail</key>
+    <map>
+      <key>Comment</key>
+      <string>Seconds to wait before retrying the return teleport after a failed attempt.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>120</integer>
+    </map>
+    <key>RestartAvoidanceRegionTimeout</key>
+    <map>
+      <key>Comment</key>
+      <string>HTTP timeout in seconds when checking the status of a region.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>10</integer>
+    </map>
+    <key>RestartAvoidanceLandingX</key>
+    <map>
+      <key>Comment</key>
+      <string>Default landing X coordinate used when evacuating the current region.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>128</integer>
+    </map>
+    <key>RestartAvoidanceLandingY</key>
+    <map>
+      <key>Comment</key>
+      <string>Default landing Y coordinate used when evacuating the current region.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>128</integer>
+    </map>
+    <key>RestartAvoidanceLandingZ</key>
+    <map>
+      <key>Comment</key>
+      <string>Default landing Z coordinate used when evacuating the current region.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>30</integer>
+    </map>
+    <key>RestartAvoidanceSafeList</key>
+    <map>
+      <key>Comment</key>
+      <string>List of safe regions to use as evacuation targets. Array of maps with keys region, x, y, z, stamp.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>LLSD</string>
+      <key>Value</key>
+      <string />
     </map>
     <key>SDL2IMEDefaultVerticalOffset</key>
     <map>

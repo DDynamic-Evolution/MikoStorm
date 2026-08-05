@@ -15341,6 +15341,54 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
      yestext="OK"/>
   </notification>
   <notification
+   icon="notifytip.tga"
+   name="RestartAvoidanceActivated"
+   type="notify">
+    <unique/>
+    Restart avoidance active for [REGION]. Leaving in [DELAY] seconds.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="RestartAvoidanceEvacuated"
+   type="notify">
+    <unique/>
+    Teleported to safe region [REGION].
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="RestartAvoidanceReturned"
+   type="notify">
+    <unique/>
+    Returned to [REGION] - restart avoidance complete.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="RestartAvoidanceMaxRetries"
+   type="alertmodal">
+    <unique/>
+    Restart avoidance gave up after [COUNT] failed return attempts. You may need to return manually.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="RestartAvoidanceSimulated"
+   type="notify">
+    <unique/>
+    Simulated restart: leaving [REGION] in 5 seconds.
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="RestartAvoidanceNoSafeList"
+   type="alertmodal">
+    <unique/>
+    Restart avoidance is enabled but no safe regions are configured. Add safe regions in Preferences -> MikoStorm -> Restart Avoidance.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+  <notification
    icon="alert.tga"
    name="Stream3DAudioAlert"
    type="alert">

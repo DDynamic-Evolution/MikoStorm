@@ -145,7 +145,7 @@
 #include "fsradar.h"
 #include "fskeywords.h" // <FS:PP> FIRE-10178: Keyword Alerts in group IM do not work unless the group is in the foreground
 #include "fslslbridge.h"
-#include "fsrestartavoid.h"
+#include "llrestartavoidancemgr.h"
 #include "fsmoneytracker.h"
 #include "fschattts.h"
 #include "llattachmentsmgr.h"
@@ -6597,7 +6597,7 @@ bool attempt_standard_notification(LLMessageSystem* msgsystem)
             make_ui_sound("UISndRestart");
             FSCommon::report_to_nearby_chat(LLTrans::getString("FSRegionRestartInLocalChat")); // <FS:PP> FIRE-6307: Region restart notices in local chat
             fs_report_region_restart_to_channel(seconds); // <FS:PP> Announce region restart to a defined chat channel
-            FSRestartAvoid::instance().onRegionRestart(llsdBlock["NAME"].asString(), seconds); // <FS:PP> Restart avoidance
+            RestartAvoidanceManager::instance().onRegionRestart(llsdBlock["NAME"].asString(), seconds); // <MikoStorm> Restart avoidance
         }
 
         // <FS:Ansariel> FIRE-9858: Kill annoying "Autopilot canceled" toast
@@ -6854,7 +6854,7 @@ void process_alert_core(const std::string& message, bool modal)
                 {
                     restart_region_name = LLTrans::getString("Unknown");
                 }
-                FSRestartAvoid::instance().onRegionRestart(restart_region_name, seconds);
+                RestartAvoidanceManager::instance().onRegionRestart(restart_region_name, seconds); // <MikoStorm> Restart avoidance
             }
             return;
         }

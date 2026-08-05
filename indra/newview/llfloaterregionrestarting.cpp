@@ -46,7 +46,7 @@
 #include "llwindow.h"
 
 #include "lltrans.h" // <FS:PP> Restart avoidance status
-#include "fsrestartavoid.h" // <FS:PP> Restart avoidance status
+#include "llrestartavoidancemgr.h" // <MikoStorm> Restart avoidance status
 
 static S32 sSeconds;
 static U32 sShakeState;
@@ -117,13 +117,14 @@ void LLFloaterRegionRestarting::refresh()
         sSeconds = 0;
     }
 
-    // <FS:PP> Show restart avoidance status
+    // <MikoStorm> Show restart avoidance status
     LLTextBox* status_text = findChild<LLTextBox>("avoid_status");
     if (status_text)
     {
-        if (FSRestartAvoid::isEnabled())
+        RestartAvoidanceManager& restart_avoid = RestartAvoidanceManager::instance();
+        if (restart_avoid.isEnabled())
         {
-            if (FSRestartAvoid::isActive())
+            if (restart_avoid.isActive())
             {
                 status_text->setValue(LLTrans::getString("FSRestartAvoidStatusActive"));
             }
@@ -137,7 +138,7 @@ void LLFloaterRegionRestarting::refresh()
             status_text->setValue(LLTrans::getString("FSRestartAvoidStatusDisabled"));
         }
     }
-    // </FS:PP>
+    // </MikoStorm>
 }
 
 // [SL:KB] - Patch: UI-RegionRestart | Checked: 2014-03-15 (Catznip-3.6)
