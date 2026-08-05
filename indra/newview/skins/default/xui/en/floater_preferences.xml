@@ -198,6 +198,12 @@
          help_topic="preferences_crashreports_tab"
          name="crashreports" />
         <panel
+         class="panel_restart_avoidance"
+         filename="panel_preferences_restart_avoidance.xml"
+         label="Restart Avoidance"
+         layout="topleft"
+         name="restart_avoidance" />
+        <panel
          class="panel_preference_firestorm"
          filename="panel_preferences_firestorm.xml"
          label="MikoStorm"

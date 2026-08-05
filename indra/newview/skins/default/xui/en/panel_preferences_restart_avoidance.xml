@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel
+ border="true"
+ follows="all"
+ height="480"
+ layout="topleft"
+ left="0"
+ top="0"
+ width="540"
+ label="Restart Avoidance"
+ name="restart_avoidance">
+
+    <check_box
+     layout="topleft"
+     follows="left|top"
+     top="8"
+     left="10"
+     width="400"
+     height="20"
+     name="restart_avoidance_enable"
+     label="Enable restart avoidance"
+     tool_tip="Automatically teleport to a safe region when a restart of the current region is announced, then return once the home region is back online."/>
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     font.style="BOLD"
+     left="10"
+     top_pad="6"
+     height="16"
+     width="300"
+     name="timing_header">
+     Timing
+    </text>
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="280"
+     name="restart_avoidance_wait_leave_label">
+     Wait before leaving (seconds):
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="600"
+     min_val="1"
+     name="restart_avoidance_wait_leave"
+     width="125" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="280"
+     name="restart_avoidance_wait_return_label">
+     Wait before returning (seconds):
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="3600"
+     min_val="1"
+     name="restart_avoidance_wait_return"
+     width="125" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="280"
+     name="restart_avoidance_home_check_label">
+     Home re-check interval (seconds):
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="3600"
+     min_val="5"
+     name="restart_avoidance_home_check"
+     width="125" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="280"
+     name="restart_avoidance_retry_fail_label">
+     Retry list after fail (seconds):
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="3600"
+     min_val="5"
+     name="restart_avoidance_retry_fail"
+     width="125" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="280"
+     name="restart_avoidance_region_timeout_label">
+     Region reply timeout (seconds):
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="120"
+     min_val="1"
+     name="restart_avoidance_region_timeout"
+     width="125" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     font.style="BOLD"
+     left="10"
+     top_pad="8"
+     height="16"
+     width="300"
+     name="landing_header">
+     Default landing coordinates
+    </text>
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="35"
+     name="restart_avoidance_landing_x_label">
+     X:
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="65536"
+     min_val="0"
+     name="restart_avoidance_landing_x"
+     width="120" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="35"
+     name="restart_avoidance_landing_y_label">
+     Y:
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="65536"
+     min_val="0"
+     name="restart_avoidance_landing_y"
+     width="120" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     left="25"
+     top_pad="4"
+     height="16"
+     width="35"
+     name="restart_avoidance_landing_z_label">
+     Z:
+    </text>
+    <spinner
+     top_delta="0"
+     left_pad="5"
+     decimal_digits="0"
+     follows="left|top"
+     height="18"
+     increment="1"
+     layout="topleft"
+     max_val="4096"
+     min_val="0"
+     name="restart_avoidance_landing_z"
+     width="120" />
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|top"
+     font.style="BOLD"
+     left="10"
+     top_pad="8"
+     height="16"
+     width="300"
+     name="safe_list_header">
+     Safe regions
+    </text>
+
+    <scroll_list
+     name="restart_avoidance_safe_list"
+     layout="topleft"
+     follows="top|left|right"
+     left="10"
+     right="-10"
+     top_pad="4"
+     height="150"
+     draw_heading="true"
+     multi_select="true"
+     tool_tip="Locations used as emergency teleport destinations during a region restart. Use 'Add current location' to save your current position.">
+        <column label="Region Name" name="region" width="180" />
+        <column label="X" name="x" width="50" />
+        <column label="Y" name="y" width="50" />
+        <column label="Z" name="z" width="50" />
+        <column label="Timestamp" name="stamp" width="120" />
+    </scroll_list>
+
+    <button
+     layout="topleft"
+     follows="left|bottom"
+     height="23"
+     label="Add current location"
+     name="restart_avoidance_add"
+     left="10"
+     bottom="-5"
+     width="130">
+        <button.commit_callback
+         function="RestartAvoidance.Add" />
+    </button>
+    <button
+     layout="topleft"
+     follows="left|bottom"
+     left_pad="5"
+     height="23"
+     label="Remove selected"
+     name="restart_avoidance_remove"
+     width="110">
+        <button.commit_callback
+         function="RestartAvoidance.Remove" />
+    </button>
+    <button
+     layout="topleft"
+     follows="left|bottom"
+     left_pad="5"
+     height="23"
+     label="Save"
+     name="restart_avoidance_save"
+     width="55">
+        <button.commit_callback
+         function="RestartAvoidance.Save" />
+    </button>
+    <button
+     layout="topleft"
+     follows="left|bottom"
+     left_pad="5"
+     height="23"
+     label="Check now"
+     name="restart_avoidance_check"
+     width="85">
+        <button.commit_callback
+         function="RestartAvoidance.Check" />
+    </button>
+    <button
+     layout="topleft"
+     follows="left|bottom"
+     left_pad="5"
+     height="23"
+     label="Simulate restart"
+     name="restart_avoidance_simulate"
+     width="105">
+        <button.commit_callback
+         function="RestartAvoidance.Simulate" />
+    </button>
+
+    <text
+     type="string"
+     length="1"
+     layout="topleft"
+     follows="left|bottom|right"
+     left="10"
+     right="-10"
+     bottom="-32"
+     height="16"
+     name="restart_avoidance_status">
+     - online, - down, - awaiting reply
+    </text>
+
+</panel>

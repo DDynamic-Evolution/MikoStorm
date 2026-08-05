@@ -182,7 +182,6 @@ set(viewer_SOURCE_FILES
     fsradarlistctrl.cpp
     fsradarmenu.cpp
     fsregioncross.cpp
-    fsrestartavoid.cpp
     fsscriptlibrary.cpp
     fsscrolllistctrl.cpp
     fsslurlcommand.cpp
@@ -194,6 +193,8 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lfsimfeaturehandler.cpp
+    llpanelrestartavoidance.cpp
+    llrestartavoidancemgr.cpp
 
     omnifilter.cpp
     omnifilterengine.cpp
@@ -1062,7 +1063,8 @@ set(viewer_HEADER_FILES
     fsradarlistctrl.h
     fsradarmenu.h
     fsregioncross.h
-    fsrestartavoid.h
+    llpanelrestartavoidance.h
+    llrestartavoidancemgr.h
     fsscriptlibrary.h
     fsscrolllistctrl.h
     fsslurl.h
