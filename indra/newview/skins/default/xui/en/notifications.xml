@@ -15347,13 +15347,20 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
     <unique/>
     Restart avoidance active for [REGION]. Leaving in [DELAY] seconds.
   </notification>
-  <notification
-   icon="notifytip.tga"
-   name="RestartAvoidanceEvacuated"
-   type="notify">
+   <notification
+    icon="notifytip.tga"
+    name="RestartAvoidanceEvacuated"
+    type="notify">
     <unique/>
     Teleported to safe region [REGION].
-  </notification>
+   </notification>
+   <notification
+    icon="alert.tga"
+    name="RestartAvoidanceEvacuateFailed"
+    type="alert">
+    <unique/>
+    Could not evacuate to safe region [REGION] because the region could not be found. You may need to evacuate manually.
+   </notification>
   <notification
    icon="notifytip.tga"
    name="RestartAvoidanceReturned"

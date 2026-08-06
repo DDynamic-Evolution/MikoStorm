@@ -38,7 +38,7 @@
 #include "hbxxh.h"
 #include "glm/gtc/type_ptr.hpp"
 
-#if LL_WINDOWS
+#if LL_WINDOWS || LL_LINUX
 extern void APIENTRY gl_debug_callback(GLenum source,
                                 GLenum type,
                                 GLuint id,
@@ -850,7 +850,7 @@ LLRender::~LLRender()
 
 bool LLRender::init(bool needs_vertex_buffer)
 {
-#if LL_WINDOWS
+#if LL_WINDOWS || LL_LINUX
     if (gGLManager.mHasDebugOutput && gDebugGL)
     { //setup debug output callback
         //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_LOW_ARB, 0, NULL, GL_TRUE);

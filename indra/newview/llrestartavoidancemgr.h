@@ -52,23 +52,6 @@ public:
         STATE_RETURNING
     };
 
-    struct SafeLocation
-    {
-        SafeLocation()
-            : mX(128)
-            , mY(128)
-            , mZ(30)
-            , mStamp(0)
-        {
-        }
-
-        std::string mRegion;
-        S32 mX;
-        S32 mY;
-        S32 mZ;
-        S32 mStamp;
-    };
-
     static RestartAvoidanceManager& instance();
 
     bool isEnabled() const;
@@ -79,7 +62,8 @@ public:
     void onRegionRestart(const std::string& region_name, S32 seconds);
 
     // Starts the full evacuate-and-return cycle for the current region.
-    void autoLeaveAndReturn();
+    // seconds_until_restart is the time to the scheduled restart (0/-1 if unknown).
+    void autoLeaveAndReturn(S32 seconds_until_restart = 0);
 
     // Runs a simulated restart using the current region as the "home" region.
     void simulateRestart();

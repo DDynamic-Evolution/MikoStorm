@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-VERSION="1.16.0"
+# Version comes from the single source of truth used by the build system.
+VERSION="$(cat indra/newview/VIEWER_VERSION_FS.txt)"
 PKG_NAME="mikostorm"
 BUILD_DIR="build-linux-x86_64/newview"
 PACKAGED_DIR="${BUILD_DIR}/packaged"

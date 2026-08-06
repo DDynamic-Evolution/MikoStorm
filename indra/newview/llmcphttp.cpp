@@ -43,13 +43,10 @@ void LLMCPHttpServer::start(U16 port, const std::string& auth_token)
 void LLMCPHttpServer::stop()
 {
     if (!sInstance) return;
+    // The server thread owns the listen socket and closes it when run() exits.
+    // Setting mRunning wakes poll() within 500ms; joining here avoids the
+    // close-during-blocking-syscall race that the old code had.
     sInstance->mRunning = false;
-    if (sInstance->mListenFd >= 0)
-    {
-        ::shutdown(sInstance->mListenFd, SHUT_RDWR);
-        ::closesocket(sInstance->mListenFd);
-        sInstance->mListenFd = -1;
-    }
     if (sInstance->mThread.joinable())
         sInstance->mThread.join();
     delete sInstance;
@@ -156,7 +153,15 @@ void LLMCPHttpServer::run()
 
 void LLMCPHttpServer::handleClient(int client_fd)
 {
-    std::string request = readHttpRequest(client_fd);
+    bool too_large = false;
+    std::string request = readHttpRequest(client_fd, too_large);
+    if (too_large)
+    {
+        sendHttpResponse(client_fd, 413, "Request Entity Too Large",
+            R"({"jsonrpc":"2.0","id":null,"error":{"code":-32600,"message":"Request body too large"}})",
+            "application/json");
+        return;
+    }
     if (request.empty()) return;
 
     std::string method, path, body;
@@ -177,7 +182,6 @@ void LLMCPHttpServer::handleClient(int client_fd)
     size_t header_end = request.find("\r\n\r\n");
     if (header_end == std::string::npos) return;
 
-    std::string headers = request.substr(0, header_end);
     std::string header_part = request.substr(pos + 2, header_end - pos - 2);
 
     // Check auth
@@ -199,14 +203,42 @@ void LLMCPHttpServer::handleClient(int client_fd)
         return;
     }
 
-    // Get body
-    body = request.substr(header_end + 4);
+    // Only echo CORS headers when the request comes from a loopback origin.
+    std::string origin = getAllowedOrigin(header_part);
+
+    // Get body, truncated to Content-Length so pipelined/extra bytes are
+    // never fed into the JSON parser.
+    size_t content_length = 0;
+    {
+        size_t cl_pos = header_part.find("Content-Length: ");
+        if (cl_pos == std::string::npos)
+            cl_pos = header_part.find("content-length: ");
+        if (cl_pos != std::string::npos)
+        {
+            size_t val_start = header_part.find_first_of("0123456789", cl_pos + 16);
+            size_t val_end = header_part.find_first_not_of("0123456789", val_start);
+            if (val_start != std::string::npos && val_end != std::string::npos)
+            {
+                content_length = (size_t)std::stoul(header_part.substr(val_start, val_end - val_start));
+            }
+        }
+    }
+    if (content_length > 0)
+    {
+        size_t available = request.size() - header_end - 4;
+        size_t to_copy = content_length < available ? content_length : available;
+        body = request.substr(header_end + 4, to_copy);
+    }
+    else
+    {
+        body = request.substr(header_end + 4);
+    }
 
     if (method == "POST" && path == "/mcp")
     {
         if (body.empty())
         {
-            sendHttpResponse(client_fd, 400, "Bad Request", R"({"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error"}})", "application/json");
+            sendHttpResponse(client_fd, 400, "Bad Request", R"({"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error"}})", "application/json", origin);
             return;
         }
 
@@ -224,16 +256,16 @@ void LLMCPHttpServer::handleClient(int client_fd)
             else
             {
                 // Notification - no response, but send empty 202
-                sendHttpResponse(client_fd, 202, "Accepted", "", "application/json");
+                sendHttpResponse(client_fd, 202, "Accepted", "", "application/json", origin);
                 return;
             }
-            sendHttpResponse(client_fd, 200, "OK", response_body, "application/json");
+            sendHttpResponse(client_fd, 200, "OK", response_body, "application/json", origin);
         }
         catch (const std::exception& e)
         {
             LL_WARNS("MCP") << "JSON parse error: " << e.what() << LL_ENDL;
             sendHttpResponse(client_fd, 400, "Bad Request",
-                R"({"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error","data":")" + std::string(e.what()) + "\"}}", "application/json");
+                R"({"jsonrpc":"2.0","id":null,"error":{"code":-32700,"message":"Parse error","data":")" + std::string(e.what()) + "\"}}", "application/json", origin);
         }
     }
     else if (method == "GET" && path == "/mcp")
@@ -241,34 +273,38 @@ void LLMCPHttpServer::handleClient(int client_fd)
         // GET for health check / SSE
         sendHttpResponse(client_fd, 200, "OK",
             R"({"jsonrpc":"2.0","result":{"server":"MikoStorm","status":"running"}})",
-            "application/json");
+            "application/json", origin);
     }
     else if (method == "OPTIONS")
     {
         // CORS preflight
-        std::string cors_headers =
-            "Access-Control-Allow-Origin: *\r\n"
-            "Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n"
-            "Access-Control-Allow-Headers: Content-Type, Authorization, MCP-Session-Id\r\n"
-            "Access-Control-Max-Age: 3600\r\n"
-            "Content-Length: 0\r\n";
-        std::string response = "HTTP/1.1 204 No Content\r\n" + cors_headers + "\r\n";
+        std::string cors_headers;
+        if (!origin.empty())
+        {
+            cors_headers =
+                "Access-Control-Allow-Origin: " + origin + "\r\n"
+                "Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n"
+                "Access-Control-Allow-Headers: Content-Type, Authorization, MCP-Session-Id\r\n"
+                "Access-Control-Max-Age: 3600\r\n";
+        }
+        std::string response = "HTTP/1.1 204 No Content\r\n" + cors_headers + "Content-Length: 0\r\n\r\n";
         ssize_t written = ::send(client_fd, response.c_str(), (int)response.size(), 0);
         (void)written;
     }
     else
     {
-        sendHttpResponse(client_fd, 404, "Not Found", R"({"error":"Not found"})", "application/json");
+        sendHttpResponse(client_fd, 404, "Not Found", R"({"error":"Not found"})", "application/json", origin);
     }
 }
 
-std::string LLMCPHttpServer::readHttpRequest(int fd)
+std::string LLMCPHttpServer::readHttpRequest(int fd, bool& too_large)
 {
     std::string result;
     char buf[4096];
     bool headers_done = false;
     size_t content_length = 0;
     bool has_content_length = false;
+    too_large = false;
 
     while (true)
     {
@@ -315,6 +351,13 @@ std::string LLMCPHttpServer::readHttpRequest(int fd)
                     }
                 }
 
+                // Reject oversized bodies instead of buffering them unbounded.
+                if (has_content_length && content_length > kMaxBodySize)
+                {
+                    too_large = true;
+                    return std::string();
+                }
+
                 size_t body_received = result.size() - header_end - 4;
                 if (has_content_length && body_received >= content_length)
                     break;
@@ -335,19 +378,62 @@ std::string LLMCPHttpServer::readHttpRequest(int fd)
 }
 
 void LLMCPHttpServer::sendHttpResponse(int fd, int status, const std::string& status_text,
-                                       const std::string& body, const std::string& content_type)
+                                       const std::string& body, const std::string& content_type,
+                                       const std::string& origin)
 {
     std::ostringstream response;
     response << "HTTP/1.1 " << status << " " << status_text << "\r\n"
              << "Content-Type: " << content_type << "\r\n"
-             << "Content-Length: " << body.size() << "\r\n"
-             << "Access-Control-Allow-Origin: *\r\n"
-             << "Access-Control-Expose-Headers: MCP-Session-Id\r\n"
-             << "Connection: close\r\n"
+             << "Content-Length: " << body.size() << "\r\n";
+    if (!origin.empty())
+    {
+        response << "Access-Control-Allow-Origin: " << origin << "\r\n"
+                 << "Access-Control-Expose-Headers: MCP-Session-Id\r\n";
+    }
+    response << "Connection: close\r\n"
              << "\r\n"
              << body;
 
     std::string resp_str = response.str();
     ssize_t written = ::send(fd, resp_str.c_str(), (int)resp_str.size(), 0);
     (void)written;
+}
+
+// static
+std::string LLMCPHttpServer::getAllowedOrigin(const std::string& header_part)
+{
+    // The MCP server only serves a local browser. Only echo CORS headers for
+    // loopback origins so a random local webpage cannot drive the viewer.
+    std::string::size_type pos = header_part.find("Origin: ");
+    if (pos == std::string::npos)
+    {
+        pos = header_part.find("origin: ");
+        if (pos == std::string::npos) return std::string();
+    }
+    std::string::size_type start = pos + 8;
+    std::string::size_type end = header_part.find("\r\n", start);
+    std::string origin = header_part.substr(start, end - start);
+    if (origin == "null")
+    {
+        return origin;
+    }
+
+    std::string::size_type scheme = origin.find("://");
+    if (scheme == std::string::npos) return std::string();
+    std::string host = origin.substr(scheme + 3);
+    std::string::size_type colon = host.find(':');
+    if (colon != std::string::npos)
+    {
+        host = host.substr(0, colon);
+    }
+    // strip IPv6 brackets
+    if (host.size() >= 2 && host[0] == '[' && host[host.size() - 1] == ']')
+    {
+        host = host.substr(1, host.size() - 2);
+    }
+    if (host == "localhost" || host == "127.0.0.1" || host == "::1")
+    {
+        return origin;
+    }
+    return std::string();
 }
