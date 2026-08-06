@@ -30,8 +30,6 @@
 #include "llagentcamera.h"
 #include "llbutton.h"
 #include "llcallbacklist.h"
-#include "lldir.h"
-#include "lldirpicker.h"
 #include "llfile.h"
 #include "lllineeditor.h"
 #include "llsliderctrl.h"
@@ -46,9 +44,6 @@
 #include "llviewermenufile.h"
 #include "llcoordframe.h"
 
-static const std::string TIMELINE_SAVE_SUBDIRECTORY = "camera_timelines";
-static const std::string TIMELINE_FILE_EXT = ".camera_timeline.xml";
-
 static const S32 BAR_HEIGHT = 96;
 static const S32 TIMELINE_WIDTH = 1000;
 static const S32 TOOLBAR_OFFSET = 100;
@@ -60,7 +55,6 @@ LLFloaterCameraTimeline::LLFloaterCameraTimeline(const LLSD& key)
       mCurrentTime(0.f),
       mPlaybackSpeed(1.f),
       mPlaybackDuration(30.f),
-      mScrubbing(false),
       mKeyframesVisible(false)
 {
 }
@@ -114,7 +108,7 @@ bool LLFloaterCameraTimeline::postBuild()
     mKeyframeList->setCommitOnSelectionChange(true);
     mDeleteBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { deleteSelectedKeyframe(); });
     mClearBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { clearAllKeyframes(); });
-    mDeleteAllBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { deleteAllKeyframes(); });
+    mDeleteAllBtn->setCommitCallback([this](LLUICtrl*, const LLSD&) { clearAllKeyframes(); });
 
     // Speed / duration / scrub callbacks
     mSpeedSlider->setCommitCallback([this](LLUICtrl*, const LLSD&) { onSpeedChanged(); });
@@ -280,22 +274,6 @@ void LLFloaterCameraTimeline::insertKeyframe(const CameraKeyframe& kf)
         [](const CameraKeyframe& a, const CameraKeyframe& b) { return a.time < b.time; });
 }
 
-void LLFloaterCameraTimeline::redistributeTimes()
-{
-    if (mKeyframes.size() <= 1)
-    {
-        if (!mKeyframes.empty())
-            mKeyframes[0].time = 0.f;
-        return;
-    }
-
-    // Redistribute evenly across the timeline
-    for (size_t i = 0; i < mKeyframes.size(); ++i)
-    {
-        mKeyframes[i].time = (F32)i / (F32)(mKeyframes.size() - 1);
-    }
-}
-
 void LLFloaterCameraTimeline::deleteSelectedKeyframe()
 {
     S32 sel = mKeyframeList->getFirstSelectedIndex();
@@ -319,19 +297,6 @@ void LLFloaterCameraTimeline::clearAllKeyframes()
     mStatusText->setText(std::string("All keyframes cleared"));
 }
 
-void LLFloaterCameraTimeline::deleteAllKeyframes()
-{
-    if (mKeyframes.empty())
-        return;
-
-    mKeyframes.clear();
-    mCurrentTime = 0.f;
-    if (mPlaying) stopPlayback();
-    updateKeyframeList();
-    updateUIState();
-    mStatusText->setText(std::string("All keyframes deleted"));
-}
-
 // --- Playback ---
 
 void LLFloaterCameraTimeline::startPlayback()
@@ -348,18 +313,6 @@ void LLFloaterCameraTimeline::startPlayback()
         mCurrentTime = 0.f;
     }
     mPlaybackTimer.reset();
-
-    LL_WARNS("CameraTimeline") << "Playback started from time=" << mCurrentTime
-        << " keyframes=" << mKeyframes.size()
-        << " kf0.pos=(" << mKeyframes[0].position.mV[VX]
-        << "," << mKeyframes[0].position.mV[VY]
-        << "," << mKeyframes[0].position.mV[VZ] << ")" << LL_ENDL;
-
-    // Save camera state for restore
-    LLViewerCamera* cam = LLViewerCamera::getInstance();
-    mSavedCameraOrigin = cam->getOrigin();
-    mSavedCameraRotation = cam->getQuaternion();
-    mSavedFov = cam->getView();
 
     gIdleCallbacks.addFunction(onIdle, this);
 
@@ -459,16 +412,6 @@ void LLFloaterCameraTimeline::applyCameraAtTime(F32 time)
         fov = kf_before.fov + (kf_after.fov - kf_before.fov) * t;
     }
 
-    static bool logged = false;
-    if (!logged)
-    {
-        LL_WARNS("CameraTimeline") << "applyCameraAtTime FIRST CALL: time=" << time
-            << " idx_before=" << idx_before << " idx_after=" << idx_after
-            << " pos=(" << pos.mV[VX] << "," << pos.mV[VY] << "," << pos.mV[VZ] << ")"
-            << LL_ENDL;
-        logged = true;
-    }
-
     LLVector3 forward = LLVector3::x_axis * rot;
     LLVector3d pos_global = gAgent.getPosGlobalFromAgent(pos);
     LLVector3d focus_global = gAgent.getPosGlobalFromAgent(pos + forward);
@@ -522,13 +465,6 @@ LLQuaternion LLFloaterCameraTimeline::slerpQuat(const LLQuaternion& a, const LLQ
 
 // --- File I/O ---
 
-std::string LLFloaterCameraTimeline::getTimelineDir() const
-{
-    std::string dir = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, TIMELINE_SAVE_SUBDIRECTORY);
-    LLFile::mkdir(dir);
-    return dir;
-}
-
 void LLFloaterCameraTimeline::saveToFile()
 {
     if (mKeyframes.empty())
@@ -545,8 +481,6 @@ void LLFloaterCameraTimeline::saveToFile()
 
 void LLFloaterCameraTimeline::saveToFile(const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
 {
-    LL_WARNS("CameraTimeline") << "saveToFile callback fired, files=" << filenames.size() << LL_ENDL;
-
     if (filenames.empty()) return;
 
     LLSD data;
@@ -593,20 +527,15 @@ void LLFloaterCameraTimeline::loadFromFile()
 
 void LLFloaterCameraTimeline::loadFromFile(const std::vector<std::string>& filenames, LLFilePicker::ELoadFilter, LLFilePicker::ESaveFilter)
 {
-    LL_WARNS("CameraTimeline") << "loadFromFile callback fired, files=" << filenames.size() << LL_ENDL;
-
     if (filenames.empty())
     {
-        LL_WARNS("CameraTimeline") << "loadFromFile: no filenames, returning" << LL_ENDL;
+        mStatusText->setText(std::string("No file selected"));
         return;
     }
-
-    LL_WARNS("CameraTimeline") << "loadFromFile: opening " << filenames[0] << LL_ENDL;
 
     llifstream infile(filenames[0]);
     if (!infile.is_open())
     {
-        LL_WARNS("CameraTimeline") << "loadFromFile: failed to open file" << LL_ENDL;
         mStatusText->setText(std::string("Failed to open file"));
         return;
     }
@@ -614,18 +543,23 @@ void LLFloaterCameraTimeline::loadFromFile(const std::vector<std::string>& filen
     LLSD data;
     if (!LLSDSerialize::fromXML(data, infile))
     {
-        LL_WARNS("CameraTimeline") << "loadFromFile: failed to parse XML" << LL_ENDL;
+        infile.close();
         mStatusText->setText(std::string("Failed to parse file"));
         return;
     }
     infile.close();
+
+    if (!data.has("version") || data["version"].asInteger() != 1)
+    {
+        mStatusText->setText(std::string("Unsupported timeline file version"));
+        return;
+    }
 
     mKeyframes.clear();
 
     if (data.has("keyframes"))
     {
         const LLSD& keyframes_llsd = data["keyframes"];
-        LL_WARNS("CameraTimeline") << "loadFromFile: found " << keyframes_llsd.size() << " keyframes in file" << LL_ENDL;
 
         for (S32 i = 0; i < keyframes_llsd.size(); ++i)
         {
@@ -641,11 +575,6 @@ void LLFloaterCameraTimeline::loadFromFile(const std::vector<std::string>& filen
             kf.rotation.mQ[VW] = kf_data["rw"].asReal();
             kf.fov = kf_data["fov"].asReal();
             mKeyframes.push_back(kf);
-
-            LL_WARNS("CameraTimeline") << "  kf[" << i << "] t=" << kf.time
-                << " pos=(" << kf.position.mV[VX] << "," << kf.position.mV[VY] << "," << kf.position.mV[VZ] << ")"
-                << " rot=(" << kf.rotation.mQ[VX] << "," << kf.rotation.mQ[VY] << "," << kf.rotation.mQ[VZ] << "," << kf.rotation.mQ[VW] << ")"
-                << " fov=" << kf.fov << LL_ENDL;
         }
     }
 
@@ -653,8 +582,6 @@ void LLFloaterCameraTimeline::loadFromFile(const std::vector<std::string>& filen
         mPlaybackDuration = data["duration"].asReal();
     if (data.has("speed"))
         mPlaybackSpeed = data["speed"].asReal();
-
-    LL_WARNS("CameraTimeline") << "loadFromFile: loaded " << mKeyframes.size() << " keyframes, duration=" << mPlaybackDuration << " speed=" << mPlaybackSpeed << LL_ENDL;
 
     mDurationSpinner->setValue(mPlaybackDuration);
     mSpeedSlider->setValue(mPlaybackSpeed);
@@ -707,7 +634,6 @@ void LLFloaterCameraTimeline::onTimelineScrub()
 {
     if (mPlaying) return;
 
-    mScrubbing = true;
     F32 val = (F32)mTimelineSlider->getValue().asReal();
     mCurrentTime = val / 100.f;
 
@@ -718,7 +644,6 @@ void LLFloaterCameraTimeline::onTimelineScrub()
 
     F32 seconds = mCurrentTime * mPlaybackDuration;
     mStatusText->setText(llformat("%.1fs / %.1fs", seconds, mPlaybackDuration));
-    mScrubbing = false;
 }
 
 void LLFloaterCameraTimeline::onSpeedChanged()

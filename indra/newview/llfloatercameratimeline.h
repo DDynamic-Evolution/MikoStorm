@@ -66,9 +66,7 @@ private:
     void captureCamera();
     void deleteSelectedKeyframe();
     void clearAllKeyframes();
-    void deleteAllKeyframes();
     void insertKeyframe(const CameraKeyframe& kf);
-    void redistributeTimes();
 
     // Playback
     void startPlayback();
@@ -122,13 +120,7 @@ private:
     F32 mPlaybackSpeed;      // Multiplier 0.25 - 4.0
     F32 mPlaybackDuration;   // Total duration in seconds
     LLFrameTimer mPlaybackTimer;
-    bool mScrubbing;
     bool mKeyframesVisible;
-
-    // Saved camera state for restore
-    LLVector3 mSavedCameraOrigin;
-    LLQuaternion mSavedCameraRotation;
-    F32 mSavedFov;
 };
 
 #endif // LL_FLOATER_CAMERA_TIMELINE_H

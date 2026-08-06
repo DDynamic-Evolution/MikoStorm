@@ -137,10 +137,10 @@ void RestartAvoidanceManager::onRegionRestart(const std::string& region_name, S3
         << " in " << seconds << " seconds" << LL_ENDL;
 
     storeOriginalLocation();
-    autoLeaveAndReturn();
+    autoLeaveAndReturn(seconds);
 }
 
-void RestartAvoidanceManager::autoLeaveAndReturn()
+void RestartAvoidanceManager::autoLeaveAndReturn(S32 seconds_until_restart)
 {
     if (mOriginalRegion.empty())
     {
@@ -153,6 +153,14 @@ void RestartAvoidanceManager::autoLeaveAndReturn()
     }
 
     mEvacuateDelay = llclamp(gSavedSettings.getS32("RestartAvoidanceWaitLeave"), 1, 600);
+    if (seconds_until_restart > 0 && seconds_until_restart < mEvacuateDelay)
+    {
+        // The restart is sooner than the configured leave delay, leave immediately.
+        LL_INFOS("RestartAvoidance") << "Restart in " << seconds_until_restart
+            << "s is sooner than configured leave delay of " << mEvacuateDelay
+            << "s, leaving now" << LL_ENDL;
+        mEvacuateDelay = 1;
+    }
     mTimer = (F32)mEvacuateDelay;
     mState = STATE_LEAVING;
     mRetryCount = 0;
@@ -316,12 +324,19 @@ void RestartAvoidanceManager::evacuate()
     LLWorldMapMessage::url_callback_t callback =
         [dest_region, landing_offset](U64 region_handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
     {
-        if (region_handle != 0)
+        if (region_handle == 0)
         {
-            LLVector3d global_pos = from_region_handle(region_handle);
-            global_pos += landing_offset;
-            gAgent.teleportViaLocation(global_pos);
+            LL_WARNS("RestartAvoidance") << "Could not resolve destination region "
+                << dest_region << " for evacuation" << LL_ENDL;
+            LLSD args;
+            args["REGION"] = dest_region;
+            LLNotificationsUtil::add("RestartAvoidanceEvacuateFailed", args);
+            return;
         }
+
+        LLVector3d global_pos = from_region_handle(region_handle);
+        global_pos += landing_offset;
+        gAgent.teleportViaLocation(global_pos);
 
         LLSD args;
         args["REGION"] = dest_region;

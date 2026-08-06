@@ -22,6 +22,8 @@
 #include "llnamevalue.h"
 #include "llstring.h"
 #include "llappviewer.h"
+#include "llversioninfo.h"
+#include "llerrorcontrol.h"
 #include "workqueue.h"
 #include "fsnearbychathub.h"
 
@@ -38,6 +40,8 @@ void create_new_item(const std::string& name,
                      U32 next_owner_perm,
                      std::function<void(const LLUUID&)> created_cb = nullptr);
 #include "llviewerassetupload.h"
+#include <algorithm>
+#include <cctype>
 #include <future>
 #include <boost/json.hpp>
 
@@ -203,10 +207,11 @@ void LLMCPServer::registerDefaultTools()
                     break;
                 }
             }
-            if (region)
+            if (!region)
             {
-                gAgent.teleportViaLocation(region->getPosGlobalFromRegion(local));
+                return errorResult(llformat("Region '%s' not found in the current grid", region_name.c_str()));
             }
+            gAgent.teleportViaLocation(region->getPosGlobalFromRegion(local));
             return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text",
                 llformat("Teleporting to %s at (%.0f, %.0f, %.0f)", region_name.c_str(), p["x"].asReal(), p["y"].asReal(), p["z"].asReal()))));
         });
@@ -492,7 +497,7 @@ LLSD LLMCPServer::handleInitialize(const LLSD& params)
 
     LLSD server_info = LLSD::emptyMap();
     server_info["name"] = "MikoStorm";
-    server_info["version"] = "1.0.0";
+    server_info["version"] = LLVersionInfo::instance().getVersion();
 
     LLSD result = LLSD::emptyMap();
     result["protocolVersion"] = "2025-11-25";
@@ -949,6 +954,18 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
 LLSD LLMCPServer::handleSetLoggerLevel(const LLSD& params)
 {
     std::string level = params["level"].asString();
+    std::string upper = level;
+    std::transform(upper.begin(), upper.end(), upper.begin(), toupper);
+    if (upper != "DEBUG" && upper != "INFO" && upper != "WARN" && upper != "WARNING"
+        && upper != "ERROR" && upper != "NONE")
+    {
+        return makeError(-32602, llformat("Unrecognized logging level '%s'", level.c_str()));
+    }
+    if (upper == "WARNING")
+    {
+        upper = "WARN";
+    }
+    LLError::setDefaultLevel(LLError::decodeLevel(upper));
     LL_INFOS("MCP") << "Set logger level to: " << level << LL_ENDL;
     return makeResult(LLSDMap("level", level));
 }
