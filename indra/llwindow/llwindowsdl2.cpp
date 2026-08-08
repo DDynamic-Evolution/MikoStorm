@@ -763,9 +763,9 @@ bool LLWindowSDL::createContext(int x, int y, int width, int height, int bits, b
             return false;
         }
 
-        if (!gladLoadGL())
+        if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
         {
-            LL_WARNS() << "gladLoadGL() failed after context creation" << LL_ENDL;
+            LL_WARNS() << "gladLoadGLLoader() failed after context creation" << LL_ENDL;
             setupFailure("Failed to load OpenGL function pointers", "Error", OSMB_OK);
             return false;
         }

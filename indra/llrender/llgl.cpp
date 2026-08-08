@@ -664,7 +664,7 @@ void LLGLManager::shutdownGL()
 void LLGLManager::initExtensions()
 {
     // Load OpenGL function pointers via glad
-    if (!gladLoadGL())
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
     {
         LL_WARNS("RenderInit") << "Failed to load OpenGL via glad" << LL_ENDL;
         mHasRequirements = false;
