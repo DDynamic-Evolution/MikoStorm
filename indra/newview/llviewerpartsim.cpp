@@ -511,14 +511,13 @@ void LLViewerPartSim::checkParticleCount(U32 size)
     // {
     //     LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ; // <FS:Beq/> FIRE-34600 - bugsplat AVX2 particle count mismatch
     // }
+    // <FS:MIK> FIRE-34600 follow-up - do not self-crash the viewer on a
+    // transient counter drift. LL_ERRS() triggers LLERROR_CRASH (SIGSEGV) via
+    // LL_ENDL, producing bugsplats (CrashNotHandled=1). Downgrade to warnings.
     if(LLViewerPartSim::sParticleCount2 != LLViewerPartSim::sParticleCount)
     {
         static int fail_count{0};
-        if(fail_count > 10)
-        {
-            LL_ERRS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
-        }
-        else
+        if(fail_count % 60 == 0)
         {
             LL_WARNS() << "sParticleCount: " << LLViewerPartSim::sParticleCount << " ; sParticleCount2: " << LLViewerPartSim::sParticleCount2 << LL_ENDL ;
         }
@@ -528,16 +527,13 @@ void LLViewerPartSim::checkParticleCount(U32 size)
     if(size > (U32)LLViewerPartSim::sParticleCount2)
     {
         static int size_mismatch_count{0};
-        if(size_mismatch_count > 10)
-        {
-            LL_ERRS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ;
-        }
-        else
+        if(size_mismatch_count % 60 == 0)
         {
             LL_WARNS() << "current particle size: " << LLViewerPartSim::sParticleCount2 << " array size: " << size << LL_ENDL ;
         }
         size_mismatch_count++;
     }
+    // </FS:MIK>
     // </FS:Beq>
 }
 
