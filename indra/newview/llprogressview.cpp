@@ -482,7 +482,9 @@ void LLProgressView::initLogos()
     const S32 default_height = 28;
     const S32 default_pad = 15;
 
+#if defined(LL_FMODSTUDIO) || defined(LL_HAVOK)
     S32 icon_width, icon_height;
+#endif
 
     // We don't know final screen rect yet, so we can't precalculate position fully
     S32 texture_start_x = (S32)mLogosLabel->getFont()->getWidthF32(mLogosLabel->getWText().c_str()) + default_pad;

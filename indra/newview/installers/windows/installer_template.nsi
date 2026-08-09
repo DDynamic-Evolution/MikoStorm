@@ -136,7 +136,9 @@ SetOverwrite on							# Overwrite files by default
 
 UninstallText $(UninstallTextMsg)
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
-!insertmacro MUI_PAGE_LICENSE "VivoxAUP.txt"
+; This build does not ship Vivox, and VivoxAUP.txt is not available, so the
+; license page is disabled.
+; !insertmacro MUI_PAGE_LICENSE "VivoxAUP.txt"
 ##!insertmacro MULTIUSER_PAGE_INSTALLMODE
 !define MUI_PAGE_CUSTOMFUNCTION_PRE dirPre
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE dirLeave # <FS:Ansariel> Optional start menu entry

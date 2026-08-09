@@ -565,23 +565,23 @@ void LLFloaterCameraTimeline::loadFromFile(const std::vector<std::string>& filen
         {
             const LLSD& kf_data = keyframes_llsd[i];
             CameraKeyframe kf;
-            kf.time = kf_data["time"].asReal();
-            kf.position.mV[VX] = kf_data["px"].asReal();
-            kf.position.mV[VY] = kf_data["py"].asReal();
-            kf.position.mV[VZ] = kf_data["pz"].asReal();
-            kf.rotation.mQ[VX] = kf_data["rx"].asReal();
-            kf.rotation.mQ[VY] = kf_data["ry"].asReal();
-            kf.rotation.mQ[VZ] = kf_data["rz"].asReal();
-            kf.rotation.mQ[VW] = kf_data["rw"].asReal();
-            kf.fov = kf_data["fov"].asReal();
+            kf.time = (F32)kf_data["time"].asReal();
+            kf.position.mV[VX] = (F32)kf_data["px"].asReal();
+            kf.position.mV[VY] = (F32)kf_data["py"].asReal();
+            kf.position.mV[VZ] = (F32)kf_data["pz"].asReal();
+            kf.rotation.mQ[VX] = (F32)kf_data["rx"].asReal();
+            kf.rotation.mQ[VY] = (F32)kf_data["ry"].asReal();
+            kf.rotation.mQ[VZ] = (F32)kf_data["rz"].asReal();
+            kf.rotation.mQ[VW] = (F32)kf_data["rw"].asReal();
+            kf.fov = (F32)kf_data["fov"].asReal();
             mKeyframes.push_back(kf);
         }
     }
 
     if (data.has("duration"))
-        mPlaybackDuration = data["duration"].asReal();
+        mPlaybackDuration = (F32)data["duration"].asReal();
     if (data.has("speed"))
-        mPlaybackSpeed = data["speed"].asReal();
+        mPlaybackSpeed = (F32)data["speed"].asReal();
 
     mDurationSpinner->setValue(mPlaybackDuration);
     mSpeedSlider->setValue(mPlaybackSpeed);

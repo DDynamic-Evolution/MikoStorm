@@ -327,6 +327,10 @@ function getopt()
 
 
 getArgs $*
+
+# Determine the source tree root from this script's location (scripts/..)
+SCRIPT_SOURCE_ROOT="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd)/.."
+
 if [ ! -d `dirname "$LOG"` ] ; then
         mkdir -p `dirname "$LOG"`
 fi
@@ -436,7 +440,7 @@ fi
 
 if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
     echo "Versioning..."
-    fullVer=`cat indra/newview/VIEWER_VERSION_FS.txt`
+    fullVer=`cat "$SCRIPT_SOURCE_ROOT/indra/newview/VIEWER_VERSION_FS.txt"`
     gitHash=`git describe --always --exclude '*'`
     echo "Channel: ${CHANNEL}"
     echo "Version: ${fullVer} [${gitHash}]"
@@ -616,8 +620,18 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         fi
     fi
 
-    mkdir -p build-linux-x86_64
-    cmake -G "$TARGET" $CMAKE_ARCH -B build-linux-x86_64 -S $PWD/indra $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $USE_3D_STREAM $ESPEAK_NG $USE_MCP $TESTBUILD $PACKAGE $VELOPACK \
+    if [ $TARGET_PLATFORM == "windows" ] ; then
+        # autobuild already runs us from inside the build directory
+        if [ "$(basename "$(pwd)")" = "build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}" ]; then
+            BUILD_DIR="."
+        else
+            BUILD_DIR="build-vc${AUTOBUILD_VSVER:-150}-${AUTOBUILD_ADDRSIZE}"
+        fi
+    else
+        BUILD_DIR="build-linux-x86_64"
+    fi
+    mkdir -p "$BUILD_DIR"
+    cmake -G "$TARGET" $CMAKE_ARCH -B "$BUILD_DIR" -S "$SCRIPT_SOURCE_ROOT/indra" $CHANNEL ${GITHASH} $FMODSTUDIO $OPENAL $KDU $OPENSIM $SINGLEGRID $HAVOK $AVX_OPTIMIZATION $AVX2_OPTIMIZATION $TRACY_PROFILER $USE_3D_STREAM $ESPEAK_NG $USE_MCP $TESTBUILD $PACKAGE $VELOPACK \
           $UNATTENDED -DLL_TESTS:BOOL=OFF -DADDRESS_SIZE:STRING=$AUTOBUILD_ADDRSIZE -DCMAKE_BUILD_TYPE:STRING=$BTYPE $CACHE_OPT \
           $CRASH_REPORTING -DVIEWER_SYMBOL_FILE:STRING="${VIEWER_SYMBOL_FILE:-}" $LL_ARGS_PASSTHRU ${VSCODE_FLAGS:-} | tee "$LOG"
     configure_status=${PIPESTATUS[0]}

@@ -1749,6 +1749,16 @@ const   S32   max_format  = (S32)num_formats - 1;
         return false;
     }
 
+    // Load OpenGL function pointers before any GL calls are made.
+    // On SDL paths glad is loaded at context creation; the win32 path has no
+    // such step, so without this the first glGetString() in initGL() crashes.
+    if (!gladLoadGL())
+    {
+        LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);
+        close();
+        return false;
+    }
+
     if (!gGLManager.initGL())
     {
         LLError::LLUserWarningMsg::show(mCallbacks->translateString("MBVideoDrvErr"), 8/*LAST_EXEC_GRAPHICS_INIT*/);

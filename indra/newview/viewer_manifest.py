@@ -914,11 +914,11 @@ class Windows_x86_64_Manifest(ViewerManifest):
             if installed_dir != out_path:
                 if install:
                     out_path = installed_dir
-                    result += 'SetOutPath ' + out_path + '\n'
+                    result += 'SetOutPath "' + out_path + '"\n'
             if install:
-                result += 'File ' + pkg_file + '\n'
+                result += 'File "' + pkg_file + '"\n'
             else:
-                result += 'Delete ' + wpath(os.path.join('$INSTDIR', rel_file)) + '\n'
+                result += 'Delete "' + wpath(os.path.join('$INSTDIR', rel_file)) + '"\n'
 
         # at the end of a delete, just rmdir all the directories
         if not install:
@@ -1058,7 +1058,7 @@ class Windows_x86_64_Manifest(ViewerManifest):
                     nsis_path = possible_path
                     break
 
-        self.run_command([possible_path, '/V2', self.dst_path_of(tempfile)])
+        self.run_command([nsis_path, '/V2', self.dst_path_of(tempfile)])
 
         self.fs_sign_win_installer(substitution_strings) # <FS:ND/> Sign files, step two. Sign installer.
         self.fs_save_windows_symbols()

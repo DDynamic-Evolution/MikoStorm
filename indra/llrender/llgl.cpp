@@ -60,6 +60,31 @@
 #include "SDL2/SDL_video.h"
 #endif
 
+#if LL_WINDOWS
+static void* get_gl_proc_address(const char* name)
+{
+    void* proc = reinterpret_cast<void*>(wglGetProcAddress(name));
+    if (!proc || proc == reinterpret_cast<void*>(1) || proc == reinterpret_cast<void*>(2)
+        || proc == reinterpret_cast<void*>(3) || proc == reinterpret_cast<void*>(static_cast<size_t>(-1)))
+    {
+        HMODULE module = GetModuleHandleA("opengl32.dll");
+        if (!module) module = LoadLibraryA("opengl32.dll");
+        proc = reinterpret_cast<void*>(GetProcAddress(module, name));
+    }
+    return proc;
+}
+#elif LL_SDL
+static void* get_gl_proc_address(const char* name)
+{
+    return reinterpret_cast<void*>(SDL_GL_GetProcAddress(name));
+}
+#else
+static void* get_gl_proc_address(const char* name)
+{
+    return nullptr;
+}
+#endif
+
 #ifdef _DEBUG
 //#define GL_STATE_VERIFY
 #endif
@@ -281,9 +306,9 @@ PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT = nullptr;
 void LLGLManager::initWGL()
 {
     // Load WGL extension function pointers needed before context creation
-    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)SDL_GL_GetProcAddress("wglCreateContextAttribsARB");
-    wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)SDL_GL_GetProcAddress("wglChoosePixelFormatARB");
-    wglGetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC)SDL_GL_GetProcAddress("wglGetPixelFormatAttribivARB");
+    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)get_gl_proc_address("wglCreateContextAttribsARB");
+    wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)get_gl_proc_address("wglChoosePixelFormatARB");
+    wglGetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC)get_gl_proc_address("wglGetPixelFormatAttribivARB");
 
     if (wglCreateContextAttribsARB)
     {
@@ -295,8 +320,8 @@ void LLGLManager::initWGL()
     }
 
     // WGL swap control
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)SDL_GL_GetProcAddress("wglSwapIntervalEXT");
-    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)SDL_GL_GetProcAddress("wglGetSwapIntervalEXT");
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)get_gl_proc_address("wglSwapIntervalEXT");
+    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)get_gl_proc_address("wglGetSwapIntervalEXT");
 }
 #endif
 
@@ -664,7 +689,7 @@ void LLGLManager::shutdownGL()
 void LLGLManager::initExtensions()
 {
     // Load OpenGL function pointers via glad
-    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc)get_gl_proc_address))
     {
         LL_WARNS("RenderInit") << "Failed to load OpenGL via glad" << LL_ENDL;
         mHasRequirements = false;
@@ -693,22 +718,22 @@ void LLGLManager::initExtensions()
 
 #if LL_WINDOWS
     // Load WGL AMD extension function pointers
-    wglGetGPUIDsAMD = (PFNWGLGETGPUIDSAMDPROC)SDL_GL_GetProcAddress("wglGetGPUIDsAMD");
-    wglGetGPUInfoAMD = (PFNWGLGETGPUINFOAMDPROC)SDL_GL_GetProcAddress("wglGetGPUInfoAMD");
-    wglGetContextGPUIDAMD = (PFNWGLGETCONTEXTGPUIDAMDPROC)SDL_GL_GetProcAddress("wglGetContextGPUIDAMD");
-    wglCreateAssociatedContextAMD = (PFNWGLCREATEASSOCIATEDCONTEXTAMDPROC)SDL_GL_GetProcAddress("wglCreateAssociatedContextAMD");
-    wglCreateAssociatedContextAttribsAMD = (PFNWGLCREATEASSOCIATEDCONTEXTATTRIBSAMDPROC)SDL_GL_GetProcAddress("wglCreateAssociatedContextAttribsAMD");
-    wglDeleteAssociatedContextAMD = (PFNWGLDELETEASSOCIATEDCONTEXTAMDPROC)SDL_GL_GetProcAddress("wglDeleteAssociatedContextAMD");
-    wglMakeAssociatedContextCurrentAMD = (PFNWGLMAKEASSOCIATEDCONTEXTCURRENTAMDPROC)SDL_GL_GetProcAddress("wglMakeAssociatedContextCurrentAMD");
-    wglGetCurrentAssociatedContextAMD = (PFNWGLGETCURRENTASSOCIATEDCONTEXTAMDPROC)SDL_GL_GetProcAddress("wglGetCurrentAssociatedContextAMD");
-    wglBlitContextFramebufferAMD = (PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC)SDL_GL_GetProcAddress("wglBlitContextFramebufferAMD");
+    wglGetGPUIDsAMD = (PFNWGLGETGPUIDSAMDPROC)get_gl_proc_address("wglGetGPUIDsAMD");
+    wglGetGPUInfoAMD = (PFNWGLGETGPUINFOAMDPROC)get_gl_proc_address("wglGetGPUInfoAMD");
+    wglGetContextGPUIDAMD = (PFNWGLGETCONTEXTGPUIDAMDPROC)get_gl_proc_address("wglGetContextGPUIDAMD");
+    wglCreateAssociatedContextAMD = (PFNWGLCREATEASSOCIATEDCONTEXTAMDPROC)get_gl_proc_address("wglCreateAssociatedContextAMD");
+    wglCreateAssociatedContextAttribsAMD = (PFNWGLCREATEASSOCIATEDCONTEXTATTRIBSAMDPROC)get_gl_proc_address("wglCreateAssociatedContextAttribsAMD");
+    wglDeleteAssociatedContextAMD = (PFNWGLDELETEASSOCIATEDCONTEXTAMDPROC)get_gl_proc_address("wglDeleteAssociatedContextAMD");
+    wglMakeAssociatedContextCurrentAMD = (PFNWGLMAKEASSOCIATEDCONTEXTCURRENTAMDPROC)get_gl_proc_address("wglMakeAssociatedContextCurrentAMD");
+    wglGetCurrentAssociatedContextAMD = (PFNWGLGETCURRENTASSOCIATEDCONTEXTAMDPROC)get_gl_proc_address("wglGetCurrentAssociatedContextAMD");
+    wglBlitContextFramebufferAMD = (PFNWGLBLITCONTEXTFRAMEBUFFERAMDPROC)get_gl_proc_address("wglBlitContextFramebufferAMD");
 
     // WGL swap control
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)SDL_GL_GetProcAddress("wglSwapIntervalEXT");
-    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)SDL_GL_GetProcAddress("wglGetSwapIntervalEXT");
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)get_gl_proc_address("wglSwapIntervalEXT");
+    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)get_gl_proc_address("wglGetSwapIntervalEXT");
 
     // WGL create context attribs
-    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)SDL_GL_GetProcAddress("wglCreateContextAttribsARB");
+    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)get_gl_proc_address("wglCreateContextAttribsARB");
 #endif
 }
 
