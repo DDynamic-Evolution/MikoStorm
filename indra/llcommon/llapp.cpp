@@ -59,6 +59,28 @@ void setup_signals();
 void default_unix_signal_handler(int signum, siginfo_t *info, void *);
 
 #if LL_LINUX
+# include <execinfo.h>
+
+// <MikoStorm> Log a backtrace of the crashing thread. backtrace_symbols()
+// allocates, so this is not async-signal-safe, but it only runs on a fatal
+// signal when the application is about to die anyway; combined with the
+// signal number it gives a crash site in the log even without a core dump.
+void log_unix_backtrace()
+{
+    const int max_frames = 64;
+    void* frames[max_frames];
+    int n = backtrace(frames, max_frames);
+    LL_WARNS() << "Stack trace (" << n << " frames):" << LL_ENDL;
+    char** symbols = backtrace_symbols(frames, n);
+    if (symbols)
+    {
+        for (int i = 0; i < n; ++i)
+        {
+            LL_WARNS() << "  " << symbols[i] << LL_ENDL;
+        }
+        free(symbols);
+    }
+}
 #else
 // Called by breakpad exception handler after the minidump has been generated.
 bool unix_post_minidump_callback(const char *dump_dir,
@@ -679,6 +701,12 @@ void default_unix_signal_handler(int signum, siginfo_t *info, void *)
             {
                 LL_WARNS() << "Signal handler - Handling fatal signal!" << LL_ENDL;
             }
+
+            // <MikoStorm> Log the crashing thread's stack trace before the
+            // shutdown path (setError/reralse) destroys the process.
+#if LL_LINUX
+            log_unix_backtrace();
+#endif
 
             if (LLApp::isError())
             {

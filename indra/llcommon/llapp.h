@@ -341,7 +341,9 @@ private:
 
 private:
 #ifdef LL_RELEASE_FOR_DOWNLOAD
-    static constexpr bool sLogInSignal = false;
+    // <MikoStorm> Keep signal logging enabled in release builds so the log
+    // records the fatal signal (and the handler's backtrace) on a crash.
+    static constexpr bool sLogInSignal = true;
 #else
     static constexpr bool sLogInSignal = true;
 #endif

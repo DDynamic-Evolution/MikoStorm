@@ -203,19 +203,24 @@ void setupBreakpad()
         return;
     }
 
-    if (!build_data.is_object() || !build_data.as_object().contains("BugSplat DB"))
-    {
-        LL_WARNS("BUGSPLAT") << "Can't initialize BugSplat, no 'BugSplat DB' entry in '" << build_data_fname
-                             << "'" << LL_ENDL;
-        return;
-    }
-
     gVersion = STRINGIZE(
             LL_VIEWER_VERSION_MAJOR << '.' << LL_VIEWER_VERSION_MINOR << '.' << LL_VIEWER_VERSION_PATCH
                                     << '.' << LL_VIEWER_VERSION_BUILD);
 
-    boost::json::value BugSplat_DB = build_data.at("BugSplat DB");
-    gBugsplatDB = boost::json::value_to<std::string>(BugSplat_DB);
+    // <MikoStorm> Install the breakpad handler even without a BugSplat DB so
+    // local builds still produce a minidump (and the crash dialog) on fatal
+    // signals. Without a DB the crash logger simply skips the upload.
+    if (build_data.is_object() && build_data.as_object().contains("BugSplat DB"))
+    {
+        boost::json::value BugSplat_DB = build_data.at("BugSplat DB");
+        gBugsplatDB = boost::json::value_to<std::string>(BugSplat_DB);
+    }
+    else
+    {
+        LL_WARNS("BUGSPLAT") << "No 'BugSplat DB' entry in '" << build_data_fname
+                             << "'; crash logger will write minidumps without uploading." << LL_ENDL;
+        gBugsplatDB.clear();
+    }
 
     LL_INFOS("BUGSPLAT") << "Initializing with crash logger: " << gCrashLogger << " database: " << gBugsplatDB << " version: " << gVersion << LL_ENDL;
 

@@ -114,6 +114,9 @@ fi
 #	export LL_ATI_MOUSE_CURSOR_BUG=x
 #fi
 
+## - Write core dumps on a crash so the failure can be inspected with gdb
+##   (systemd-coredump stores them; retrieve via `coredumpctl gdb <pid>`).
+ulimit -c unlimited
 
 ## Nothing worth editing below this line.
 ##-------------------------------------------------------------------
