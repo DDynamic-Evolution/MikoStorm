@@ -4418,8 +4418,14 @@ void LLPipeline::postSort(LLCamera &camera)
             // and elements are visited in order inside each chunk; sizing the
             // scratch buffers to n_groups keeps the serial fallback path
             // (slot == element index) in bounds as well.
+            // <MikoStorm> updateDistance() -> calcDistance() may call
+            // gPipeline.markRebuild() for alpha-dirty groups, which pushes into
+            // the shared mGroupQ1. That must never run on a cull worker thread;
+            // collect the groups and run updateDistance() on the main thread
+            // after the parallel render map build.
+            std::vector<std::vector<LLSpatialGroup*>> render_map_distance_tasks(n_groups);
             LL::parallel_for(sCull->beginVisibleGroups(), sCull->endVisibleGroups(),
-                [&camera, this](LLSpatialGroup*& group, size_t slot)
+                [&camera, this, &render_map_distance_tasks](LLSpatialGroup*& group, size_t slot)
                 {
                     if (group->isDead())
                     {
@@ -4462,14 +4468,25 @@ void LLPipeline::postSort(LLCamera &camera)
                             LLSpatialBridge *bridge = group->getSpatialPartition()->asBridge();
                             if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
                             {
-                                if (bridge)
+                                // <MikoStorm> updateDistance() -> calcDistance()
+                                // may call gPipeline.markRebuild(), which pushes
+                                // into the shared mGroupQ1. Defer to the main
+                                // thread (see render_map_distance_tasks).
+                                if (slot < render_map_distance_tasks.size())
                                 {
-                                    LLCamera trans_camera = bridge->transformCamera(camera);
-                                    group->updateDistance(trans_camera);
+                                    render_map_distance_tasks[slot].push_back(group);
                                 }
                                 else
                                 {
-                                    group->updateDistance(camera);
+                                    if (bridge)
+                                    {
+                                        LLCamera trans_camera = bridge->transformCamera(camera);
+                                        group->updateDistance(trans_camera);
+                                    }
+                                    else
+                                    {
+                                        group->updateDistance(camera);
+                                    }
                                 }
                             }
 
@@ -4492,6 +4509,29 @@ void LLPipeline::postSort(LLCamera &camera)
                 }, cull_pool, 16);
 
             sCull->flushThreadBuffers();
+
+            // <MikoStorm> Drain the deferred alpha-group distance updates.
+            // updateDistance() -> calcDistance() may call markRebuild(), which
+            // writes the shared mGroupQ1, so it must run on the main thread.
+            if (LLViewerCamera::sCurCameraID == LLViewerCamera::CAMERA_WORLD && !gCubeSnapshot)
+            {
+                for (std::vector<LLSpatialGroup*>& tasks : render_map_distance_tasks)
+                {
+                    for (LLSpatialGroup* group : tasks)
+                    {
+                        LLSpatialBridge *bridge = group->getSpatialPartition()->asBridge();
+                        if (bridge)
+                        {
+                            LLCamera trans_camera = bridge->transformCamera(camera);
+                            group->updateDistance(trans_camera);
+                        }
+                        else
+                        {
+                            group->updateDistance(camera);
+                        }
+                    }
+                }
+            }
         }
     }
 
