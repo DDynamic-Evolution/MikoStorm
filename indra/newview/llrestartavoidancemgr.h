@@ -118,6 +118,7 @@ private:
     S32 mRetryCount;
     S32 mEvacuateDelay;
     bool mPendingReturn;
+    std::string mEvacuateTargetRegion;
 
     LLSD mSafeList;
     std::map<std::string, ERegionStatus> mRegionStatus;

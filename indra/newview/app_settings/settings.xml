@@ -21410,6 +21410,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>1.0</real>
   </map>
+  <key>FSMaxTeleportRetries</key>
+  <map>
+    <key>Comment</key>
+    <string>Number of times the viewer will automatically retry a teleport that timed out before giving up. Set to 0 to disable retries.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
   <key>FMODProfilerEnable</key>
   <map>
     <key>Comment</key>
@@ -27146,6 +27157,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>LLSD</string>
       <key>Value</key>
       <string />
+    </map>
+    <key>MikoPingTimeoutEnabled</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable the ping-based circuit timeout that drops the connection when a region stops responding. Disable to keep the connection alive despite a slow or unresponsive region.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>SDL2IMEDefaultVerticalOffset</key>
     <map>

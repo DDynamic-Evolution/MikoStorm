@@ -65,6 +65,7 @@ RestartAvoidanceManager::RestartAvoidanceManager()
     , mRetryCount(0)
     , mEvacuateDelay(30)
     , mPendingReturn(false)
+    , mEvacuateTargetRegion()
     , mOnlineCount(0)
     , mDownCount(0)
     , mAwaitingCount(0)
@@ -312,6 +313,8 @@ void RestartAvoidanceManager::evacuate()
         return;
     }
 
+    mEvacuateTargetRegion = dest_region;
+
     LLVector3d landing_offset(
         (F64)gSavedSettings.getS32("RestartAvoidanceLandingX"),
         (F64)gSavedSettings.getS32("RestartAvoidanceLandingY"),
@@ -322,8 +325,17 @@ void RestartAvoidanceManager::evacuate()
     mTimer = (F32)llclamp(gSavedSettings.getS32("RestartAvoidanceHomeCheck"), 5, 3600);
 
     LLWorldMapMessage::url_callback_t callback =
-        [dest_region, landing_offset](U64 region_handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
+        [this, dest_region, landing_offset](U64 region_handle, const std::string& url, const LLUUID& snapshot_id, bool teleport)
     {
+        if (mState != STATE_LEFT)
+        {
+            // The user left on their own (or the cycle was cancelled) while the
+            // map lookup was in flight - do not force the evacuation teleport.
+            LL_INFOS("RestartAvoidance") << "Evacuation no longer needed (state="
+                << mState << "), skipping teleport" << LL_ENDL;
+            return;
+        }
+
         if (region_handle == 0)
         {
             LL_WARNS("RestartAvoidance") << "Could not resolve destination region "
@@ -423,8 +435,17 @@ void RestartAvoidanceManager::onRegionChanged()
         mState = STATE_IDLE;
         mRetryCount = 0;
         mPendingReturn = false;
+        mEvacuateTargetRegion.clear();
         updateStatusText();
         mStatusChangedSignal();
+        return;
+    }
+
+    // Landing at the intended safe region is our own evacuation teleport, so
+    // keep waiting for the original region to come back online.
+    if (mState == STATE_LEFT && current == mEvacuateTargetRegion)
+    {
+        LL_INFOS("RestartAvoidance") << "Confirmed evacuation landing at " << current << LL_ENDL;
         return;
     }
 
@@ -441,6 +462,7 @@ void RestartAvoidanceManager::onRegionChanged()
             LLNotificationsUtil::add("RestartAvoidanceMaxRetries", args);
             mState = STATE_IDLE;
             mPendingReturn = false;
+            mEvacuateTargetRegion.clear();
             updateStatusText();
             mStatusChangedSignal();
             return;
@@ -453,7 +475,26 @@ void RestartAvoidanceManager::onRegionChanged()
             << ", retrying in " << (S32)mTimer << "s" << LL_ENDL;
         updateStatusText();
         mStatusChangedSignal();
+        return;
     }
+
+    // Any other region change (during the leave countdown, or to a region that
+    // is neither home nor the evacuation target) means the user moved on their
+    // own. Stop the cycle instead of force-teleporting them back later.
+    LL_INFOS("RestartAvoidance") << "Region changed to " << current << " while "
+        << (mState == STATE_LEAVING ? "waiting to leave" : "waiting to return")
+        << ", cancelling restart avoidance" << LL_ENDL;
+
+    LLSD args;
+    args["REGION"] = current;
+    LLNotificationsUtil::add("RestartAvoidanceCancelled", args);
+
+    mState = STATE_IDLE;
+    mRetryCount = 0;
+    mPendingReturn = false;
+    mEvacuateTargetRegion.clear();
+    updateStatusText();
+    mStatusChangedSignal();
 }
 
 std::string RestartAvoidanceManager::makeRegionStatusURL(const std::string& region_name) const

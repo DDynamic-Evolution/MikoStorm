@@ -993,6 +993,8 @@ bool idle_startup()
                 LLAppViewer::instance()->earlyExit("LoginFailedNoNetwork", LLSD().with("DIAGNOSTIC", diagnostic));
             }
 
+            gAllowCircuitTimeout = gSavedSettings.getBOOL("MikoPingTimeoutEnabled");
+
             #if LL_WINDOWS
                 // On the windows dev builds, unpackaged, the message.xml file will
                 // be located in indra/build-vc**/newview/<config>/app_settings.

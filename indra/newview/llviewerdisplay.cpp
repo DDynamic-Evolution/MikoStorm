@@ -315,6 +315,14 @@ static void update_tp_display(bool minimized)
     F32 teleport_percent = teleport_elapsed * (100.f / teleport_save_time);
     if (gAgent.getTeleportState() != LLAgent::TELEPORT_START && teleport_percent > 100.f)
     {
+        // Before giving up, try resending the teleport request a limited number
+        // of times. On a successful retry the teleport state is reset to
+        // TELEPORT_START and the switch below handles the transition (and timer
+        // reset), so just skip the give-up path here.
+        if (gAgent.retryTimedOutTeleport())
+        {
+            return;
+        }
         // Give up.  Don't keep the UI locked forever.
         LL_WARNS("Teleport") << "Giving up on teleport. elapsed time " << teleport_elapsed << " exceeds max time " << teleport_save_time << LL_ENDL;
         gAgent.setTeleportState(LLAgent::TELEPORT_NONE);

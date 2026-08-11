@@ -15382,8 +15382,15 @@ You can enable saving transcripts under Preferences &gt; Privacy &gt; Logs &amp;
    icon="notifytip.tga"
    name="RestartAvoidanceSimulated"
    type="notify">
-    <unique/>
-    Simulated restart: leaving [REGION] in 5 seconds.
+   <unique/>
+   Simulated restart: leaving [REGION] in 5 seconds.
+  </notification>
+  <notification
+   icon="notifytip.tga"
+   name="RestartAvoidanceCancelled"
+   type="notify">
+   <unique/>
+   Restart avoidance cancelled because you moved to [REGION].
   </notification>
   <notification
    icon="alertmodal.tga"
