@@ -766,7 +766,6 @@ protected:
 public:
     bool            hasRestartableFailedTeleportRequest();
     void            restartFailedTeleportRequest();
-    bool            retryTimedOutTeleport();
     void            clearTeleportRequest();
     void            setMaturityRatingChangeDuringTeleport(U8 pMaturityRatingChange);
     void            sheduleTeleportIM();
@@ -782,7 +781,6 @@ private:
 
     LLTeleportRequestPtr        mTeleportRequest;
     LLTeleportRequestPtr        mTeleportCanceled;
-    S32                         mTeleportRetryCount;
     boost::signals2::connection mTeleportFinishedSlot;
     boost::signals2::connection mTeleportFailedSlot;
 

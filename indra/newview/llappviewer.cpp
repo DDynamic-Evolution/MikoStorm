@@ -2929,9 +2929,12 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
                 {
                     continue;
                 }
-                else if (!gDirUtilp->fileExists(full_settings_path))
+                else if (!gDirUtilp->fileExists(full_settings_path)
+                         && !LLStringUtil::startsWith(full_settings_path, gDirUtilp->getDirDelimiter()))
                 {
-                    // search in default path
+                    // search in default path (only for relative names - an absolute
+                    // path must not be re-expanded, otherwise it gets doubled, e.g.
+                    // <profil>/<profil>/settings_per_account.xml)
                     full_settings_path = gDirUtilp->getExpandedFilename((ELLPath)path_index, full_settings_path);
                 }
             }
@@ -3210,6 +3213,21 @@ bool LLAppViewer::initConfiguration()
 
 
         gSavedSettings.setBOOL("FirstRunThisInstall", false);
+    }
+
+    // <FS> Sanity-check the session settings filename. A corrupt persisted value
+    // (e.g. a mangled path) would otherwise silently skip loading the session
+    // settings file, leaving controls declared only there (like FSHideLocalChat)
+    // unregistered and crashing the viewer.
+    {
+        std::string session_settings_filename = gSavedSettings.getString("SessionSettingsFile");
+        if (session_settings_filename.empty()
+            || !gDirUtilp->fileExists(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, session_settings_filename)))
+        {
+            LL_INFOS("Settings") << "Session settings file '" << session_settings_filename
+                << "' not resolvable - using settings_firestorm.xml" << LL_ENDL;
+            gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
+        }
     }
 
 // <FS:Beq> FIRE-29819 Set ForceShowGrid to true always, unless expressly disabled

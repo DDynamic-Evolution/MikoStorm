@@ -62,11 +62,6 @@ const S32 LL_MAX_RESENT_PACKETS_PER_FRAME = 100;
 const S32 LL_MAX_ACKED_PACKETS_PER_FRAME = 200;
 const F32 LL_COLLECT_ACK_TIME_MAX = 2.f;
 
-// Whether circuits should be dropped when no ping response arrives within
-// the heartbeat timeout. The viewer can disable this to keep a connection
-// alive even when a region is slow or unresponsive.
-extern bool gAllowCircuitTimeout;
-
 //
 // Prototypes and Predefines
 //

@@ -257,11 +257,20 @@ bool FSFloaterNearbyChat::postBuild()
     mChatHistoryMuted->setUnreadMessagesUpdateCallback(boost::bind(&FSFloaterNearbyChat::updateUnreadMessageNotification, this, _1, true));
 
     FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
-    gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
+    if (LLControlVariable* use_nearby_chat_console = gSavedSettings.getControl("FSUseNearbyChatConsole"))
+    {
+        use_nearby_chat_console->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
+    }
 
-    gSavedSettings.getControl("FSShowMutedChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateShowMutedChatHistory, this, _2));
+    if (LLControlVariable* show_muted_chat_history = gSavedSettings.getControl("FSShowMutedChatHistory"))
+    {
+        show_muted_chat_history->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateShowMutedChatHistory, this, _2));
+    }
 
-    gSavedSettings.getControl("FSHideLocalChat")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSHideLocalChat, this, _2));
+    if (LLControlVariable* hide_local_chat = gSavedSettings.getControl("FSHideLocalChat"))
+    {
+        hide_local_chat->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::updateFSHideLocalChat, this, _2));
+    }
 
     return LLFloater::postBuild();
 }
@@ -315,7 +324,7 @@ static std::string appendTime()
 
 void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
-    static LLCachedControl<bool> fsHideLocalChat(gSavedSettings, "FSHideLocalChat");
+    static LLCachedControl<bool> fsHideLocalChat(gSavedSettings, "FSHideLocalChat", false);
     if (fsHideLocalChat)
     {
         return;

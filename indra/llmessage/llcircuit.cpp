@@ -59,8 +59,6 @@
 
 #include "nd/ndetw.h"
 
-bool gAllowCircuitTimeout = true;
-
 const S32 PING_START_BLOCK = 3;     // How many pings behind we have to be to consider ourself blocked.
 const S32 PING_RELEASE_BLOCK = 2;   // How many pings behind we have to be to consider ourself unblocked.
 
@@ -1069,7 +1067,7 @@ bool LLCircuitData::checkCircuitTimeout()
     F64Seconds time_since_last_ping = LLMessageSystem::getMessageTimeSeconds() - mLastPingReceivedTime;
 
     // Nota Bene: This needs to be turned off if you are debugging multiple simulators
-    if (gAllowCircuitTimeout && (time_since_last_ping > mHeartbeatTimeout))
+    if (time_since_last_ping > mHeartbeatTimeout)
     {
         LL_WARNS() << "LLCircuitData::checkCircuitTimeout for " << mHost << " last ping " << time_since_last_ping << " seconds ago." <<LL_ENDL;
         setAlive(false);

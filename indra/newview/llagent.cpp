@@ -431,7 +431,6 @@ LLAgent::LLAgent() :
     mCanEditParcel(false),
     mTeleportSourceSLURL(new LLSLURL),
     mTeleportRequest(),
-    mTeleportRetryCount(0),
     mTeleportFinishedSlot(),
     mTeleportFailedSlot(),
     mIsMaturityRatingChangingDuringTeleport(false),
@@ -4891,37 +4890,6 @@ void LLAgent::restartFailedTeleportRequest()
     }
 }
 
-bool LLAgent::retryTimedOutTeleport()
-{
-    static LLCachedControl<S32> teleport_max_retries(gSavedSettings, "FSMaxTeleportRetries", 2);
-    if (teleport_max_retries <= 0)
-    {
-        return false;
-    }
-    if (!mTeleportRequest || !mTeleportRequest->canRestartTeleport())
-    {
-        return false;
-    }
-    if ((mTeleportState != TELEPORT_REQUESTED) && (mTeleportState != TELEPORT_MOVING))
-    {
-        // Only retry while waiting for the source sim to answer or while
-        // in transit; by the time we arrive retrying is pointless.
-        return false;
-    }
-    if (mTeleportRetryCount >= teleport_max_retries)
-    {
-        return false;
-    }
-    ++mTeleportRetryCount;
-    LL_INFOS("Teleport") << "Teleport timed out, retrying (" << mTeleportRetryCount
-                         << "/" << teleport_max_retries << ")..." << LL_ENDL;
-    // restartFailedTeleportRequest() only handles requests that already
-    // failed, so mark the timed-out request as failed first.
-    mTeleportRequest->setStatus(LLTeleportRequest::kFailed);
-    restartFailedTeleportRequest();
-    return true;
-}
-
 void LLAgent::clearTeleportRequest()
 {
     if(LLVoiceClient::instanceExists())
@@ -4960,12 +4928,6 @@ void LLAgent::startTeleportRequest()
     }
     if (hasPendingTeleportRequest())
     {
-        if (mTeleportRequest->getStatus() == LLTeleportRequest::kPending)
-        {
-            // Fresh teleport, reset the timeout-retry counter. Restarts
-            // (kRestartPending) keep counting so we can limit retries.
-            mTeleportRetryCount = 0;
-        }
         LLUIUsage::instance().logCommand("Agent.StartTeleportRequest");
         mTeleportCanceled.reset();
         if  (!isMaturityPreferenceSyncedWithServer())
@@ -5595,7 +5557,10 @@ void LLAgent::setTeleportState(ETeleportState state)
                           << teleportStateName(mTeleportState) << "(" << mTeleportState << ")"
                           << LL_ENDL;
     mTeleportState = state;
-    if (mTeleportState > TELEPORT_NONE && gSavedSettings.getBOOL("FreezeTime"))
+    // if (mTeleportState > TELEPORT_NONE && gSavedSettings.getBOOL("FreezeTime"))
+    static LLCachedControl<bool> freeze_time(gSavedSettings, "FreezeTime");
+    if (mTeleportState > TELEPORT_NONE && freeze_time())
+    // </FS:PP>
     {
         LLFloaterReg::hideInstance("snapshot");
     }
