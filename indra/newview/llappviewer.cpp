@@ -6627,10 +6627,10 @@ void LLAppViewer::idleNetwork()
         mAgentRegionLastAlive = this_region_alive;
 
         // Network health warning when performance is critically low
-        static LLCachedControl<bool> netWarningEnabled(gSavedSettings, "FSNetworkWarningEnabled");
-        static LLCachedControl<F32> netWarningPingThreshold(gSavedSettings, "FSNetworkWarningPingThreshold");
-        static LLCachedControl<F32> netWarningLossThreshold(gSavedSettings, "FSNetworkWarningPacketLossThreshold");
-        static LLCachedControl<S32> netWarningCooldown(gSavedSettings, "FSNetworkWarningCooldown");
+        static LLCachedControl<bool> netWarningEnabled(gSavedSettings, "FSNetworkWarningEnabled", true);
+        static LLCachedControl<F32> netWarningPingThreshold(gSavedSettings, "FSNetworkWarningPingThreshold", 800.0f);
+        static LLCachedControl<F32> netWarningLossThreshold(gSavedSettings, "FSNetworkWarningPacketLossThreshold", 15.0f);
+        static LLCachedControl<S32> netWarningCooldown(gSavedSettings, "FSNetworkWarningCooldown", 30);
         static F64 sLastNetworkWarningTime = 0;
         static LLUUID sLastNetworkWarningRegion;
 
