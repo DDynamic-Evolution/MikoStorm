@@ -24,7 +24,7 @@ We develop on **Linux** because it offers a much better and much friendlier buil
 
 ### Not on the TPV List.. why?
 
-There are applications back from february which are not assigned... not really into waiting forever. 
+In progress
 
 ## Changelog
 
