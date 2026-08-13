@@ -24,7 +24,7 @@ We develop on **Linux** because it offers a much better and much friendlier buil
 
 ### Not on the TPV List.. why?
 
-In progress
+application in progress https://github.com/secondlife/third-party-viewers/issues/12
 
 ## Changelog
 
