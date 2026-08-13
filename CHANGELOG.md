@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.36 (2026-08-13)
+
+### Bug Fixes
+
+- **Revert Parallel Render Pipeline:** Reverted the parallel octree culling, render map build and stateSort changes that caused repeated crashes (teleport, stateSort, cull, postSort) on Windows and Linux. Restored the serial Vanilla pipeline. ([pipeline.cpp](indra/newview/pipeline.cpp), [llspatialpartition.cpp](indra/newview/llspatialpartition.cpp), [lldrawpool.cpp](indra/newview/lldrawpool.cpp))
+
 ## 1.16.35 (2026-08-13)
 
 ### Bug Fixes

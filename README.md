@@ -28,7 +28,7 @@ application in progress https://github.com/secondlife/third-party-viewers/issues
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for the full release history. The current version is **1.16.35**.
+See [CHANGELOG.md](CHANGELOG.md) for the full release history. The current version is **1.16.36**.
 
 ### No 32Bit version
 
