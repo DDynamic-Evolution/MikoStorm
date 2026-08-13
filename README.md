@@ -1,5 +1,5 @@
 # MikoStorm – Fast. Modern. Open Source
-
+Going on vacation until August 29.
 <p align="center">
   <img src="images/mikostorm.png" width="512" height="512">
 </p>
