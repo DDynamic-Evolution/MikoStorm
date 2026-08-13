@@ -229,7 +229,6 @@ set(llcommon_HEADER_FILES
     llstatsaccumulator.h
     llsys.h
     lltempredirect.h
-    llparallelfor.h
     llthread.h
     llthreadlocalstorage.h
     llthreadsafequeue.h

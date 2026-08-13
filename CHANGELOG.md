@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.16.35 (2026-08-13)
+
+### Bug Fixes
+
+- **Linux Crash on Missing Session Settings:** Fixed a startup crash (SIGSEGV) when account session settings could not be loaded. Absolute settings paths were re-expanded with the settings prefix, doubling the path (`/xandir_foxglove//home/.../settings_per_account.xml`), so session-only controls such as `FSHideLocalChat` and `FSNetworkWarning*` were never registered and their `LLCachedControl`/`getControl()` lookups aborted the viewer. Settings load now skips re-expansion of absolute paths, an empty/unresolvable session settings file falls back to `settings_firestorm.xml`, and the affected controls use defaults instead of aborting. ([llappviewer.cpp](indra/newview/llappviewer.cpp), [fsfloaternearbychat.cpp](indra/newview/fsfloaternearbychat.cpp))
+- **Restore Firestorm RLV immediate delete:** Reverted a debug leftover in `RlvForceWear::done` that altered the Firestorm `immediate_delete` behavior. ([rlvhelper.cpp](indra/newview/rlvhelper.cpp))
+- **Particle-count Self-Crash:** Fixed a viewer crash when counting particles. ([llviewerpartsim.cpp](indra/newview/llviewerpartsim.cpp))
+- **Windows GL Initialization:** Fixed startup GL loading (SDL_GL_GetProcAddress/glad) and NSIS packaging; updated FMOD to 2.03.14. ([llgl.cpp](indra/llrender/llgl.cpp), [llwindowwin32.cpp](indra/llwindow/llwindowwin32.cpp))
+- **MCP Fixes:** Fixed MCP tool execution and camera timeline bugs. ([llmcphttp.cpp](indra/newview/llmcphttp.cpp), [llfloatercameratimeline.cpp](indra/newview/llfloatercameratimeline.cpp))
+
+### Improvements
+
+- **Restart Avoidance Panel:** Reworked restart avoidance into a dedicated preferences tab with per-option controls. ([llpanelrestartavoidance.cpp](indra/newview/llpanelrestartavoidance.cpp), [llrestartavoidancemgr.cpp](indra/newview/llrestartavoidancemgr.cpp))
+- **Teleport Timeout Retry:** Teleport now retries on timeout and cancels restart avoidance on manual movement; added a circuit timeout toggle. ([llagent.cpp](indra/newview/llagent.cpp), [llcircuit.cpp](indra/llmessage/llcircuit.cpp))
+- **Linux Crash Diagnostics:** Added backtrace to the log, kept signal info, and enabled core dumps for crash debugging. ([llappviewerlinux.cpp](indra/newview/llappviewerlinux.cpp), [llapp.cpp](indra/llcommon/llapp.cpp))
+
 ## 1.16.24 (2026-08-04)
 
 ### Bug Fixes

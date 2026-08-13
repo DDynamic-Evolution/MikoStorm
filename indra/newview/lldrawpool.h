@@ -126,11 +126,6 @@ public:
     S32 mId;
     U32 mType;              // Type of draw pool
     bool mSkipRender;
-
-    // <MikoStorm> Parallel stateSort: per-thread scratch queues for faces.
-    // No-ops for pools that do not enqueue faces (e.g. LLRenderPass).
-    virtual void resizeThreadQueues(U32 count) { }
-    virtual void mergeThreadQueues() { }
 };
 
 class LLRenderPass : public LLDrawPool
@@ -424,7 +419,6 @@ public:
     virtual void dirtyTextures(const std::set<LLViewerFetchedTexture*>& textures);
 
     virtual void enqueue(LLFace *face);
-    void enqueue(LLFace *face, U32 slot);
     virtual bool addFace(LLFace *face);
     virtual bool removeFace(LLFace *face);
 
@@ -434,10 +428,6 @@ public:
     void resetAll();
 
     void destroy();
-
-    // <MikoStorm> Parallel stateSort: face queues per worker slot.
-    virtual void resizeThreadQueues(U32 count);
-    virtual void mergeThreadQueues();
 
     void buildEdges();
 
@@ -457,11 +447,6 @@ public:
     face_array_t    mDrawFace;
     face_array_t    mMoveFace;
     face_array_t    mReferences;
-
-    // <MikoStorm> Parallel stateSort: one scratch queue per worker slot.
-    // enqueue(face, slot) writes here; mergeThreadQueues() appends them to
-    // mDrawFace (in slot order) on the main thread after the parallel phase.
-    std::vector<face_array_t> mThreadDrawFaces;
 
 public:
     class LLOverrideFaceColor

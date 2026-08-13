@@ -42,7 +42,6 @@
 #include "llheroprobemanager.h"
 
 #include <stack>
-#include <atomic>
 
 class LLViewerTexture;
 class LLFace;
@@ -198,13 +197,10 @@ public:
 
     // Object related methods
     void        markVisible(LLDrawable *drawablep, LLCamera& camera);
-    void        markVisibleLocal(LLDrawable *drawablep, LLCamera& camera, U32 slot);
     void        markOccluder(LLSpatialGroup* group);
-    void        markOccluderLocal(LLSpatialGroup* group, U32 slot);
 
     void        doOcclusion(LLCamera& camera);
     void        markNotCulled(LLSpatialGroup* group, LLCamera &camera);
-    void        markNotCulledLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot);
     void        markMoved(LLDrawable *drawablep, bool damped_motion = false);
     void        markShift(LLDrawable *drawablep);
     void        markTextured(LLDrawable *drawablep);
@@ -287,12 +283,9 @@ public:
     static F32 calcPixelArea(const LLVector4a& center, const LLVector4a& size, LLCamera &camera);
 
     void stateSort(LLCamera& camera, LLCullResult& result);
-    void stateSortSerial(LLCamera& camera, LLCullResult& result);
     void stateSort(LLSpatialGroup* group, LLCamera& camera);
-    void stateSortLocal(LLSpatialGroup* group, LLCamera& camera, U32 slot);
     void stateSort(LLSpatialBridge* bridge, LLCamera& camera, bool fov_changed = false);
-    void stateSort(LLDrawable* drawablep, LLCamera& camera, U32 slot = U32_MAX);
-    void stateSortLOD(LLDrawable* drawablep, LLCamera& camera);
+    void stateSort(LLDrawable* drawablep, LLCamera& camera);
     void postSort(LLCamera& camera);
 
     void forAllVisibleDrawables(void (*func)(LLDrawable*));
@@ -671,13 +664,13 @@ public:
     bool                     mBackfaceCull;
     S32                      mMatrixOpCount;
     S32                      mTextureMatrixOps;
-    std::atomic<S32>         mNumVisibleNodes;
+    S32                      mNumVisibleNodes;
 
     S32                      mDebugTextureUploadCost;
     S32                      mDebugSculptUploadCost;
     S32                      mDebugMeshUploadCost;
 
-    std::atomic<S32>         mNumVisibleFaces;
+    S32                      mNumVisibleFaces;
 
     S32                     mPoissonOffset;
 
@@ -991,21 +984,6 @@ protected:
     };
     typedef std::set<LLDrawPool*, compare_pools > pool_set_t;
     pool_set_t mPools;
-    // <MikoStorm> Parallel stateSort: per-slot collection of drawables whose
-    // distance/LOD update (GL-bound) is deferred to the main thread.
-    std::vector<std::vector<LLDrawable*>> mStateSortLODTasks;
-    // <MikoStorm> Parallel stateSort: per-slot collection of spatial bridges
-    // whose inner-octree cull (gPipeline.markNotCulled) calls the serial
-    // pushVisibleGroup()/pushDrawableGroup() on the global cull result. That
-    // is not thread-safe, so it is deferred to the main thread and drained
-    // after each parallel phase.
-    std::vector<std::vector<LLSpatialBridge*>> mStateSortBridgeTasks;
-    // <MikoStorm> Parallel culling: groups whose distance/alpha-dirty update
-    // was deferred from the cull workers. LLSpatialGroup::updateDistance()
-    // -> calcDistance() may call gPipeline.markRebuild(), which pushes into
-    // the shared mGroupQ1; that is not thread-safe, so it is deferred to the
-    // main thread and drained after the parallel frustum cull.
-    std::vector<std::vector<LLSpatialGroup*>> mCullDistanceTasks;
     LLDrawPool* mLastRebuildPool;
 
     // For quick-lookups into mPools (mapped by texture pointer)

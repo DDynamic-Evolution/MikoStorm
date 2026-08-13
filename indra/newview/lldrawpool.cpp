@@ -272,32 +272,6 @@ void LLFacePool::enqueue(LLFace* facep)
     mDrawFace.push_back(facep);
 }
 
-void LLFacePool::enqueue(LLFace* facep, U32 slot)
-{
-    if (slot == U32_MAX || mThreadDrawFaces.empty())
-    {
-        mDrawFace.push_back(facep);
-    }
-    else
-    {
-        mThreadDrawFaces[slot].push_back(facep);
-    }
-}
-
-void LLFacePool::resizeThreadQueues(U32 count)
-{
-    mThreadDrawFaces.resize(count);
-}
-
-void LLFacePool::mergeThreadQueues()
-{
-    for (face_array_t& q : mThreadDrawFaces)
-    {
-        mDrawFace.insert(mDrawFace.end(), q.begin(), q.end());
-        q.clear();
-    }
-}
-
 // virtual
 bool LLFacePool::addFace(LLFace *facep)
 {
@@ -319,10 +293,6 @@ bool LLFacePool::removeFace(LLFace *facep)
 void LLFacePool::resetDrawOrders()
 {
     mDrawFace.resize(0);
-    for (face_array_t& q : mThreadDrawFaces)
-    {
-        q.clear();
-    }
 }
 
 LLViewerTexture *LLFacePool::getTexture()
