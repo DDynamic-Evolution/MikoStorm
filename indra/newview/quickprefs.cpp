@@ -34,6 +34,7 @@
 
 #include "fscommon.h"
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llappviewer.h"
 #include "llcheckboxctrl.h"
 #include "llcolorswatch.h"
@@ -43,13 +44,16 @@
 #include "llfeaturemanager.h"
 #include "llfloaterpreference.h" // for LLAvatarComplexityControls
 #include "llinventoryfunctions.h"
+#include "lldiriterator.h"
 #include "lllayoutstack.h"
 #include "llnotificationsutil.h"
 #include "llpresetsmanager.h"
+#include "llscrolllistctrl.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "lltoolbarview.h"
 #include "llviewercontrol.h"
+#include "llviewermenufile.h"
 #include "llviewernetwork.h" // <FS:Beq/> for LLGridManager
 #include "llviewerregion.h"
 #include "llvoavatar.h"
@@ -625,6 +629,22 @@ bool FloaterQuickPrefs::postBuild()
         mPhotoPresetLoadBtn = getChild<LLButton>("PhotoPresetLoadBtn");
         mPhotoPresetDeleteBtn = getChild<LLButton>("PhotoPresetDeleteBtn");
         mPhotoPresetActiveLabel = getChild<LLTextBox>("PhotoPresetActiveLabel");
+
+        // Color grading LUT
+        mColorGradingLUTCombo = getChild<LLComboBox>("ColorGradingLUTCombo");
+        getChild<LLButton>("BrowseLUTBtn")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onBrowseLUT, this));
+        getChild<LLButton>("RemoveLUTBtn")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onRemoveLUT, this));
+        if (mColorGradingLUTCombo)
+            mColorGradingLUTCombo->setCommitCallback(boost::bind(&FloaterQuickPrefs::onLUTComboChanged, this, _1, _2));
+        refreshColorGradingLUTCombo();
+
+        // Bone camera - follow a specified skeleton joint
+        mJointComboBox = findChild<LLComboBox>("joint_combo");
+        if (mJointComboBox)
+        {
+            mJointComboBox->setCommitCallback(boost::bind(&FloaterQuickPrefs::onJointCameraChanged, this, _1, _2));
+            refreshJointCameraCombo();
+        }
 
         refreshPhotoPresetList();
         refreshSettings();
@@ -2353,3 +2373,138 @@ void FloaterQuickPrefs::onPhotoPresetsListChange()
 {
     refreshPhotoPresetList();
 }
+
+// Color grading LUT
+void FloaterQuickPrefs::refreshColorGradingLUTCombo()
+{
+    if (!mColorGradingLUTCombo)
+        return;
+
+    mColorGradingLUTCombo->clearRows();
+    mColorGradingLUTCombo->addSimpleElement(std::string("None"), ADD_TOP, std::string(""));
+
+    std::string luts_dir = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "luts");
+    LLDirIterator dir_iter(luts_dir, "*.cube");
+    std::string file;
+    std::vector<std::string> lut_files;
+    while (dir_iter.next(file))
+        lut_files.push_back(file);
+    std::sort(lut_files.begin(), lut_files.end());
+    for (const auto& f : lut_files)
+        mColorGradingLUTCombo->addSimpleElement(f, ADD_BOTTOM, f);
+
+    std::string current = gSavedSettings.getString("RenderColorGradingLUTName");
+    if (!current.empty() && mColorGradingLUTCombo->getItemByValue(LLSD(current)) == nullptr)
+    {
+        std::string basename = gDirUtilp->getBaseFileName(current, false);
+        mColorGradingLUTCombo->addSimpleElement(basename, ADD_BOTTOM, current);
+    }
+    mColorGradingLUTCombo->setValue(LLSD(current));
+}
+
+void FloaterQuickPrefs::onBrowseLUT()
+{
+    LLFilePickerReplyThread::startPicker(
+        boost::bind(&FloaterQuickPrefs::onLUTFileSelected, this, _1),
+        LLFilePicker::FFLOAD_ALL,
+        false);
+}
+
+void FloaterQuickPrefs::onLUTFileSelected(const std::vector<std::string>& filenames)
+{
+    if (filenames.empty()) return;
+    const std::string& path = filenames[0];
+    gSavedSettings.setString("RenderColorGradingLUTName", path);
+
+    if (mColorGradingLUTCombo)
+    {
+        std::string basename = gDirUtilp->getBaseFileName(path, false);
+        if (mColorGradingLUTCombo->getItemByValue(LLSD(path)) == nullptr)
+            mColorGradingLUTCombo->addSimpleElement(basename, ADD_BOTTOM, path);
+        mColorGradingLUTCombo->setValue(LLSD(path));
+    }
+}
+
+void FloaterQuickPrefs::onLUTComboChanged(LLUICtrl* ctrl, const LLSD& value)
+{
+    LLComboBox* combo = dynamic_cast<LLComboBox*>(ctrl);
+    if (!combo) return;
+    LLSD selected_val = combo->getSelectedValue();
+    gSavedSettings.setString("RenderColorGradingLUTName",
+        selected_val.asString());
+}
+
+void FloaterQuickPrefs::onRemoveLUT()
+{
+    if (!mColorGradingLUTCombo) return;
+
+    std::string current = gSavedSettings.getString("RenderColorGradingLUTName");
+    if (current.empty()) return;
+
+    // Default LUTs (in luts/ folder) cannot be removed
+    std::string current_path = gDirUtilp->getExpandedFilename(
+        LL_PATH_APP_SETTINGS, "luts", current);
+    if (gDirUtilp->fileExists(current_path))
+        return;
+
+    // Remove by value match
+    LLScrollListItem* item = mColorGradingLUTCombo->getItemByValue(LLSD(current));
+    if (item && item->getColumn(0))
+    {
+        std::string label = item->getColumn(0)->getValue().asString();
+        if (!label.empty())
+            mColorGradingLUTCombo->remove(label);
+    }
+
+    // Reset to None
+    mColorGradingLUTCombo->setValue(LLSD(""));
+    gSavedSettings.setString("RenderColorGradingLUTName", "");
+}
+
+// <CJB> Bone camera - follow a specified skeleton joint
+void FloaterQuickPrefs::refreshJointCameraCombo()
+{
+    if (!mJointComboBox)
+    {
+        return;
+    }
+
+    if (!mJointCameraComboInitialized)
+    {
+        mJointCameraComboInitialized = true;
+        for (const auto& joint : getCameraJointList())
+        {
+            mJointComboBox->add(joint.first, joint.first);
+        }
+    }
+
+    if (gAgentCamera.mFollowJoint == -1)
+    {
+        mJointComboBox->setCurrentByIndex(0);
+    }
+    else
+    {
+        mJointComboBox->selectByValue(gAgentCamera.mFollowJoint);
+    }
+}
+
+void FloaterQuickPrefs::onJointCameraChanged(LLUICtrl* ctrl, const LLSD& value)
+{
+    const std::string& joint_name = value.asString();
+    if (joint_name == "None")
+    {
+        gSavedSettings.setS32("CameraFollowJoint", -1);
+    }
+    else
+    {
+        for (auto joint : gAgentAvatarp->getSkeleton())
+        {
+            if (joint->getName() == joint_name)
+            {
+                gSavedSettings.setS32("CameraFollowJoint", joint->mJointNum);
+                break;
+            }
+        }
+    }
+}
+// </CJB>

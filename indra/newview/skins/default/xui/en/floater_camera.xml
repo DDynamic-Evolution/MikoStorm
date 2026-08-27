@@ -12,8 +12,8 @@
     can_close="false"
     chrome="true"
     follows="bottom"
-    height="135"
-    min_height="120"
+    height="162"
+    min_height="147"
     layout="topleft"
     name="camera_floater"
     title="Camera Controls"
@@ -275,7 +275,7 @@
   </panel>
   <panel
       border="false"
-      height="50"
+      height="77"
       layout="topleft"
       follows="bottom|left|right"
       left="0"
@@ -333,6 +333,30 @@
       is_toggle="true">
       <button.commit_callback function="CameraPresets.ShowPresetsList" />
     </button>  
+    <!-- <CJB> Bone camera - follow a specified skeleton joint -->
+    <text
+        follows="bottom|left"
+        height="20"
+        layout="topleft"
+        left="5"
+        bottom="3"
+        name="joint_label"
+        text="Bone Camera" />
+    <combo_box
+        follows="bottom|left|right"
+        height="20"
+        left_pad="4"
+        bottom="3"
+        mouse_opaque="true"
+        name="joint_combo"
+        width="120">
+      <combo_list mouse_wheel_opaque="true" />
+      <combo_box.item
+          label="None"
+          name="None"
+          value="None" />
+    </combo_box>
+    <!-- </CJB> -->
   </panel>
   <panel
     name="viewer_camera_info"

@@ -506,9 +506,17 @@ static bool handleGammaChanged(const LLSD& newvalue)
     return true;
 }
 
+// <CJB> Bone camera - follow a specified skeleton joint
+static bool handleFollowJoint(const LLSD& newvalue)
+{
+    if (gAgentCamera.isInitialized())
+        gAgentCamera.mFollowJoint = newvalue.asInteger();
+    return true;
+}
+// </CJB>
+
 const F32 MAX_USER_FOG_RATIO = 10.f;
 const F32 MIN_USER_FOG_RATIO = 0.5f;
-
 static bool handleFogRatioChanged(const LLSD& newvalue)
 {
     F32 fog_ratio = llmax(MIN_USER_FOG_RATIO, llmin((F32) newvalue.asReal(), MAX_USER_FOG_RATIO));
@@ -1512,6 +1520,7 @@ void migrate_legacy_settings()
 void settings_setup_listeners()
 {
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
+    setting_setup_signal_listener(gSavedSettings, "CameraFollowJoint", handleFollowJoint);
     setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderTerrainScale", handleTerrainScaleChanged);
     setting_setup_signal_listener(gSavedSettings, "RenderTerrainPBRScale", handlePBRTerrainScaleChanged);

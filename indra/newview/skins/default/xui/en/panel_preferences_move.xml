@@ -307,6 +307,30 @@
          width="350"
          tool_tip="If enabled, temporary derendered objects will stay derendered until teleport. If disabled, they stay derendered until the end of the session or get manually re-rendered via the asset blacklist window."
          control_name="FSTempDerenderUntilTeleport"/>
+        <!-- <CJB> Bone camera - follow a specified skeleton joint -->
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="20"
+         layout="topleft"
+         left="25"
+         name="joint_lbl"
+         width="90"
+         top_pad="12">
+            Bone Camera:
+        </text>
+        <combo_box
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-5"
+         name="joint_combo"
+         tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets."
+         width="200">
+         <combo_list mouse_wheel_opaque="true" />
+        </combo_box>
+        <!-- </CJB> -->
         <text
          follows="left|top"
          type="string"

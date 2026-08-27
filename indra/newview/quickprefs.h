@@ -46,6 +46,7 @@ class LLSliderCtrl;
 class LLSpinCtrl;
 class LLTextBox;
 class LLColorSwatchCtrl;
+class LLUICtrl;
 
 #define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
 #define PRESET_NAME_DAY_CYCLE "__Day_Cycle__"
@@ -116,6 +117,17 @@ public:
     void onPhotoPresetDelete();
     void onPhotoPresetsListChange();
 
+    // Color grading LUT
+    void refreshColorGradingLUTCombo();
+    void onBrowseLUT();
+    void onLUTFileSelected(const std::vector<std::string>& filenames);
+    void onLUTComboChanged(LLUICtrl* ctrl, const LLSD& value);
+    void onRemoveLUT();
+
+    // Bone camera - follow a specified skeleton joint
+    void refreshJointCameraCombo();
+    void onJointCameraChanged(LLUICtrl* ctrl, const LLSD& value);
+
     void dockToToolbarButton();
 
 private:
@@ -162,6 +174,13 @@ private:
     LLButton*           mPhotoPresetLoadBtn;
     LLButton*           mPhotoPresetDeleteBtn;
     LLTextBox*          mPhotoPresetActiveLabel;
+
+    // Color grading LUT
+    LLComboBox*         mColorGradingLUTCombo;
+
+    // Bone camera - follow a specified skeleton joint
+    LLComboBox*         mJointComboBox;
+    bool                mJointCameraComboInitialized;
 
     LLSettingsSky::ptr_t        mLiveSky;
     LLSettingsWater::ptr_t      mLiveWater;

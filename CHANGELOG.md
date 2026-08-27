@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.38 (2026-08-27)
+
+### Improvements
+
+- **Bone Camera (Camera Follow Joint):** New feature to fix the third-person camera to follow a specified skeleton bone, using the current camera preset offsets rotated by the avatar's facing. Ported from Black Dragon. Controlled by the `CameraFollowJoint` setting (default `-1` = off) with a bone picker added to the standalone Camera Controls floater, the Preferences → Move panel and a new "Bone Camera" sub-tab in the Phototools Cam tab. ([llagentcamera.cpp](indra/newview/llagentcamera.cpp), [llagentcamera.h](indra/newview/llagentcamera.h), [llfloatercamera.cpp](indra/newview/llfloatercamera.cpp), [llfloaterpreference.cpp](indra/newview/llfloaterpreference.cpp), [quickprefs.cpp](indra/newview/quickprefs.cpp), [llviewercontrol.cpp](indra/newview/llviewercontrol.cpp), [settings.xml](indra/newview/app_settings/settings.xml))
+
 ## 1.16.36 (2026-08-13)
 
 ### Bug Fixes

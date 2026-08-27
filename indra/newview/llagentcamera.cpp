@@ -193,6 +193,7 @@ LLAgentCamera::LLAgentCamera() :
     mRollLeftKey(0.f),
     mRollRightKey(0.f),
 // </FS:Chanayane>
+    mFollowJoint(0),
     mPointAtObject(NULL)
 {
     mFollowCam.setMaxCameraDistantFromSubject( MAX_CAMERA_DISTANCE_FROM_AGENT );
@@ -246,6 +247,7 @@ void LLAgentCamera::init()
     mTargetCameraDistance = mCurrentCameraDistance;
     mCameraZoomFraction = 1.f;
     mTrackFocusObject = gSavedSettings.getBOOL("TrackFocusObject");
+    mFollowJoint = gSavedSettings.getS32("CameraFollowJoint");
 
     mInitialized = true;
 }
@@ -1605,6 +1607,21 @@ void LLAgentCamera::updateCamera()
 
     LLVector3 focus_agent = gAgent.getPosAgentFromGlobal(mFocusGlobal);
     LLVector3 position_agent = gAgent.getPosAgentFromGlobal(camera_pos_global);
+
+    // <CJB> Bone camera - follow a specified skeleton joint
+    if (mFollowJoint != -1
+        && isAgentAvatarValid()
+        && mFocusOnAvatar
+        && mCameraMode == CAMERA_MODE_THIRD_PERSON)
+    {
+        LLJoint* joint = gAgentAvatarp->getCharacterJoint(mFollowJoint);
+        if (joint)
+        {
+            LLQuaternion avatarRotationForFollowCam = gAgentAvatarp->isSitting() ? gAgentAvatarp->getRenderRotation() : gAgent.getFrameAgent().getQuaternion();
+            focus_agent = joint->getWorldPosition() + (LLVector3)getFocusOffsetInitial() * avatarRotationForFollowCam;
+        }
+    }
+    // </CJB>
 
     // Try to move the camera
 
@@ -3388,5 +3405,19 @@ void LLAgentCamera::loadCameraPosition()
 // </FS:Chanayane>
 }
 // </FS:Ansariel> FIRE-7758: Save/load camera position feature
+
+camera_joint_list_t getCameraJointList()
+{
+    camera_joint_list_t list;
+    list.push_back(std::make_pair(std::string("None"), -1));
+    if (isAgentAvatarValid())
+    {
+        for (auto joint : gAgentAvatarp->getSkeleton())
+        {
+            list.push_back(std::make_pair(joint->getName(), joint->mJointNum));
+        }
+    }
+    return list;
+}
 
 // EOF

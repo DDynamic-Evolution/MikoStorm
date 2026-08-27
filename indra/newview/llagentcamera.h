@@ -486,8 +486,17 @@ public:
     void            storeCameraPosition();
     void            loadCameraPosition();
 // </FS:Ansariel> FIRE-7758: Save/load camera position feature
+
+    // <CJB> Bone camera - follow a specified skeleton joint
+    S32             mFollowJoint;
+    // </CJB>
 };
 
 extern LLAgentCamera gAgentCamera;
+
+// <CJB> Bone camera - helper to build the joint selection list (None + all skeleton joints)
+typedef std::vector<std::pair<std::string, S32> > camera_joint_list_t;
+camera_joint_list_t getCameraJointList();
+// </CJB>
 
 #endif

@@ -3521,6 +3521,18 @@
       <integer>0</integer>
     </map>
 
+  <key>CameraFollowJoint</key>
+  <map>
+    <key>Comment</key>
+    <string>Fix the camera to follow a specified skeleton bone in third person using the current camera preset offsets. -1 disables bone following.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>-1</integer>
+  </map>
+
   <key>CameraFocusTransitionTime</key>
   <map>
     <key>Comment</key>

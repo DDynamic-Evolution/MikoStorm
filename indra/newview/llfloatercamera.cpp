@@ -64,6 +64,7 @@ const F32 ORBIT_NUDGE_RATE = 0.05f; // fraction of normal speed
 bool LLFloaterCamera::sFreeCamera = false;
 bool LLFloaterCamera::sAppearanceEditing = false;
 
+
 // Zoom the camera in and out
 class LLPanelCameraZoom
 :   public LLPanel
@@ -625,6 +626,15 @@ bool LLFloaterCamera::postBuild()
     }
     // </FS:Ansariel>
 
+    // <CJB> Bone camera - follow a specified skeleton joint
+    mJointComboBox = findChild<LLComboBox>("joint_combo");
+    if (mJointComboBox)
+    {
+        mJointComboBox->setCommitCallback(boost::bind(&LLFloaterCamera::onJointComboChanged, this, _1, _2));
+        refreshJointCombo();
+    }
+    // </CJB>
+
     update();
 
     // ensure that appearance mode is handled while building. See EXT-7796.
@@ -763,6 +773,55 @@ void LLFloaterCamera::updateItemsSelection()
     argument["selected"] = mCurrMode == CAMERA_CTRL_MODE_FREE_CAMERA;
     getChild<LLPanelCameraItem>("object_view")->setValue(argument);
 }
+
+// <CJB> Bone camera - follow a specified skeleton joint
+void LLFloaterCamera::refreshJointCombo()
+{
+    if (!mJointComboBox)
+    {
+        return;
+    }
+
+    if (!mJointComboInitialized)
+    {
+        mJointComboInitialized = true;
+        for (const auto& joint : getCameraJointList())
+        {
+            mJointComboBox->add(joint.first, joint.first);
+        }
+    }
+
+    S32 current_joint = gAgentCamera.mFollowJoint;
+    if (current_joint == -1)
+    {
+        mJointComboBox->setCurrentByIndex(0);
+    }
+    else
+    {
+        mJointComboBox->selectByValue(current_joint);
+    }
+}
+
+void LLFloaterCamera::onJointComboChanged(LLUICtrl* ctrl, const LLSD& value)
+{
+    const std::string& joint_name = value.asString();
+    if (joint_name == "None")
+    {
+        gSavedSettings.setS32("CameraFollowJoint", -1);
+    }
+    else
+    {
+        for (auto joint : gAgentAvatarp->getSkeleton())
+        {
+            if (joint->getName() == joint_name)
+            {
+                gSavedSettings.setS32("CameraFollowJoint", joint->mJointNum);
+                break;
+            }
+        }
+    }
+}
+// </CJB>
 
 // static
 void LLFloaterCamera::onClickCameraItem(const LLSD& param)

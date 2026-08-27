@@ -26,8 +26,8 @@
 	 tab_allow_rearrange="false"
 	 tab_group="0"
 	 tab_position="top"
-	 tab_min_width="54"
-	 tab_max_width="54"
+	 tab_min_width="46"
+	 tab_max_width="46"
 	 top="0"
 	 width="384">
 
@@ -2662,6 +2662,185 @@
 		</panel>
 
 		<panel
+		 follows="all"
+		 name="P_ColorGrading"
+		 label="Color"
+		 layout="topleft">
+
+			<panel
+			 name="PT_ColorGrading"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="3"
+			 left="0"
+			 width="288"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_ColorGrading"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 font="SansSerif"
+				 height="17"
+				 width="280">
+					Color Grading Settings
+				</text>
+			</panel>
+
+			<panel
+			 name="P_ColorGrading_LUT"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="75"
+			 border_visible="true"
+			 background_visible="true">
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="10"
+				 layout="topleft"
+				 left="5"
+				 name="T_Color_LUT"
+				 tool_tip="Pick a Lookup Table (LUT) to remap the colors of your viewer and apply cinematic color grading."
+				 top_pad="10"
+				 width="65">
+					Color LUT
+				</text>
+				<combo_box
+				 name="ColorGradingLUTCombo"
+				 allow_text_entry="false"
+				 follows="left|top"
+				 layout="topleft"
+				 left_pad="-2"
+				 top_delta="-5"
+				 width="170"
+				 height="20"/>
+				<button
+				 enabled="true"
+				 name="BrowseLUTBtn"
+				 follows="left|top"
+				 height="20"
+				 label="Browse"
+				 layout="topleft"
+				 left_pad="2"
+				 top_delta="0"
+				 width="56"
+				 tool_tip="Load a .cube LUT file to apply cinematic color grading."/>
+				<button
+				 enabled="true"
+				 name="RemoveLUTBtn"
+				 follows="left|top"
+				 height="20"
+				 label="Remove"
+				 layout="topleft"
+				 left_pad="0"
+				 width="56"
+				 tool_tip="Remove the currently selected LUT."/>
+			</panel>
+
+			<panel
+			 name="P_ColorGrading_Intensity"
+			 follows="top|left"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="55"
+			 border_visible="true"
+			 background_visible="true">
+				<text
+				 name="T_ColorGrading_Intensity"
+				 follows="left|top"
+				 layout="topleft"
+				 left="5"
+				 tool_tip="Blend intensity of the color grading LUT (0.0=off, 1.0=full). A lower value softens the color grading effect, while 1.0 applies it at full strength."
+				 top_pad="8"
+				 width="80">
+					LUT Intensity
+				</text>
+				<slider_bar
+				 name="SB_ColorGrading_Intensity"
+				 can_edit_text="true"
+				 control_name="RenderColorGradingLUTIntensity"
+				 follows="left|right"
+				 height="16"
+				 decimal_digits="2"
+				 increment="0.01"
+				 layout="topleft"
+				 left_pad="0"
+				 min_val="0"
+				 max_val="1"
+				 top_delta="0"
+				 width="127"/>
+				<spinner
+				 name="S_ColorGrading_Intensity"
+				 can_edit_text="true"
+				 control_name="RenderColorGradingLUTIntensity"
+				 top_delta="-3"
+				 label_width="0"
+				 left_pad="0"
+				 decimal_digits="3"
+				 follows="top|left"
+				 max_val="1"
+				 min_val="0"
+				 width="53"
+				 increment="0.001"
+				 border_visible="false"/>
+				<button
+				 follows="left|top"
+				 name="Reset_ColorGrading_Intensity"
+				 height="22"
+				 label="D"
+				 layout="topleft"
+				 left_pad="0"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderColorGradingLUTIntensity"/>
+				</button>
+			</panel>
+
+			<panel
+			 name="P_ColorGrading_Info"
+			 follows="left|right|top"
+			 layout="topleft"
+			 top_pad="1"
+			 left="3"
+			 right="-3"
+			 height="90"
+			 border_visible="true"
+			 background_visible="true">
+				<text
+				 type="string"
+				 follows="left|top"
+				 height="80"
+				 layout="topleft"
+				 left="6"
+				 top_pad="6"
+				 name="T_ColorGrading_Info"
+				 word_wrap="true"
+				 use_ellipses="false"
+				 parse_urls="true"
+				 width="175">
+A Lookup Table (LUT) is a file that remaps the colors of your viewer
+to create a specific visual style or mood, like a photo filter for
+your entire 3D world. Load a .cube LUT to apply cinematic color
+grading, warm tones, cool blues, or a vintage film look.
+				</text>
+			</panel>
+		</panel>
+
+		<panel
 		 name="P_General"
 		 follows="left|top"
 		 layout="topleft"
@@ -4957,6 +5136,47 @@
 							 width="250"
 							 control_name="FSResetCameraOnMovement"
 							 tool_tip="Resets the camera to its default position when you move the avatar"/>
+						</panel>
+					</panel>
+
+					<panel
+					 follows="all"
+					 name="P_Bone"
+					 layout="topleft"
+					 width="282"
+					 top="0"
+					 label="Bone Camera"
+					 left="0">
+						<panel
+						 name="P_Bone_Settings"
+						 follows="left|top"
+						 layout="topleft"
+						 top_pad="0"
+						 left="0"
+						 width="275"
+						 height="110"
+						 border_visible="true"
+						 background_visible="true">
+							<text
+							 name="T_Bone_Cam"
+							 follows="left|top"
+							 layout="topleft"
+							 left="5"
+							 top_pad="7"
+							 tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets. Select None to disable."
+							 width="180">
+								Bone Camera
+							</text>
+							<combo_box
+							 height="23"
+							 follows="left|top"
+							 layout="topleft"
+							 left_pad="0"
+							 mouse_opaque="true"
+							 name="joint_combo"
+							 top_delta="-2"
+							 tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets. Select None to disable."
+							 width="200"/>
 						</panel>
 					</panel>
 				</tab_container>

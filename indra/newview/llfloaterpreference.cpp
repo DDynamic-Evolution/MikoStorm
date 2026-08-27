@@ -1360,6 +1360,30 @@ void LLFloaterPreference::onOpen(const LLSD& key)
         onUpdateFilterTerm(true);
     }
     // </FS:Zi>
+
+    // <CJB> Bone camera - follow a specified skeleton joint
+    static bool bone_camera_initialized = false;
+    if (!bone_camera_initialized && LLStartUp::getStartupState() == STATE_STARTED)
+    {
+        LLComboBox* joint_combo = findChild<LLComboBox>("joint_combo");
+        if (joint_combo)
+        {
+            bone_camera_initialized = true;
+            for (const auto& joint : getCameraJointList())
+            {
+                joint_combo->add(joint.first, joint.first);
+            }
+            if (gAgentCamera.mFollowJoint == -1)
+            {
+                joint_combo->setCurrentByIndex(0);
+            }
+            else
+            {
+                joint_combo->selectByValue(gAgentCamera.mFollowJoint);
+            }
+        }
+    }
+    // </CJB>
 }
 
 void LLFloaterPreference::onRenderOptionEnable()

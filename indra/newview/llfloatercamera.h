@@ -37,6 +37,7 @@ class LLJoystickCameraTrack;
 class LLFloaterReg;
 class LLPanelCameraZoom;
 class LLComboBox;
+class LLUICtrl;
 
 enum ECameraControlMode
 {
@@ -130,6 +131,11 @@ private:
     // <FS:Ansariel> Phototools support
     void switchViews(ECameraControlMode mode);
 
+    // <CJB> Bone camera - follow a specified skeleton joint
+    void refreshJointCombo();
+    void onJointComboChanged(LLUICtrl* ctrl, const LLSD& value);
+    // </CJB>
+
     // set to true when free camera mode is selected in modes list
     // remains true until preset camera mode is chosen, or pan button is clicked, or escape pressed
     static bool sFreeCamera;
@@ -144,6 +150,11 @@ private:
     LLPanel* mAgentCameraInfo { nullptr };
     LLComboBox* mPresetCombo { nullptr };
     //LLTextBox* mPreciseCtrls { nullptr }; // <FS:Ansariel> Improved camera floater
+
+    // <CJB> Bone camera - follow a specified skeleton joint
+    LLComboBox* mJointComboBox { nullptr };
+    bool        mJointComboInitialized { false };
+    // </CJB>
 };
 
 /**
