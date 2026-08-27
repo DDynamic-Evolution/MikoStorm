@@ -459,6 +459,10 @@ void LLFloaterCamera::update()
     {
         setMode(mode);
     }
+
+    // <CJB> Bone camera - rebuild the joint list once the avatar skeleton becomes available
+    refreshJointCombo();
+    // </CJB>
 }
 
 
@@ -782,13 +786,20 @@ void LLFloaterCamera::refreshJointCombo()
         return;
     }
 
-    if (!mJointComboInitialized)
+    camera_joint_list_t joints = getCameraJointList();
+    S32 skeleton_joint_count = static_cast<S32>(joints.size());
+
+    // The skeleton may not have been ready when the floater was first built (e.g. on
+    // login / certain locales), so rebuild the list whenever the joint set changes.
+    if (!mJointComboInitialized
+        || mJointComboBox->getItemCount() != skeleton_joint_count)
     {
-        mJointComboInitialized = true;
-        for (const auto& joint : getCameraJointList())
+        mJointComboBox->clearRows();
+        for (const auto& joint : joints)
         {
             mJointComboBox->add(joint.first, joint.first);
         }
+        mJointComboInitialized = true;
     }
 
     S32 current_joint = gAgentCamera.mFollowJoint;

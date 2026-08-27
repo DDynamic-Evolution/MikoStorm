@@ -157,6 +157,9 @@ void FloaterQuickPrefs::onOpen(const LLSD& key)
     // bail out here if this is a reused Phototools floater
     if (getIsPhototools())
     {
+        // <CJB> Bone camera - refresh the joint list once the avatar skeleton is available
+        refreshJointCameraCombo();
+        // </CJB>
         return;
     }
 
@@ -2469,13 +2472,20 @@ void FloaterQuickPrefs::refreshJointCameraCombo()
         return;
     }
 
-    if (!mJointCameraComboInitialized)
+    camera_joint_list_t joints = getCameraJointList();
+    S32 skeleton_joint_count = static_cast<S32>(joints.size());
+
+    // The skeleton may not have been ready when the floater was first built (e.g. on
+    // login / certain locales), so rebuild the list whenever the joint set changes.
+    if (!mJointCameraComboInitialized
+        || mJointComboBox->getItemCount() != skeleton_joint_count)
     {
-        mJointCameraComboInitialized = true;
-        for (const auto& joint : getCameraJointList())
+        mJointComboBox->clearRows();
+        for (const auto& joint : joints)
         {
             mJointComboBox->add(joint.first, joint.first);
         }
+        mJointCameraComboInitialized = true;
     }
 
     if (gAgentCamera.mFollowJoint == -1)
