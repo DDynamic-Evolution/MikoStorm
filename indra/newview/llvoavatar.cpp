@@ -5297,12 +5297,25 @@ void LLVOAvatar::updateOrientation(LLAgent& agent, F32 speed, F32 delta_time)
 
             static LLCachedControl<F32> s_pelvis_rot_threshold_slow(gSavedSettings, "AvatarRotateThresholdSlow", 60.0);
             static LLCachedControl<F32> s_pelvis_rot_threshold_fast(gSavedSettings, "AvatarRotateThresholdFast", 2.0);
+            // <BD Port> Configurable mouselook pelvis rotate threshold
+            static LLCachedControl<F32> s_pelvis_rot_threshold_mouselook(gSavedSettings, "AvatarRotateThresholdMouselook", -1.0);
+            // </BD Port>
 
             F32 pelvis_rot_threshold = clamp_rescale(speed, 0.1f, 1.0f, s_pelvis_rot_threshold_slow, s_pelvis_rot_threshold_fast);
 
             if (self_in_mouselook)
             {
-                pelvis_rot_threshold *= MOUSELOOK_PELVIS_FOLLOW_FACTOR;
+                // <BD Port> Use the user-configurable mouselook rotate threshold when set,
+                // otherwise fall back to the standard fixed follow factor.
+                if (s_pelvis_rot_threshold_mouselook >= 0.f)
+                {
+                    pelvis_rot_threshold = (F32)s_pelvis_rot_threshold_mouselook;
+                }
+                else
+                {
+                    pelvis_rot_threshold *= MOUSELOOK_PELVIS_FOLLOW_FACTOR;
+                }
+                // </BD Port>
             }
             pelvis_rot_threshold *= DEG_TO_RAD;
 

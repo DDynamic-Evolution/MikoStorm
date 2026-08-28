@@ -2847,6 +2847,12 @@ void LLAgent::endAnimationUpdateUI()
                     sendAnimationRequest(ANIM_AGENT_HOLD_BOW_L, ANIM_REQUEST_START);
                 }
             }
+            // <BD Port> Experimental first-person aiming animation
+            if (gSavedSettings.getBOOL("FSExperimentFirstPersonAiming"))
+            {
+                sendAnimationRequest(ANIM_AGENT_AIM_HANDGUN_R, ANIM_REQUEST_STOP);
+            }
+            // </BD Port>
         }
     }
     else if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_CUSTOMIZE_AVATAR)
@@ -3012,6 +3018,13 @@ void LLAgent::endAnimationUpdateUI()
                     sendAnimationRequest(ANIM_AGENT_AIM_BOW_L, ANIM_REQUEST_START);
                 }
             }
+            // <BD Port> Experimental first-person aiming animation
+            if (gSavedSettings.getBOOL("FSExperimentFirstPersonAiming")
+                && !gAgentAvatarp->isAnyAnimationSignaled(AGENT_GUN_HOLD_ANIMS, NUM_AGENT_GUN_HOLD_ANIMS))
+            {
+                sendAnimationRequest(ANIM_AGENT_AIM_HANDGUN_R, ANIM_REQUEST_START);
+            }
+            // </BD Port>
             if (gAgentAvatarp->getParent())
             {
                 LLVector3 at_axis = LLViewerCamera::getInstance()->getAtAxis();

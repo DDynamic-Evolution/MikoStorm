@@ -1263,7 +1263,14 @@ void LLAgentCamera::updateLookAt(const S32 mouse_x, const S32 mouse_y)
 
         if (cameraMouselook())
         {
-            lookAtType = LOOKAT_TARGET_MOUSELOOK;
+            // <BD Port> Allow disabling head/eye tracking in mouselook (the avatar
+            // no longer turns its head and eyes to follow the mouse cursor).
+            static LLCachedControl<bool> s_head_tracking(gSavedSettings, "FSMouselookHeadTracking", true);
+            if (s_head_tracking)
+            {
+                lookAtType = LOOKAT_TARGET_MOUSELOOK;
+            }
+            // </BD Port>
         }
         else if (cameraThirdPerson())
         {
@@ -1648,7 +1655,10 @@ void LLAgentCamera::updateCamera()
     }
     gAgent.setLastPositionGlobal(global_pos);
 
-    if (LLVOAvatar::sVisibleInFirstPerson && isAgentAvatarValid() && !gAgentAvatarp->isSitting() && cameraMouselook())
+    // <BD Port> Realistic mouselook: don't lock the body to the camera so it can
+    // animate freely (head bobbing, walking, etc.) instead of being held below it.
+    static LLCachedControl<bool> s_realistic_mouselook_on(gSavedSettings, "FSRealisticMouselook", false);
+    if (LLVOAvatar::sVisibleInFirstPerson && isAgentAvatarValid() && !gAgentAvatarp->isSitting() && cameraMouselook() && !s_realistic_mouselook_on)
     {
         LLVector3 head_pos = gAgentAvatarp->mHeadp->getWorldPosition() +
             LLVector3(0.08f, 0.f, 0.05f) * gAgentAvatarp->mHeadp->getWorldRotation() +
@@ -1977,10 +1987,22 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(bool *hit_limit)
         }
         else
         {
-            head_offset.mdV[VZ] += gAgentAvatarp->mHeadOffset.mV[VZ];
-            camera_position_global = gAgent.getPosGlobalFromAgent(gAgentAvatarp->getRenderPosition());//frame_center_global;
-            head_offset = head_offset * gAgentAvatarp->getRenderRotation();
-            camera_position_global = camera_position_global + head_offset;
+            // <BD Port> Realistic mouselook: bind the camera to the animated head
+            // instead of a fixed head offset so head bobbing and body motion are
+            // naturally followed and the body is no longer held at the camera.
+            static LLCachedControl<bool> s_realistic_mouselook(gSavedSettings, "FSRealisticMouselook", false);
+            if (s_realistic_mouselook)
+            {
+                camera_position_global = gAgent.getPosGlobalFromAgent(gAgentAvatarp->mHeadp->getWorldPosition());
+            }
+            else
+            {
+                head_offset.mdV[VZ] += gAgentAvatarp->mHeadOffset.mV[VZ];
+                camera_position_global = gAgent.getPosGlobalFromAgent(gAgentAvatarp->getRenderPosition());//frame_center_global;
+                head_offset = head_offset * gAgentAvatarp->getRenderRotation();
+                camera_position_global = camera_position_global + head_offset;
+            }
+            // </BD Port>
         }
     }
     else if (mCameraMode == CAMERA_MODE_THIRD_PERSON && mFocusOnAvatar)

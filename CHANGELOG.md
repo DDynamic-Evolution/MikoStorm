@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.16.40 (2026-08-28)
+
+### Improvements
+
+- **Black Dragon Mouselook Features:** Ported/reenvisioned four Black Dragon mouselook options, all settable in Preferences → Move → Mouselook:
+  - **Realistic Mouselook** (`FSRealisticMouselook`, off): binds the mouselook camera to the animated head instead of a fixed head offset, so head bobbing and body motion are naturally followed and the body is no longer held below the camera.
+  - **Mouselook Rotate Threshold** (`AvatarRotateThresholdMouselook`, `-1` = default): a separate, user-configurable pelvis-rotate threshold for mouselook, replacing the fixed follow factor.
+  - **Head/Eyes Follow** (`FSMouselookHeadTracking`, on): lets the avatar head and eyes follow the mouse cursor in mouselook be disabled.
+  - **Experimental First-Person Aiming** (`FSExperimentFirstPersonAiming`, off): plays a first-person aiming animation while in mouselook.
+  - ([llagentcamera.cpp](indra/newview/llagentcamera.cpp), [llagent.cpp](indra/newview/llagent.cpp), [llvoavatar.cpp](indra/newview/llvoavatar.cpp), [settings.xml](indra/newview/app_settings/settings.xml), [panel_preferences_move.xml](indra/newview/skins/default/xui/en/panel_preferences_move.xml))
+
 ## 1.16.38 (2026-08-27)
 
 ### Improvements
