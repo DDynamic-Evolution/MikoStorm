@@ -11,6 +11,10 @@
   - **Experimental First-Person Aiming** (`FSExperimentFirstPersonAiming`, off): plays a first-person aiming animation while in mouselook.
   - ([llagentcamera.cpp](indra/newview/llagentcamera.cpp), [llagent.cpp](indra/newview/llagent.cpp), [llvoavatar.cpp](indra/newview/llvoavatar.cpp), [settings.xml](indra/newview/app_settings/settings.xml), [panel_preferences_move.xml](indra/newview/skins/default/xui/en/panel_preferences_move.xml))
 
+### Bug Fixes
+
+- **Mouselook tab readability and alignment:** The Black Dragon mouselook options in Preferences → Move → Mouselook were not being laid out correctly. They used `left_pad`, which positions a control relative to the previous control's right edge, so they were pushed far to the right. They also overflowed the fixed-height (non-scrollable) tab and got clipped out of view. The whole Mouselook tab is now wrapped in a scroll container and the new options use an absolute left position, aligning with the rest of the options. ([panel_preferences_move.xml](indra/newview/skins/default/xui/en/panel_preferences_move.xml))
+
 ## 1.16.38 (2026-08-27)
 
 ### Improvements
