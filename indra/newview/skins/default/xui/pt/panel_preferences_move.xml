@@ -52,6 +52,12 @@
 			<check_box label="Ative funções de combate" name="FSMouselookCombatFeatures" />
 			<check_box label="Ativar marcadores de alvo" name="ExodusMouselookIFF" />
 			<slider label="Alcance (m)" name="ExodusMouselookIFFRange" />
+
+			<text name="Mouselook_BD_Header">Experimental Feature</text>
+			<check_box label="Realistic Mouselook (camera follows head, body not locked)" name="FSRealisticMouselook" tool_tip="Binds the mouselook camera to the avatar's head instead of locking it to the avatar's center. The body is no longer held below the camera, animations play out fully and the avatar can move around while the camera follows."/>
+			<slider label="Mouselook rotate threshold (deg):" name="AvatarRotateThresholdMouselook" tool_tip="Angle between avatar facing and camera facing at which the avatar turns while in mouselook. Set to -1 to use the default mouselook behaviour."/>
+			<check_box label="Head and eyes follow mouse in Mouselook" name="FSMouselookHeadTracking" tool_tip="If enabled, the avatar's head and eyes follow the mouse cursor direction while in mouselook."/>
+			<check_box label="Experimental first-person aiming animation" name="FSExperimentFirstPersonAiming" tool_tip="Plays a first-person aiming animation while in mouselook (experimental)."/>
 			<text name="Mouse Sensitivity" width="195">
 				Sensibilidade do Mouse:
 			</text>
