@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.16.41 (2026-08-29)
+
+### Improvements
+
+- **New Post-Processing FX section (Phase 1 of the Black Dragon graphics port):** a new **Post-Processing FX** group in Preferences → Graphics → Rendering that reimplements several Black Dragon post effects as native MikoStorm features:
+  - **Upscaling (`RenderUpscaleEnabled`, off):** renders the 3D scene at a reduced internal resolution (`RenderResolutionMultiplier`, default `1.0`) and upscales back to screen resolution using the existing AMD Contrast Adaptive Sharpening (CAS) pass for true reconstruction upsampling, instead of plain bilinear stretch. Sharpness is adjustable (`RenderUpscaleSharpness`, default `0.4`).
+  - **Color grading:** a master `RenderSatContrastStrength` (default `0.0` = off) gating independent saturation (`RenderSaturation`, `1.0`), contrast (`RenderContrast`, `1.0`) and brightness (`RenderBrightness`, `0.0`) controls.
+  - **Vignette (`RenderVignetteAmount`, `0.0` = off)** darkens the screen edges.
+  - **Film grain (`RenderFilmGrain`, `0.0` = off)** adds a subtle noise grain using a GPU-noise shader permutation.
+  - All effects are off by default so the default image is unchanged; each is gated/driven by its own setting. Implemented as a new `postDeferredPostFx.glsl` composite pass chained in right before the final present, with a new `gPostFxProgram` shader program. Cross-platform (OpenGL), no Vulkan dependency. ([pipeline.cpp](indra/newview/pipeline.cpp), [pipeline.h](indra/newview/pipeline.h), [llviewershadermgr.cpp](indra/newview/llviewershadermgr.cpp), [llviewershadermgr.h](indra/newview/llviewershadermgr.h), [postDeferredPostFx.glsl](indra/newview/app_settings/shaders/class1/deferred/postDeferredPostFx.glsl), [settings.xml](indra/newview/app_settings/settings.xml), [panel_preferences_graphics1.xml](indra/newview/skins/default/xui/en/panel_preferences_graphics1.xml))
+- **Black Dragon overlay settings groundwork (Phase 0):** re-registered the previously skipped Black Dragon overlay settings keys so they are present and controllable as a foundation for later phases, including motion blur (`RenderMotionBlur`, `RenderMotionBlurStrength`), volumetric lighting (`RenderVolumetricLighting` and resolution/multiplier/falloff), and the AYA cinematic overlay intensity/atmosphere controls (`AYAR14*`, `AYAR16*` aerial perspective, `AYAR17*` color temperature, `AYAR18*` cloud volumetric). ([settings.xml](indra/newview/app_settings/settings.xml), [llviewercontrol.cpp](indra/newview/llviewercontrol.cpp))
+
 ## 1.16.40 (2026-08-28)
 
 ### Improvements

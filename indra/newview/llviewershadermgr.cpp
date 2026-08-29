@@ -214,6 +214,9 @@ LLGLSLShader            gCASProgram;
 LLGLSLShader            gCASLegacyGammaProgram;
 LLGLSLShader            gDeferredPostNoDoFProgram;
 LLGLSLShader            gDeferredPostNoDoFNoiseProgram;
+// <FS:AYA> BD-style post-processing composite pass
+LLGLSLShader            gPostFxProgram;
+// </FS:AYA>
 LLGLSLShader            gDeferredWLSkyProgram;
 LLGLSLShader            gEnvironmentMapProgram;
 LLGLSLShader            gDeferredWLCloudProgram;
@@ -459,6 +462,9 @@ void LLViewerShaderMgr::finalizeShaderList()
     mShaderList.push_back(&gCASLegacyGammaProgram);
     mShaderList.push_back(&gDeferredPostGammaCorrectProgram); // for gamma
     mShaderList.push_back(&gLegacyPostGammaCorrectProgram);
+    // <FS:AYA> BD-style post-processing composite pass
+    mShaderList.push_back(&gPostFxProgram);
+    // </FS:AYA>
     mShaderList.push_back(&gDeferredDiffuseProgram);
     mShaderList.push_back(&gDeferredBumpProgram);
     mShaderList.push_back(&gDeferredPBROpaqueProgram);
@@ -2896,6 +2902,24 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         success = gDeferredPostNoDoFNoiseProgram.createShader();
         llassert(success);
     }
+
+    // <FS:AYA> BD-style post-processing composite pass (color grade / vignette / grain)
+    if (success)
+    {
+        gPostFxProgram.mName = "Post FX Composite Shader";
+        gPostFxProgram.mFeatures.isDeferred = true;
+        gPostFxProgram.mShaderFiles.clear();
+        gPostFxProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER));
+        gPostFxProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredPostFx.glsl", GL_FRAGMENT_SHADER));
+
+        gPostFxProgram.clearPermutations();
+        gPostFxProgram.addPermutation("HAS_NOISE", "1");
+
+        gPostFxProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+        success = gPostFxProgram.createShader();
+        llassert(success);
+    }
+    // </FS:AYA>
 
     if (success)
     {

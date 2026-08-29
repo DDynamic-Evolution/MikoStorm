@@ -255,6 +255,9 @@ extern LLGLSLShader         gCASProgram;
 extern LLGLSLShader         gCASLegacyGammaProgram;
 extern LLGLSLShader         gDeferredPostNoDoFProgram;
 extern LLGLSLShader         gDeferredPostNoDoFNoiseProgram;
+// <FS:AYA> BD-style post-processing composite pass
+extern LLGLSLShader         gPostFxProgram;
+// </FS:AYA>
 extern LLGLSLShader         gDeferredPostGammaCorrectProgram;
 extern LLGLSLShader         gLegacyPostGammaCorrectProgram;
 extern LLGLSLShader         gDeferredPostTonemapProgram;

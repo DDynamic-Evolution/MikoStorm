@@ -4652,6 +4652,70 @@ void LLPipeline::recordTrianglesDrawn()
     add(LLStatViewer::TRIANGLES_DRAWN, LLUnits::Triangles::fromValue(count));
 }
 
+// <FS:AYA> BD-style post-processing composite pass (color grade / vignette / grain).
+// Returns true if a pass ran. All inputs are gated by their settings; when every
+// setting is at its default (off) value this does nothing and returns false so the
+// default present path is unchanged.
+bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
+{
+    static LLCachedControl<F32> fx_strength(gSavedSettings, "RenderSatContrastStrength", 0.0f);
+    static LLCachedControl<F32> saturation(gSavedSettings, "RenderSaturation", 1.0f);
+    static LLCachedControl<F32> contrast(gSavedSettings, "RenderContrast", 1.0f);
+    static LLCachedControl<F32> brightness(gSavedSettings, "RenderBrightness", 0.0f);
+    static LLCachedControl<F32> vignette_amount(gSavedSettings, "RenderVignetteAmount", 0.0f);
+    static LLCachedControl<F32> film_grain(gSavedSettings, "RenderFilmGrain", 0.0f);
+
+    bool grade = fx_strength() > 0.f;
+    bool vignette = vignette_amount() > 0.f;
+    bool grain = film_grain() > 0.f;
+
+    if (!grade && !vignette && !grain)
+    {
+        return false;
+    }
+
+    if (!gPostFxProgram.isComplete())
+    {
+        return false;
+    }
+
+    LL_PROFILE_GPU_ZONE("PostFx");
+    dst->bindTarget();
+
+    gPostFxProgram.bind();
+
+    S32 channel = gPostFxProgram.enableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
+    if (channel > -1)
+    {
+        src->bindTexture(0, channel, LLTexUnit::TFO_BILINEAR);
+    }
+
+    // Bind the deferred depth so the gl_FragDepth write in the shader reads real depth.
+    gPostFxProgram.bindTexture(LLShaderMgr::DEFERRED_DEPTH, &mRT->deferredScreen, true);
+
+    gPostFxProgram.uniform2f(
+        LLShaderMgr::DEFERRED_SCREEN_RES,
+        (GLfloat)dst->getWidth(),
+        (GLfloat)dst->getHeight());
+
+    gPostFxProgram.uniform1f(LLStaticHashedString("saturation"), saturation());
+    gPostFxProgram.uniform1f(LLStaticHashedString("contrast"), contrast());
+    gPostFxProgram.uniform1f(LLStaticHashedString("brightness"), brightness());
+    gPostFxProgram.uniform1f(LLStaticHashedString("postfx_strength"), fx_strength());
+    gPostFxProgram.uniform1f(LLStaticHashedString("vignette_amount"), vignette_amount());
+    gPostFxProgram.uniform1f(LLStaticHashedString("film_grain"), film_grain());
+
+    mScreenTriangleVB->setBuffer();
+    mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+    stop_glerror();
+
+    gPostFxProgram.disableTexture(LLShaderMgr::DEFERRED_DIFFUSE, src->getUsage());
+    gPostFxProgram.unbind();
+    dst->flush();
+    return true;
+}
+// </FS:AYA>
+
 // <FS:Beq> Rework Snapshot Guide Rendering
 void LLPipeline::renderSnapshotGuidesOverlay()
 {
@@ -8180,11 +8244,12 @@ void LLPipeline::generateGlow(LLRenderTarget* src)
     }
 }
 
-void LLPipeline::applyCAS(LLRenderTarget* src, LLRenderTarget* dst)
+void LLPipeline::applyCAS(LLRenderTarget* src, LLRenderTarget* dst, F32 sharpness_override)
 {
     static LLCachedControl<F32> cas_sharpness(gSavedSettings, "RenderCASSharpness", 0.4f);
+    F32 sharpen_amount = (sharpness_override >= 0.f) ? sharpness_override : cas_sharpness();
     LL_PROFILE_GPU_ZONE("cas");
-    if (cas_sharpness == 0.0f || !gCASProgram.isComplete() || !gCASLegacyGammaProgram.isComplete())
+    if (sharpen_amount == 0.0f || !gCASProgram.isComplete() || !gCASLegacyGammaProgram.isComplete())
     {
         gPipeline.copyRenderTarget(src, dst);
         return;
@@ -8213,7 +8278,7 @@ void LLPipeline::applyCAS(LLRenderTarget* src, LLRenderTarget* dst)
         varAU4(const0);
         varAU4(const1);
         CasSetup(const0, const1,
-            cas_sharpness(),             // Sharpness tuning knob (0.0 to 1.0).
+            sharpen_amount,             // Sharpness tuning knob (0.0 to 1.0).
             (AF1)src->getWidth(), (AF1)src->getHeight(),  // Input size.
             (AF1)dst->getWidth(), (AF1)dst->getHeight()); // Output size.
 
@@ -9044,14 +9109,22 @@ void LLPipeline::renderFinalize()
         generateExposure(&mLuminanceMap, &mExposureMap);
 
         static LLCachedControl<F32> cas_sharpness(gSavedSettings, "RenderCASSharpness", 0.4f);
-        bool apply_cas = cas_sharpness != 0.0f && gCASProgram.isComplete() && gCASLegacyGammaProgram.isComplete();
+        // <FS:AYA> BD-style upscaling: when upscaling is enabled, RenderUpscaleSharpness
+        // drives the CAS pass instead of RenderCASSharpness.
+        static LLCachedControl<bool> upscale_enabled(gSavedSettings, "RenderUpscaleEnabled", false);
+        static LLCachedControl<F32> upscale_sharpness(gSavedSettings, "RenderUpscaleSharpness", 0.4f);
+        F32 cas_amount = (upscale_enabled() && (RenderResolutionMultiplier < 1.f || RenderResolutionDivisor > 1))
+                             ? upscale_sharpness()
+                             : cas_sharpness();
+        bool apply_cas = cas_amount != 0.0f && gCASProgram.isComplete() && gCASLegacyGammaProgram.isComplete();
+        // </FS:AYA>
 
         tonemap(&mRT->screen, apply_cas ? &mRT->deferredLight : &mPostPingMap, !apply_cas);
 
         if (apply_cas)
         {
             // Gamma Corrects
-            applyCAS(&mRT->deferredLight, &mPostPingMap);
+            applyCAS(&mRT->deferredLight, &mPostPingMap, cas_amount);
         }
     }
     else
@@ -9119,6 +9192,13 @@ void LLPipeline::renderFinalize()
     {
         std::swap(auxActiveBuffer, auxTargetBuffer);
     };
+    // </FS:Beq>
+    // <FS:AYA> BD-style post-processing composite pass
+    if (renderPostFx(auxActiveBuffer, auxTargetBuffer))
+    {
+        std::swap(auxActiveBuffer, auxTargetBuffer);
+    };
+    // </FS:AYA>
 
     sourceBuffer = auxActiveBuffer;
     // </FS:Beq>

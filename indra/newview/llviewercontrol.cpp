@@ -1551,9 +1551,11 @@ void settings_setup_listeners()
     // </FS:AYA r30 P4 step 5>
     // <PandaView r30 P5> Cinematic floater 即時反映の wire ギャップ補填。
     // RenderMotionBlur: mVelocityMap allocation を createGLBuffers() で再走させる。
-    // RenderVolumetricLightingDirectional: GODRAYS_FADE permutation を shader rebuild で反映。
-    // FIXME: These settings are not defined in settings.xml - commented out to prevent crash
-    // setting_setup_signal_listener(gSavedSettings, "RenderMotionBlur",                    handleReleaseGLBufferChanged);
+    // <FS:AYA> RenderMotionBlur is now defined in settings.xml (Phase 0), safe to register.
+    setting_setup_signal_listener(gSavedSettings, "RenderMotionBlur", handleReleaseGLBufferChanged);
+    // RenderVolumetricLightingDirectional: GODRAYS_FADE permutation is not implemented yet,
+    // and the setting is not defined - left commented until Phase 2 (volumetric/god rays).
+    // FIXME: This setting is not defined in settings.xml - commented out to prevent crash
     // setting_setup_signal_listener(gSavedSettings, "RenderVolumetricLightingDirectional", handleSetShaderChanged);
     // </PandaView r30 P5>
     setting_setup_signal_listener(gSavedSettings, "RenderGlowResolutionPow", handleReleaseGLBufferChanged);

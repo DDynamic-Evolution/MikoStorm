@@ -1416,7 +1416,7 @@ If you do not understand the distinction then leave this control alone."
          bottom="-1"
          right="-1">
         <panel
-         height="1700"
+         height="1950"
          layout="topleft"
          left="0"
          top="0"
@@ -1937,10 +1937,191 @@ If you do not understand the distinction then leave this control alone."
          show_text="true"
          top_pad="5"
          width="310"/>
-        <!-- End of Tone Mapping Settings-->
+         <!-- End of Tone Mapping Settings-->
+        <!-- <FS:AYA> BD-style Post FX / Upscaling settings (reimplemented) -->
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="PostFxHeader"
+         top_pad="12"
+         width="400"
+         font="SansSerifBold">
+            Post-Processing FX
+        </text>
+        <check_box
+         control_name="RenderUpscaleEnabled"
+         follows="left|top"
+         height="16"
+         label="Upscale reduced-resolution rendering with CAS"
+         tool_tip="Renders the 3D scene at a reduced internal resolution (see RenderResolutionMultiplier below) and upscales the result back to screen resolution using AMD Contrast Adaptive Sharpening. Disable for plain bilinear stretching. Black Dragon style feature, reimplemented."
+         layout="topleft"
+         left="10"
+         name="UpscaleEnabled"
+         top_pad="6"
+         width="420"/>
+        <slider
+         control_name="RenderResolutionMultiplier"
+         decimal_digits="2"
+         enabled_control="RenderUpscaleEnabled"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Internal Resolution:"
+         tool_tip="Multiplier for rendering the 3D scene at a reduced resolution. 1.0 = full resolution; lower values increase performance and require RenderUpscaleEnabled for best quality."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.25"
+         max_val="1.0"
+         name="InternalResScale"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <slider
+         control_name="RenderUpscaleSharpness"
+         decimal_digits="2"
+         enabled_control="RenderUpscaleEnabled"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Upscale Sharpness:"
+         tool_tip="Sharpness tuning knob for the CAS upscaling/sharpening pass. 0.0 = softer, 1.0 = sharpest."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="UpscaleSharpness"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="ColorGradeHeader"
+         top_pad="12"
+         width="400"
+         font="SansSerifBold">
+            Color Grading
+        </text>
+        <slider
+         control_name="RenderSatContrastStrength"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Grading Strength:"
+         tool_tip="Master strength of the color grading pass. 0.0 = off (no color grading applied)."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="GradeStrength"
+         show_text="true"
+         top_pad="6"
+         width="310"/>
+        <slider
+         control_name="RenderSaturation"
+         decimal_digits="2"
+         enabled_control="RenderSatContrastStrength"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Saturation:"
+         tool_tip="Color saturation. 1.0 = neutral."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="2.0"
+         name="Saturation"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <slider
+         control_name="RenderContrast"
+         decimal_digits="2"
+         enabled_control="RenderSatContrastStrength"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Contrast:"
+         tool_tip="Contrast. 1.0 = neutral."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.5"
+         max_val="1.5"
+         name="Contrast"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <slider
+         control_name="RenderBrightness"
+         decimal_digits="2"
+         enabled_control="RenderSatContrastStrength"
+         follows="left|top"
+         height="16"
+         increment="0.02"
+         label="Brightness:"
+         tool_tip="Brightness offset. 0.0 = neutral."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="-0.5"
+         max_val="0.5"
+         name="Brightness"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <slider
+         control_name="RenderVignetteAmount"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         label="Vignette:"
+         tool_tip="Darkens the edges of the screen. 0.0 = off. Black Dragon style feature, reimplemented."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="1.0"
+         name="VignetteAmount"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <slider
+         control_name="RenderFilmGrain"
+         decimal_digits="3"
+         follows="left|top"
+         height="16"
+         increment="0.001"
+         label="Film Grain:"
+         tool_tip="Adds a film grain effect to the final image. 0.0 = off. Black Dragon style feature, reimplemented."
+         label_width="150"
+         layout="topleft"
+         left="10"
+         min_val="0.0"
+         max_val="0.03"
+         name="FilmGrain"
+         show_text="true"
+         top_pad="5"
+         width="310"/>
+        <!-- </FS:AYA> -->
         </panel>
       </scroll_container>
     </panel>
+
 
 <!--Depth of Field-->
 	   <panel

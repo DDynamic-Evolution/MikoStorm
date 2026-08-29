@@ -3544,6 +3544,78 @@
     <integer>-1</integer>
   </map>
 
+  <key>CameraBoneYaw</key>
+  <map>
+    <key>Comment</key>
+    <string>Yaw offset in degrees applied to the bone camera focus offset when following a skeleton bone. Rotates the camera around the bone horizontally.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>CameraBonePitch</key>
+  <map>
+    <key>Comment</key>
+    <string>Pitch offset in degrees applied to the bone camera focus offset when following a skeleton bone. Tills the camera up/down around the bone.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>CameraBoneRoll</key>
+  <map>
+    <key>Comment</key>
+    <string>Roll offset in degrees applied to the bone camera focus offset when following a skeleton bone. Rolls the camera around the bone.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>CameraBoneOffsetX</key>
+  <map>
+    <key>Comment</key>
+    <string>X position offset in meters applied to the bone camera focus offset when following a skeleton bone. Offset is in avatar local space (forward/back).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>CameraBoneOffsetY</key>
+  <map>
+    <key>Comment</key>
+    <string>Y position offset in meters applied to the bone camera focus offset when following a skeleton bone. Offset is in avatar local space (left/right).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
+  <key>CameraBoneOffsetZ</key>
+  <map>
+    <key>Comment</key>
+    <string>Z position offset in meters applied to the bone camera focus offset when following a skeleton bone. Offset is in avatar local space (up/down).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+
   <key>CameraFocusTransitionTime</key>
   <map>
     <key>Comment</key>
@@ -12560,6 +12632,160 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>RenderMotionBlur</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable motion blur (Black Dragon cinematic feature, reimplemented). Reserved in settings_cinematic_bd.xml overlay.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>RenderMotionBlurStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>Motion blur strength (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>8</integer>
+  </map>
+  <key>RenderVolumetricLighting</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable volumetric lighting / god rays (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>RenderVolumetricLightingResolution</key>
+  <map>
+    <key>Comment</key>
+    <string>Volumetric lighting ray march resolution (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>16</integer>
+  </map>
+  <key>RenderVolumetricLightingMultiplier</key>
+  <map>
+    <key>Comment</key>
+    <string>Volumetric lighting intensity multiplier (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>4.0</real>
+  </map>
+  <key>RenderVolumetricLightingFalloffMultiplier</key>
+  <map>
+    <key>Comment</key>
+    <string>Volumetric lighting falloff multiplier (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>2.0</real>
+  </map>
+  <key>AYAR14VolumetricAtmosphereInCinematicEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>R14: volumetric atmosphere in Cinematic mode (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>AYAR14Strength</key>
+  <map>
+    <key>Comment</key>
+    <string>R14: volumetric atmosphere strength (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.2</real>
+  </map>
+  <key>AYAR16AerialPerspectiveInCinematicEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>R16: aerial perspective in Cinematic mode (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>AYAR16AerialPerspectiveStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>R16: aerial perspective strength (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+  </map>
+  <key>AYAR17ColorTemperatureInCinematicEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>R17: color temperature in Cinematic mode (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>AYAR17Strength</key>
+  <map>
+    <key>Comment</key>
+    <string>R17: color temperature strength (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+  </map>
+  <key>AYAR18CloudVolumetricInCinematicEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>R18: cloud volumetric in Cinematic mode (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>AYAR18CloudVolumetricStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>R18: cloud volumetric strength (Black Dragon cinematic feature, reimplemented).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.7</real>
+  </map>
 
   <key>RenderDeferred</key>
   <map>
@@ -13558,6 +13784,94 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>F32</string>
     <key>Value</key>
     <real>1.0</real>
+  </map>
+  <key>RenderUpscaleEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>When enabled, the reduced-resolution 3D scene (see RenderResolutionMultiplier/Divisor) is upscaled to full resolution using AMD Contrast Adaptive Sharpening (CAS) as a high-quality upscaler. Disable to use plain bilinear stretching. Black Dragon style feature, reimplemented.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>RenderUpscaleSharpness</key>
+  <map>
+    <key>Comment</key>
+    <string>Sharpness tuning knob for the CAS upscaling pass. 0.0 = softer, 1.0 = sharpest. Valid values: 0.0 to 1.0. Reuses RenderCASSharpness when upscaling.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.4</real>
+  </map>
+  <key>RenderSatContrastStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>Master strength for the color grading (saturation/contrast/brightness) pass. Range 0.0 to 1.0. Black Dragon style feature, reimplemented.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+  <key>RenderSaturation</key>
+  <map>
+    <key>Comment</key>
+    <string>Color saturation for the color grading pass (1.0 = neutral).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.0</real>
+  </map>
+  <key>RenderContrast</key>
+  <map>
+    <key>Comment</key>
+    <string>Contrast for the color grading pass (1.0 = neutral).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>1.0</real>
+  </map>
+  <key>RenderBrightness</key>
+  <map>
+    <key>Comment</key>
+    <string>Brightness offset for the color grading pass (0.0 = neutral).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+  <key>RenderVignetteAmount</key>
+  <map>
+    <key>Comment</key>
+    <string>Vignette amount (0.0 = off) for the post-processing pass. Black Dragon style feature, reimplemented.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
+  <key>RenderFilmGrain</key>
+  <map>
+    <key>Comment</key>
+    <string>Film grain intensity (0.0 = off) added in the final present pass. Black Dragon style feature, reimplemented.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
   </map>
   <key>RenderShaderLightingMaxLevel</key>
   <map>

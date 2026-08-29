@@ -161,7 +161,7 @@ public:
     void tonemap(LLRenderTarget* src, LLRenderTarget* dst, bool gamma_correct);
     void gammaCorrect(LLRenderTarget* src, LLRenderTarget* dst);
     void generateGlow(LLRenderTarget* src);
-    void applyCAS(LLRenderTarget* src, LLRenderTarget* dst);
+    void applyCAS(LLRenderTarget* src, LLRenderTarget* dst, F32 sharpness_override = -1.f);
     void applyFXAA(LLRenderTarget* src, LLRenderTarget* dst);
     void generateSMAABuffers(LLRenderTarget* src);
     void applySMAA(LLRenderTarget* src, LLRenderTarget* dst);
@@ -357,6 +357,9 @@ public:
     void renderHighlights();
     bool renderVignette(LLRenderTarget* src, LLRenderTarget* dst);
     bool renderSnapshotFrame(LLRenderTarget* src, LLRenderTarget* dst); // <FS:Beq/> Add snapshot frame rendering
+    // <FS:AYA> BD-style post-processing composite pass
+    bool renderPostFx(LLRenderTarget* src, LLRenderTarget* dst);
+    // </FS:AYA>
     void renderSnapshotGuidesOverlay(); // <FS:Beq/> Add snapshot composition guide rendering
     void renderDebug();
     void renderPhysicsDisplay();
