@@ -160,6 +160,9 @@ LLGLSLShader            gDeferredSpotLightProgram;
 LLGLSLShader            gDeferredMultiSpotLightProgram;
 LLGLSLShader            gDeferredSunProgram;
 LLGLSLShader            gDeferredSunProbeProgram;
+// <FS:AYA> Volumetric light scattering (god rays) pass
+LLGLSLShader            gVolumetricLightProgram;
+// </FS:AYA>
 LLGLSLShader            gHazeProgram;
 LLGLSLShader            gHazeWaterProgram;
 LLGLSLShader            gDeferredBlurLightProgram;
@@ -429,6 +432,9 @@ void LLViewerShaderMgr::finalizeShaderList()
     mShaderList.push_back(&gUnderWaterProgram);
     mShaderList.push_back(&gDeferredSunProgram);
     mShaderList.push_back(&gDeferredSunProbeProgram);
+    // <FS:AYA> Volumetric light scattering (god rays) pass
+    mShaderList.push_back(&gVolumetricLightProgram);
+    // </FS:AYA>
     mShaderList.push_back(&gHazeProgram);
     mShaderList.push_back(&gHazeWaterProgram);
     mShaderList.push_back(&gDeferredSoftenProgram);
@@ -1767,6 +1773,25 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         success = gDeferredSunProbeProgram.createShader();
         llassert(success);
     }
+
+    // <FS:AYA> Volumetric light scattering (god rays) pass
+    if (success)
+    {
+        gVolumetricLightProgram.mName = "Volumetric Light Program";
+        gVolumetricLightProgram.mFeatures.isDeferred = true;
+        gVolumetricLightProgram.mFeatures.hasShadows = true;
+
+        gVolumetricLightProgram.mShaderFiles.clear();
+        gVolumetricLightProgram.mShaderFiles.push_back(make_pair("deferred/sunLightV.glsl", GL_VERTEX_SHADER));
+        gVolumetricLightProgram.mShaderFiles.push_back(make_pair("deferred/volumetricLightF.glsl", GL_FRAGMENT_SHADER));
+        gVolumetricLightProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+
+        add_common_permutations(&gVolumetricLightProgram);
+
+        success = gVolumetricLightProgram.createShader();
+        llassert(success);
+    }
+    // </FS:AYA>
 
     if (success)
     {

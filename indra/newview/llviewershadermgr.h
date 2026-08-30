@@ -233,6 +233,9 @@ extern LLGLSLShader         gDeferredSpotLightProgram;
 extern LLGLSLShader         gDeferredMultiSpotLightProgram;
 extern LLGLSLShader         gDeferredSunProgram;
 extern LLGLSLShader         gDeferredSunProbeProgram;
+// <FS:AYA> Volumetric light scattering (god rays) pass
+extern LLGLSLShader         gVolumetricLightProgram;
+// </FS:AYA>
 extern LLGLSLShader         gHazeProgram;
 extern LLGLSLShader         gHazeWaterProgram;
 extern LLGLSLShader         gDeferredBlurLightProgram;

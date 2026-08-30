@@ -332,6 +332,10 @@ public:
 
     void renderDeferredLighting();
 
+    // <FS:AYA> Volumetric light scattering (god rays) pass
+    void renderVolumetricLighting();
+    // </FS:AYA>
+
     // apply atmospheric haze based on contents of color and depth buffer
     // should be called just before rendering water when camera is under water
     // and just before rendering alpha when camera is above water

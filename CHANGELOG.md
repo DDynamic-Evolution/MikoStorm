@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.16.42 (2026-08-29)
+
+### Improvements
+
+- **Volumetric Light Scattering / God Rays (Phase 2):** reimplemented Black Dragon's deferred volumetric lighting as a native MikoStorm feature, controlled by the `RenderVolumetricLighting` setting (default on) and its tuning knobs `RenderVolumetricLightingResolution` (ray-march steps, 16), `RenderVolumetricLightingMultiplier` (intensity, `4.0`) and `RenderVolumetricLightingFalloffMultiplier` (`2.0`, distance/silhouette weighting). It accumulates forward-scattered sunlight (Henyey-Greenstein phase) along the view ray in the deferred light buffer, occluded by the existing cascaded shadow maps, and is wired into `renderDeferredLighting` right after the sun/atmospheric pass. Cross-platform (OpenGL). ([pipeline.cpp](indra/newview/pipeline.cpp), [pipeline.h](indra/newview/pipeline.h), [llviewershadermgr.cpp](indra/newview/llviewershadermgr.cpp), [llviewershadermgr.h](indra/newview/llviewershadermgr.h), [volumetricLightF.glsl](indra/newview/app_settings/shaders/class2/deferred/volumetricLightF.glsl))
+  - Note: the GLSL is compiled at runtime by the viewer; the C++ compiles/links clean but the visual result should be tuned in-world via the Preferences → Graphics controls.
+
 ## 1.16.41 (2026-08-29)
 
 ### Improvements

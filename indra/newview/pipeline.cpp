@@ -9757,6 +9757,10 @@ void LLPipeline::renderDeferredLighting()
             unbindDeferredShader(gDeferredSoftenProgram);
         }
 
+        // <FS:AYA> Volumetric light scattering (god rays) pass
+        renderVolumetricLighting();
+        // </FS:AYA>
+
         static LLCachedControl<S32> local_light_count(gSavedSettings, "RenderLocalLightCount", 256);
         static LLCachedControl<S32> probe_level(gSavedSettings, "RenderReflectionProbeLevel", 0);
 
@@ -10073,6 +10077,73 @@ void LLPipeline::renderDeferredLighting()
     }
     gGL.setColorMask(true, true);
 }
+
+// <FS:AYA> Volumetric light scattering (god rays) pass
+void LLPipeline::renderVolumetricLighting()
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
+
+    static LLCachedControl<bool> enabled(gSavedSettings, "RenderVolumetricLighting", true);
+    if (!enabled)
+    {
+        return;
+    }
+
+    if (gCubeSnapshot)
+    {
+        return;
+    }
+
+    // the lightmap (deferredLight) only holds valid content once the sun shadow/SSAO pass has run
+    static LLCachedControl<S32> shadow_detail(gSavedSettings, "RenderShadowDetail", 0);
+    static LLCachedControl<bool> ssao(gSavedSettings, "RenderDeferredSSAO", false);
+    if (shadow_detail <= 0 && !ssao)
+    {
+        return;
+    }
+
+    if (!gVolumetricLightProgram.isComplete())
+    {
+        return;
+    }
+
+    LL_PROFILE_GPU_ZONE("volumetric lighting");
+
+    LLRenderTarget* deferred_light_target = &mRT->deferredLight;
+    LLRenderTarget* screen_target         = &mRT->screen;
+
+    deferred_light_target->bindTarget();
+
+    gGL.setSceneBlendType(LLRender::BT_ADD);
+
+    bindDeferredShader(gVolumetricLightProgram, deferred_light_target);
+
+    static LLCachedControl<S32> vlight_res(gSavedSettings, "RenderVolumetricLightingResolution", 16);
+    static LLCachedControl<F32> vlight_multiplier(gSavedSettings, "RenderVolumetricLightingMultiplier", 4.f);
+    static LLCachedControl<F32> vlight_falloff(gSavedSettings, "RenderVolumetricLightingFalloffMultiplier", 2.f);
+
+    S32 steps = llclamp((S32)vlight_res, 1, 64);
+
+    gVolumetricLightProgram.uniform1i(LLStaticHashedString("vlight_steps"), steps);
+    gVolumetricLightProgram.uniform1f(LLStaticHashedString("vlight_multiplier"), vlight_multiplier);
+    gVolumetricLightProgram.uniform1f(LLStaticHashedString("vlight_falloff"), vlight_falloff);
+
+    {
+        LLGLDepthTest depth(GL_FALSE);
+        mScreenTriangleVB->setBuffer();
+        mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+    }
+
+    unbindDeferredShader(gVolumetricLightProgram);
+
+    deferred_light_target->flush();
+
+    gGL.setSceneBlendType(LLRender::BT_ALPHA);
+
+    // restore the screen target binding for the subsequent passes
+    screen_target->bindTarget();
+}
+// </FS:AYA>
 
 void LLPipeline::doAtmospherics()
 {
