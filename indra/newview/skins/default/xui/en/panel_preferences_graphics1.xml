@@ -303,19 +303,120 @@
          <check_box.commit_callback
           function="Pref.RenderOptionUpdate" />
         </check_box>
-        <check_box
-         control_name="RenderMirrors"
-         height="16"
-         initial_value="false"
-         label="Mirrors"
-         layout="topleft"
-         left_delta="0"
-         name="Mirrors"
-         top_pad="1"
-         width="280">
+         <check_box
+          control_name="RenderMirrors"
+          height="16"
+          initial_value="false"
+          label="Mirrors"
+          layout="topleft"
+          left_delta="0"
+          name="Mirrors"
+          top_pad="1"
+          width="280">
           <check_box.commit_callback
            function="Pref.RenderOptionUpdate" />
+         </check_box>
+        <text
+         type="string"
+         length="1"
+         follows="top|left"
+         top_pad="6"
+         height="16"
+         left_delta="0"
+         width="280"
+         name="CinematicText">
+          Cinematic Rendering:
+        </text>
+        <check_box
+         control_name="RenderVolumetricLighting"
+         height="16"
+         initial_value="true"
+         label="Volumetric Lighting (God Rays)"
+         layout="topleft"
+         left_delta="0"
+         name="UseVolumetricLighting"
+         top_pad="2"
+         width="280">
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
         </check_box>
+        <slider
+         control_name="RenderVolumetricLightingResolution"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="God Ray Steps:"
+         label_width="128"
+         layout="topleft"
+         left_delta="0"
+         max_val="64"
+         min_val="1"
+         name="VolumetricLightResolution"
+         show_text="true"
+         top_pad="2"
+         width="280"/>
+        <slider
+         control_name="RenderVolumetricLightingMultiplier"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="God Ray Intensity:"
+         label_width="128"
+         layout="topleft"
+         left_delta="0"
+         max_val="10.0"
+         min_val="0.0"
+         name="VolumetricLightMultiplier"
+         show_text="true"
+         top_pad="2"
+         width="280"/>
+        <slider
+         control_name="RenderVolumetricLightingFalloffMultiplier"
+         decimal_digits="1"
+         follows="left|top"
+         height="16"
+         increment="0.1"
+         label="God Ray Falloff:"
+         label_width="128"
+         layout="topleft"
+         left_delta="0"
+         max_val="10.0"
+         min_val="0.1"
+         name="VolumetricLightFalloff"
+         show_text="true"
+         top_pad="2"
+         width="280"/>
+        <check_box
+         control_name="RenderMotionBlur"
+         height="16"
+         initial_value="true"
+         label="Motion Blur (Camera Motion)"
+         layout="topleft"
+         left_delta="0"
+         name="UseMotionBlur"
+         top_pad="6"
+         width="280">
+         <check_box.commit_callback
+          function="Pref.RenderOptionUpdate" />
+        </check_box>
+        <slider
+         control_name="RenderMotionBlurStrength"
+         decimal_digits="0"
+         follows="left|top"
+         height="16"
+         increment="1"
+         label="Motion Blur Strength:"
+         label_width="128"
+         layout="topleft"
+         left_delta="0"
+         max_val="20"
+         min_val="0"
+         name="MotionBlurStrength"
+         show_text="true"
+         top_pad="2"
+         width="280"/>
         <text
          type="string"
          length="1"
