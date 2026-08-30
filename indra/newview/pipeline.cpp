@@ -4664,6 +4664,7 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     static LLCachedControl<F32> brightness(gSavedSettings, "RenderBrightness", 0.0f);
     static LLCachedControl<F32> vignette_amount(gSavedSettings, "RenderVignetteAmount", 0.0f);
     static LLCachedControl<F32> film_grain(gSavedSettings, "RenderFilmGrain", 0.0f);
+    static LLCachedControl<F32> chromatic_aberration(gSavedSettings, "RenderChromaticAberration", 0.0f);
 
     // AYAR cinematic effects (set by the cinematic overlay in mode 2; gate each on its toggle)
     static LLCachedControl<U32>  aya_mode(gSavedSettings, "AYAVisualRealismEnabled", 0);
@@ -4684,11 +4685,14 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     bool aya17 = cinematic && aya17_enabled() && aya17_strength() > 0.f;
     bool aya18 = cinematic && aya18_enabled() && aya18_strength() > 0.f;
 
+    // Chromatic aberration (cinematic-only, like the other AYAR-style effects)
+    bool ca = cinematic && chromatic_aberration() > 0.f;
+
     bool grade = fx_strength() > 0.f;
     bool vignette = vignette_amount() > 0.f;
     bool grain = film_grain() > 0.f;
 
-    if (!grade && !vignette && !grain && !aya14 && !aya16 && !aya17 && !aya18)
+    if (!grade && !vignette && !grain && !aya14 && !aya16 && !aya17 && !aya18 && !ca)
     {
         return false;
     }
@@ -4729,6 +4733,7 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     gPostFxProgram.uniform1f(LLStaticHashedString("aya_ap_strength"), aya16 ? aya16_strength() : 0.f);
     gPostFxProgram.uniform1f(LLStaticHashedString("aya_cloud"), aya18 ? aya18_strength() : 0.f);
     gPostFxProgram.uniform1f(LLStaticHashedString("aya_atmo"), aya14 ? aya14_strength() : 0.f);
+    gPostFxProgram.uniform1f(LLStaticHashedString("chromatic_aberration"), ca ? chromatic_aberration() : 0.f);
 
     mScreenTriangleVB->setBuffer();
     mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);

@@ -13873,6 +13873,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.0</real>
   </map>
+  <key>RenderChromaticAberration</key>
+  <map>
+    <key>Comment</key>
+    <string>Radial chromatic aberration strength (0.0 = off). Black Dragon style cinematic feature, reimplemented. Applied only in cinematic mode (AYAR).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0</real>
+  </map>
   <key>RenderShaderLightingMaxLevel</key>
   <map>
     <key>Comment</key>

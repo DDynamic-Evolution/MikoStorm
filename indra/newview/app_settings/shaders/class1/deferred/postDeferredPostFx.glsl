@@ -31,6 +31,7 @@ uniform float brightness;
 uniform float postfx_strength;
 uniform float vignette_amount;
 uniform float film_grain;
+uniform float chromatic_aberration;
 
 // AYAR cinematic effects (0 = off; gated upsteam by the *_InCinematicEnabled toggle)
 uniform float aya_temp;        // AYAR17 color temperature [-1..1], warm(+) / cool(-)
@@ -145,6 +146,17 @@ void main()
         diff.rgb += nz * film_grain;
     }
 #endif
+
+    // Chromatic aberration (radial RGB split; gated by chromatic_aberration > 0)
+    if (chromatic_aberration > 0.0)
+    {
+        vec2 center = vary_fragcoord.xy - vec2(0.5);
+        float dist2 = dot(center, center);
+        vec2 off = center * chromatic_aberration * dist2 * 3.0;
+        float cr = texture(diffuseRect, vary_fragcoord.xy - off).r;
+        float cb = texture(diffuseRect, vary_fragcoord.xy + off).b;
+        diff.rgb = vec3(cr, diff.g, cb);
+    }
 
     diff.rgb = clampHDRRange(diff.rgb);
     frag_color = diff;
