@@ -163,6 +163,9 @@ LLGLSLShader            gDeferredSunProbeProgram;
 // <FS:AYA> Volumetric light scattering (god rays) pass
 LLGLSLShader            gVolumetricLightProgram;
 // </FS:AYA>
+// <FS:AYA> Camera-motion motion blur pass
+LLGLSLShader            gMotionBlurProgram;
+// </FS:AYA>
 LLGLSLShader            gHazeProgram;
 LLGLSLShader            gHazeWaterProgram;
 LLGLSLShader            gDeferredBlurLightProgram;
@@ -434,6 +437,9 @@ void LLViewerShaderMgr::finalizeShaderList()
     mShaderList.push_back(&gDeferredSunProbeProgram);
     // <FS:AYA> Volumetric light scattering (god rays) pass
     mShaderList.push_back(&gVolumetricLightProgram);
+    // </FS:AYA>
+    // <FS:AYA> Camera-motion motion blur pass
+    mShaderList.push_back(&gMotionBlurProgram);
     // </FS:AYA>
     mShaderList.push_back(&gHazeProgram);
     mShaderList.push_back(&gHazeWaterProgram);
@@ -1788,6 +1794,24 @@ bool LLViewerShaderMgr::loadShadersDeferred()
         add_common_permutations(&gVolumetricLightProgram);
 
         success = gVolumetricLightProgram.createShader();
+        llassert(success);
+    }
+    // </FS:AYA>
+
+    // <FS:AYA> Camera-motion motion blur pass
+    if (success)
+    {
+        gMotionBlurProgram.mName = "Camera Motion Blur Program";
+        gMotionBlurProgram.mFeatures.isDeferred = true;
+
+        gMotionBlurProgram.mShaderFiles.clear();
+        gMotionBlurProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER));
+        gMotionBlurProgram.mShaderFiles.push_back(make_pair("deferred/motionBlurF.glsl", GL_FRAGMENT_SHADER));
+        gMotionBlurProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
+
+        add_common_permutations(&gMotionBlurProgram);
+
+        success = gMotionBlurProgram.createShader();
         llassert(success);
     }
     // </FS:AYA>

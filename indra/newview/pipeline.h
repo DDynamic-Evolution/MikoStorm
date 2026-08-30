@@ -336,6 +336,10 @@ public:
     bool renderVolumetricLighting(LLRenderTarget* src, LLRenderTarget* dst);
     // </FS:AYA>
 
+    // <FS:AYA> Camera-motion motion blur pass
+    bool renderMotionBlur(LLRenderTarget* src, LLRenderTarget* dst);
+    // </FS:AYA>
+
     // apply atmospheric haze based on contents of color and depth buffer
     // should be called just before rendering water when camera is under water
     // and just before rendering alpha when camera is above water

@@ -236,6 +236,9 @@ extern LLGLSLShader         gDeferredSunProbeProgram;
 // <FS:AYA> Volumetric light scattering (god rays) pass
 extern LLGLSLShader         gVolumetricLightProgram;
 // </FS:AYA>
+// <FS:AYA> Camera-motion motion blur pass
+extern LLGLSLShader         gMotionBlurProgram;
+// </FS:AYA>
 extern LLGLSLShader         gHazeProgram;
 extern LLGLSLShader         gHazeWaterProgram;
 extern LLGLSLShader         gDeferredBlurLightProgram;

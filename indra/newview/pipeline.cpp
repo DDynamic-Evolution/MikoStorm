@@ -4665,11 +4665,30 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     static LLCachedControl<F32> vignette_amount(gSavedSettings, "RenderVignetteAmount", 0.0f);
     static LLCachedControl<F32> film_grain(gSavedSettings, "RenderFilmGrain", 0.0f);
 
+    // AYAR cinematic effects (set by the cinematic overlay in mode 2; gate each on its toggle)
+    static LLCachedControl<U32>  aya_mode(gSavedSettings, "AYAVisualRealismEnabled", 0);
+    static LLCachedControl<bool> aya14_enabled(gSavedSettings, "AYAR14VolumetricAtmosphereInCinematicEnabled", false);
+    static LLCachedControl<F32>  aya14_strength(gSavedSettings, "AYAR14Strength", 0.f);
+    static LLCachedControl<bool> aya16_enabled(gSavedSettings, "AYAR16AerialPerspectiveInCinematicEnabled", false);
+    static LLCachedControl<F32>  aya16_strength(gSavedSettings, "AYAR16AerialPerspectiveStrength", 0.f);
+    static LLCachedControl<bool> aya17_enabled(gSavedSettings, "AYAR17ColorTemperatureInCinematicEnabled", false);
+    static LLCachedControl<F32>  aya17_strength(gSavedSettings, "AYAR17Strength", 0.f);
+    static LLCachedControl<bool> aya18_enabled(gSavedSettings, "AYAR18CloudVolumetricInCinematicEnabled", false);
+    static LLCachedControl<F32>  aya18_strength(gSavedSettings, "AYAR18CloudVolumetricStrength", 0.f);
+
+    // AYAR effects only apply in cinematic mode (AYAVisualRealismEnabled == 2) to keep
+    // the non-cinematic default image unchanged.
+    bool cinematic = aya_mode() == 2;
+    bool aya14 = cinematic && aya14_enabled() && aya14_strength() > 0.f;
+    bool aya16 = cinematic && aya16_enabled() && aya16_strength() > 0.f;
+    bool aya17 = cinematic && aya17_enabled() && aya17_strength() > 0.f;
+    bool aya18 = cinematic && aya18_enabled() && aya18_strength() > 0.f;
+
     bool grade = fx_strength() > 0.f;
     bool vignette = vignette_amount() > 0.f;
     bool grain = film_grain() > 0.f;
 
-    if (!grade && !vignette && !grain)
+    if (!grade && !vignette && !grain && !aya14 && !aya16 && !aya17 && !aya18)
     {
         return false;
     }
@@ -4704,6 +4723,12 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     gPostFxProgram.uniform1f(LLStaticHashedString("postfx_strength"), fx_strength());
     gPostFxProgram.uniform1f(LLStaticHashedString("vignette_amount"), vignette_amount());
     gPostFxProgram.uniform1f(LLStaticHashedString("film_grain"), film_grain());
+
+    // AYAR cinematic effect uniforms (0 when disabled)
+    gPostFxProgram.uniform1f(LLStaticHashedString("aya_temp"), aya17 ? aya17_strength() : 0.f);
+    gPostFxProgram.uniform1f(LLStaticHashedString("aya_ap_strength"), aya16 ? aya16_strength() : 0.f);
+    gPostFxProgram.uniform1f(LLStaticHashedString("aya_cloud"), aya18 ? aya18_strength() : 0.f);
+    gPostFxProgram.uniform1f(LLStaticHashedString("aya_atmo"), aya14 ? aya14_strength() : 0.f);
 
     mScreenTriangleVB->setBuffer();
     mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
@@ -9149,6 +9174,13 @@ void LLPipeline::renderFinalize()
     }
     // </FS:AYA>
 
+    // <FS:AYA> Camera-motion motion blur pass
+    if (renderMotionBlur(sourceBuffer, targetBuffer))
+    {
+        std::swap(sourceBuffer, targetBuffer);
+    }
+    // </FS:AYA>
+
     gGLViewport[0] = gViewerWindow->getWorldViewRectRaw().mLeft;
     gGLViewport[1] = gViewerWindow->getWorldViewRectRaw().mBottom;
     gGLViewport[2] = gViewerWindow->getWorldViewRectRaw().getWidth();
@@ -10170,6 +10202,56 @@ bool LLPipeline::renderVolumetricLighting(LLRenderTarget* src, LLRenderTarget* d
 
     gGL.getTexUnit(channel)->unbind(LLTexUnit::TT_TEXTURE);
     gVolumetricLightProgram.unbind();
+    dst->flush();
+
+    return true;
+}
+// </FS:AYA>
+
+// <FS:AYA> Camera-motion motion blur pass
+bool LLPipeline::renderMotionBlur(LLRenderTarget* src, LLRenderTarget* dst)
+{
+    LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
+
+    static LLCachedControl<bool> enabled(gSavedSettings, "RenderMotionBlur", false);
+    if (!enabled)
+    {
+        return false;
+    }
+
+    if (gCubeSnapshot)
+    {
+        return false;
+    }
+
+    if (!gMotionBlurProgram.isComplete())
+    {
+        return false;
+    }
+
+    LL_PROFILE_GPU_ZONE("motion blur");
+
+    static LLCachedControl<U32> strength(gSavedSettings, "RenderMotionBlurStrength", 8);
+
+    dst->bindTarget();
+
+    gMotionBlurProgram.bind();
+
+    gMotionBlurProgram.bindTexture(LLShaderMgr::DEFERRED_DIFFUSE, src, false, LLTexUnit::TFO_BILINEAR);
+    gMotionBlurProgram.bindTexture(LLShaderMgr::DEFERRED_DEPTH, &mRT->deferredScreen, true);
+
+    gMotionBlurProgram.uniform1f(LLStaticHashedString("blur_strength"), (F32)strength);
+    gMotionBlurProgram.uniformMatrix4fv(LLShaderMgr::INVERSE_MODELVIEW_DELTA_MATRIX, 1, GL_FALSE, glm::value_ptr(gGLInverseDeltaModelView));
+    gMotionBlurProgram.uniformMatrix4fv(LLStaticHashedString("last_proj"), 1, GL_FALSE, gGLLastProjection);
+
+    {
+        LLGLDepthTest depth(GL_FALSE);
+        LLGLDisable   blend(GL_BLEND);
+        mScreenTriangleVB->setBuffer();
+        mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
+    }
+
+    gMotionBlurProgram.unbind();
     dst->flush();
 
     return true;
