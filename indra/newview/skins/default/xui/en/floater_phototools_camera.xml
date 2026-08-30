@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  positioning="right"
- can_resize="false"
+ can_resize="true"
  can_dock="false"
  can_close="true"
  can_minimize="true"
- height="315"
+ height="460"
+ min_height="400"
  width="285"
+ min_width="285"
  layout="topleft"
  save_rect="true"
  save_visibility="true"
@@ -34,7 +36,7 @@
 	 halign="center"
 	 name="tabs"
 	 layout="topleft"
-	 height="320"
+	 height="430"
 	 width="285"
 	 top="0"
 	 left="0"
@@ -1067,6 +1069,363 @@
 				 left="6"
 				 top_pad="7"
 				 width="15"/>
+			</panel>
+		</panel>
+		<panel
+		 name="P_Bone"
+		 follows="all"
+		 layout="topleft"
+		 top="0"
+		 label="Bone Cam"
+		 height="400"
+		 left="0">
+			<panel
+			 name="P_Bone_Settings"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Bone_Cam"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 width="230">
+					Bone Camera
+				</text>
+			</panel>
+			<panel
+			 name="P_Bone_Select"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="52"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 name="T_Bone_Cam_Label"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets plus the angles and offsets below. Select None to disable."
+				 width="120">
+					Bone Camera
+				</text>
+				<combo_box
+				 height="23"
+				 follows="left|top"
+				 layout="topleft"
+				 left_pad="0"
+				 mouse_opaque="true"
+				 name="joint_combo"
+				 top_delta="-2"
+				 tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets. Select None to disable."
+				 width="130"/>
+			</panel>
+			<panel
+			 name="P_Bone_Angle_Header"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Bone_Angle_Header"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 width="230">
+					Angle Offsets
+				</text>
+			</panel>
+			<panel
+			 name="P_Bone_Offset"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="118"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 name="T_Bone_Yaw"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="12"
+				 tool_tip="Rotates the camera horizontally around the selected bone."
+				 width="70">
+					Yaw
+				</text>
+				<slider
+				 name="SL_Bone_Yaw"
+				 can_edit_text="true"
+				 control_name="CameraBoneYaw"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_delta="80"
+				 min_val="-180"
+				 max_val="180"
+				 top_delta="-2"
+				 width="120"/>
+				<button
+				 follows="right"
+				 name="Reset_Bone_Yaw"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraBoneYaw"/>
+				</button>
+
+				<text
+				 name="T_Bone_Pitch"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Tilts the camera up and down around the selected bone."
+				 width="70">
+					Pitch
+				</text>
+				<slider
+				 name="SL_Bone_Pitch"
+				 can_edit_text="true"
+				 control_name="CameraBonePitch"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_delta="80"
+				 min_val="-180"
+				 max_val="180"
+				 top_delta="-2"
+				 width="120"/>
+				<button
+				 follows="right"
+				 name="Reset_Bone_Pitch"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraBonePitch"/>
+				</button>
+
+				<text
+				 name="T_Bone_Roll"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Rolls the camera around the selected bone."
+				 width="70">
+					Roll
+				</text>
+				<slider
+				 name="SL_Bone_Roll"
+				 can_edit_text="true"
+				 control_name="CameraBoneRoll"
+				 follows="left|right"
+				 height="16"
+				 increment="1"
+				 layout="topleft"
+				 left_delta="80"
+				 min_val="-180"
+				 max_val="180"
+				 top_delta="-2"
+				 width="120"/>
+				<button
+				 follows="right"
+				 name="Reset_Bone_Roll"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraBoneRoll"/>
+				</button>
+			</panel>
+			<panel
+			 name="P_Bone_Pos_Header"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="285"
+			 height="22"
+			 bg_alpha_color="Phototools_Header"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Bone_Pos_Header"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 width="230">
+					Position Offsets
+				</text>
+			</panel>
+			<panel
+			 name="P_Bone_Pos"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="270"
+			 height="118"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 name="T_Bone_OffsetX"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="12"
+				 tool_tip="Moves the camera forward/back (m) relative to the selected bone, in avatar local space."
+				 width="70">
+					Offset X
+				</text>
+				<slider
+				 name="SL_Bone_OffsetX"
+				 can_edit_text="true"
+				 control_name="CameraBoneOffsetX"
+				 follows="left|right"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_delta="80"
+				 min_val="-10"
+				 max_val="10"
+				 top_delta="-2"
+				 width="120"/>
+				<button
+				 follows="right"
+				 name="Reset_Bone_OffsetX"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraBoneOffsetX"/>
+				</button>
+
+				<text
+				 name="T_Bone_OffsetY"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Moves the camera left/right (m) relative to the selected bone, in avatar local space."
+				 width="70">
+					Offset Y
+				</text>
+				<slider
+				 name="SL_Bone_OffsetY"
+				 can_edit_text="true"
+				 control_name="CameraBoneOffsetY"
+				 follows="left|right"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_delta="80"
+				 min_val="-10"
+				 max_val="10"
+				 top_delta="-2"
+				 width="120"/>
+				<button
+				 follows="right"
+				 name="Reset_Bone_OffsetY"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraBoneOffsetY"/>
+				</button>
+
+				<text
+				 name="T_Bone_OffsetZ"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 tool_tip="Moves the camera up/down (m) relative to the selected bone, in avatar local space."
+				 width="70">
+					Offset Z
+				</text>
+				<slider
+				 name="SL_Bone_OffsetZ"
+				 can_edit_text="true"
+				 control_name="CameraBoneOffsetZ"
+				 follows="left|right"
+				 height="16"
+				 increment="0.1"
+				 layout="topleft"
+				 left_delta="80"
+				 min_val="-10"
+				 max_val="10"
+				 top_delta="-2"
+				 width="120"/>
+				<button
+				 follows="right"
+				 name="Reset_Bone_OffsetZ"
+				 height="16"
+				 label="D"
+				 layout="topleft"
+				 left="245"
+				 top_delta="0"
+				 width="20"
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraBoneOffsetZ"/>
+				</button>
 			</panel>
 		</panel>
 	</tab_container>

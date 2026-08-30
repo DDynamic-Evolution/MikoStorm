@@ -5138,47 +5138,6 @@ grading, warm tones, cool blues, or a vintage film look.
 							 tool_tip="Resets the camera to its default position when you move the avatar"/>
 						</panel>
 					</panel>
-
-					<panel
-					 follows="all"
-					 name="P_Bone"
-					 layout="topleft"
-					 width="282"
-					 top="0"
-					 label="Bone Camera"
-					 left="0">
-						<panel
-						 name="P_Bone_Settings"
-						 follows="left|top"
-						 layout="topleft"
-						 top_pad="0"
-						 left="0"
-						 width="275"
-						 height="110"
-						 border_visible="true"
-						 background_visible="true">
-							<text
-							 name="T_Bone_Cam"
-							 follows="left|top"
-							 layout="topleft"
-							 left="5"
-							 top_pad="7"
-							 tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets. Select None to disable."
-							 width="180">
-								Bone Camera
-							</text>
-							<combo_box
-							 height="23"
-							 follows="left|top"
-							 layout="topleft"
-							 left_pad="0"
-							 mouse_opaque="true"
-							 name="joint_combo"
-							 top_delta="-2"
-							 tool_tip="Fix the camera to a specified skeleton bone in third person using the current camera preset offsets. Select None to disable."
-							 width="200"/>
-						</panel>
-					</panel>
 				</tab_container>
 			</panel>
 		</panel>

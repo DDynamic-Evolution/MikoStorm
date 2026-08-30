@@ -124,10 +124,6 @@ public:
     void onLUTComboChanged(LLUICtrl* ctrl, const LLSD& value);
     void onRemoveLUT();
 
-    // Bone camera - follow a specified skeleton joint
-    void refreshJointCameraCombo();
-    void onJointCameraChanged(LLUICtrl* ctrl, const LLSD& value);
-
     void dockToToolbarButton();
 
 private:
@@ -177,10 +173,6 @@ private:
 
     // Color grading LUT
     LLComboBox*         mColorGradingLUTCombo;
-
-    // Bone camera - follow a specified skeleton joint
-    LLComboBox*         mJointComboBox;
-    bool                mJointCameraComboInitialized;
 
     LLSettingsSky::ptr_t        mLiveSky;
     LLSettingsWater::ptr_t      mLiveWater;

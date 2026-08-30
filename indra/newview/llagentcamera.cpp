@@ -1625,7 +1625,24 @@ void LLAgentCamera::updateCamera()
         if (joint)
         {
             LLQuaternion avatarRotationForFollowCam = gAgentAvatarp->isSitting() ? gAgentAvatarp->getRenderRotation() : gAgent.getFrameAgent().getQuaternion();
-            focus_agent = joint->getWorldPosition() + (LLVector3)getFocusOffsetInitial() * avatarRotationForFollowCam;
+
+            // <FS:CJB> Bone camera - adjustable yaw/pitch/roll angle and x/y/z position offsets
+            static LLCachedControl<F32> bone_yaw(gSavedSettings, "CameraBoneYaw", 0.f);
+            static LLCachedControl<F32> bone_pitch(gSavedSettings, "CameraBonePitch", 0.f);
+            static LLCachedControl<F32> bone_roll(gSavedSettings, "CameraBoneRoll", 0.f);
+            static LLCachedControl<F32> bone_offset_x(gSavedSettings, "CameraBoneOffsetX", 0.f);
+            static LLCachedControl<F32> bone_offset_y(gSavedSettings, "CameraBoneOffsetY", 0.f);
+            static LLCachedControl<F32> bone_offset_z(gSavedSettings, "CameraBoneOffsetZ", 0.f);
+            F32 yaw_rad = (F32)bone_yaw * DEG_TO_RAD;
+            F32 pitch_rad = (F32)bone_pitch * DEG_TO_RAD;
+            F32 roll_rad = (F32)bone_roll * DEG_TO_RAD;
+            LLQuaternion boneOffsetRotation(pitch_rad, LLVector3::x_axis);
+            boneOffsetRotation *= LLQuaternion(yaw_rad, LLVector3::z_axis);
+            boneOffsetRotation *= LLQuaternion(roll_rad, LLVector3::y_axis);
+            LLVector3 bonePositionOffset((F32)bone_offset_x, (F32)bone_offset_y, (F32)bone_offset_z);
+            // </FS:CJB>
+
+            focus_agent = joint->getWorldPosition() + (LLVector3)getFocusOffsetInitial() * boneOffsetRotation * avatarRotationForFollowCam + bonePositionOffset * avatarRotationForFollowCam;
         }
     }
     // </CJB>
