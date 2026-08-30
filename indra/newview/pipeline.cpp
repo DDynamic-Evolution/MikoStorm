@@ -9142,6 +9142,13 @@ void LLPipeline::renderFinalize()
     combineGlow(sourceBuffer, targetBuffer);
     std::swap(sourceBuffer, targetBuffer);
 
+    // <FS:AYA> Volumetric light scattering (god rays) pass
+    if (renderVolumetricLighting(sourceBuffer, targetBuffer))
+    {
+        std::swap(sourceBuffer, targetBuffer);
+    }
+    // </FS:AYA>
+
     gGLViewport[0] = gViewerWindow->getWorldViewRectRaw().mLeft;
     gGLViewport[1] = gViewerWindow->getWorldViewRectRaw().mBottom;
     gGLViewport[2] = gViewerWindow->getWorldViewRectRaw().getWidth();
@@ -9757,10 +9764,6 @@ void LLPipeline::renderDeferredLighting()
             unbindDeferredShader(gDeferredSoftenProgram);
         }
 
-        // <FS:AYA> Volumetric light scattering (god rays) pass
-        renderVolumetricLighting();
-        // </FS:AYA>
-
         static LLCachedControl<S32> local_light_count(gSavedSettings, "RenderLocalLightCount", 256);
         static LLCachedControl<S32> probe_level(gSavedSettings, "RenderReflectionProbeLevel", 0);
 
@@ -10079,44 +10082,59 @@ void LLPipeline::renderDeferredLighting()
 }
 
 // <FS:AYA> Volumetric light scattering (god rays) pass
-void LLPipeline::renderVolumetricLighting()
+// Self-contained screen-space light-shaft pass: it reads only the already-lit
+// source image (no G-buffer, no shadow maps) and additively composites radial
+// god-rays streaming toward the sun onto it. Run as one step of the post chain
+// (read src -> write dst -> swap), so it can never disrupt the deferred passes.
+bool LLPipeline::renderVolumetricLighting(LLRenderTarget* src, LLRenderTarget* dst)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
 
     static LLCachedControl<bool> enabled(gSavedSettings, "RenderVolumetricLighting", true);
     if (!enabled)
     {
-        return;
+        return false;
     }
 
     if (gCubeSnapshot)
     {
-        return;
-    }
-
-    // the lightmap (deferredLight) only holds valid content once the sun shadow/SSAO pass has run
-    static LLCachedControl<S32> shadow_detail(gSavedSettings, "RenderShadowDetail", 0);
-    static LLCachedControl<bool> ssao(gSavedSettings, "RenderDeferredSSAO", false);
-    if (shadow_detail <= 0 && !ssao)
-    {
-        return;
+        return false;
     }
 
     if (!gVolumetricLightProgram.isComplete())
     {
-        return;
+        return false;
     }
 
     LL_PROFILE_GPU_ZONE("volumetric lighting");
 
-    LLRenderTarget* deferred_light_target = &mRT->deferredLight;
-    LLRenderTarget* screen_target         = &mRT->screen;
+    LLEnvironment& env = LLEnvironment::instance();
+    LLVector3 sun_dir = env.getSunDirection();
 
-    deferred_light_target->bindTarget();
+    LLViewerCamera* cam = LLViewerCamera::getInstance();
+    bool sun_in_front = (sun_dir * cam->getAtAxis() > 0.0f);
 
-    gGL.setSceneBlendType(LLRender::BT_ADD);
-
-    bindDeferredShader(gVolumetricLightProgram, deferred_light_target);
+    F32 sun_u = 0.0f;
+    F32 sun_v = 0.0f;
+    if (sun_in_front)
+    {
+        LLRect view = gViewerWindow->getWorldViewRectRaw();
+        LLVector3 sun_pt = cam->getOrigin() + sun_dir * 10000.0f;
+        LLCoordGL sun_gl;
+        if (cam->projectPosAgentToScreen(sun_pt, sun_gl))
+        {
+            F32 w = (F32)llmax(view.getWidth(), 1);
+            F32 h = (F32)llmax(view.getHeight(), 1);
+            sun_u = (F32)(sun_gl.mX - view.mLeft) / w;
+            sun_v = (F32)(sun_gl.mY - view.mBottom) / h;
+            sun_u = llclamp(sun_u, 0.01f, 0.99f);
+            sun_v = llclamp(sun_v, 0.01f, 0.99f);
+        }
+        else
+        {
+            sun_in_front = false;
+        }
+    }
 
     static LLCachedControl<S32> vlight_res(gSavedSettings, "RenderVolumetricLightingResolution", 16);
     static LLCachedControl<F32> vlight_multiplier(gSavedSettings, "RenderVolumetricLightingMultiplier", 4.f);
@@ -10124,24 +10142,37 @@ void LLPipeline::renderVolumetricLighting()
 
     S32 steps = llclamp((S32)vlight_res, 1, 64);
 
+    dst->bindTarget();
+
+    gVolumetricLightProgram.bind();
+
+    // Explicitly drive the sampler binding rather than relying on the deferred
+    // program's auto texture registration: bind the source (already-lit) image to
+    // GL texture unit 0 and point the diffuseRect sampler at it. This guarantees a
+    // correct read back regardless of the deferred feature flags.
+    const S32 channel = 0;
+    gGL.getTexUnit(channel)->activate();
+    src->bindTexture(0, channel, LLTexUnit::TFO_BILINEAR);
+    gVolumetricLightProgram.uniform1i(LLShaderMgr::DEFERRED_DIFFUSE, channel);
+
+    gVolumetricLightProgram.uniform2f(LLStaticHashedString("sun_screen_pos"), sun_u, sun_v);
+    gVolumetricLightProgram.uniform1f(LLStaticHashedString("sun_visible"), sun_in_front ? 1.0f : 0.0f);
     gVolumetricLightProgram.uniform1i(LLStaticHashedString("vlight_steps"), steps);
     gVolumetricLightProgram.uniform1f(LLStaticHashedString("vlight_multiplier"), vlight_multiplier);
     gVolumetricLightProgram.uniform1f(LLStaticHashedString("vlight_falloff"), vlight_falloff);
 
     {
         LLGLDepthTest depth(GL_FALSE);
+        LLGLDisable   blend(GL_BLEND);
         mScreenTriangleVB->setBuffer();
         mScreenTriangleVB->drawArrays(LLRender::TRIANGLES, 0, 3);
     }
 
-    unbindDeferredShader(gVolumetricLightProgram);
+    gGL.getTexUnit(channel)->unbind(LLTexUnit::TT_TEXTURE);
+    gVolumetricLightProgram.unbind();
+    dst->flush();
 
-    deferred_light_target->flush();
-
-    gGL.setSceneBlendType(LLRender::BT_ALPHA);
-
-    // restore the screen target binding for the subsequent passes
-    screen_target->bindTarget();
+    return true;
 }
 // </FS:AYA>
 

@@ -333,7 +333,7 @@ public:
     void renderDeferredLighting();
 
     // <FS:AYA> Volumetric light scattering (god rays) pass
-    void renderVolumetricLighting();
+    bool renderVolumetricLighting(LLRenderTarget* src, LLRenderTarget* dst);
     // </FS:AYA>
 
     // apply atmospheric haze based on contents of color and depth buffer

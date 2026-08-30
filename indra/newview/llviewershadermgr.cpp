@@ -1779,10 +1779,9 @@ bool LLViewerShaderMgr::loadShadersDeferred()
     {
         gVolumetricLightProgram.mName = "Volumetric Light Program";
         gVolumetricLightProgram.mFeatures.isDeferred = true;
-        gVolumetricLightProgram.mFeatures.hasShadows = true;
 
         gVolumetricLightProgram.mShaderFiles.clear();
-        gVolumetricLightProgram.mShaderFiles.push_back(make_pair("deferred/sunLightV.glsl", GL_VERTEX_SHADER));
+        gVolumetricLightProgram.mShaderFiles.push_back(make_pair("deferred/postDeferredNoTCV.glsl", GL_VERTEX_SHADER));
         gVolumetricLightProgram.mShaderFiles.push_back(make_pair("deferred/volumetricLightF.glsl", GL_FRAGMENT_SHADER));
         gVolumetricLightProgram.mShaderLevel = mShaderLevel[SHADER_DEFERRED];
 
