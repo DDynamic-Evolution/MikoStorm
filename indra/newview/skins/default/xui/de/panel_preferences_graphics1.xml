@@ -38,12 +38,12 @@
 		<text name="CinematicText">
 			Filmisches Rendern:
 		</text>
-		<check_box label="Volumetrisches Licht (Sonnenstrahlen)" name="UseVolumetricLighting" control_name="RenderVolumetricLighting"/>
-		<slider label="Sonnenstrahl-Schritte:" name="VolumetricLightResolution" min_val="1" max_val="64" increment="1" decimal_digits="0" control_name="RenderVolumetricLightingResolution"/>
-		<slider label="Sonnenstrahl-Intensität:" name="VolumetricLightMultiplier" min_val="0.0" max_val="10.0" increment="0.1" decimal_digits="1" control_name="RenderVolumetricLightingMultiplier"/>
-		<slider label="Sonnenstrahl-Falloff:" name="VolumetricLightFalloff" min_val="0.1" max_val="10.0" increment="0.1" decimal_digits="1" control_name="RenderVolumetricLightingFalloffMultiplier"/>
-		<check_box label="Bewegungsunschärfe (Kamerabewegung)" name="UseMotionBlur" control_name="RenderMotionBlur"/>
-		<slider label="Stärke der Bewegungsunschärfe:" name="MotionBlurStrength" min_val="0" max_val="20" increment="1" decimal_digits="0" control_name="RenderMotionBlurStrength"/>
+		<check_box bottom_delta="0" follows="left|top" height="19" label="Volumetrisches Licht (Sonnenstrahlen)" layout="topleft" left="10" name="UseVolumetricLighting" top_pad="6" width="340" control_name="RenderVolumetricLighting"/>
+		<slider bottom_delta="-4" control_name="RenderVolumetricLightingResolution" decimal_digits="0" follows="left|top" height="16" increment="1" label="Sonnenstrahl-Schritte:" label_width="230" layout="topleft" left="10" max_val="64" min_val="1" name="VolumetricLightResolution" show_text="true" top_pad="4" width="409"/>
+		<slider bottom_delta="-4" control_name="RenderVolumetricLightingMultiplier" decimal_digits="1" follows="left|top" height="16" increment="0.1" label="Sonnenstrahl-Intensität:" label_width="230" layout="topleft" left="10" max_val="10.0" min_val="0.0" name="VolumetricLightMultiplier" show_text="true" top_pad="4" width="409"/>
+		<slider bottom_delta="-4" control_name="RenderVolumetricLightingFalloffMultiplier" decimal_digits="1" follows="left|top" height="16" increment="0.1" label="Sonnenstrahl-Falloff:" label_width="230" layout="topleft" left="10" max_val="10.0" min_val="0.1" name="VolumetricLightFalloff" show_text="true" top_pad="4" width="409"/>
+		<check_box bottom_delta="0" follows="left|top" height="19" label="Bewegungsunschärfe (Kamerabewegung)" layout="topleft" left="10" name="UseMotionBlur" top_pad="6" width="340" control_name="RenderMotionBlur"/>
+		<slider bottom_delta="-4" control_name="RenderMotionBlurStrength" decimal_digits="0" follows="left|top" height="16" increment="1" label="Stärke der Bewegungsunschärfe:" label_width="230" layout="topleft" left="10" max_val="20" min_val="0" name="MotionBlurStrength" show_text="true" top_pad="4" width="409"/>
 		<text name="shadows_label">
 			Schatten:
 		</text>
