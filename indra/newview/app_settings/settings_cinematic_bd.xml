@@ -134,7 +134,7 @@
     <boolean>1</boolean>
 
     <key>RenderMotionBlur</key>
-    <boolean>1</boolean>
+    <boolean>0</boolean>
 
     <key>RenderMotionBlurStrength</key>
     <integer>8</integer>

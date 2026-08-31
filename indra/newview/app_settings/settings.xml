@@ -12635,13 +12635,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderMotionBlur</key>
   <map>
     <key>Comment</key>
-    <string>Enable motion blur (Black Dragon cinematic feature, reimplemented). Reserved in settings_cinematic_bd.xml overlay.</string>
+    <string>Enable motion blur (Black Dragon cinematic feature, reimplemented). Reserved in settings_cinematic_bd.xml overlay. Default OFF after install.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
   <key>RenderMotionBlurStrength</key>
   <map>
