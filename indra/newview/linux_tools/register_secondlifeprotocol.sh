@@ -46,3 +46,24 @@ EOF
     fi
 done
 
+# Register handler the modern way (XDG / freedesktop), used by current
+# GNOME, Cinnamon, KDE, XFCE, etc. via a .desktop file + xdg-mime.
+DESKTOP_INSTALL_DIR="${HOME}/.local/share/applications"
+mkdir -p "${DESKTOP_INSTALL_DIR}"
+HANDLER_PATH="`pwd`/etc/handle_secondlifeprotocol.sh"
+HANDLER_DESKTOP="${DESKTOP_INSTALL_DIR}/mikostorm-slurl-handler.desktop"
+cat > "${HANDLER_DESKTOP}" <<EOF
+[Desktop Entry]
+Type=Application
+Name=MikoStorm SLURL Handler
+NoDisplay=true
+Exec=${HANDLER_PATH} %u
+MimeType=x-scheme-handler/secondlife;x-scheme-handler/hop;
+EOF
+if which xdg-mime >/dev/null 2>&1; then
+    xdg-mime default mikostorm-slurl-handler.desktop x-scheme-handler/secondlife x-scheme-handler/hop 2>/dev/null || true
+fi
+if which update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "${DESKTOP_INSTALL_DIR}" 2>/dev/null || true
+fi
+
