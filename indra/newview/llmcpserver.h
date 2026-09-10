@@ -7,6 +7,8 @@
 #include <map>
 #include <functional>
 #include <mutex>
+#include <deque>
+#include <boost/signals2.hpp>
 
 class LLMCPServer : public LLSingleton<LLMCPServer>
 {
@@ -27,6 +29,11 @@ public:
     LLSD handleRequest(const LLSD& request);
 
     void registerDefaultTools();
+
+    // Chat buffer: stores recent chat messages for MCP read access
+    static constexpr size_t kChatBufferSize = 100;
+    void pushChatMessage(const LLSD& msg);
+    LLSD getChatMessages(S32 limit = 50) const;
 
 private:
     ~LLMCPServer();
@@ -61,8 +68,12 @@ private:
     bool mRunning;
     U16 mPort;
     std::string mAuthToken;
-    std::mutex mMutex;
+    mutable std::mutex mMutex;
     bool mInitialized;
+
+    // Chat buffer (protected by mMutex)
+    std::deque<LLSD> mChatBuffer;
+    boost::signals2::connection mChatConnection;
 };
 
 #endif

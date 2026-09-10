@@ -26,6 +26,8 @@
 #include "llerrorcontrol.h"
 #include "workqueue.h"
 #include "fsnearbychathub.h"
+#include "llfloaterimnearbychathandler.h"
+#include "llnotificationmanager.h"
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -91,6 +93,15 @@ void LLMCPServer::start()
 
     registerDefaultTools();
 
+    // Hook into chat to capture messages for MCP read access
+    auto chat_handler = LLNotificationsUI::LLNotificationManager::instance().getChatHandler();
+    if (chat_handler)
+    {
+        mChatConnection = chat_handler->addNewChatCallback(
+            [this](const LLSD& chat) { pushChatMessage(chat); });
+        LL_INFOS("MCP") << "Chat capture hook installed" << LL_ENDL;
+    }
+
     mRunning = true;
     LLMCPHttpServer::start(mPort, mAuthToken);
     LL_INFOS("MCP") << "MCP Server started on port " << mPort << LL_ENDL;
@@ -99,12 +110,43 @@ void LLMCPServer::start()
 void LLMCPServer::stop()
 {
     if (!mRunning) return;
+
+    if (mChatConnection.connected())
+    {
+        mChatConnection.disconnect();
+        mChatConnection = boost::signals2::connection();
+    }
+
     mRunning = false;
     LLMCPHttpServer::stop();
     LL_INFOS("MCP") << "MCP Server stopped" << LL_ENDL;
 #ifdef _WIN32
     WSACleanup();
 #endif
+}
+
+void LLMCPServer::pushChatMessage(const LLSD& msg)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    if (mChatBuffer.size() >= kChatBufferSize)
+    {
+        mChatBuffer.pop_front();
+    }
+    mChatBuffer.push_back(msg);
+}
+
+LLSD LLMCPServer::getChatMessages(S32 limit) const
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    LLSD messages = LLSD::emptyArray();
+    if (limit <= 0 || limit > (S32)mChatBuffer.size())
+        limit = (S32)mChatBuffer.size();
+    size_t start = mChatBuffer.size() - limit;
+    for (size_t i = start; i < mChatBuffer.size(); ++i)
+    {
+        messages.append(mChatBuffer[i]);
+    }
+    return messages;
 }
 
 void LLMCPServer::registerTool(const std::string& name,
@@ -383,6 +425,22 @@ void LLMCPServer::registerDefaultTools()
                 return errorResult("Failed to create IM session");
             LLIMModel::sendMessage(msg, session_id, agent_id, IM_NOTHING_SPECIAL);
             return textResult("Message sent");
+        });
+
+    registerTool("chat_read",
+        "Read recent local chat messages",
+        LLSDMap("type", "object")(
+            "properties", LLSDMap("limit", LLSDMap("type", "number")("description", "Maximum number of recent messages to return (default 50, max 100)"))
+        )("required", llsd::array()),
+        [](const LLSD& p) -> LLSD {
+            S32 limit = p.has("limit") ? (S32)p["limit"].asInteger() : 50;
+            if (limit <= 0) limit = 50;
+            if (limit > 100) limit = 100;
+            LLSD messages = LLMCPServer::instance().getChatMessages(limit);
+            LLSD data = LLSD::emptyMap();
+            data["messages"] = messages;
+            data["count"] = (LLSD::Integer)messages.size();
+            return textResult(toJsonString(data));
         });
 
     registerTool("inventory_search",
@@ -844,6 +902,13 @@ LLSD LLMCPServer::handleResourcesList(const LLSD&)
     r6["mimeType"] = "application/json";
     resources.append(r6);
 
+    LLSD r7 = LLSD::emptyMap();
+    r7["uri"] = "mikostorm://chat";
+    r7["name"] = "Chat History";
+    r7["description"] = "Recent local chat messages";
+    r7["mimeType"] = "application/json";
+    resources.append(r7);
+
     LLSD result = LLSD::emptyMap();
     result["resources"] = resources;
     return makeResult(result);
@@ -923,6 +988,15 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
                 }
             }
             return items;
+        };
+    }
+    else if (uri == "mikostorm://chat")
+    {
+        loader = [this]() {
+            LLSD data = LLSD::emptyMap();
+            data["messages"] = getChatMessages(100);
+            data["count"] = (LLSD::Integer)kChatBufferSize;
+            return data;
         };
     }
     else

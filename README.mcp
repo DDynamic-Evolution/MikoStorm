@@ -74,6 +74,7 @@ async with HttpConnection("http://localhost:13231/mcp") as session:
 | `chat_say` | message, channel (optional) | Say in local chat |
 | `chat_shout` | message, channel (optional) | Shout (100m) |
 | `chat_im` | target (UUID/name), message | Send an instant message |
+| `chat_read` | limit (optional) | Read recent local chat messages (default 50, max 100) |
 
 ### World / Info
 | Tool | Parameters | Description |
@@ -107,6 +108,7 @@ async with HttpConnection("http://localhost:13231/mcp") as session:
 | `mikostorm://attachments` | Worn attachments (JSON) |
 | `mikostorm://parcel` | Current parcel info (JSON) |
 | `mikostorm://inventory` | Root inventory (JSON) |
+| `mikostorm://chat` | Recent local chat messages (JSON) |
 
 ## Security
 
@@ -114,7 +116,7 @@ async with HttpConnection("http://localhost:13231/mcp") as session:
 - Optional bearer token via `Authorization: Bearer <token>` header
 - Port is freely configurable (1024–65535)
 - Server is **disabled by default**
-- Only outgoing viewer functions — no filesystem access
+- Chat read access only captures messages visible to the local avatar
 
 ## Architecture
 
