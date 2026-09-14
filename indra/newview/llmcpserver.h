@@ -8,6 +8,7 @@
 #include <functional>
 #include <mutex>
 #include <deque>
+#include <set>
 #include <boost/signals2.hpp>
 
 class LLMCPServer : public LLSingleton<LLMCPServer>
@@ -35,6 +36,24 @@ public:
     void pushChatMessage(const LLSD& msg);
     LLSD getChatMessages(S32 limit = 50) const;
 
+    // IM buffer: stores recent IM messages for MCP read access
+    static constexpr size_t kImBufferSize = 100;
+    void pushIMMessage(const LLSD& msg);
+    LLSD getIMMessages(S32 limit = 50) const;
+
+    // Trigger word watch: stores chat messages matching trigger words
+    static constexpr size_t kTriggerBufferSize = 50;
+    void checkTriggerWords(const LLSD& chat);
+    LLSD getTriggerMatches() const;
+    void setTriggerWords(const std::vector<std::string>& words);
+    void clearTriggerBuffer();
+
+    // Bridge used by media plugins to consume MCP tools.
+    LLSD handlePluginMCPCommand(const std::string& command, const LLSD& params);
+
+    // Exposed tool registry (called on the main thread only).
+    LLSD getToolsList() const;
+
 private:
     ~LLMCPServer();
 
@@ -56,6 +75,8 @@ private:
     LLSD collectSelfInfo() const;
     LLSD collectNearbyObjects(const LLSD& params) const;
     LLSD inventorySearch(const LLSD& params) const;
+    LLSD collectFriendsOnline() const;
+    LLSD collectIMSessions() const;
 
     struct Tool {
         std::string name;
@@ -74,6 +95,14 @@ private:
     // Chat buffer (protected by mMutex)
     std::deque<LLSD> mChatBuffer;
     boost::signals2::connection mChatConnection;
+
+    // IM buffer (protected by mMutex)
+    std::deque<LLSD> mImBuffer;
+    boost::signals2::connection mImConnection;
+
+    // Trigger word watch (protected by mMutex)
+    std::set<std::string> mTriggerWords;
+    std::deque<LLSD> mTriggerBuffer;
 };
 
 #endif

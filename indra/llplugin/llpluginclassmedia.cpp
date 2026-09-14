@@ -40,6 +40,8 @@ extern bool gHiDPISupport;
 
 static int LOW_PRIORITY_TEXTURE_SIZE_DEFAULT = 256;
 
+LLPluginClassMedia::MCPBridgeFunction LLPluginClassMedia::sMCPBridge;
+
 static int nextPowerOf2( int value )
 {
     int next_power_of_2 = 1;
@@ -139,6 +141,7 @@ void LLPluginClassMedia::reset()
     mCanPaste = false;
     mCanDoDelete = false;
     mCanSelectAll = false;
+    mMCPToolsPushed = false;
     mMediaName.clear();
     mMediaDescription.clear();
     mBackgroundColor = LLColor4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -284,6 +287,13 @@ void LLPluginClassMedia::idle(void)
             LLPluginMessage message = mSendQueue.front();
             mSendQueue.pop();
             mPlugin->sendMessage(message);
+        }
+
+        // Once the plugin settles into its running state, hand it the current MCP tool list.
+        if(!mMCPToolsPushed && hasMCPBridge())
+        {
+            pushMCPToolsList();
+            mMCPToolsPushed = true;
         }
     }
 }
@@ -1391,7 +1401,82 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
             LL_WARNS("Plugin") << "Unknown " << message_name << " class message: " << message_name << LL_ENDL;
         }
     }
+    else if(message_class == LLPLUGIN_MESSAGE_CLASS_MCP)
+    {
+        handleMCPMessage(message);
+    }
 
+}
+
+void LLPluginClassMedia::setMCPBridge(MCPBridgeFunction bridge)
+{
+    sMCPBridge = std::move(bridge);
+}
+
+bool LLPluginClassMedia::pluginSupportsMCP(void)
+{
+    std::string version = mPlugin ? mPlugin->getMessageClassVersion(LLPLUGIN_MESSAGE_CLASS_MCP) : std::string();
+    return !version.empty();
+}
+
+void LLPluginClassMedia::pushMCPToolsList()
+{
+    if(!mPlugin || !mPlugin->isRunning() || !sMCPBridge || !pluginSupportsMCP())
+    {
+        return;
+    }
+
+    LLSD tools = sMCPBridge("get_tools_list", LLSD());
+    LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MCP, "tools_list");
+    message.setValueLLSD("tools", tools);
+    message.setValueS32("count", (S32)tools.size());
+    sendMessage(message);
+
+    LL_DEBUGS("Plugin") << "Pushed " << tools.size() << " MCP tool(s) to plugin" << LL_ENDL;
+}
+
+void LLPluginClassMedia::handleMCPMessage(const LLPluginMessage &message)
+{
+    if(!sMCPBridge)
+    {
+        LL_WARNS("Plugin") << "Received MCP message from plugin but no bridge is installed" << LL_ENDL;
+        return;
+    }
+
+    std::string message_name = message.getName();
+
+    if(message_name == "tools_list_request")
+    {
+        pushMCPToolsList();
+    }
+    else if(message_name == "tools_call")
+    {
+        std::string name = message.getValue("name");
+        std::string request_id = message.getValue("request_id");
+        LLSD args = message.getValueLLSD("arguments");
+        if(!args.isMap())
+        {
+            args = LLSD::emptyMap();
+        }
+
+        LLPluginMessage response(LLPLUGIN_MESSAGE_CLASS_MCP, "tools_call_response");
+        response.setValue("name", name);
+        {
+            LLSD bridge_params = LLSD::emptyMap();
+            bridge_params["name"] = name;
+            bridge_params["arguments"] = args;
+            response.setValueLLSD("result", sMCPBridge("call_tool", bridge_params));
+        }
+        if(!request_id.empty())
+        {
+            response.setValue("request_id", request_id);
+        }
+        sendMessage(response);
+    }
+    else
+    {
+        LL_WARNS("Plugin") << "Unknown MCP message: " << message_name << LL_ENDL;
+    }
 }
 
 /* virtual */

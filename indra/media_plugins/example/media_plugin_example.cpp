@@ -107,6 +107,7 @@ void mediaPluginExample::receiveMessage(const char* message_string)
                 versions[LLPLUGIN_MESSAGE_CLASS_BASE] = LLPLUGIN_MESSAGE_CLASS_BASE_VERSION;
                 versions[LLPLUGIN_MESSAGE_CLASS_MEDIA] = LLPLUGIN_MESSAGE_CLASS_MEDIA_VERSION;
                 versions[LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER] = LLPLUGIN_MESSAGE_CLASS_MEDIA_BROWSER_VERSION;
+                versions[LLPLUGIN_MESSAGE_CLASS_MCP] = LLPLUGIN_MESSAGE_CLASS_MCP_VERSION;
                 message.setValueLLSD("versions", versions);
 
                 std::string plugin_version = "Example plugin 0.0.0";
@@ -239,6 +240,41 @@ void mediaPluginExample::receiveMessage(const char* message_string)
                 else if (event == "double_click")
                 {
                 }
+            }
+        }
+        else if (message_class == LLPLUGIN_MESSAGE_CLASS_MCP)
+        {
+            // Demonstrate MCP tools integration.
+            // The viewer pushes the tools list once on startup; the plugin may
+            // reply with a "tools_list_request" to ask for a refresh, or call a
+            // tool by sending "tools_call".
+            if (message_name == "tools_list")
+            {
+                LLSD tools = message_in.getValueLLSD("tools");
+                S32 count = message_in.getValueS32("count");
+                std::cerr << "ExamplePlugin: received MCP tool list (" << count << " tools)\n";
+
+                // For demonstration, call "get_position" to prove the bridge works.
+                LLPluginMessage call(LLPLUGIN_MESSAGE_CLASS_MCP, "tools_call");
+                call.setValue("name", "get_position");
+                call.setValueLLSD("arguments", LLSD::emptyMap());
+                call.setValue("request_id", "demo_call");
+                sendMessage(call);
+            }
+            else if (message_name == "tools_call_response")
+            {
+                LLSD result = message_in.getValueLLSD("result");
+                std::string name = message_in.getValue("name");
+                std::string reqid = message_in.getValue("request_id");
+                std::cerr << "ExamplePlugin: MCP tool '" << name << "' response [req=" << reqid << "]\n";
+            }
+            else if (message_name == "tools_list_request")
+            {
+                // No action needed here — the viewer already pushed the list.
+            }
+            else
+            {
+                std::cerr << "ExamplePlugin: unknown MCP message: " << message_name << "\n";
             }
         }
         else

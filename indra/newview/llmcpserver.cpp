@@ -25,9 +25,13 @@
 #include "llversioninfo.h"
 #include "llerrorcontrol.h"
 #include "workqueue.h"
+#include "llpluginclassmedia.h"
+#include "llmainthreadtask.h"
 #include "fsnearbychathub.h"
 #include "llfloaterimnearbychathandler.h"
 #include "llnotificationmanager.h"
+#include "llcallingcard.h"
+#include "llavatarnamecache.h"
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -44,6 +48,7 @@ void create_new_item(const std::string& name,
 #include "llviewerassetupload.h"
 #include <algorithm>
 #include <cctype>
+#include <sstream>
 #include <future>
 #include <boost/json.hpp>
 
@@ -91,16 +96,51 @@ void LLMCPServer::start()
     mAuthToken = gSavedSettings.getString("MCPAuthToken");
     mInitialized = false;
 
+    // Load trigger words from settings (comma-separated)
+    std::string trigger_cfg = gSavedSettings.getString("MCPTriggerWords");
+    std::vector<std::string> trigger_words;
+    if (!trigger_cfg.empty())
+    {
+        std::stringstream ss(trigger_cfg);
+        std::string word;
+        while (std::getline(ss, word, ','))
+        {
+            LLStringUtil::trim(word);
+            if (!word.empty())
+                trigger_words.push_back(word);
+        }
+    }
+    setTriggerWords(trigger_words);
+
     registerDefaultTools();
+
+    // Let media plugins consume MCP tools (e.g. CEF/VLC/GStreamer). The bridge
+    // must run on the main thread so it can safely invoke the exposed tools.
+    LLPluginClassMedia::setMCPBridge(
+        [this](const std::string& command, const LLSD& params) -> LLSD
+        {
+            return LLMainThreadTask::dispatch([this, command, params]()
+            {
+                return handlePluginMCPCommand(command, params);
+            });
+        });
 
     // Hook into chat to capture messages for MCP read access
     auto chat_handler = LLNotificationsUI::LLNotificationManager::instance().getChatHandler();
     if (chat_handler)
     {
         mChatConnection = chat_handler->addNewChatCallback(
-            [this](const LLSD& chat) { pushChatMessage(chat); });
+            [this](const LLSD& chat) {
+                pushChatMessage(chat);
+                checkTriggerWords(chat);
+            });
         LL_INFOS("MCP") << "Chat capture hook installed" << LL_ENDL;
     }
+
+    // Hook into IM system to capture incoming IMs for MCP read access
+    mImConnection = LLIMModel::instance().addNewMsgCallback(
+        [this](const LLSD& arg) { pushIMMessage(arg); });
+    LL_INFOS("MCP") << "IM capture hook installed" << LL_ENDL;
 
     mRunning = true;
     LLMCPHttpServer::start(mPort, mAuthToken);
@@ -116,6 +156,14 @@ void LLMCPServer::stop()
         mChatConnection.disconnect();
         mChatConnection = boost::signals2::connection();
     }
+
+    if (mImConnection.connected())
+    {
+        mImConnection.disconnect();
+        mImConnection = boost::signals2::connection();
+    }
+
+    LLPluginClassMedia::setMCPBridge(nullptr);
 
     mRunning = false;
     LLMCPHttpServer::stop();
@@ -147,6 +195,91 @@ LLSD LLMCPServer::getChatMessages(S32 limit) const
         messages.append(mChatBuffer[i]);
     }
     return messages;
+}
+
+void LLMCPServer::pushIMMessage(const LLSD& msg)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    if (mImBuffer.size() >= kImBufferSize)
+    {
+        mImBuffer.pop_front();
+    }
+    mImBuffer.push_back(msg);
+}
+
+LLSD LLMCPServer::getIMMessages(S32 limit) const
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    LLSD messages = LLSD::emptyArray();
+    if (limit <= 0 || limit > (S32)mImBuffer.size())
+        limit = (S32)mImBuffer.size();
+    size_t start = mImBuffer.size() - limit;
+    for (size_t i = start; i < mImBuffer.size(); ++i)
+    {
+        messages.append(mImBuffer[i]);
+    }
+    return messages;
+}
+
+void LLMCPServer::checkTriggerWords(const LLSD& chat)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    if (mTriggerWords.empty()) return;
+    std::string text = chat["message"].asString();
+    std::string lower = text;
+    LLStringUtil::toLower(lower);
+    for (const std::string& word : mTriggerWords)
+    {
+        if (lower.find(word) != std::string::npos)
+        {
+            if (mTriggerBuffer.size() >= kTriggerBufferSize)
+            {
+                mTriggerBuffer.pop_front();
+            }
+            mTriggerBuffer.push_back(chat);
+            break;
+        }
+    }
+}
+
+LLSD LLMCPServer::getTriggerMatches() const
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    LLSD messages = LLSD::emptyArray();
+    for (const auto& msg : mTriggerBuffer)
+    {
+        messages.append(msg);
+    }
+    LLSD data = LLSD::emptyMap();
+    data["messages"] = messages;
+    data["count"] = (LLSD::Integer)messages.size();
+    data["trigger_words"] = llsd::array();
+    for (const auto& w : mTriggerWords)
+    {
+        data["trigger_words"].append(w);
+    }
+    return data;
+}
+
+void LLMCPServer::setTriggerWords(const std::vector<std::string>& words)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    mTriggerWords.clear();
+    for (const std::string& w : words)
+    {
+        std::string lower = w;
+        LLStringUtil::toLower(lower);
+        if (!lower.empty())
+        {
+            mTriggerWords.insert(lower);
+        }
+    }
+}
+
+void LLMCPServer::clearTriggerBuffer()
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    mTriggerBuffer.clear();
 }
 
 void LLMCPServer::registerTool(const std::string& name,
@@ -488,6 +621,142 @@ void LLMCPServer::registerDefaultTools()
         [](const LLSD&) -> LLSD {
             return textResult(toJsonString(LLMCPServer::instance().collectSelfInfo()));
         });
+
+    registerTool("get_friends_online",
+        "List all friends with their online status",
+        LLSDMap("type", "object")("properties", LLSD::emptyMap())("required", llsd::array()),
+        [](const LLSD&) -> LLSD {
+            return textResult(toJsonString(LLMCPServer::instance().collectFriendsOnline()));
+        });
+
+    registerTool("im_read",
+        "Read recent incoming IM messages from any IM session",
+        LLSDMap("type", "object")(
+            "properties", LLSDMap("limit", LLSDMap("type", "number")("description", "Maximum number of recent messages to return (default 50, max 100)"))
+        )("required", llsd::array()),
+        [](const LLSD& p) -> LLSD {
+            S32 limit = p.has("limit") ? (S32)p["limit"].asInteger() : 50;
+            if (limit <= 0) limit = 50;
+            if (limit > 100) limit = 100;
+            LLSD data = LLSD::emptyMap();
+            data["messages"] = LLMCPServer::instance().getIMMessages(limit);
+            data["count"] = (LLSD::Integer)data["messages"].size();
+            return textResult(toJsonString(data));
+        });
+
+    registerTool("im_sessions",
+        "List all active IM sessions",
+        LLSDMap("type", "object")("properties", LLSD::emptyMap())("required", llsd::array()),
+        [](const LLSD&) -> LLSD {
+            return textResult(toJsonString(LLMCPServer::instance().collectIMSessions()));
+        });
+
+    registerTool("chat_watch",
+        "Set trigger words and read chat messages matching them (uses case-insensitive substring matching)",
+        LLSDMap("type", "object")(
+            "properties", LLSDMap(
+                "words", LLSDMap("type", "array")("items", LLSDMap("type", "string"))("description", "Trigger words (case-insensitive). Empty array clears all triggers."))(
+                "clear", LLSDMap("type", "boolean")("description", "Clear the trigger match buffer (default false)"))(
+                "count", LLSDMap("type", "boolean")("description", "Set true to check how many matches are in the buffer"))
+        )("required", llsd::array()),
+        [](const LLSD& p) -> LLSD {
+            LLMCPServer& server = LLMCPServer::instance();
+            if (p.has("words"))
+            {
+                std::vector<std::string> words;
+                for (LLSD::array_const_iterator it = p["words"].beginArray();
+                     it != p["words"].endArray(); ++it)
+                {
+                    words.push_back(it->asString());
+                }
+                server.setTriggerWords(words);
+                std::string joined;
+                for (size_t i = 0; i < words.size(); ++i)
+                {
+                    if (i > 0) joined += ",";
+                    joined += words[i];
+                }
+                gSavedSettings.setString("MCPTriggerWords", joined);
+            }
+            if (p.has("clear") && p["clear"].asBoolean())
+            {
+                server.clearTriggerBuffer();
+            }
+            LLSD data = server.getTriggerMatches();
+            if (p.has("count") && p["count"].asBoolean())
+            {
+                return textResult(toJsonString(LLSDMap("count", data["count"])));
+            }
+            return textResult(toJsonString(data));
+        });
+}
+
+LLSD LLMCPServer::handlePluginMCPCommand(const std::string& command, const LLSD& params)
+{
+    if(command == "get_tools_list")
+    {
+        return getToolsList();
+    }
+    else if(command == "call_tool")
+    {
+        std::string name = params["name"].asString();
+        LLSD args = params.has("arguments") ? params["arguments"] : LLSD::emptyMap();
+
+        ToolHandler handler;
+        {
+            std::lock_guard<std::mutex> lock(mMutex);
+            auto it = mTools.find(name);
+            if(it == mTools.end())
+            {
+                LLSD err = LLSD::emptyMap();
+                err["_error"] = llformat("Tool '%s' not found", name.c_str());
+                return err;
+            }
+            handler = it->second.handler;
+        }
+
+        if(!on_main_thread())
+        {
+            LL_WARNS("MCP") << "Plugin tool call escaped the main thread" << LL_ENDL;
+            LLSD err = LLSD::emptyMap();
+            err["_error"] = "Tool execution is restricted to the main thread";
+            return err;
+        }
+
+        try
+        {
+            return handler(args);
+        }
+        catch(const std::exception& e)
+        {
+            LL_WARNS("MCP") << "Plugin tool '" << name << "' threw: " << e.what() << LL_ENDL;
+            LLSD err = LLSD::emptyMap();
+            err["_error"] = std::string("Handler failed: ") + e.what();
+            return err;
+        }
+    }
+    else
+    {
+        LLSD err = LLSD::emptyMap();
+        err["_error"] = "Unknown MCP bridge command";
+        return err;
+    }
+}
+
+LLSD LLMCPServer::getToolsList() const
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    LLSD tools = LLSD::emptyArray();
+    for(const auto& pair : mTools)
+    {
+        const Tool& tool = pair.second;
+        LLSD t = LLSD::emptyMap();
+        t["name"] = tool.name;
+        t["description"] = tool.description;
+        t["inputSchema"] = tool.input_schema;
+        tools.append(t);
+    }
+    return tools;
 }
 
 LLSD LLMCPServer::handleRequest(const LLSD& request)
@@ -732,6 +1001,68 @@ LLSD LLMCPServer::collectSelfInfo() const
     return data;
 }
 
+LLSD LLMCPServer::collectFriendsOnline() const
+{
+    LLAvatarTracker& tracker = LLAvatarTracker::instance();
+    LLAvatarTracker::buddy_map_t buddies;
+    tracker.copyBuddyList(buddies);
+
+    LLSD friends = LLSD::emptyArray();
+    S32 online_count = 0;
+
+    for (const auto& pair : buddies)
+    {
+        const LLUUID& buddy_id = pair.first;
+        LLRelationship* rel = pair.second;
+        if (!rel) continue;
+
+        LLAvatarName av_name;
+        LLAvatarNameCache::get(buddy_id, &av_name);
+
+        LLSD entry = LLSD::emptyMap();
+        entry["name"] = av_name.getDisplayName();
+        entry["username"] = av_name.getUserName();
+        entry["uuid"] = buddy_id.asString();
+        entry["online"] = rel->isOnline();
+        entry["can_see_online"] = rel->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
+        entry["can_see_map"] = rel->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION);
+        entry["can_modify_objects"] = rel->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS);
+        friends.append(entry);
+
+        if (rel->isOnline()) online_count++;
+    }
+
+    LLSD data = LLSD::emptyMap();
+    data["friends"] = friends;
+    data["count"] = (LLSD::Integer)friends.size();
+    data["online_count"] = online_count;
+    return data;
+}
+
+LLSD LLMCPServer::collectIMSessions() const
+{
+    LLSD sessions = LLSD::emptyArray();
+    const auto& session_map = LLIMModel::getInstance()->mId2SessionMap;
+    for (const auto& pair : session_map)
+    {
+        LLIMModel::LLIMSession* session = pair.second;
+        if (!session) continue;
+        LLSD entry = LLSD::emptyMap();
+        entry["session_id"] = pair.first.asString();
+        entry["name"] = session->mName;
+        entry["type"] = (LLSD::Integer)session->mType;
+        entry["session_type"] = (LLSD::Integer)session->mSessionType;
+        entry["other_participant_id"] = session->mOtherParticipantID.asString();
+        entry["num_unread"] = session->mNumUnread;
+        entry["num_messages"] = (LLSD::Integer)session->mMsgs.size();
+        sessions.append(entry);
+    }
+    LLSD data = LLSD::emptyMap();
+    data["sessions"] = sessions;
+    data["count"] = (LLSD::Integer)sessions.size();
+    return data;
+}
+
 LLSD LLMCPServer::collectNearbyObjects(const LLSD& params) const
 {
     S32 max_results = params.has("max_results") ? (S32)params["max_results"].asInteger() : 50;
@@ -909,6 +1240,20 @@ LLSD LLMCPServer::handleResourcesList(const LLSD&)
     r7["mimeType"] = "application/json";
     resources.append(r7);
 
+    LLSD r8 = LLSD::emptyMap();
+    r8["uri"] = "mikostorm://friends";
+    r8["name"] = "Friends Online";
+    r8["description"] = "Friends list with online status";
+    r8["mimeType"] = "application/json";
+    resources.append(r8);
+
+    LLSD r9 = LLSD::emptyMap();
+    r9["uri"] = "mikostorm://im";
+    r9["name"] = "IM Messages";
+    r9["description"] = "Recent incoming IM messages";
+    r9["mimeType"] = "application/json";
+    resources.append(r9);
+
     LLSD result = LLSD::emptyMap();
     result["resources"] = resources;
     return makeResult(result);
@@ -996,6 +1341,19 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
             LLSD data = LLSD::emptyMap();
             data["messages"] = getChatMessages(100);
             data["count"] = (LLSD::Integer)kChatBufferSize;
+            return data;
+        };
+    }
+    else if (uri == "mikostorm://friends")
+    {
+        loader = [this]() { return collectFriendsOnline(); };
+    }
+    else if (uri == "mikostorm://im")
+    {
+        loader = [this]() {
+            LLSD data = LLSD::emptyMap();
+            data["messages"] = getIMMessages(100);
+            data["count"] = (LLSD::Integer)data["messages"].size();
             return data;
         };
     }

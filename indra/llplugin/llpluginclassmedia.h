@@ -33,6 +33,7 @@
 #include "llrect.h"
 #include "llpluginclassmediaowner.h"
 #include <queue>
+#include <functional>
 #include "v4color.h"
 
 class LLPluginClassMedia : public LLPluginProcessParentOwner
@@ -121,6 +122,16 @@ public:
 
     // enable/disable media plugin debugging messages and info spam
     void enableMediaPluginDebugging( bool enable );
+
+    // MCP tools bridge (set by the viewer to expose MCP tools to plugins)
+    typedef std::function<LLSD(const std::string& command, const LLSD& params)> MCPBridgeFunction;
+    static void setMCPBridge(MCPBridgeFunction bridge);
+    static bool hasMCPBridge() { return (bool)sMCPBridge; }
+
+    // true if the plugin declared support for the "mcp" message class
+    bool pluginSupportsMCP();
+    // send the MCP tool list to this plugin (no-op unless plugin supports MCP and a bridge is installed)
+    void pushMCPToolsList();
 
     // Javascript <-> viewer events
     void jsEnableObject( bool enable );
@@ -362,6 +373,11 @@ protected:
     std::queue<LLPluginMessage> mSendQueue;     // Used to queue messages while the plugin initializes.
 
     void setSizeInternal(void);
+
+    void handleMCPMessage(const LLPluginMessage &message);
+
+    static MCPBridgeFunction sMCPBridge;
+    bool        mMCPToolsPushed;                // MCP tools list already sent to this plugin
 
     bool        mTextureParamsReceived;     // the mRequestedTexture* fields are only valid when this is true
     S32         mRequestedTextureDepth;
