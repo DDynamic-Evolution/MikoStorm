@@ -4658,6 +4658,12 @@ void LLPipeline::recordTrianglesDrawn()
 // default present path is unchanged.
 bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
 {
+    static LLCachedControl<bool> fx_enabled(gSavedSettings, "FSVisualEffectsEnabled", true);
+    if (!fx_enabled)
+    {
+        return false;
+    }
+
     static LLCachedControl<F32> fx_strength(gSavedSettings, "RenderSatContrastStrength", 0.0f);
     static LLCachedControl<F32> saturation(gSavedSettings, "RenderSaturation", 1.0f);
     static LLCachedControl<F32> contrast(gSavedSettings, "RenderContrast", 1.0f);
@@ -8641,6 +8647,12 @@ void LLPipeline::combineGlow(LLRenderTarget* src, LLRenderTarget* dst)
 // <FS:Beq> updated Vignette code (based on original Exo Vignette)
 bool LLPipeline::renderVignette(LLRenderTarget* src, LLRenderTarget* dst)
 {
+    static LLCachedControl<bool> fx_enabled(gSavedSettings, "FSVisualEffectsEnabled", true);
+    if (!fx_enabled)
+    {
+        return false;
+    }
+
     if (RenderVignette.mV[0] > 0.f)
     {
         LL_PROFILE_GPU_ZONE("Vignette");
@@ -10127,6 +10139,12 @@ bool LLPipeline::renderVolumetricLighting(LLRenderTarget* src, LLRenderTarget* d
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
 
+    static LLCachedControl<bool> fx_enabled(gSavedSettings, "FSVisualEffectsEnabled", true);
+    if (!fx_enabled)
+    {
+        return false;
+    }
+
     static LLCachedControl<bool> enabled(gSavedSettings, "RenderVolumetricLighting", true);
     if (!enabled)
     {
@@ -10217,6 +10235,12 @@ bool LLPipeline::renderVolumetricLighting(LLRenderTarget* src, LLRenderTarget* d
 bool LLPipeline::renderMotionBlur(LLRenderTarget* src, LLRenderTarget* dst)
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_PIPELINE;
+
+    static LLCachedControl<bool> fx_enabled(gSavedSettings, "FSVisualEffectsEnabled", true);
+    if (!fx_enabled)
+    {
+        return false;
+    }
 
     static LLCachedControl<bool> enabled(gSavedSettings, "RenderMotionBlur", false);
     if (!enabled)

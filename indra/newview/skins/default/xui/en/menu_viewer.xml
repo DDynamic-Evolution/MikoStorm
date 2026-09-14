@@ -1023,6 +1023,18 @@
         </menu_item_call>
         
         <menu_item_separator/>
+        
+        <menu_item_check
+         label="MikoStorm Visual Effects"
+         name="MikoStormVisualEffects">
+            <menu_item_check.on_check
+             control="FSVisualEffectsEnabled" />
+            <menu_item_check.on_click
+             function="ToggleControl"
+             parameter="FSVisualEffectsEnabled" />
+        </menu_item_check>
+        
+        <menu_item_separator/>
      
         <menu_item_call
             label="Nearby Avatars"
