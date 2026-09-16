@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.49 (2026-09-15)
+
+### Bug Fixes
+
+- **MikoStorm Visual Effects off by default:** The cinematic visual effects chain (color grading, vignette, film grain, chromatic aberration, AYA atmosphere/aerial/cloud/color temperature, volumetric light scattering and camera motion blur) is now disabled by default because it caused problems for other users. New installations start with `FSVisualEffectsEnabled = 0`; it can still be turned on via World → MikoStorm Visual Effects (also available in the German skin as Welt → MikoStorm visuelle Effekte). ([settings.xml](indra/newview/app_settings/settings.xml), [pipeline.cpp](indra/newview/pipeline.cpp), [menu_viewer.xml](indra/newview/skins/default/xui/en/menu_viewer.xml))
+
 ## 1.16.42 (2026-08-29)
 
 ### Improvements

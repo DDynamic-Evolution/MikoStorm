@@ -12635,13 +12635,13 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>FSVisualEffectsEnabled</key>
   <map>
     <key>Comment</key>
-    <string>Master switch for the MikoStorm cinematic visual effects chain (color grading, vignette, film grain, chromatic aberration, AYA atmosphere/aerial/cloud/color temperature, volumetric light scattering and camera motion blur). Disable to render the plain Firestorm image without these post-processing passes.</string>
+    <string>Master switch for the MikoStorm cinematic visual effects chain (color grading, vignette, film grain, chromatic aberration, AYA atmosphere/aerial/cloud/color temperature, volumetric light scattering and camera motion blur). Disable to render the plain Firestorm image without these post-processing passes. Disabled by default to avoid problems for other users.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
   <key>RenderMotionBlur</key>
   <map>
