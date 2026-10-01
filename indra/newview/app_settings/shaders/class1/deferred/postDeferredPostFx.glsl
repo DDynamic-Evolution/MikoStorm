@@ -33,6 +33,10 @@ uniform float vignette_amount;
 uniform float film_grain;
 uniform float chromatic_aberration;
 
+// <MCA> Color vision deficiency simulation (Daltonization). 0 = off,
+// 1 = Protanopia, 2 = Deuteranopia, 3 = Tritanopia, 4 = Monochromacy.
+uniform int fscol_vision_filter;
+
 // AYAR cinematic effects (0 = off; gated upsteam by the *_InCinematicEnabled toggle)
 uniform float aya_temp;        // AYAR17 color temperature [-1..1], warm(+) / cool(-)
 uniform float aya_ap_strength; // AYAR16 aerial perspective [0..1] depth haze
@@ -62,6 +66,37 @@ float noise(vec2 x) {
 //=============================
 
 vec3 clampHDRRange(vec3 color);
+
+// Approximate color vision deficiency simulation matrices (Machado et al.).
+void applyColorVisionFilter(inout vec3 rgb)
+{
+    if (fscol_vision_filter == 1)
+    {
+        const mat3 m = mat3(0.152286, 0.114503, -0.003882,
+                            1.052583, 0.786281, -0.048116,
+                           -0.204868, 0.099216,  1.051998);
+        rgb = m * rgb;
+    }
+    else if (fscol_vision_filter == 2)
+    {
+        const mat3 m = mat3(0.367322, 0.280085, -0.011820,
+                            0.860646, 0.672501,  0.042940,
+                           -0.227968, 0.047413,  0.968881);
+        rgb = m * rgb;
+    }
+    else if (fscol_vision_filter == 3)
+    {
+        const mat3 m = mat3(1.255528, -0.078411,  0.004733,
+                           -0.076749,  0.930809,  0.691367,
+                           -0.178779,  0.147602,  0.303900);
+        rgb = m * rgb;
+    }
+    else if (fscol_vision_filter == 4)
+    {
+        float lum = dot(rgb, vec3(0.2126, 0.7152, 0.0722));
+        rgb = vec3(lum);
+    }
+}
 
 
 void main()
@@ -156,6 +191,13 @@ void main()
         float cr = texture(diffuseRect, vary_fragcoord.xy - off).r;
         float cb = texture(diffuseRect, vary_fragcoord.xy + off).b;
         diff.rgb = vec3(cr, diff.g, cb);
+    }
+
+    // Color vision deficiency simulation (applied last, independent of the
+    // optional cinematic grade/vignette/grain effects)
+    if (fscol_vision_filter > 0)
+    {
+        applyColorVisionFilter(diff.rgb);
     }
 
     diff.rgb = clampHDRRange(diff.rgb);

@@ -1904,7 +1904,13 @@ LLUUID LLScriptEdCore::getAssociatedExperience()const
 
 void LLScriptEdCore::onFontChanged()
 {
-    LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(gSavedSettings.getString("FSScriptingFontName"), gSavedSettings.getString("FSScriptingFontSize"), LLFontGL::NORMAL));
+    const std::string font_name = gSavedSettings.getString("FSScriptingFontName");
+    std::string font_size = gSavedSettings.getString("FSScriptingFontSize");
+    LLFontGL* font = LLFontGL::getFont(LLFontDescriptor(font_name, font_size, LLFontGL::NORMAL));
+    if (!font)
+    {
+        font = LLFontGL::getFont(LLFontDescriptor(font_name, "Medium", LLFontGL::NORMAL));
+    }
     if (font)
     {
         mEditor->setFont(font);

@@ -157,22 +157,13 @@ void GLWorkQueue::post(const GLWorkQueue::Work& value)
 GLWorkQueue::Work GLWorkQueue::pop()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_THREAD;
-    // Lock the mutex
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-
-        // Wait for a new element to become available or for the queue to close
-        {
-            mCondition.wait(lock, [=] { return !mQueue.empty() || mClosed; });
-        }
-    }
-
     Work ret;
 
     {
-        std::lock_guard<std::mutex> lock(mMutex);
+        std::unique_lock<std::mutex> lock(mMutex);
 
-        // Get the next element from the queue
+        mCondition.wait(lock, [=] { return !mQueue.empty() || mClosed; });
+
         if (mQueue.size() > 0)
         {
             ret = mQueue.front();

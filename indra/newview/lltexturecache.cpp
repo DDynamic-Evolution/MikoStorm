@@ -1265,8 +1265,12 @@ void LLTextureCache::updateEntryTimeStamp(S32 idx, Entry& entry)
     {
         if (!mReadOnly)
         {
-            entry.mTime = (U32)time(NULL);
-            mUpdatedEntryMap[idx] = entry ;
+            U32 now = (U32)time(NULL);
+            if (now - entry.mTime > 60)
+            {
+                entry.mTime = now;
+                mUpdatedEntryMap[idx] = entry;
+            }
         }
     }
 }
@@ -2190,13 +2194,22 @@ bool LLTextureCache::writeToFastCache(LLUUID image_id, S32 id, LLPointer<LLImage
         openFastCache();
 
         mFastCachep->seek(APR_SET, offset);
+        S32 existing[4];
+        if (mFastCachep->read(existing, TEXTURE_FAST_CACHE_ENTRY_OVERHEAD) == TEXTURE_FAST_CACHE_ENTRY_OVERHEAD
+            && existing[0] == w && existing[1] == h && existing[2] == c)
+        {
+            closeFastCache(false);
+            return true;
+        }
+
+        mFastCachep->seek(APR_SET, offset);
 
         //no need to do this assertion check. When it fails, let it fail quietly.
         //this failure could happen because other viewer removes the fast cache file when clearing cache.
         //--> llassert_always(mFastCachep->write(mFastCachePadBuffer, TEXTURE_FAST_CACHE_ENTRY_SIZE) == TEXTURE_FAST_CACHE_ENTRY_SIZE);
         mFastCachep->write(mFastCachePadBuffer, TEXTURE_FAST_CACHE_ENTRY_SIZE);
 
-        closeFastCache(true);
+        closeFastCache(false);
     }
 
     return true;

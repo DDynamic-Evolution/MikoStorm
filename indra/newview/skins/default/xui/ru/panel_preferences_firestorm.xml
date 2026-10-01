@@ -210,16 +210,17 @@
           Шрифт скриптов:
         </text>
         <combo_box name="FSScriptingFontName" tool_tip="Имя шрифта используемого в редакторе LSL-скриптов">
-          <combo_item name="Monospace" label="Моноширный"/>
-          <combo_item name="Scripting" label="Скриптовый"/>
+          <combo_item value="Monospace" name="Monospace" label="Моноширный"/>
+          <combo_item value="Scripting" name="Scripting" label="Скриптовый"/>
         </combo_box>
         <combo_box name="FSScriptingFontSize" tool_tip="Размер шрифта используемого в редакторе LSL-скриптов">
-          <combo_item name="Monospace" label="Моноширный"/>
-          <combo_item name="Scripting" label="Скриптовый"/>
-          <combo_item name="Small" label="Мелкий"/>
-          <combo_item name="Medium" label="Средний"/>
-          <combo_item name="Large" label="Крупный"/>
-        </combo_box>
+          <combo_item value="Monospace" name="Monospace" label="Моноширный"/>
+          <combo_item value="Scripting" name="Scripting" label="Скриптовый"/>
+          <combo_item value="Small" name="Small" label="Мелкий"/>
+          <combo_item value="Medium" name="Medium" label="Средний"/>
+          <combo_item value="Large" name="Large" label="Крупный"/>
+
+          <combo_item name="Huge" value="Huge" label="Huge"/>        </combo_box>
         <check_box label="Сохранять скрипты редактируемые в инвенторе как Моно" tool_tip="Сохранять скрипты редактируемые в инвенторе как Моно" name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Включить процессор предварительной обработки LSL" tool_tip="Включить процессор предварительной обработки LSL." name="preproc_checkbox" />
         <check_box label="Оптимизатор" tool_tip="Препроцессор LSL позволит оптимизировать пространство, используемое скриптами за счет чтения." name="preprocoptimizer_checkbox" />

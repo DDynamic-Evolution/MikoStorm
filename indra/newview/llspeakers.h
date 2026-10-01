@@ -281,6 +281,8 @@ protected:
     // *TODO: To be removed when a way to request the current voice channel
     // moderation mode is implemented: See EXT-6937
     bool mModerateModeHandledFirstTime;
+
+    bool mCachedVoiceChannelActive;
 };
 
 class LLIMSpeakerMgr : public LLSpeakerMgr

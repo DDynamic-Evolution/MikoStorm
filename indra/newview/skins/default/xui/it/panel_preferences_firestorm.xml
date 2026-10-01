@@ -205,10 +205,11 @@
                 Font finestra script:
             </text>
             <combo_box name="FSScriptingFontSize" tool_tip="Dimensioni del carattere usato nella finestra di modifica script LSL">
-                <combo_item name="Small" label="Piccolo"/>
-                <combo_item name="Medium" label="Medio"/>
-                <combo_item name="Large" label="Grande"/>
-            </combo_box>
+                <combo_item value="Small" name="Small" label="Piccolo"/>
+                <combo_item value="Medium" name="Medium" label="Medio"/>
+                <combo_item value="Large" name="Large" label="Grande"/>
+
+                <combo_item name="Huge" value="Huge" label="Huge"/>            </combo_box>
             <check_box label="Salva gli script in inventario come Mono" tool_tip="Quando selezionato, salverà gli script editati nell&apos;inventario con il formato Mono anziché LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
             <check_box label="Abilita preprocessore LSL" tool_tip="Quando spuntata, il preprocessore LSL è attivo." name="preproc_checkbox" />
             <check_box label="Ottimizza script" tool_tip="Quando spuntato, il preprocessore ottimizza lo spazio usato usato dallo script e migliora la leggibilità." name="preprocoptimizer_checkbox"/>

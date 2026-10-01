@@ -49,6 +49,7 @@
 #include "llgl.h"
 #include "llglheaders.h"
 #include "llgltfmateriallist.h"
+#include "llimagegl.h"
 #include "llhudmanager.h"
 #include "llimagepng.h"
 #include "llmachineid.h"
@@ -1897,6 +1898,110 @@ void render_ui_3d()
     stop_glerror();
 }
 
+static void render_magnifier()
+{
+    if (gSnapshot || !gSavedSettings.getBOOL("MagnifierEnabled"))
+    {
+        return;
+    }
+
+    S32 window_w = gViewerWindow->getWindowWidthRaw();
+    S32 window_h = gViewerWindow->getWindowHeightRaw();
+    if (window_w < 8 || window_h < 8)
+    {
+        return;
+    }
+
+    static LLPointer<LLImageGL> magnifier_screen;
+    static S32 screen_w = 0;
+    static S32 screen_h = 0;
+    if (magnifier_screen.isNull() || screen_w != window_w || screen_h != window_h)
+    {
+        magnifier_screen = new LLImageGL(false);
+        if (magnifier_screen->createGLTexture())
+        {
+            gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, magnifier_screen->getTexName());
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_w, window_h, 0,
+                GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+            gGL.getTexUnit(0)->setTextureFilteringOption(LLTexUnit::TFO_BILINEAR);
+            gGL.getTexUnit(0)->setTextureAddressMode(LLTexUnit::TAM_CLAMP);
+            screen_w = window_w;
+            screen_h = window_h;
+        }
+        else
+        {
+            screen_w = 0;
+            screen_h = 0;
+            return;
+        }
+    }
+
+    if (!magnifier_screen->setSubImageFromFrameBuffer(0, 0, 0, 0, window_w, window_h))
+    {
+        return;
+    }
+
+    S32 mouse_x, mouse_y;
+    LLUI::getInstance()->getMousePositionScreen(&mouse_x, &mouse_y);
+    const LLVector2& ui_scale = LLUI::getScaleFactor();
+    F32 mouse_xraw = (F32)mouse_x * ui_scale.mV[VX];
+    F32 mouse_yraw = (F32)mouse_y * ui_scale.mV[VY];
+
+    F32 zoom = llclamp(gSavedSettings.getF32("MagnifierZoom"), 1.f, 16.f);
+    const F32 lupe_size = (F32)llmin(window_w, window_h) * 0.175f;
+    const F32 src_size = lupe_size / zoom;
+
+    F32 src_left = llclamp(mouse_xraw - src_size * 0.5f, 0.f, (F32)(window_w - 1));
+    F32 src_bottom = llclamp(mouse_yraw - src_size * 0.5f, 0.f, (F32)(window_h - 1));
+    src_left = llmin(src_left, (F32)window_w - src_size);
+    src_bottom = llmin(src_bottom, (F32)window_h - src_size);
+
+    S32 disp_left = (S32)(mouse_xraw + lupe_size * 0.3f - lupe_size * 0.5f);
+    S32 disp_bottom = (S32)(mouse_yraw + lupe_size * 0.3f - lupe_size * 0.5f);
+    S32 disp_right = ll_round((F32)disp_left + lupe_size);
+    S32 disp_top = ll_round((F32)disp_bottom + lupe_size);
+
+    if (disp_left < 0) { disp_right -= disp_left; disp_left = 0; }
+    if (disp_bottom < 0) { disp_top -= disp_bottom; disp_bottom = 0; }
+    if (disp_right > window_w) { disp_left -= disp_right - window_w; disp_right = window_w; }
+    if (disp_top > window_h) { disp_bottom -= disp_top - window_h; disp_top = window_h; }
+
+    F32 u0 = src_left / (F32)window_w;
+    F32 v0 = src_bottom / (F32)window_h;
+    F32 u1 = src_size / (F32)window_w;
+    F32 v1 = src_size / (F32)window_h;
+
+    LLGLDisable cull(GL_CULL_FACE);
+    LLGLDisable blend(GL_BLEND);
+
+    LLGLSLShader* prev_shader = LLGLSLShader::sCurBoundShaderPtr;
+    gUIProgram.bind();
+
+    const S32 border = 3;
+    gGL.color4f(0.f, 0.f, 0.f, 1.f);
+    gl_rect_2d(disp_left - border, disp_top + border, disp_right + border, disp_bottom - border, true);
+    gGL.color4f(1.f, 1.f, 1.f, 1.f);
+
+    gGL.getTexUnit(0)->bind(magnifier_screen);
+    gGL.begin(LLRender::TRIANGLE_STRIP);
+    gGL.color4f(1.f, 1.f, 1.f, 1.f);
+    gGL.texCoord2f(u0, v0);                 gGL.vertex2i(disp_left, disp_bottom);
+    gGL.texCoord2f(u0 + u1, v0);            gGL.vertex2i(disp_right, disp_bottom);
+    gGL.texCoord2f(u0, v0 + v1);            gGL.vertex2i(disp_left, disp_top);
+    gGL.texCoord2f(u0 + u1, v0 + v1);       gGL.vertex2i(disp_right, disp_top);
+    gGL.end();
+    gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+    if (prev_shader)
+    {
+        prev_shader->bind();
+    }
+    else
+    {
+        gUIProgram.unbind();
+    }
+}
+
 void render_ui_2d()
 {
     LL_PROFILE_ZONE_SCOPED_CATEGORY_UI;
@@ -2020,6 +2125,7 @@ void render_ui_2d()
     }
 
     // reset current origin for font rendering, in case of tiling render
+    render_magnifier();
     LLFontGL::sCurOrigin.set(0, 0);
 }
 

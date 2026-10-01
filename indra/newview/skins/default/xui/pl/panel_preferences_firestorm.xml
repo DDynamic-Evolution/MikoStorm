@@ -211,10 +211,11 @@
         </text>
         <combo_box name="FSScriptingFontName" tool_tip="Nazwa czcionki używanej w edytorze skryptów LSL" />
         <combo_box name="FSScriptingFontSize" tool_tip="Rozmiar czcionki używanej w edytorze skryptów LSL">
-            <combo_item name="Small" label="Mała"/>
-            <combo_item name="Medium" label="Średnia"/>
-            <combo_item name="Large" label="Duża"/>
-        </combo_box>
+            <combo_item value="Small" name="Small" label="Mała"/>
+            <combo_item value="Medium" name="Medium" label="Średnia"/>
+            <combo_item value="Large" name="Large" label="Duża"/>
+
+            <combo_item name="Huge" value="Huge" label="Huge"/>        </combo_box>
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
         <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty." name="preprocoptimizer_checkbox" />

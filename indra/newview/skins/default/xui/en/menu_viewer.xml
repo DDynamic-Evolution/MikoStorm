@@ -752,7 +752,17 @@
                 <menu_item_check.on_click
                  function="World.SetAutorespondNonFriends"/>
             </menu_item_check>
-        
+            <menu_item_check
+             label="Block Non-Friend IMs"
+             name="PVBlockNonFriendIMs">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="PVBlockNonFriendIMs"/>
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="PVBlockNonFriendIMs"/>
+            </menu_item_check>
+
             <menu_item_separator/>
                 <menu_item_check
              label="Reject teleport offers and requests"

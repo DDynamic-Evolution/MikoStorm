@@ -95,7 +95,22 @@
                      left_pad="2"
                      name="speak_btn"
                      tool_tip="Speak with people using your microphone"
-                     width="31"/>	
+                     width="31"/>
+                    <button
+                     follows="top|left"
+                     height="25"
+                     image_hover_unselected="Toolbar_Middle_Over"
+                     image_overlay="block_list"
+                     image_selected="Toolbar_Middle_Selected"
+                     image_unselected="Toolbar_Middle_Off"
+                     is_toggle="true"
+                     control_name="PVBlockNonFriendIMs"
+                     layout="topleft"
+                     top="1"
+                     left_pad="2"
+                     name="block_nonfriend_im_btn"
+                     tool_tip="Block IMs from non-friends (toggle)"
+                     width="31"/>
                 </layout_panel>
                 <layout_panel
                  auto_resize="false"

@@ -229,18 +229,19 @@
 			Fonte do editor de script:
 		</text>
 		<combo_box name="FSScriptingFontName" tool_tip="Nome da fonte usada no editor de script">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Script"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item value="Monospace" name="Monospace" label="Monospace"/>
+			<combo_item value="Scripting" name="Scripting" label="Script"/>
+			<combo_item value="Cascadia" name="Cascadia" label="Cascadia Code"/>
 		</combo_box>
 		<combo_box name="FSScriptingFontSize" tool_tip="Tamanho da fonte usada no editor de script">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Script"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
-			<combo_item name="Small" label="Pequeno"/>
-			<combo_item name="Medium" label="Médio"/>
-			<combo_item name="Large" label="Grande"/>
-		</combo_box>
+			<combo_item value="Monospace" name="Monospace" label="Monospace"/>
+			<combo_item value="Scripting" name="Scripting" label="Script"/>
+			<combo_item value="Cascadia" name="Cascadia" label="Cascadia Code"/>
+			<combo_item value="Small" name="Small" label="Pequeno"/>
+			<combo_item value="Medium" name="Medium" label="Médio"/>
+			<combo_item value="Large" name="Large" label="Grande"/>
+
+			<combo_item name="Huge" value="Huge" label="Huge"/>		</combo_box>
 		<check_box label="Salvar como Mono scripts editados a partir do inventário" tool_tip="Salva scripts editados diretamente do inventário como Mono em vez de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="Ativar pré-processador LSL" tool_tip="Ativa suporte de pré-processador para scripts LSL" name="preproc_checkbox"/>
 		<check_box label="Otimizar Scripts" tool_tip="Otimiza o espaço necessário para scripts." name="preprocoptimizer_checkbox"/>

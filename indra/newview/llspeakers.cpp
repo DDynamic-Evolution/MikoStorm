@@ -279,6 +279,7 @@ LLSpeakerMgr::LLSpeakerMgr(LLVoiceChannel* channelp) :
     mVoiceChannel(channelp),
     mVoiceModerated(false),
     mModerateModeHandledFirstTime(false),
+    mCachedVoiceChannelActive(false),
     mSpeakerListUpdated(false)
 {
     mGetListTime.reset();
@@ -377,14 +378,16 @@ void LLSpeakerMgr::update(bool resort_ok)
     static const LLUIColor speaking_color = LLUIColorTable::instance().getColor("SpeakingColor");
     static const LLUIColor overdriven_color = LLUIColorTable::instance().getColor("OverdrivenColor");
 
+    // update status of all current speakers
+    LLVoiceClient* voice_client = LLVoiceClient::getInstance();
+    mCachedVoiceChannelActive = (!mVoiceChannel && voice_client->inProximalChannel()) || (mVoiceChannel && mVoiceChannel->isActive());
+
     if(resort_ok) // only allow list changes when user is not interacting with it
     {
         updateSpeakerList();
     }
 
-    // update status of all current speakers
-    LLVoiceClient* voice_client = LLVoiceClient::getInstance();
-    bool voice_channel_active = (!mVoiceChannel && voice_client->inProximalChannel()) || (mVoiceChannel && mVoiceChannel->isActive());
+    bool voice_channel_active = mCachedVoiceChannelActive;
     for (speaker_map_t::iterator speaker_it = mSpeakers.begin(); speaker_it != mSpeakers.end(); speaker_it++)
     {
         LLUUID speaker_id = speaker_it->first;
@@ -489,7 +492,7 @@ void LLSpeakerMgr::updateSpeakerList()
 {
     // Are we bound to the currently active voice channel?
     LLVoiceClient* vocie_client = LLVoiceClient::getInstance();
-    if ((!mVoiceChannel && vocie_client->inProximalChannel()) || (mVoiceChannel && mVoiceChannel->isActive()))
+    if (mCachedVoiceChannelActive)
     {
         std::set<LLUUID> participants;
         vocie_client->getParticipantList(participants);

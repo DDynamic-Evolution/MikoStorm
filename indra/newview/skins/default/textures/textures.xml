@@ -177,6 +177,7 @@ with the same filename but different name
   <texture name="Command_AvatarAlign_Icon"  file_name="toolbar_icons/compass.png"      preload="true" />     <!-- FS:Chanayane Compass floater -->
   <texture name="Command_FaceNearest_Icon"  file_name="toolbar_icons/facenearest.png"  preload="true" />     <!-- FS:Chanayane Compass floater -->
   <texture name="Command_Search_Icon"       file_name="toolbar_icons/search.png"       preload="true" />
+  <texture name="Command_Magnifier_Icon"    file_name="toolbar_icons/search.png"       preload="true" />
   <texture name="Command_Snapshot_Icon"     file_name="toolbar_icons/snapshot.png"     preload="true" />
   <texture name="Command_Speak_Icon"        file_name="toolbar_icons/speak.png"        preload="true" />
   <!-- FS:Beq FIRE-20977 -->

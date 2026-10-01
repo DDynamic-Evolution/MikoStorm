@@ -153,10 +153,11 @@
 			<text name="text_box_scripting_font" width="155">Police de l'éditeur de script :</text>
 			<combo_box name="FSScriptingFontName" tool_tip="Nom de la police utilisée dans l'éditeur de script LSL" />
 			<combo_box name="FSScriptingFontSize" tool_tip="Taille de la police utilisée dans l'éditeur de script LSL">
-				<combo_item name="Small" label="Petite"/>
-				<combo_item name="Medium" label="Moyenne"/>
-				<combo_item name="Large" label="Grande"/>
-			</combo_box>
+				<combo_item value="Small" name="Small" label="Petite"/>
+				<combo_item value="Medium" name="Medium" label="Moyenne"/>
+				<combo_item value="Large" name="Large" label="Grande"/>
+
+				<combo_item name="Huge" value="Huge" label="Huge"/>			</combo_box>
 			<check_box label="Sauvegarder les scripts édités depuis l'inventaire en Mono" tool_tip="Activer cette option sauvegardera directement les scripts situés dans l'inventaire en Mono au lieu de LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Activer le préprocesseur LSL" tool_tip="Quand coché, le préprocesseur LSL est activé." name="preproc_checkbox"/>
 			<check_box label="Optimiser" tool_tip="Quand coché, le préprocesseur LSL optimisera la place que prennent les scripts." name="preprocoptimizer_checkbox"/>

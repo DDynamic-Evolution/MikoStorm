@@ -24,7 +24,8 @@ We develop on **Linux** because it offers a much better and much friendlier buil
 
 ### Not on the TPV List.. why?
 
-application in progress https://github.com/secondlife/third-party-viewers/issues/12
+TPV Request canceled. Nothing is happening there and I dont have the time to meet people on Hippotropolis.
+This will be a private project, more or less
 
 ## Changelog
 

@@ -221,14 +221,15 @@
 				スクリプトエディタのフォント：
 			</text>
 			<combo_box name="FSScriptingFontName" tool_tip="ＬＳＬスクリプトエディタで使用するフォント名を指定します。">
-				<combo_item name="Monospace" label="等幅"/>
+				<combo_item value="Monospace" name="Monospace" label="等幅"/>
 			</combo_box>
 			<combo_box name="FSScriptingFontSize" tool_tip="ＬＳＬスクリプトエディタで使用するフォントの大きさを指定します。">
-				<combo_item name="Monospace" label="等幅"/>
-				<combo_item name="Small" label="小"/>
-				<combo_item name="Medium" label="中"/>
-				<combo_item name="Large" label="大"/>
-			</combo_box>
+				<combo_item value="Monospace" name="Monospace" label="等幅"/>
+				<combo_item value="Small" name="Small" label="小"/>
+				<combo_item value="Medium" name="Medium" label="中"/>
+				<combo_item value="Large" name="Large" label="大"/>
+
+				<combo_item name="Huge" value="Huge" label="Huge"/>			</combo_box>
 			<check_box label="インベントリ内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、インベントリ内で直接編集したスクリプトをＬＳＬ２でなく、Ｍｏｎｏの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="ＬＳＬプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox"/>
 			<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox"/>

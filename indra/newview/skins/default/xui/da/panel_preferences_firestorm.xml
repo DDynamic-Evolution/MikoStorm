@@ -220,18 +220,19 @@
         Script Editor Font:
       </text>
       <combo_box name="FSScriptingFontName" tool_tip="Name of the font used in the LSL script editor">
-        <combo_item name="Monospace" label="Monospace"/>
-        <combo_item name="Scripting" label="Scripting"/>
-        <combo_item name="Cascadia" label="Cascadia Code"/>
+        <combo_item value="Monospace" name="Monospace" label="Monospace"/>
+        <combo_item value="Scripting" name="Scripting" label="Scripting"/>
+        <combo_item value="Cascadia" name="Cascadia" label="Cascadia Code"/>
       </combo_box>
       <combo_box name="FSScriptingFontSize" tool_tip="Size of the font used in the LSL script editor">
-        <combo_item name="Monospace" label="Monospace"/>
-        <combo_item name="Scripting" label="Scripting"/>
-        <combo_item name="Cascadia" label="Cascadia Code"/>
-        <combo_item name="Small" label="Lille"/>
-        <combo_item name="Medium" label="Mellem"/>
-        <combo_item name="Large" label="Stor"/>
-      </combo_box>
+        <combo_item value="Monospace" name="Monospace" label="Monospace"/>
+        <combo_item value="Scripting" name="Scripting" label="Scripting"/>
+        <combo_item value="Cascadia" name="Cascadia" label="Cascadia Code"/>
+        <combo_item value="Small" name="Small" label="Lille"/>
+        <combo_item value="Medium" name="Medium" label="Mellem"/>
+        <combo_item value="Large" name="Large" label="Stor"/>
+
+        <combo_item name="Huge" value="Huge" label="Huge"/>      </combo_box>
       <check_box name="FSSaveInventoryScriptsAsMono_toggle" label="Save scripts edited from inventory as Mono" tool_tip="When checked, editing a script directly from inventory and then saving it saves as Mono instead of LSL."/>
       <check_box name="preproc_checkbox" label="Enable LSL preprocessor" tool_tip="When checked, the LSL preprocessor is enabled."/>
       <check_box name="preprocoptimizer_checkbox" label="Script optimizer" tool_tip="When checked, the LSL preprocessor will optimize space used by scripts."/>

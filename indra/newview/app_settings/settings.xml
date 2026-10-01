@@ -2108,6 +2108,28 @@
       <key>Value</key>
       <boolean>0</boolean>
     </map>
+    <key>PVBlockNonFriendIMs</key>
+    <map>
+      <key>Comment</key>
+      <string>Block IMs from non-friends. Silently drops the message and sends an auto-reply.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>0</boolean>
+    </map>
+    <key>PVBlockNonFriendIMsResponse</key>
+    <map>
+      <key>Comment</key>
+      <string>Auto-reply message sent to non-friends when PVBlockNonFriendIMs is enabled.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>Sorry, non-friends are unable to send this user messages. Speak to them locally or add them as a friend.</string>
+    </map>
     <key>AckCollectTime</key>
     <map>
       <key>Comment</key>
@@ -13829,6 +13851,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <real>0.0</real>
   </map>
+  <key>FSColorVisionFilter</key>
+  <map>
+    <key>Comment</key>
+    <string>Color vision deficiency simulation filter: 0 = off, 1 = Protanopia, 2 = Deuteranopia, 3 = Tritanopia, 4 = Monochromacy. Applied as a screen-space matrix in the post-processing pass.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>RenderSaturation</key>
   <map>
     <key>Comment</key>
@@ -22248,6 +22281,28 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>MagnifierEnabled</key>
+  <map>
+    <key>Comment</key>
+    <string>Toggles the screen magnifier that follows the mouse cursor.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>MagnifierZoom</key>
+  <map>
+    <key>Comment</key>
+    <string>Zoom factor of the screen magnifier.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>2.5</real>
+  </map>
   <key>MainChatbarVisible</key>
   <map>
     <key>Comment</key>
@@ -27064,7 +27119,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>Scripting</string>
+      <string>Medium</string>
     </map>
     <key>FSNotecardFontName</key>
     <map>

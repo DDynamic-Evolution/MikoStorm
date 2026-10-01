@@ -513,6 +513,11 @@ void FSRadar::updateRadarList()
             ++inSameRegion;
         }
 
+        if (mUpdateSignal.empty())
+        {
+            continue;
+        }
+
         LLSD entry;
         LLSD entry_options;
 

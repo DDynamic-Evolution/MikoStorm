@@ -4322,6 +4322,7 @@ void LLPipeline::renderGeomDeferred(LLCamera& camera, bool do_occlusion)
 
     bool occlude = LLPipeline::sUseOcclusion > 1 && do_occlusion && !LLGLSLShader::sProfileEnabled;
 
+    mHWLightsDirty = true;
     setupHWLights();
 
     {
@@ -4698,7 +4699,11 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     bool vignette = vignette_amount() > 0.f;
     bool grain = film_grain() > 0.f;
 
-    if (!grade && !vignette && !grain && !aya14 && !aya16 && !aya17 && !aya18 && !ca)
+    // Color vision deficiency simulation (independent of the cinematic effects)
+    static LLCachedControl<S32> color_vision_filter(gSavedSettings, "FSColorVisionFilter", 0);
+    bool color_vision = color_vision_filter() > 0;
+
+    if (!grade && !vignette && !grain && !color_vision && !aya14 && !aya16 && !aya17 && !aya18 && !ca)
     {
         return false;
     }
@@ -4733,6 +4738,8 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     gPostFxProgram.uniform1f(LLStaticHashedString("postfx_strength"), fx_strength());
     gPostFxProgram.uniform1f(LLStaticHashedString("vignette_amount"), vignette_amount());
     gPostFxProgram.uniform1f(LLStaticHashedString("film_grain"), film_grain());
+
+    gPostFxProgram.uniform1i(LLStaticHashedString("fscol_vision_filter"), color_vision_filter());
 
     // AYAR cinematic effect uniforms (0 when disabled)
     gPostFxProgram.uniform1f(LLStaticHashedString("aya_temp"), aya17 ? aya17_strength() : 0.f);
@@ -6370,7 +6377,7 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
         }
 
         // UPDATE THE EXISTING NEARBY LIGHTS
-        light_set_t cur_nearby_lights;
+        mCurNearbyLights.clear();
         for (light_set_t::iterator iter = mNearbyLights.begin();
             iter != mNearbyLights.end(); iter++)
         {
@@ -6433,12 +6440,12 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
                     fade -= LIGHT_FADE_TIME;
                 }
             }
-            cur_nearby_lights.insert(Light(drawable, dist, fade));
+            mCurNearbyLights.insert(Light(drawable, dist, fade));
         }
-        mNearbyLights = cur_nearby_lights;
+        mNearbyLights = mCurNearbyLights;
 
         // FIND NEW LIGHTS THAT ARE IN RANGE
-        light_set_t new_nearby_lights;
+        mNewNearbyLights.clear();
         for (LLDrawable::ordered_drawable_set_t::iterator iter = mLights.begin();
              iter != mLights.end(); ++iter)
         {
@@ -6467,18 +6474,18 @@ void LLPipeline::calcNearbyLights(LLCamera& camera)
             {
                 continue;
             }
-            new_nearby_lights.insert(Light(drawable, dist, 0.f));
-            if (!LLPipeline::sRenderDeferred && new_nearby_lights.size() > (U32)MAX_LOCAL_LIGHTS)
+            mNewNearbyLights.insert(Light(drawable, dist, 0.f));
+            if (!LLPipeline::sRenderDeferred && mNewNearbyLights.size() > (U32)MAX_LOCAL_LIGHTS)
             {
-                new_nearby_lights.erase(--new_nearby_lights.end());
-                const Light& last = *new_nearby_lights.rbegin();
+                mNewNearbyLights.erase(--mNewNearbyLights.end());
+                const Light& last = *mNewNearbyLights.rbegin();
                 max_dist = last.dist;
             }
         }
 
         // INSERT ANY NEW LIGHTS
-        for (light_set_t::iterator iter = new_nearby_lights.begin();
-             iter != new_nearby_lights.end(); iter++)
+        for (light_set_t::iterator iter = mNewNearbyLights.begin();
+             iter != mNewNearbyLights.end(); iter++)
         {
             const Light* light = &(*iter);
             if (LLPipeline::sRenderDeferred || mNearbyLights.size() < (U32)MAX_LOCAL_LIGHTS)
@@ -6537,6 +6544,12 @@ void LLPipeline::setupHWLights()
     {
         return;
     }
+
+    if (!mHWLightsDirty)
+    {
+        return;
+    }
+    mHWLightsDirty = false;
 
     F32 light_scale = 1.f;
 

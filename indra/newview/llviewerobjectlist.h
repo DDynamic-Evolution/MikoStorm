@@ -219,7 +219,7 @@ protected:
     uuid_multiset_t   mDeadObjects;
     // </FS:Beq>
 
-    std::map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
+    std::unordered_map<LLUUID, LLPointer<LLViewerObject> > mUUIDObjectMap;
 
     //set of objects that need to update their cost
     uuid_set_t   mStaleObjectCost;

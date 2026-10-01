@@ -281,14 +281,25 @@
         </text>
         <combo_box name="FSNotecardFontName" tool_tip="Название шрифта, используемого в редакторе заметок"/>
         <combo_box name="FSNotecardFontSize" tool_tip="Размер шрифта, используемого в редакторе заметок">
-             <combo_item name="Monospace" label="Моноширинный"/>
-             <combo_item name="Scripting" label="Прописной"/>
-             <combo_item name="Cascadia" label="Код Каскадии"/>
-             <combo_item name="Small" label="Мелкий"/>
-             <combo_item name="Medium" label="Средний"/>
-             <combo_item name="Large" label="Крупный"/>
-        </combo_box>
-        <text name="emoji_font_settings_label">
+             <combo_item value="Monospace" name="Monospace" label="Моноширинный"/>
+             <combo_item value="Scripting" name="Scripting" label="Прописной"/>
+             <combo_item value="Cascadia" name="Cascadia" label="Код Каскадии"/>
+             <combo_item value="Small" name="Small" label="Мелкий"/>
+             <combo_item value="Medium" name="Medium" label="Средний"/>
+             <combo_item value="Large" name="Large" label="Крупный"/>
+
+             <combo_item name="Huge" value="Huge" label="Huge"/>        </combo_box>
+        <text name="color_vision_filter_label">
+			Color Vision Filter:
+		</text>
+		<combo_box name="FSColorVisionFilter" tool_tip="Simulates a color vision deficiency to help affected users distinguish colors. Applied in the post-processing pass.">
+			<combo_item name="Off" value="0" label="Off"/>
+			<combo_item name="Protanopia" value="1" label="Protanopia"/>
+			<combo_item name="Deuteranopia" value="2" label="Deuteranopia"/>
+			<combo_item name="Tritanopia" value="3" label="Tritanopia"/>
+			<combo_item name="Monochromacy" value="4" label="Monochromacy"/>
+		</combo_box>
+<text name="emoji_font_settings_label">
           Настройки шрифта Эмодзи: (требуется перезапуск)
         </text>
         <check_box name="FSUseBWEmojis" label="Отображать эмодзи монохромно"/>

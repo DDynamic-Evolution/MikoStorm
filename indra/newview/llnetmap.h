@@ -163,6 +163,10 @@ private:
     F32             mObjectMapPixels;       // Width of object map in pixels
     F32             mDotRadius;             // Size of avatar markers
 
+    F32             mAvatarUpdateTime;
+    uuid_vec_t      mCachedAvatarIds;
+    std::vector<LLVector3d> mCachedAvatarPositions;
+
     bool            mPanning; // map is being dragged
     bool            mCentering; // map is being re-centered around the agent
     LLVector2       mCurPan;

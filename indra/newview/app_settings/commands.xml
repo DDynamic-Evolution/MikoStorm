@@ -719,4 +719,12 @@
         is_running_parameters="photogrammetry"
          />
 
+  <command name="magnifier"
+        available_in_toybox="true"
+        icon="Command_Magnifier_Icon"
+        label_ref="Command_Magnifier_Label"
+        tooltip_ref="Command_Magnifier_Tooltip"
+        control_name="MagnifierEnabled"
+         />
+
 </commands>

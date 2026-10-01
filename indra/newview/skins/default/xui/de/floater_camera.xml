@@ -65,7 +65,31 @@
 		<combo_box name="preset_combo">
 			<combo_box.item label="Voreinstellung verw." name="Use preset"/>
 		</combo_box>
-		<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
-		<button name="save_preset_btn" tool_tip="Als Voreinstellung speichern"/>
-	</panel>
+<button name="gear_btn" tool_tip="Kamera-Voreinstellungen"/>
+	<button name="save_preset_btn" tool_tip="Als Voreinstellung speichern"/>
+	<!-- <CJB> Bone camera - follow a specified skeleton joint -->
+	<text
+		follows="bottom|left"
+		height="20"
+		layout="topleft"
+		left="5"
+		bottom="3"
+		name="joint_label"
+		text="Bone Camera" />
+	<combo_box
+		follows="bottom|left|right"
+		height="20"
+		left_pad="4"
+		bottom="3"
+		mouse_opaque="true"
+		name="joint_combo"
+		width="120">
+		<combo_list mouse_wheel_opaque="true" />
+		<combo_box.item
+			label="None"
+			name="None"
+			value="None" />
+	</combo_box>
+	<!-- </CJB> -->
+</panel>
 </floater>

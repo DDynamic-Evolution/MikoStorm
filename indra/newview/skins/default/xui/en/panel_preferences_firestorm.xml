@@ -1746,7 +1746,8 @@
              <combo_item name="Small" value="Small" label="Small"/>
              <combo_item name="Medium" value="Medium" label="Medium"/>
              <combo_item name="Large" value="Large" label="Large"/>
-        </combo_box>
+
+             <combo_item name="Huge" value="Huge" label="Huge"/>        </combo_box>
 
         <check_box
          left="10"

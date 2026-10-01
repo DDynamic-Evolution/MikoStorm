@@ -206,16 +206,17 @@
           Skript yazı tipi:
         </text>
         <combo_box name="FSScriptingFontName" tool_tip="LSL skript dəyişdiricisində istifadə olunan yazı tipinin adı">
-          <combo_item name="Monospace" label="Monogeniş"/>
-          <combo_item name="Scripting" label="Skriptli"/>
+          <combo_item value="Monospace" name="Monospace" label="Monogeniş"/>
+          <combo_item value="Scripting" name="Scripting" label="Skriptli"/>
         </combo_box>
         <combo_box name="FSScriptingFontSize" tool_tip="LSL skript dəyişdiricisində istifadə olunan yazı tipinin ölçüsü">
-          <combo_item name="Monospace" label="Monogeniş"/>
-          <combo_item name="Scripting" label="Skriptli"/>
-          <combo_item name="Small" label="Kiçik"/>
-          <combo_item name="Medium" label="Ortam"/>
-          <combo_item name="Large" label="Yerkə"/>
-        </combo_box>
+          <combo_item value="Monospace" name="Monospace" label="Monogeniş"/>
+          <combo_item value="Scripting" name="Scripting" label="Skriptli"/>
+          <combo_item value="Small" name="Small" label="Kiçik"/>
+          <combo_item value="Medium" name="Medium" label="Ortam"/>
+          <combo_item value="Large" name="Large" label="Yerkə"/>
+
+          <combo_item name="Huge" value="Huge" label="Böyük"/>        </combo_box>
         <check_box label="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" tool_tip="Avadanlıq siyahısında dəyişdirilmiş skriptləri Mono olaraq saxlayın" name="FSSaveInventoryScriptsAsMono_toggle" />
 		<check_box label="LSL Önprosessorunu aktivləşdir" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru işləyəcəkdir." name="preproc_checkbox" />
 		<check_box label="Optimallaşdırma" tool_tip="Bu seçim aktiv edildikdə, LSL önprosessoru skript tərəfindən istifadə edilən sahəni optimizə edəcəkdir." name="preprocoptimizer_checkbox" />

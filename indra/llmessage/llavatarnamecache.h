@@ -32,6 +32,7 @@
 #include "llsingleton.h"
 #include <boost/signals2.hpp>
 #include <set>
+#include <unordered_map>
 
 class LLSD;
 class LLUUID;
@@ -203,7 +204,7 @@ private:
     signal_map_t mSignalMap;
 
     // The cache at last, i.e. avatar names we know about.
-    typedef std::map<LLUUID, LLAvatarName> cache_t;
+    typedef std::unordered_map<LLUUID, LLAvatarName> cache_t;
     cache_t mCache;
 
     // Time when unrefreshed cached names were checked last.

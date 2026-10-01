@@ -225,7 +225,7 @@ private:
     EntriesInfo mHeaderEntriesInfo;
     std::set<S32> mFreeList; // deleted entries
     std::set<LLUUID> mLRU;
-    typedef std::map<LLUUID, S32> id_map_t;
+    typedef std::unordered_map<LLUUID, S32> id_map_t;
     id_map_t mHeaderIDMap;
 
     LLAPRFile*   mFastCachep;

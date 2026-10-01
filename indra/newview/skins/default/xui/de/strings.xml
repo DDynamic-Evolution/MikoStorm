@@ -5958,6 +5958,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Search_Label">
 		Suchen
 	</string>
+	<string name="Command_Magnifier_Label">
+		Lupe
+	</string>
 	<string name="Command_Snapshot_Label">
 		Foto
 	</string>
@@ -6177,6 +6180,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Search_Tooltip">
 		Orte, Veranstaltungen, Leute finden (Strg+F)
+	</string>
+	<string name="Command_Magnifier_Tooltip">
+		Vergrößert den Bereich um den Mauszeiger
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Foto aufnehmen (Strg+Umschalt+S)

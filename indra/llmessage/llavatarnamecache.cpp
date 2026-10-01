@@ -48,6 +48,7 @@
 #include "workqueue.h"
 
 #include <map>
+#include <unordered_map>
 #include <set>
 
 #include "llcontrol.h" // <FS:Ansariel> Optional legacy name cache expiration
@@ -291,7 +292,7 @@ void LLAvatarNameCache::handleAvNameCacheSuccess(const LLSD &data, const LLSD &h
 // Provide some fallback for agents that return errors
 void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
 {
-    std::map<LLUUID,LLAvatarName>::iterator existing = mCache.find(agent_id);
+    std::unordered_map<LLUUID,LLAvatarName>::iterator existing = mCache.find(agent_id);
     if (existing == mCache.end())
     {
         // <FS:Ansariel> Don't re-request names for agents with null uuid.
@@ -335,7 +336,7 @@ void LLAvatarNameCache::processName(const LLUUID& agent_id, const LLAvatarName& 
 
     bool updated_account = true; // assume obsolete value for new arrivals by default
 
-    std::map<LLUUID, LLAvatarName>::iterator it = mCache.find(agent_id);
+    std::unordered_map<LLUUID, LLAvatarName>::iterator it = mCache.find(agent_id);
     if (it != mCache.end()
         && (*it).second.getAccountName() == av_name.getAccountName())
     {
@@ -442,7 +443,7 @@ void LLAvatarNameCache::legacyNameCallback(const LLUUID& agent_id,
     // Retrieve the name and set it to never (or almost never...) expire: when we are using the legacy
     // protocol, we do not get an expiration date for each name and there's no reason to ask the
     // data again and again so we set the expiration time to the largest value admissible.
-    std::map<LLUUID,LLAvatarName>::iterator av_record = LLAvatarNameCache::getInstance()->mCache.find(agent_id);
+    std::unordered_map<LLUUID,LLAvatarName>::iterator av_record = LLAvatarNameCache::getInstance()->mCache.find(agent_id);
     LLAvatarName& av_name = av_record->second;
     av_name.setExpires(MAX_UNREFRESHED_TIME);
 }
@@ -669,7 +670,7 @@ bool LLAvatarNameCache::getName(const LLUUID& agent_id, LLAvatarName *av_name)
     if (mRunning)
     {
         // ...only do immediate lookups when cache is running
-        std::map<LLUUID,LLAvatarName>::iterator it = mCache.find(agent_id);
+        std::unordered_map<LLUUID,LLAvatarName>::iterator it = mCache.find(agent_id);
         if (it != mCache.end())
         {
             *av_name = it->second;
@@ -733,7 +734,7 @@ LLAvatarNameCache::callback_connection_t LLAvatarNameCache::getNameCallback(cons
     if (mRunning)
     {
         // ...only do immediate lookups when cache is running
-        std::map<LLUUID,LLAvatarName>::iterator it = mCache.find(agent_id);
+        std::unordered_map<LLUUID,LLAvatarName>::iterator it = mCache.find(agent_id);
         if (it != mCache.end())
         {
             LLAvatarName& av_name = it->second;
@@ -845,8 +846,8 @@ void LLAvatarNameCache::insert(const LLUUID& agent_id, const LLAvatarName& av_na
 
 LLUUID LLAvatarNameCache::findIdByName(const std::string& name)
 {
-    std::map<LLUUID, LLAvatarName>::iterator it;
-    std::map<LLUUID, LLAvatarName>::iterator end = mCache.end();
+    std::unordered_map<LLUUID, LLAvatarName>::iterator it;
+    std::unordered_map<LLUUID, LLAvatarName>::iterator end = mCache.end();
     for (it = mCache.begin(); it != end; ++it)
     {
         if (it->second.getUserName() == name)

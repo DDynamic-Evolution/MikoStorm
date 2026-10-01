@@ -1137,6 +1137,36 @@ void LLIMProcessing::processNewMessage(LLUUID from_id,
                     // </FS:Ansariel>
                 }
             }
+            // <PV> Block IMs from non-friends
+            else if (gSavedSettings.getBOOL("PVBlockNonFriendIMs")
+                        && !is_friend
+                        && !is_muted
+                        && !LLMuteList::isLinden(name)
+                        && from_id.notNull()
+                        && to_id.notNull()
+                        && offline == IM_ONLINE)
+            {
+                if (!gIMMgr->hasSession(session_id) || session_id.isNull())
+                {
+                    std::string my_name;
+                    LLAgentUI::buildFullname(my_name);
+                    static LLCachedControl<std::string> block_response(gSavedSettings, "PVBlockNonFriendIMsResponse");
+                    pack_instant_message(
+                        gMessageSystem,
+                        gAgent.getID(),
+                        false,
+                        gAgent.getSessionID(),
+                        from_id,
+                        my_name,
+                        block_response,
+                        IM_ONLINE,
+                        IM_DO_NOT_DISTURB_AUTO_RESPONSE,
+                        session_id);
+                    gAgent.sendReliableMessage();
+                }
+                // IM silently dropped
+            }
+            // </PV>
             else if (from_id.isNull())
             {
                 LLSD args;

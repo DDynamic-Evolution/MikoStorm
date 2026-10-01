@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """\
 @file   start-client.py
 
@@ -56,7 +56,7 @@ def start_client(grid, slurl, build_config, my_args):
     f = open("start-client.log", "w")
     print("Viewer startup arguments:", file=f)
     llstart.start("viewer", "../../newview", 
-        "%s/newview/%s/firestorm-bin.exe" % (build_path, build_config),
+        "%s/newview/%s/mikostorm.exe" % (build_path, build_config),
         viewer_args, f)
     f.close()
 

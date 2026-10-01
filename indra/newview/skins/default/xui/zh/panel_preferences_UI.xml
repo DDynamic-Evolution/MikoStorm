@@ -274,20 +274,31 @@
 				記事卡字型：
 			</text>
 			<combo_box name="FSNotecardFontName" tool_tip="用於記事卡編輯器的字型名稱">
-				<combo_item name="Sans Serif" label="無襯線" />
-				<combo_item name="Monospace" label="等寬" />
-				<combo_item name="Scripting" label="斜體" />
-				<combo_item name="Cascadia" label="新型等寬" />
+				<combo_item value="SansSerif" name="Sans Serif" label="無襯線" />
+				<combo_item value="Monospace" name="Monospace" label="等寬" />
+				<combo_item value="Scripting" name="Scripting" label="斜體" />
+				<combo_item value="Cascadia" name="Cascadia" label="新型等寬" />
 			</combo_box>
 			<combo_box name="FSNotecardFontSize" tool_tip="用於記事卡編輯器的字型大小">
-				<combo_item name="Monospace" label="等寬" />
-				<combo_item name="Scripting" label="斜體" />
-				<combo_item name="Cascadia" label="新型等寬" />
-				<combo_item name="Small" label="小" />
-				<combo_item name="Medium" label="中" />
-				<combo_item name="Large" label="大" />
-			</combo_box>
-			<text name="emoji_font_settings_label">
+				<combo_item value="Monospace" name="Monospace" label="等寬" />
+				<combo_item value="Scripting" name="Scripting" label="斜體" />
+				<combo_item value="Cascadia" name="Cascadia" label="新型等寬" />
+				<combo_item value="Small" name="Small" label="小" />
+				<combo_item value="Medium" name="Medium" label="中" />
+				<combo_item value="Large" name="Large" label="大" />
+
+				<combo_item name="Huge" value="Huge" label="Huge"/>			</combo_box>
+			<text name="color_vision_filter_label">
+			Color Vision Filter:
+		</text>
+		<combo_box name="FSColorVisionFilter" tool_tip="Simulates a color vision deficiency to help affected users distinguish colors. Applied in the post-processing pass.">
+			<combo_item name="Off" value="0" label="Off"/>
+			<combo_item name="Protanopia" value="1" label="Protanopia"/>
+			<combo_item name="Deuteranopia" value="2" label="Deuteranopia"/>
+			<combo_item name="Tritanopia" value="3" label="Tritanopia"/>
+			<combo_item name="Monochromacy" value="4" label="Monochromacy"/>
+		</combo_box>
+<text name="emoji_font_settings_label">
 				Emoji 字型設定：（重新啟動後才能完全生效）
 			</text>
 			<check_box label="以單色顯示表情符號" name="FSUseBWEmojis" />

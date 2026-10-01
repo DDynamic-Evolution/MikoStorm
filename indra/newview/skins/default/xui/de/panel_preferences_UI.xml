@@ -286,20 +286,31 @@ Standard 0. Größere Werte können nicht korrekt funktionieren.
 			Schrift für Notizkarten:
 		</text>
 		<combo_box name="FSNotecardFontName" tool_tip="Name der Schrift, die für den Notizkarten-Editor verwendet wird">
-			<combo_item name="Sans Serif" label="Sans Serif"/>
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
+			<combo_item value="SansSerif" name="Sans Serif" label="Sans Serif"/>
+			<combo_item value="Monospace" name="Monospace" label="Monospace"/>
+			<combo_item value="Scripting" name="Scripting" label="Scripting"/>
+			<combo_item value="Cascadia" name="Cascadia" label="Cascadia Code"/>
 		</combo_box>
 		<combo_box name="FSNotecardFontSize" tool_tip="Größe der Schrift, die für den Notizkarten-Editor verwendet wird">
-			<combo_item name="Monospace" label="Monospace"/>
-			<combo_item name="Scripting" label="Scripting"/>
-			<combo_item name="Cascadia" label="Cascadia Code"/>
-			<combo_item name="Small" label="Klein"/>
-			<combo_item name="Medium" label="Mittel"/>
-			<combo_item name="Large" label="Groß"/>
+			<combo_item value="Monospace" name="Monospace" label="Monospace"/>
+			<combo_item value="Scripting" name="Scripting" label="Scripting"/>
+			<combo_item value="Cascadia" name="Cascadia" label="Cascadia Code"/>
+			<combo_item value="Small" name="Small" label="Klein"/>
+			<combo_item value="Medium" name="Medium" label="Mittel"/>
+			<combo_item value="Large" name="Large" label="Groß"/>
+
+			<combo_item name="Huge" value="Huge" label="Riesig"/>		</combo_box>
+		<text name="color_vision_filter_label">
+			Color Vision Filter:
+		</text>
+		<combo_box name="FSColorVisionFilter" tool_tip="Simulates a color vision deficiency to help affected users distinguish colors. Applied in the post-processing pass.">
+			<combo_item name="Off" value="0" label="Aus"/>
+			<combo_item name="Protanopia" value="1" label="Protanopie (Rot)"/>
+			<combo_item name="Deuteranopia" value="2" label="Deuteranopie (Grün)"/>
+			<combo_item name="Tritanopia" value="3" label="Tritanopie (Blau)"/>
+			<combo_item name="Monochromacy" value="4" label="Monochromasie (Graustufen)"/>
 		</combo_box>
-		<text name="emoji_font_settings_label">
+<text name="emoji_font_settings_label">
 			Emoji-Schrifteinstellungen: (erfordert Neustart)
 		</text>
 		<check_box label="Emojis in monochrom darstellen" name="FSUseBWEmojis"/>

@@ -144,6 +144,7 @@ LLNetMap::LLNetMap (const Params & p)
 // [/SL:KB]
     mClosestAgentToCursor(),
 //  mClosestAgentAtLastRightClick(),
+    mAvatarUpdateTime(0.f),
     mToolTipMsg()
 {
     // <FS:Ansariel> Fixing borked minimap zoom level persistance
@@ -695,11 +696,16 @@ void LLNetMap::draw()
         // </FS:Ansariel>
 
         LLVector3 pos_map;
-        uuid_vec_t avatar_ids;
-        std::vector<LLVector3d> positions;
         bool unknown_relative_z;
 
-        LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgentCamera.getCameraPositionGlobal());
+        if ((gFrameTimeSeconds - mAvatarUpdateTime) > 0.2f)
+        {
+            mAvatarUpdateTime = gFrameTimeSeconds;
+            LLWorld::getInstance()->getAvatars(&mCachedAvatarIds, &mCachedAvatarPositions, gAgentCamera.getCameraPositionGlobal());
+        }
+
+        const uuid_vec_t& avatar_ids = mCachedAvatarIds;
+        const std::vector<LLVector3d>& positions = mCachedAvatarPositions;
 
         // Draw avatars
         for (U32 i = 0; i < avatar_ids.size(); i++)

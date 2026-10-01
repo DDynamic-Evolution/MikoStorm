@@ -613,8 +613,9 @@ void FSData::selectNextMOTD()
 //WS: Create a new LLSD based on the data from the mLegacyClientList if
 LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4& color) const
 {
+    const std::string id_str = id.asString();
     LLSD curtag;
-    curtag["uuid"] = id.asString();
+    curtag["uuid"] = id_str;
     curtag["id_based"] = new_system;
     curtag["tex_color"] = color.getValue();
 
@@ -637,9 +638,9 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
     //WS: Do we want to use Legacy Clienttags?
     if (use_legacy_client_tags)
     {
-        if (mLegacyClientList.has(id.asString()))
+        if (mLegacyClientList.has(id_str))
         {
-            curtag = mLegacyClientList[id.asString()];
+            curtag = mLegacyClientList[id_str];
         }
         else
         {
@@ -715,7 +716,7 @@ LLSD FSData::resolveClientTag(const LLUUID& id, bool new_system, const LLColor4&
         curtag.clear();
     }
 
-    curtag["uuid"] = id.asString();
+    curtag["uuid"] = id_str;
     curtag["id_based"] = new_system;
     curtag["tex_color"] = color.getValue();
 

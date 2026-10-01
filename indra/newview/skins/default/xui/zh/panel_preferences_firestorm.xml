@@ -149,18 +149,19 @@
 		<panel label="指令碼編輯器" name="BuildTabScriptEditor">
 			<text name="text_box_scripting_font" width="155">指令碼編輯器字型：</text>
 			<combo_box name="FSScriptingFontName" tool_tip="LSL 指令碼編輯器中使用的字型名稱">
-				<combo_item name="Monospace" label="等寬" />
-				<combo_item name="Scripting" label="斜體" />
-				<combo_item name="Cascadia" label="新型等寬" />
+				<combo_item value="Monospace" name="Monospace" label="等寬" />
+				<combo_item value="Scripting" name="Scripting" label="斜體" />
+				<combo_item value="Cascadia" name="Cascadia" label="新型等寬" />
 			</combo_box>
 			<combo_box name="FSScriptingFontSize" tool_tip="LSL 指令碼編輯器中使用的字型大小">
-				<combo_item name="Monospace" label="等寬" />
-				<combo_item name="Scripting" label="斜體" />
-				<combo_item name="Cascadia" label="新型等寬" />
-				<combo_item name="Small" label="小" />
-				<combo_item name="Medium" label="中" />
-				<combo_item name="Large" label="大" />
-			</combo_box>
+				<combo_item value="Monospace" name="Monospace" label="等寬" />
+				<combo_item value="Scripting" name="Scripting" label="斜體" />
+				<combo_item value="Cascadia" name="Cascadia" label="新型等寬" />
+				<combo_item value="Small" name="Small" label="小" />
+				<combo_item value="Medium" name="Medium" label="中" />
+				<combo_item value="Large" name="Large" label="大" />
+
+				<combo_item name="Huge" value="Huge" label="Huge"/>			</combo_box>
 			<check_box label="將編輯的指令碼儲存到 Mono 中" tool_tip="啟用此選項將直接將儲存在庫存中的指令碼儲存為 Mono，而不是 LSL。" name="FSSaveInventoryScriptsAsMono_toggle" />
 			<check_box label="啟用 LSL 前處理器" tool_tip="勾選此項將啟用 LSL 前處理器。" name="preproc_checkbox" />
 			<check_box label="最佳化指令碼" tool_tip="勾選此項，LSL 前處理器將最佳化指令碼所佔用的空間。" name="preprocoptimizer_checkbox" />
