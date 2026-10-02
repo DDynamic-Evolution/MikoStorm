@@ -43,7 +43,9 @@
 #ifdef LL_FMODSTUDIO
 #include "llaudioengine_fmodstudio.h" // r12.x: FSParcelStreamQuality live setter
 #endif
+#ifdef USE_3D_STREAM
 #include "llpositionalstreammgr.h"
+#endif
 #include "llagent.h"
 #include "llcinematicoverlay.h" // <FS:AYA r30 P5 R2> sentinel reset on mode switch
 #include "llagentcamera.h"
@@ -565,6 +567,7 @@ static void handleAudioVolumeChanged(const LLSD& newvalue)
 }
 
 // <FS:AYA> [PositionalStream]
+#ifdef USE_3D_STREAM
 static void handleStream3DRolloffChanged(const LLSD&)
 {
     LLPositionalStreamMgr::instance().applyDefaultRolloff(
@@ -678,6 +681,7 @@ static void handleStream3DDebugStereoPlayChanged(const LLSD& newvalue)
         LLPositionalStreamMgr::instance().stopDebugStereo();
     }
 }
+#endif // USE_3D_STREAM
 // </FS:AYA>
 
 // r12.x: FSParcelStreamQuality live setter. Buffer hint applies on next
@@ -1698,6 +1702,7 @@ void settings_setup_listeners()
     // <FS:Ansariel> Show start location setting has no effect on login
     setting_setup_signal_listener(gSavedSettings, "ShowStartLocation", handleForceShowGrid);
     setting_setup_signal_listener(gSavedSettings, "RenderTransparentWater", handleRenderTransparentWaterChanged);
+#ifdef USE_3D_STREAM
     setting_setup_signal_listener(gSavedSettings, "Stream3DDebugPlay", handleStream3DDebugPlayChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DDebugStereoPlay", handleStream3DDebugStereoPlayChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DRolloffMin", handleStream3DRolloffChanged);
@@ -1707,6 +1712,7 @@ void settings_setup_listeners()
     setting_setup_signal_listener(gSavedSettings, "Stream3DEnabled", handleStream3DEnabledChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DDescriptionScan", handleStream3DDescriptionScanChanged);
     setting_setup_signal_listener(gSavedSettings, "Stream3DScanAttachments", handleStream3DScanAttachmentsChanged);
+#endif
     setting_setup_signal_listener(gSavedSettings, "FSParcelStreamQuality", handleParcelStreamQualityChanged);
     // </FS:AYA>
     setting_setup_signal_listener(gSavedSettings, "SpellCheck", handleSpellCheckChanged);
