@@ -31,6 +31,8 @@
 #include "vld.h"
 #endif
 
+#include <cstdlib>
+
 #include "llviewermenu.h"
 
 // linden library includes
@@ -10156,6 +10158,40 @@ class FSResetPerAccountControl : public view_listener_t
         return true;
     }
 };
+
+// <MikoStorm> Set/Check S32-controls from menus (radio group)
+class LLSetS32Control : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        std::string callback_data = userdata.asString();
+        std::string::size_type eq = callback_data.find('=');
+        if (eq != std::string::npos)
+        {
+            std::string control_name = callback_data.substr(0, eq);
+            S32 value = static_cast<S32>(strtol(callback_data.c_str() + eq + 1, NULL, 10));
+            gSavedSettings.setS32(control_name, value);
+        }
+        return true;
+    }
+};
+
+class LLCheckS32Control : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+        std::string callback_data = userdata.asString();
+        std::string::size_type eq = callback_data.find('=');
+        if (eq != std::string::npos)
+        {
+            std::string control_name = callback_data.substr(0, eq);
+            S32 value = static_cast<S32>(strtol(callback_data.c_str() + eq + 1, NULL, 10));
+            return gSavedSettings.getS32(control_name) == value;
+        }
+        return false;
+    }
+};
+// </MikoStorm>
 // </FS:Ansariel> Control enhancements
 
 // <FS:Ansariel> Reset Mesh LOD; Forcing highest LOD on each mesh briefly should fix
@@ -13316,6 +13352,10 @@ void initialize_menus()
     view_listener_t::addMenu(new LLCheckPerAccountControl(), "CheckPerAccountControl");
     view_listener_t::addMenu(new FSResetControl(), "ResetControl");
     view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
+    // <MikoStorm>
+    view_listener_t::addMenu(new LLSetS32Control(), "SetS32Control");
+    view_listener_t::addMenu(new LLCheckS32Control(), "CheckS32Control");
+    // </MikoStorm>
     // </FS:Ansariel> Control enhancements
 
     // <FS:Ansariel> Reset Mesh LOD

@@ -4660,7 +4660,9 @@ void LLPipeline::recordTrianglesDrawn()
 bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
 {
     static LLCachedControl<bool> fx_enabled(gSavedSettings, "FSVisualEffectsEnabled", false);
-    if (!fx_enabled)
+    // Color vision deficiency simulation (independent of the cinematic effects)
+    static LLCachedControl<S32> color_vision_filter(gSavedSettings, "FSColorVisionFilter", 0);
+    if (!fx_enabled && color_vision_filter() <= 0)
     {
         return false;
     }
@@ -4699,8 +4701,6 @@ bool LLPipeline::renderPostFx(LLRenderTarget* src, LLRenderTarget* dst)
     bool vignette = vignette_amount() > 0.f;
     bool grain = film_grain() > 0.f;
 
-    // Color vision deficiency simulation (independent of the cinematic effects)
-    static LLCachedControl<S32> color_vision_filter(gSavedSettings, "FSColorVisionFilter", 0);
     bool color_vision = color_vision_filter() > 0;
 
     if (!grade && !vignette && !grain && !color_vision && !aya14 && !aya16 && !aya17 && !aya18 && !ca)
