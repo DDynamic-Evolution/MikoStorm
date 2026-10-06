@@ -1,0 +1,93 @@
+name: MikoStorm Linux build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mikostorm-linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Ubuntu 22.04 x86_64
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+    env:
+      AUTOBUILD_ADDRSIZE: "64"
+      AUTOBUILD_VARIABLES_FILE: ${{ github.workspace }}/build-variables/variables
+      AUTOBUILD_INSTALLABLE_CACHE: ${{ github.workspace }}/.autobuild-installables
+      XZ_DEFAULTS: "-T0"
+
+    steps:
+      - name: Check out MikoStorm (including submodules)
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Check out Firestorm build variables
+        uses: actions/checkout@v6
+        with:
+          repository: FirestormViewer/fs-build-variables
+          path: build-variables
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential cmake ccache git ninja-build \
+            libfontconfig-dev libfreetype6-dev libgl1-mesa-dev libglu1-mesa-dev \
+            libpulse-dev libssl-dev libxinerama-dev libxrandr-dev python3-dev
+
+      - name: Install Autobuild requirements
+        run: python -m pip install -r requirements.txt
+
+      - name: Cache Autobuild downloads
+        uses: actions/cache@v4
+        with:
+          path: .autobuild-installables
+          key: linux-22.04-x86_64-${{ hashFiles('autobuild.xml') }}
+          restore-keys: |
+            linux-22.04-x86_64-
+
+      - name: Configure and compile viewer
+        shell: bash
+        run: |
+          set -o pipefail
+          ./scripts/configure_firestorm.sh \
+            --config --build --ninja --compiler-cache \
+            --avx2 --openal --opensim --3dstream --mcp --no-espeak \
+            --package --chan Release 2>&1 | tee build.log
+
+      - name: Upload compiled viewer
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MikoStorm-Linux-x86_64-${{ github.sha }}
+          path: |
+            build-linux-x86_64/newview/packaged/
+            build-linux-x86_64/newview/Phoenix*.tar.*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MikoStorm-Linux-build-log-${{ github.run_id }}
+          path: build.log
+          if-no-files-found: ignore
+          retention-days: 7
