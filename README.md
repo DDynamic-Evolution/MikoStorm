@@ -1,5 +1,4 @@
 # MikoStorm – Fast. Modern. Open Source
-Going on vacation until August 29.
 <p align="center">
   <img src="images/mikostorm.png" width="512" height="512">
 </p>
@@ -12,13 +11,24 @@ MikoStorm is a fork of the [Firestorm Viewer](https://github.com/FirestormViewer
 
 This repository is not released by SecondLife or Firestorm!
 
-MikoStorm aims to provide a viewer with many missing or unique features that enhance the Second Life experience. Anyone looking for a viewer with illegal features must look elsewhere — this is not the place for it.
+MikoStorm adds camera, communication, rendering and audio features for everyday use, photography and machinima in Second Life and OpenSim.
 
 This project is a one man show! So be patient
 
+## Current Windows release: 2.0.2
+
+- **Windows Chat popout:** local chat, private IMs and group conversations in a separate Windows window, with individual histories and drafts.
+- **Windows appearance:** automatic Light/Dark application theme, High Contrast support and live theme updates.
+- **Friends in the popout:** searchable friend list with online status; open an IM by double-clicking, pressing Enter or choosing **Open chat**.
+- **Toybox button:** drag **Windows Chat** onto a toolbar to open or focus the popout.
+- **Build features:** Windows x64 AVX2, OpenSim, FMOD, positional 3D Stream audio and optional MCP support.
+- **Embedded browser:** enabled by default.
+
+The current AVX2 installer is version **2.0.2**. The older legacy/NoAVX package remains **1.16.58** and predates the new chat features.
+
 ### Builds
 
-We develop on **Linux** because it offers a much better and much friendlier build environment. Compiling on **Windows** is a big hassle and needs many adjustments, so there will be **fewer Windows builds** than Linux builds. See [Building on Windows](doc/building_windows.md) and [Building on Linux](doc/building_linux.md) for details.
+Windows uses separate AVX2 and legacy profiles. See [Windows build profiles](doc/building_windows_profiles.md), [Building on Windows](doc/building_windows.md) and [Building on Linux](doc/building_linux.md) for setup and build instructions.
 
 <img width="1839" height="919" alt="screen" src="https://github.com/user-attachments/assets/44ebaa9b-3fc1-490f-926e-2c3b8156c395" />
 
@@ -29,7 +39,7 @@ This will be a private project, more or less
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for the full release history. The current version is **2.0.2** (Windows AVX2). The legacy/NoAVX release remains 1.16.58.
+See [CHANGELOG.md](CHANGELOG.md) for the full release history.
 
 ### No 32Bit version
 
@@ -41,6 +51,8 @@ You can post them here on github or send me a mail. Email is in my profile here 
 
 ### Documentation
 
+- [Windows Chat](doc/native_chat.md) — Popout, themes, friends and conversations
+- [MCP setup and tools](doc/mcp.md) — Optional local MCP server
 - [Experimental Features](doc/experimental_features.md) — How to use all experimental features
 - [Camera Timeline](#camera-timeline) — Record and playback camera movements
 

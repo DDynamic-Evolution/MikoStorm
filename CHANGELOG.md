@@ -2,10 +2,10 @@
 
 ## 2.0.2 (2026-10-28)
 
-- Follow the Windows application Light/Dark preference and live theme/settings notifications; preserve High Contrast system colors and use a supported dark title bar when available.
-- Add a searchable friend sidebar, online-first sorting and open-IM actions via double-click, Enter or Open chat. Use normal friend/name/session services and recheck login, membership and RLV before opening.
-- Preserve draft/conversation state, keep contacts in memory and reject stale friend actions across account or membership changes.
-- Pass four native test programs (215 core checks plus avatar-log, camera and production Windows renderer tests) and 21 source integration checks; incrementally build/link the AVX2 viewer with MCP, OpenSim, FMOD and 3D Stream, then create and verify the NSIS installer.
+- **Automatic Windows appearance:** the chat popout follows the Windows application Light/Dark setting and updates while open. High Contrast uses system colors; a dark title bar is used where supported.
+- **Friends sidebar:** show online status, sort online friends first and search names. Double-click a friend, press Enter or use **Open chat** to select an existing IM or start a new one.
+- **Conversation state:** preserve separate drafts and histories while switching chats; clear friend data on account changes and reject requests for removed contacts.
+- **Windows installer:** x64 AVX2 with OpenSim, FMOD, 3D Stream audio and optional MCP support. The embedded browser is enabled by default.
 
 ## 2.0.1 (2026-10-28)
 
@@ -43,19 +43,17 @@
 
 - MCP: bounded HTTP header/body parsing, partial-send handling, origin/host validation, request deadlines and cancellation of queued main-thread work during shutdown.
 - Camera: shared numeric joint selection in Camera Controls, Phototools and Preferences; refresh late skeletons and keep the active selection stable.
-- Export permissions: preserve grid-specific policy in a tested decision helper; handle omitted name/description output parameters safely.
+- Asset checks: handle optional name/description output parameters safely while preserving grid-specific permission rules.
 - Avatar log: record successful writes only, retry failed writes with backoff, disconnect pending name lookups and reload deduplication on path changes.
 - 3D audio: separate tag parsing and discovery from stream lifecycle; budget object/structure scans and add discovery timing instrumentation; reject non-finite/malformed numeric tags.
 - Windows: independent AVX2/legacy CMake presets and CMD build/packaging workflow with regression tests and SHA-256 output.
 
 ## 1.16.57 (2026-10-27)
 
-### Permission Enforcement
+### Bug Fixes
 
-- Removed the unrestricted MikoStorm object/avatar XML exporter, its menus and floater, and both raw-asset download helpers (MikoStorm and PandaView).
-- Restored the regular inventory permissions for asset UUID access and texture saving. Removed raw animation/sound export and UUID buttons from the explorers.
-- Texture previews opened by UUID now require verified export rights. Single/bulk save entry points and asynchronous image-write callbacks recheck permissions.
-- Appearance XML diagnostics now require genuine server-granted administrator access, including the file-write callback.
+- Improve permission checks for texture saving and UUID previews, including asynchronous write callbacks.
+- Require server-granted administrator access for appearance diagnostics and their file-write callback.
 
 ## 1.16.56 (2026-10-27)
 
