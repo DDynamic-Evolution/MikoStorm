@@ -146,6 +146,7 @@
 #include "lltoolbarview.h"
 #include "lltoolpie.h"
 #include "llviewermenufile.h" // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
+#include "fsmikoavatarlog.h" // <MikoStorm>
 #include "llviewernetwork.h" // <FS:AW  opensim search support>
 #include "llviewershadermgr.h"
 #include "NACLantispam.h"
@@ -219,6 +220,9 @@ struct LabelTable : public LLInitParam::Block<LabelTable>
 
 void handleNameTagOptionChanged(const LLSD& newvalue);
 void handleDisplayNamesOptionChanged(const LLSD& newvalue);
+// <MikoStorm> Avatar encounter log
+void handleMikoAvatarLogEnabledChanged(const LLSD& newvalue);
+// </MikoStorm>
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 
@@ -333,6 +337,16 @@ void handleNameTagOptionChanged(const LLSD& newvalue)
     LLAvatarNameCache::getInstance()->setUseUsernames(gSavedSettings.getBOOL("NameTagShowUsernames"));
     LLVOAvatar::invalidateNameTags();
 }
+
+// <MikoStorm> Avatar encounter log
+void handleMikoAvatarLogEnabledChanged(const LLSD& newvalue)
+{
+    if (newvalue.asBoolean())
+    {
+        FSMikoAvatarLog::instance().logAllPresentAvatars();
+    }
+}
+// </MikoStorm>
 
 void handleDisplayNamesOptionChanged(const LLSD& newvalue)
 {
@@ -553,6 +567,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
     mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",      boost::bind(&LLFloaterPreference::setPreprocInclude, this));
     // <FS:LO> FIRE-23606 Reveal path to external script editor in prefernces
     mCommitCallbackRegistrar.add("Pref.SetExternalEditor",      boost::bind(&LLFloaterPreference::setExternalEditor, this));
+    // <MikoStorm> Avatar encounter log
+    mCommitCallbackRegistrar.add("Miko.BrowseAvatarLog",        boost::bind(&LLFloaterPreference::onBrowseAvatarLog, this));
+    gSavedSettings.getControl("MikoAvatarLogEnabled")->getCommitSignal()->connect(boost::bind(&handleMikoAvatarLogEnabledChanged, _2));
+    // </MikoStorm>
     //[ADD - Clear Settings : SJ]
     mCommitCallbackRegistrar.add("Pref.ClearSettings",          boost::bind(&LLFloaterPreference::onClickClearSettings, this));
     mCommitCallbackRegistrar.add("Pref.Online_Notices",         boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));
@@ -646,6 +664,7 @@ void LLFloaterPreference::saveAvatarPropertiesCoro(const std::string cap_url, bo
 
 bool LLFloaterPreference::postBuild()
 {
+    mJointSelector.bind(findChild<LLComboBox>("joint_combo"));
     mDeleteTranscriptsBtn = getChild<LLButton>("delete_transcripts");
 
     // <FS:Ansariel> We don't have these buttons
@@ -974,6 +993,12 @@ LLFloaterPreference::~LLFloaterPreference()
 //  LLFloater::draw();
 //}
 // </FS:Zi>
+
+void LLFloaterPreference::draw()
+{
+    mJointSelector.refresh();
+    LLFloater::draw();
+}
 
 void LLFloaterPreference::saveSettings()
 {
@@ -1361,29 +1386,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
     }
     // </FS:Zi>
 
-    // <CJB> Bone camera - follow a specified skeleton joint
-    static bool bone_camera_initialized = false;
-    if (!bone_camera_initialized && LLStartUp::getStartupState() == STATE_STARTED)
-    {
-        LLComboBox* joint_combo = findChild<LLComboBox>("joint_combo");
-        if (joint_combo)
-        {
-            bone_camera_initialized = true;
-            for (const auto& joint : getCameraJointList())
-            {
-                joint_combo->add(joint.first, joint.first);
-            }
-            if (gAgentCamera.mFollowJoint == -1)
-            {
-                joint_combo->setCurrentByIndex(0);
-            }
-            else
-            {
-                joint_combo->selectByValue(gAgentCamera.mFollowJoint);
-            }
-        }
-    }
-    // </CJB>
+    mJointSelector.refresh(true);
 }
 
 void LLFloaterPreference::onRenderOptionEnable()
@@ -2072,6 +2075,33 @@ void LLFloaterPreference::changeExternalEditorPath(const std::vector<std::string
     gSavedSettings.setString("ExternalEditor", executable_path);
 }
 // </FS:LO>
+
+// <MikoStorm> Avatar encounter log
+void LLFloaterPreference::onBrowseAvatarLog()
+{
+    std::string proposed_name("mikostorm_avatars.txt");
+    std::string cur_name(gSavedSettings.getString("MikoAvatarLogPath"));
+    if (!cur_name.empty())
+    {
+        proposed_name = gDirUtilp->getBaseFileName(cur_name);
+    }
+
+    LLFilePickerReplyThread::startPicker(
+        boost::bind(&LLFloaterPreference::onAvatarLogPathSelected, this, _1),
+        LLFilePicker::FFSAVE_ALL,
+        proposed_name);
+}
+
+void LLFloaterPreference::onAvatarLogPathSelected(const std::vector<std::string>& filenames)
+{
+    if (filenames.empty())
+    {
+        return;
+    }
+    gSavedSettings.setString("MikoAvatarLogPath", filenames[0]);
+    FSMikoAvatarLog::instance().logAllPresentAvatars();
+}
+// </MikoStorm>
 
 //[FIX JIRA-1971 : SJ] Show an notify when Javascript setting change
 void LLFloaterPreference::onClickJavascript()
@@ -3548,6 +3578,10 @@ LLPanelPreference::LLPanelPreference()
 //virtual
 bool LLPanelPreference::postBuild()
 {
+#ifndef USE_MCP
+    for (const char* name : {"mcp_control", "mcp_enabled", "mcp_port", "mcp_auth_token", "mcp_trigger_words"})
+        if (auto* control = findChild<LLUICtrl>(name)) control->setEnabled(false);
+#endif
     ////////////////////// PanelGeneral ///////////////////
     if (hasChild("display_names_check", true))
     {

@@ -50,6 +50,7 @@
 #include "llexperiencecache.h"
 #include "llphysicsmotion.h"
 #include "llviewercontrol.h"
+#include "fsmikoavatarlog.h" // <MikoStorm>
 #include "llcallingcard.h"      // IDEVO for LLAvatarTracker
 #include "lldrawpoolavatar.h"
 #include "lldriverparam.h"
@@ -3074,6 +3075,13 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, const F64 &time)
         LL_INFOS() << "Warning!  Idle on dead avatar" << LL_ENDL;
         return;
     }
+
+    // <MikoStorm> Log avatars we encounter in the region
+    if (!isSelf() && !isUIAvatar() && !isControlAvatar())
+    {
+        FSMikoAvatarLog::instance().logAvatar(getID());
+    }
+    // </MikoStorm>
 
     static LLCachedControl<bool> friends_only(gSavedSettings, "RenderAvatarFriendsOnly", false);
     if (friends_only()
@@ -11595,6 +11603,9 @@ void LLVOAvatar::getSortedJointNames(S32 joint_type, std::vector<std::string>& r
 
 void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_wearables )
 {
+    if (!gAgent.isGodlikeWithoutAdminMenuFakery())
+        return;
+
     std::string outprefix(prefix);
     if (outprefix.empty())
     {
@@ -11609,6 +11620,9 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 
 void LLVOAvatar::dumpArchetypeXMLCallback(const std::vector<std::string>& filenames, bool group_by_wearables)
 {
+    if (filenames.empty() || !gAgent.isGodlikeWithoutAdminMenuFakery())
+        return;
+
 // </FS:CR>
     LLAPRFile outfile;
     LLWearableType *wr_inst = LLWearableType::getInstance();

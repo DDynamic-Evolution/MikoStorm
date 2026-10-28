@@ -1,4 +1,8 @@
 #include "llmcpserver.h"
+#include "llsdutil.h"
+#include "llmcptask.h"
+#include "llmcpcontext.h"
+#include "llcallbacklist.h"
 #include "llmcphttp.h"
 #include "llviewercontrol.h"
 #include "llsdjson.h"
@@ -70,7 +74,6 @@ static LLSD textResult(const std::string& text)
 LLMCPServer::LLMCPServer()
     : mRunning(false)
     , mPort(13231)
-    , mInitialized(false)
 {
 }
 
@@ -82,19 +85,27 @@ LLMCPServer::~LLMCPServer()
 void LLMCPServer::start()
 {
     if (mRunning) return;
+    const U32 port = gSavedSettings.getU32("MCPPort");
+    if (port == 0 || port > 65535)
+    {
+        mLastError = "MCPPort must be between 1 and 65535";
+        LL_WARNS("MCP") << "MCPPort must be between 1 and 65535" << LL_ENDL;
+        return;
+    }
 
 #ifdef _WIN32
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
+        mLastError = "Windows socket initialization failed";
         LL_WARNS("MCP") << "WSAStartup failed" << LL_ENDL;
         return;
     }
 #endif
 
-    mPort = (U16)gSavedSettings.getU32("MCPPort");
-    mAuthToken = gSavedSettings.getString("MCPAuthToken");
-    mInitialized = false;
+    mPort = static_cast<U16>(port);
+    refreshAccess();
+    mLastError.clear();
 
     // Load trigger words from settings (comma-separated)
     std::string trigger_cfg = gSavedSettings.getString("MCPTriggerWords");
@@ -113,16 +124,34 @@ void LLMCPServer::start()
     setTriggerWords(trigger_words);
 
     registerDefaultTools();
+    registerViewerTools();
+
+    mSession = std::make_shared<std::atomic<bool>>(true);
 
     // Let media plugins consume MCP tools (e.g. CEF/VLC/GStreamer). The bridge
     // must run on the main thread so it can safely invoke the exposed tools.
     LLPluginClassMedia::setMCPBridge(
-        [this](const std::string& command, const LLSD& params) -> LLSD
+        [this, lifetime = mSession, capacity = mMainRequests](const std::string& command, const LLSD& params) -> LLSD
         {
-            return LLMainThreadTask::dispatch([this, command, params]()
+            if (!lifetime->load()) return errorResult("MCP server stopped");
+            if (on_main_thread()) return handlePluginMCPCommand(command, params);
+            // A plugin worker must retain no reference to server members while
+            // waiting: plugin workers are not joined by the HTTP server's stop.
+            if (capacity->fetch_add(1) >= 6)
+            { capacity->fetch_sub(1); return errorResult("Main-thread request capacity reached"); }
+            struct Pending { std::shared_ptr<std::atomic<U32>> count; ~Pending() { count->fetch_sub(1); } } pending{capacity};
+            auto queue = LL::WorkQueue::getInstance("mainloop");
+            if (!queue) return errorResult("Main loop unavailable");
+            auto task = std::make_shared<LLMCPCancellableTask<LLSD>>(lifetime);
+            try
             {
-                return handlePluginMCPCommand(command, params);
-            });
+                queue->post([task, this, command, params]() {
+                    task->execute([this, command, params]() { return handlePluginMCPCommand(command, params); });
+                });
+                if (!task->wait(std::chrono::seconds(10))) return errorResult("MCP bridge request cancelled or timed out");
+                return task->get();
+            }
+            catch (...) { return errorResult("MCP bridge request failed"); }
         });
 
     // Hook into chat to capture messages for MCP read access
@@ -143,7 +172,13 @@ void LLMCPServer::start()
     LL_INFOS("MCP") << "IM capture hook installed" << LL_ENDL;
 
     mRunning = true;
-    LLMCPHttpServer::start(mPort, mAuthToken);
+    if (!LLMCPHttpServer::start(mPort))
+    {
+        mLastError = "Could not bind MCP listener; check port and log";
+        stop();
+        return;
+    }
+    gIdleCallbacks.addFunction(idle, this);
     LL_INFOS("MCP") << "MCP Server started on port " << mPort << LL_ENDL;
 }
 
@@ -165,7 +200,24 @@ void LLMCPServer::stop()
 
     LLPluginClassMedia::setMCPBridge(nullptr);
 
+    bool cancelTeleport = false;
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        for (const auto& [id, op] : mOperations)
+            if (op.kind == "teleport" && op.hasTarget && (op.state == "running" || op.state == "cancelling")) cancelTeleport = true;
+    }
+    if (cancelTeleport) gAgent.teleportCancel();
+    mSearchCursors.clear();
     mRunning = false;
+    mSession->store(false); // Release a worker waiting for the main loop before joining it.
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        for (auto& request : mRequests) request.second->store(false);
+        for (auto& operation : mOperations) if (operation.second.state == "running" || operation.second.state == "cancelling")
+        { operation.second.state = "cancelled"; operation.second.message = "Server stopped"; }
+        mSessions.clear();
+    }
+    gIdleCallbacks.deleteFunction(idle, this);
     LLMCPHttpServer::stop();
     LL_INFOS("MCP") << "MCP Server stopped" << LL_ENDL;
 #ifdef _WIN32
@@ -288,7 +340,32 @@ void LLMCPServer::registerTool(const std::string& name,
                                ToolHandler handler)
 {
     std::lock_guard<std::mutex> lock(mMutex);
-    mTools[name] = { name, description, input_schema, std::move(handler) };
+    LLSD schema = input_schema;
+    schema["additionalProperties"] = false;
+    for (auto it = schema["properties"].beginMap(); it != schema["properties"].endMap(); ++it)
+    {
+        auto& field = schema["properties"][it->first];
+        if (field["type"].asString() == "string" && !field.has("maxLength")) field["maxLength"] = it->first == "content" ? 65536 : 8192;
+        if (it->first == "max_results" || it->first == "limit")
+        { field["type"] = "integer"; field["minimum"] = 1; field["maximum"] = 200; }
+        if (it->first == "offset") { field["type"] = "integer"; field["minimum"] = 0; field["maximum"] = 2147480000; }
+        if (it->first == "channel") { field["type"] = "integer"; field["minimum"] = -2147483648.0; field["maximum"] = 2147483647.0; }
+        if (it->first == "x" || it->first == "y") { field["minimum"] = 0; field["maximum"] = 65536; }
+        if (it->first == "z") { field["minimum"] = -4096; field["maximum"] = 65536; }
+    }
+    for (const auto& key : {"folder", "source_id"})
+        if (schema["properties"].has(key)) schema["properties"][key]["format"] = "uuid";
+    for (auto it = schema["properties"].beginMap(); it != schema["properties"].endMap(); ++it)
+        if (it->second["type"].asString() == "array" && it->second["items"]["type"].asString() == "string")
+            schema["properties"][it->first]["items"]["maxLength"] = 8192;
+    if (name == "inventory_search") schema["properties"]["cursor"] = LLSDMap("type", "string")("maxLength", 64);
+    if (name == "get_nearby_objects") schema["properties"]["offset"] = LLSDMap("type", "integer")("minimum", 0)("maximum", 2147480000);
+    if (name == "chat_read" || name == "im_read") schema["properties"]["limit"]["maximum"] = 100;
+    for (const auto& key : {"name", "query", "region", "message", "target"})
+        if (schema["properties"].has(key)) schema["properties"][key]["minLength"] = 1;
+    if (schema["properties"].has("region")) schema["properties"]["region"]["maxLength"] = 255;
+    if (name == "notecard_write") { schema["properties"]["name"]["maxLength"] = 128; schema["properties"]["content"]["minLength"] = 1; }
+    mTools[name] = { name, description, schema, std::move(handler) };
 }
 
 void LLMCPServer::registerDefaultTools()
@@ -324,13 +401,12 @@ void LLMCPServer::registerDefaultTools()
         });
 
     registerTool("avatar_sit",
-        "Sit down on the ground or nearby object",
+        "Sit on the ground; a repeated request leaves an already seated avatar seated",
         LLSDMap("type", "object")("properties", LLSD::emptyMap())("required", llsd::array()),
         [](const LLSD&) -> LLSD {
             if (gAgent.isSitting())
             {
-                gAgent.standUp();
-                return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text", "Standing up")));
+                return textResult("Already sitting");
             }
             gAgent.sitDown();
             return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text", "Sitting down")));
@@ -352,7 +428,10 @@ void LLMCPServer::registerDefaultTools()
                 "z", LLSDMap("type", "number")("description", "Z coordinate"))
         )("required", llsd::array("x", "y", "z")),
         [](const LLSD& p) -> LLSD {
+            if (!gAgent.getRegion()) return errorResult("Not connected to a region");
             LLVector3 local((F32)p["x"].asReal(), (F32)p["y"].asReal(), (F32)p["z"].asReal());
+            if (local.mV[VX] >= gAgent.getRegion()->getWidth() || local.mV[VY] >= gAgent.getRegion()->getWidth())
+                return errorResult("Walking destination lies outside the current region");
             if (gAgent.getRegion())
             {
                 LLVector3d global = gAgent.getRegion()->getOriginGlobal() + LLVector3d(local);
@@ -363,33 +442,14 @@ void LLMCPServer::registerDefaultTools()
         });
 
     registerTool("avatar_teleport",
-        "Teleport to a location in any region",
+        "Resolve a region in the current grid and start a tracked teleport operation",
         LLSDMap("type", "object")(
             "properties", LLSDMap("region", LLSDMap("type", "string")("description", "Region name"))(
                 "x", LLSDMap("type", "number")("description", "X coordinate"))(
                 "y", LLSDMap("type", "number")("description", "Y coordinate"))(
                 "z", LLSDMap("type", "number")("description", "Z coordinate"))
         )("required", llsd::array("region", "x", "y", "z")),
-        [](const LLSD& p) -> LLSD {
-            LLVector3 local((F32)p["x"].asReal(), (F32)p["y"].asReal(), (F32)p["z"].asReal());
-            std::string region_name = p["region"].asString();
-            LLViewerRegion* region = nullptr;
-            for (const auto& r : LLWorld::getInstance()->getRegionList())
-            {
-                if (r->getName() == region_name)
-                {
-                    region = r;
-                    break;
-                }
-            }
-            if (!region)
-            {
-                return errorResult(llformat("Region '%s' not found in the current grid", region_name.c_str()));
-            }
-            gAgent.teleportViaLocation(region->getPosGlobalFromRegion(local));
-            return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text",
-                llformat("Teleporting to %s at (%.0f, %.0f, %.0f)", region_name.c_str(), p["x"].asReal(), p["y"].asReal(), p["z"].asReal()))));
-        });
+        [this](const LLSD& p) -> LLSD { return startTeleport(p); });
 
     registerTool("avatar_fly",
         "Enable or disable flying",
@@ -398,6 +458,7 @@ void LLMCPServer::registerDefaultTools()
         )("required", llsd::array("enabled")),
         [](const LLSD& p) -> LLSD {
             gAgent.setFlying(p["enabled"].asBoolean());
+            if (gAgent.getFlying() != p["enabled"].asBoolean()) return errorResult("Flying was refused by viewer or region policy");
             return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text",
                 p["enabled"].asBoolean() ? "Flying" : "Not flying")));
         });
@@ -424,7 +485,7 @@ void LLMCPServer::registerDefaultTools()
                 return LLSDMap("isError", true)("content", llsd::array(LLSDMap("type", "text")("text", "Not connected to a region")));
             LLSD data = LLSD::emptyMap();
             data["name"] = regionp->getName();
-            data["handle"] = (LLSD::Integer)regionp->getHandle();
+            data["handle"] = std::to_string(regionp->getHandle());
             return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text", toJsonString(data))));
         });
 
@@ -441,80 +502,31 @@ void LLMCPServer::registerDefaultTools()
             "properties", LLSDMap("name", LLSDMap("type", "string")("description", "Notecard title"))(
                 "content", LLSDMap("type", "string")("description", "Notecard body text"))
         )("required", llsd::array("name", "content")),
-        [](const LLSD& p) -> LLSD {
-            std::string name = p["name"].asString();
-            std::string content = p["content"].asString();
-            if (name.empty() || content.empty())
-                return LLSDMap("isError", true)("content", llsd::array(LLSDMap("type", "text")("text", "Name and content are required")));
-            LLViewerRegion* region = gAgent.getRegion();
-            if (!region)
-                return LLSDMap("isError", true)("content", llsd::array(LLSDMap("type", "text")("text", "Not connected to a region")));
-            std::string agent_url = region->getCapability("UpdateNotecardAgentInventory");
-            if (agent_url.empty())
-                return LLSDMap("isError", true)("content", llsd::array(LLSDMap("type", "text")("text", "Region does not support notecard updates")));
-            create_new_item(name,
-                gInventory.findCategoryUUIDForType(LLFolderType::FT_NOTECARD),
-                LLAssetType::AT_NOTECARD,
-                LLInventoryType::IT_NOTECARD,
-                PERM_ALL,
-                [name, content, agent_url](const LLUUID& item_id)
-                {
-                    if (item_id.isNull()) return;
-                    auto uploadInfo = std::make_shared<LLBufferedAssetUploadInfo>(
-                        item_id, LLAssetType::AT_NOTECARD, content,
-                        [name](LLUUID itemId, LLUUID newAssetId, LLUUID newItemId, LLSD)
-                        {
-                            LLUUID targetId = newItemId.notNull() ? newItemId : itemId;
-                            LLViewerInventoryItem* item = gInventory.getItem(targetId);
-                            if (item)
-                            {
-                                item->setAssetUUID(newAssetId);
-                                gInventory.updateItem(item);
-                                gInventory.notifyObservers();
-                            }
-                            LL_INFOS("MCP") << "Notecard '" << name << "' saved (asset=" << newAssetId << ")" << LL_ENDL;
-                        },
-                        [name](LLUUID, LLUUID, LLSD, std::string reason) -> bool {
-                            LL_WARNS("MCP") << "Failed to save notecard '" << name << "': " << reason << LL_ENDL;
-                            return false;
-                        });
-                    LLViewerAssetUpload::EnqueueInventoryUpload(agent_url, uploadInfo);
-                });
-            return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text",
-                llformat("Creating notecard '%s'...", name.c_str()))));
-        });
+        [this](const LLSD& p) -> LLSD { return writeNotecard(p); });
 
-    registerTool("inventory_list",
-        "List inventory folders and items at the root level",
-        LLSDMap("type", "object")("properties", LLSD::emptyMap())("required", llsd::array()),
-        [](const LLSD&) -> LLSD {
-            LLSD items = LLSD::emptyArray();
+    registerTool("inventory_list", "Page through the cached contents of an inventory folder",
+        LLSDMap("type", "object")("properties", LLSDMap("folder", LLSDMap("type", "string"))
+            ("offset", LLSDMap("type", "integer"))("max_results", LLSDMap("type", "integer"))),
+        [](const LLSD& p) -> LLSD {
+            LLUUID folder = p.has("folder") ? LLUUID(p["folder"].asString()) : gInventory.getRootFolderID();
+            if (!gInventory.getCategory(folder)) return errorResult("Inventory folder is not cached");
             LLInventoryModel::cat_array_t* cats = nullptr;
-            LLInventoryModel::item_array_t* items_arr = nullptr;
-            gInventory.getDirectDescendentsOf(LLUUID::null, cats, items_arr);
-            if (cats)
+            LLInventoryModel::item_array_t* items = nullptr;
+            gInventory.getDirectDescendentsOf(folder, cats, items);
+            const S32 offset = p.has("offset") ? p["offset"].asInteger() : 0;
+            const S32 limit = p.has("max_results") ? p["max_results"].asInteger() : 50;
+            const S32 catCount = cats ? static_cast<S32>(cats->size()) : 0;
+            const S32 count = catCount + (items ? static_cast<S32>(items->size()) : 0);
+            LLSD page = LLSD::emptyArray();
+            for (S32 index = offset; index < count && page.size() < limit; ++index)
             {
-                for (size_t i = 0; i < cats->size(); ++i)
-                {
-                    LLSD entry = LLSD::emptyMap();
-                    entry["name"] = (*cats)[i]->getName();
-                    entry["uuid"] = (*cats)[i]->getUUID().asString();
-                    entry["type"] = "folder";
-                    items.append(entry);
-                }
+                if (index < catCount)
+                { const auto& entry = (*cats)[index]; page.append(LLSDMap("uuid", entry->getUUID().asString())("name", entry->getName())("type", "folder")); }
+                else
+                { const auto& entry = (*items)[index - catCount]; page.append(LLSDMap("uuid", entry->getUUID().asString())("name", entry->getName())("type", LLInventoryType::lookup(entry->getInventoryType()))); }
             }
-            if (items_arr)
-            {
-                for (size_t i = 0; i < items_arr->size(); ++i)
-                {
-                    LLSD entry = LLSD::emptyMap();
-                    entry["name"] = (*items_arr)[i]->getName();
-                    entry["uuid"] = (*items_arr)[i]->getUUID().asString();
-                    entry["type"] = "item";
-                    items.append(entry);
-                }
-            }
-            return LLSDMap("content", llsd::array(LLSDMap("type", "text")("text", toJsonString(items))));
+            return textResult(toJsonString(LLSDMap("items", page)("count", page.size())("cached_total", count)
+                ("next_offset", offset + page.size() < count ? LLSD(offset + page.size()) : LLSD())));
         });
 
     registerTool("chat_im",
@@ -693,6 +705,7 @@ void LLMCPServer::registerDefaultTools()
 
 LLSD LLMCPServer::handlePluginMCPCommand(const std::string& command, const LLSD& params)
 {
+    if (!on_main_thread() || !mRunning) return errorResult("MCP bridge is unavailable");
     if(command == "get_tools_list")
     {
         return getToolsList();
@@ -702,38 +715,12 @@ LLSD LLMCPServer::handlePluginMCPCommand(const std::string& command, const LLSD&
         std::string name = params["name"].asString();
         LLSD args = params.has("arguments") ? params["arguments"] : LLSD::emptyMap();
 
-        ToolHandler handler;
-        {
-            std::lock_guard<std::mutex> lock(mMutex);
-            auto it = mTools.find(name);
-            if(it == mTools.end())
-            {
-                LLSD err = LLSD::emptyMap();
-                err["_error"] = llformat("Tool '%s' not found", name.c_str());
-                return err;
-            }
-            handler = it->second.handler;
-        }
-
-        if(!on_main_thread())
-        {
-            LL_WARNS("MCP") << "Plugin tool call escaped the main thread" << LL_ENDL;
-            LLSD err = LLSD::emptyMap();
-            err["_error"] = "Tool execution is restricted to the main thread";
-            return err;
-        }
-
-        try
-        {
-            return handler(args);
-        }
-        catch(const std::exception& e)
-        {
-            LL_WARNS("MCP") << "Plugin tool '" << name << "' threw: " << e.what() << LL_ENDL;
-            LLSD err = LLSD::emptyMap();
-            err["_error"] = std::string("Handler failed: ") + e.what();
-            return err;
-        }
+        if (!on_main_thread()) return errorResult("Tool execution is restricted to the main thread");
+        Context context;
+        context.client = "media-plugin";
+        context.session = "plugin";
+        LLMCPContextScope scope(context);
+        return dispatchTool(name, args);
     }
     else
     {
@@ -745,77 +732,34 @@ LLSD LLMCPServer::handlePluginMCPCommand(const std::string& command, const LLSD&
 
 LLSD LLMCPServer::getToolsList() const
 {
-    std::lock_guard<std::mutex> lock(mMutex);
+    Context pluginContext; pluginContext.client = "media-plugin";
+    LLMCPContextScope pluginScope(pluginContext);
+    std::map<std::string, Tool> registry;
+    { std::lock_guard<std::mutex> lock(mMutex); registry = mTools; }
     LLSD tools = LLSD::emptyArray();
-    for(const auto& pair : mTools)
+    for(const auto& pair : registry)
     {
         const Tool& tool = pair.second;
         LLSD t = LLSD::emptyMap();
         t["name"] = tool.name;
         t["description"] = tool.description;
+        if (!permitted(currentClient(), permissionForTool(tool.name))) continue;
         t["inputSchema"] = tool.input_schema;
+        t["outputSchema"] = LLSDMap("type", "object")("properties", LLSDMap("data", LLSDMap("type", "object")))("required", llsd::array("data"));
+        t["annotations"] = LLSDMap("readOnlyHint", (permissionForTool(tool.name) == Read || tool.name == "operation_status" || tool.name == "chat_read" || tool.name == "im_read" || tool.name == "im_sessions"))
+            ("idempotentHint", tool.name == "avatar_sit" || tool.name == "avatar_stand" || tool.name == "avatar_fly");
         tools.append(t);
     }
     return tools;
 }
 
-LLSD LLMCPServer::handleRequest(const LLSD& request)
-{
-    if (!request.isMap() || !request.has("method"))
-    {
-        return makeError(-32600, "Invalid Request: missing 'method'");
-    }
-
-    std::string method = request["method"].asString();
-    LLSD params = request.has("params") ? request["params"] : LLSD::emptyMap();
-    LLSD id = request.has("id") ? request["id"] : LLSD();
-
-    LLSD result;
-    bool needs_id = id.isDefined() && !id.isUndefined();
-
-    if (method == "initialize")
-        result = handleInitialize(params);
-    else if (method == "ping")
-        result = handlePing(params);
-    else if (method == "tools/list")
-        result = handleToolsList(params);
-    else if (method == "tools/call")
-        result = handleToolsCall(params);
-    else if (method == "resources/list")
-        result = handleResourcesList(params);
-    else if (method == "resources/read")
-        result = handleResourcesRead(params);
-    else if (method == "logging/setLevel")
-        result = handleSetLoggerLevel(params);
-    else if (method == "notifications/initialized")
-    {
-        mInitialized = true;
-        return LLSD();
-    }
-    else if (method == "notifications/roots/list_changed")
-    {
-        return LLSD();
-    }
-    else
-        result = makeError(-32601, llformat("Method '%s' not found", method.c_str()));
-
-    if (needs_id)
-    {
-        LLSD response = result;
-        response["id"] = id;
-        return response;
-    }
-    return LLSD();
-}
-
 LLSD LLMCPServer::handleInitialize(const LLSD& params)
 {
-    mInitialized = true;
-
     LLSD caps = LLSD::emptyMap();
     LLSD tool_cap = LLSD::emptyMap();
     tool_cap["listChanged"] = false;
     caps["tools"] = tool_cap;
+    caps["logging"] = LLSD::emptyMap();
 
     LLSD res_cap = LLSD::emptyMap();
     res_cap["subscribe"] = false;
@@ -827,7 +771,7 @@ LLSD LLMCPServer::handleInitialize(const LLSD& params)
     server_info["version"] = LLVersionInfo::instance().getVersion();
 
     LLSD result = LLSD::emptyMap();
-    result["protocolVersion"] = "2025-11-25";
+    result["protocolVersion"] = gMCPContext ? protocolForSession(gMCPContext->session) : "2025-11-25";
     result["capabilities"] = caps;
     result["serverInfo"] = server_info;
 
@@ -836,20 +780,25 @@ LLSD LLMCPServer::handleInitialize(const LLSD& params)
 
 LLSD LLMCPServer::handlePing(const LLSD&)
 {
-    return makeResult(LLSDMap("pong", true));
+    return makeResult(LLSD::emptyMap());
 }
 
 LLSD LLMCPServer::handleToolsList(const LLSD&)
 {
-    std::lock_guard<std::mutex> lock(mMutex);
+    std::map<std::string, Tool> registry;
+    { std::lock_guard<std::mutex> lock(mMutex); registry = mTools; }
     LLSD tools = LLSD::emptyArray();
-    for (const auto& pair : mTools)
+    for (const auto& pair : registry)
     {
         const Tool& tool = pair.second;
         LLSD t = LLSD::emptyMap();
         t["name"] = tool.name;
         t["description"] = tool.description;
+        if (!permitted(currentClient(), permissionForTool(tool.name))) continue;
         t["inputSchema"] = tool.input_schema;
+        t["outputSchema"] = LLSDMap("type", "object")("properties", LLSDMap("data", LLSDMap("type", "object")))("required", llsd::array("data"));
+        t["annotations"] = LLSDMap("readOnlyHint", (permissionForTool(tool.name) == Read || tool.name == "operation_status" || tool.name == "chat_read" || tool.name == "im_read" || tool.name == "im_sessions"))
+            ("idempotentHint", tool.name == "avatar_sit" || tool.name == "avatar_stand" || tool.name == "avatar_fly");
         tools.append(t);
     }
     LLSD result = LLSD::emptyMap();
@@ -859,58 +808,43 @@ LLSD LLMCPServer::handleToolsList(const LLSD&)
 
 LLSD LLMCPServer::handleToolsCall(const LLSD& params)
 {
-    std::string name = params["name"].asString();
-    LLSD args = params.has("arguments") ? params["arguments"] : LLSD::emptyMap();
-
-    ToolHandler handler;
-    {
-        std::lock_guard<std::mutex> lock(mMutex);
-        auto it = mTools.find(name);
-        if (it == mTools.end())
-            return makeError(-32602, llformat("Tool '%s' not found", name.c_str()));
-        handler = it->second.handler;
-    }
-
-    return runOnMain([handler, args]() { return handler(args); });
+    if (!params["name"].isString() || (params.has("arguments") && !params["arguments"].isMap()))
+        return makeError(-32602, "Tool name must be a string and arguments an object");
+    const auto name = params["name"].asString();
+    { std::lock_guard<std::mutex> lock(mMutex); if (!mTools.count(name)) return makeError(-32602, "Unknown tool"); }
+    const LLSD args = params.has("arguments") ? params["arguments"] : LLSD::emptyMap();
+    LLSD value = runOnMain([this, name, args]() { return dispatchTool(name, args); });
+    if (value.has("jsonrpc")) return value;
+    return makeResult(value);
 }
 
 LLSD LLMCPServer::runOnMain(std::function<LLSD()> fn)
 {
+    // Leave HTTP worker capacity for cancellation and lifecycle requests.
+    const auto capacity = mMainRequests;
+    if (capacity->fetch_add(1) >= 6)
+    { capacity->fetch_sub(1); return makeError(-32000, "Main-thread request capacity reached; retry later"); }
+    struct Pending { std::shared_ptr<std::atomic<U32>> count; ~Pending() { count->fetch_sub(1); } } pending{capacity};
     auto mainloop = LL::WorkQueue::getInstance("mainloop");
     if (!mainloop)
         return makeError(-32000, "Main loop work queue not available");
 
-    std::promise<LLSD> promise;
-    auto future = promise.get_future();
-
+    const Context context = gMCPContext ? *gMCPContext : Context{};
+    const auto lifetime = context.client == "media-plugin" && context.active ? context.active : mSession;
+    auto task = std::make_shared<LLMCPCancellableTask<LLSD>>(lifetime, context.active);
     try
     {
-        mainloop->post([&promise, fn = std::move(fn)]()
-        {
-            LLSD result;
-            try
-            {
-                result = fn();
-            }
-            catch (const std::exception& e)
-            {
-                LL_WARNS("MCP") << "Main thread handler threw: " << e.what() << LL_ENDL;
-                result = errorResult(std::string("Handler failed: ") + e.what());
-            }
-            catch (...)
-            {
-                LL_WARNS("MCP") << "Main thread handler threw" << LL_ENDL;
-                result = errorResult("Handler failed");
-            }
-            promise.set_value(result);
-        });
+        mainloop->post([task, context, fn = std::move(fn)]() { LLMCPContextScope scope(context); task->execute(fn); });
     }
     catch (...)
     {
         return makeError(-32000, "Failed to post to main thread");
     }
-
-    return future.get();
+    if (!task->wait(std::chrono::seconds(10)))
+        return makeError(-32000, "Request cancelled or main thread timed out");
+    try { return task->get(); }
+    catch (const std::exception& e) { return makeError(-32603, e.what()); }
+    catch (...) { return makeError(-32603, "Main thread handler failed"); }
 }
 
 LLSD LLMCPServer::collectNearbyAgents() const
@@ -929,6 +863,7 @@ LLSD LLMCPServer::collectNearbyAgents() const
         entry["z"] = avPos.mV[VZ];
         entry["distance"] = dist_vec(myPos, avPos);
         agents.append(entry);
+        if (agents.size() >= 200) break;
     }
     LLSD data = LLSD::emptyMap();
     data["agents"] = agents;
@@ -1028,14 +963,15 @@ LLSD LLMCPServer::collectFriendsOnline() const
         entry["can_see_map"] = rel->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION);
         entry["can_modify_objects"] = rel->isRightGrantedFrom(LLRelationship::GRANT_MODIFY_OBJECTS);
         friends.append(entry);
-
         if (rel->isOnline()) online_count++;
+        if (friends.size() >= 200) break;
     }
 
     LLSD data = LLSD::emptyMap();
     data["friends"] = friends;
     data["count"] = (LLSD::Integer)friends.size();
     data["online_count"] = online_count;
+    data["truncated"] = friends.size() < static_cast<S32>(buddies.size());
     return data;
 }
 
@@ -1056,8 +992,10 @@ LLSD LLMCPServer::collectIMSessions() const
         entry["num_unread"] = session->mNumUnread;
         entry["num_messages"] = (LLSD::Integer)session->mMsgs.size();
         sessions.append(entry);
+        if (sessions.size() >= 200) break;
     }
     LLSD data = LLSD::emptyMap();
+    data["truncated"] = sessions.size() < static_cast<S32>(session_map.size());
     data["sessions"] = sessions;
     data["count"] = (LLSD::Integer)sessions.size();
     return data;
@@ -1071,9 +1009,12 @@ LLSD LLMCPServer::collectNearbyObjects(const LLSD& params) const
 
     LLSD objects = LLSD::emptyArray();
     LLVector3 myPos = gAgent.getPositionAgent();
-    for (S32 i = 0; i < gObjectList.getNumObjects(); ++i)
+    S32 index = params.has("offset") ? params["offset"].asInteger() : 0;
+    const S32 scanEnd = llmin(gObjectList.getNumObjects(), index + 2048);
+    for (; index < scanEnd; ++index)
     {
         if ((S32)objects.size() >= max_results) break;
+        const S32 i = index;
         LLViewerObject* obj = gObjectList.getObject(i);
         if (!obj) continue;
         if (obj->isAttachment() && !include_attachments) continue;
@@ -1102,88 +1043,76 @@ LLSD LLMCPServer::collectNearbyObjects(const LLSD& params) const
         objects.append(entry);
     }
     LLSD data = LLSD::emptyMap();
+    data["next_offset"] = index < gObjectList.getNumObjects() ? LLSD(index) : LLSD();
     data["objects"] = objects;
     data["count"] = (LLSD::Integer)objects.size();
     return data;
 }
 
-LLSD LLMCPServer::inventorySearch(const LLSD& params) const
+LLSD LLMCPServer::inventorySearch(const LLSD& params)
 {
-    std::string query = params.has("query") ? params["query"].asString() : "";
-    if (query.empty())
-        return LLSDMap("error", "Query is required");
-    LLStringUtil::toLower(query);
-
-    LLUUID start_folder = params.has("folder") ? LLUUID(params["folder"].asString()) : LLUUID::null;
-    std::string type_filter = params.has("type") ? params["type"].asString() : "";
-    S32 max_results = params.has("max_results") ? (S32)params["max_results"].asInteger() : 50;
-    if (max_results <= 0) max_results = 50;
-
-    LLInventoryType::EType filter_type = LLInventoryType::IT_NONE;
-    if (!type_filter.empty())
+    const auto now = Clock::now();
+    for (auto it = mSearchCursors.begin(); it != mSearchCursors.end(); )
+        if (now - it->second.touched > std::chrono::minutes(2)) it = mSearchCursors.erase(it); else ++it;
+    std::string query = params["query"].asString(); LLStringUtil::toLower(query);
+    const std::string type = params["type"].asString();
+    const auto filter = type.empty() ? LLInventoryType::IT_NONE : LLInventoryType::lookup(type);
+    if (!type.empty() && filter == LLInventoryType::IT_NONE) return LLSDMap("error", "Unknown inventory type");
+    const LLUUID root = params.has("folder") ? LLUUID(params["folder"].asString()) : gInventory.getRootFolderID();
+    std::string cursorID = params["cursor"].asString();
+    if (cursorID.empty())
     {
-        filter_type = LLInventoryType::lookup(type_filter);
-        if (filter_type == LLInventoryType::IT_NONE)
-            return LLSDMap("error", llformat("Unknown inventory type '%s'", type_filter.c_str()));
+        if (!gInventory.getCategory(root)) return LLSDMap("error", "Inventory folder is not cached");
+        if (mSearchCursors.size() >= 32) return LLSDMap("error", "Too many inventory searches; finish an existing cursor or wait two minutes");
+        LLUUID uuid; uuid.generate(); cursorID = uuid.asString();
+        SearchCursor cursor;
+        cursor.client = currentClient(); cursor.session = gMCPContext ? gMCPContext->session : "";
+        cursor.query = query; cursor.type = type; cursor.root = root;
+        cursor.stack.push_back({root, "", 0, 0}); cursor.visited.insert(root);
+        mSearchCursors.emplace(cursorID, std::move(cursor));
     }
-
+    auto it = mSearchCursors.find(cursorID);
+    if (it == mSearchCursors.end() || it->second.client != currentClient() || !gMCPContext ||
+        it->second.session != gMCPContext->session || it->second.query != query || it->second.type != type || it->second.root != root)
+        return LLSDMap("error", "Unknown, expired or incompatible inventory cursor");
+    auto& cursor = it->second; cursor.touched = now;
+    const S32 limit = params.has("max_results") ? params["max_results"].asInteger() : 50;
     LLSD results = LLSD::emptyArray();
-    std::function<void(const LLUUID&, const std::string&)> walk;
-    walk = [&](const LLUUID& cat_id, const std::string& path)
+    S32 inspected = 0;
+    // A continuation retains folder/item positions: an empty page is still
+    // resumable and does not repeatedly scan the beginning of a large inventory.
+    while (!cursor.stack.empty() && inspected < 2048 && results.size() < limit)
     {
-        if ((S32)results.size() >= max_results) return;
-
+        auto& frame = cursor.stack.back();
         LLInventoryModel::cat_array_t* cats = nullptr;
         LLInventoryModel::item_array_t* items = nullptr;
-        gInventory.getDirectDescendentsOf(cat_id, cats, items);
-
-        if (cats)
+        gInventory.getDirectDescendentsOf(frame.folder, cats, items);
+        if (cats && frame.cat < cats->size())
         {
-            for (size_t i = 0; i < cats->size(); ++i)
-            {
-                if ((S32)results.size() >= max_results) break;
-                std::string cname = (*cats)[i]->getName();
-                std::string lower = cname;
-                LLStringUtil::toLower(lower);
-                if (type_filter.empty() && lower.find(query) != std::string::npos)
-                {
-                    LLSD entry = LLSD::emptyMap();
-                    entry["name"] = cname;
-                    entry["uuid"] = (*cats)[i]->getUUID().asString();
-                    entry["type"] = "folder";
-                    entry["folder"] = path;
-                    results.append(entry);
-                }
-                std::string sub_path = path.empty() ? cname : path + "/" + cname;
-                walk((*cats)[i]->getUUID(), sub_path);
-            }
+            const auto category = (*cats)[frame.cat++]; ++inspected;
+            const auto name = category->getName(); auto lower = name; LLStringUtil::toLower(lower);
+            const auto path = frame.path;
+            if (type.empty() && lower.find(query) != std::string::npos)
+                results.append(LLSDMap("name", name)("uuid", category->getUUID().asString())("type", "folder")("folder", path));
+            if (cursor.stack.size() < 64 && cursor.visited.size() < 20000 && cursor.visited.insert(category->getUUID()).second)
+                cursor.stack.push_back({category->getUUID(), path.empty() ? name : path + "/" + name, 0, 0});
+            else if (cursor.stack.size() >= 64 || cursor.visited.size() >= 20000)
+            { mSearchCursors.erase(it); return LLSDMap("results", results)("truncated", true)("complete", false)("message", "Inventory depth/folder safety limit reached"); }
         }
-
-        if (items)
+        else if (items && frame.item < items->size())
         {
-            for (size_t i = 0; i < items->size(); ++i)
-            {
-                if ((S32)results.size() >= max_results) break;
-                std::string iname = (*items)[i]->getName();
-                std::string lower = iname;
-                LLStringUtil::toLower(lower);
-                if (lower.find(query) == std::string::npos) continue;
-                LLInventoryType::EType itype = (*items)[i]->getInventoryType();
-                if (filter_type != LLInventoryType::IT_NONE && itype != filter_type) continue;
-                LLSD entry = LLSD::emptyMap();
-                entry["name"] = iname;
-                entry["uuid"] = (*items)[i]->getUUID().asString();
-                entry["type"] = LLInventoryType::lookup(itype);
-                entry["folder"] = path;
-                results.append(entry);
-            }
+            const auto item = (*items)[frame.item++]; ++inspected;
+            auto lower = item->getName(); LLStringUtil::toLower(lower);
+            if (lower.find(query) != std::string::npos && (type.empty() || item->getInventoryType() == filter))
+                results.append(LLSDMap("name", item->getName())("uuid", item->getUUID().asString())
+                    ("type", LLInventoryType::lookup(item->getInventoryType()))("folder", frame.path));
         }
-    };
-    walk(start_folder, "");
-
-    LLSD data = LLSD::emptyMap();
-    data["results"] = results;
-    data["count"] = (LLSD::Integer)results.size();
+        else { cursor.stack.pop_back(); ++inspected; }
+    }
+    const bool complete = cursor.stack.empty();
+    LLSD data = LLSDMap("results", results)("count", results.size())("inspected", inspected)("complete", complete)
+        ("cursor", complete ? "" : cursorID)("cached_only", true);
+    if (complete) mSearchCursors.erase(it);
     return data;
 }
 
@@ -1255,13 +1184,21 @@ LLSD LLMCPServer::handleResourcesList(const LLSD&)
     resources.append(r9);
 
     LLSD result = LLSD::emptyMap();
-    result["resources"] = resources;
+    LLSD visible = LLSD::emptyArray();
+    for (const auto& resource : llsd::inArray(resources))
+    {
+        const auto uri = resource["uri"].asString();
+        if (permitted(currentClient(), uri == "mikostorm://chat" || uri == "mikostorm://im" ? Chat : Read)) visible.append(resource);
+    }
+    result["resources"] = visible;
     return makeResult(result);
 }
 
 LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
 {
+    if (!params["uri"].isString()) return makeError(-32602, "Resource URI must be a string");
     std::string uri = params["uri"].asString();
+    const U32 group = uri == "mikostorm://chat" || uri == "mikostorm://im" ? Chat : Read;
 
     std::function<LLSD()> loader;
     if (uri == "mikostorm://position")
@@ -1287,7 +1224,7 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
                 return content_data;
             }
             content_data["name"] = regionp->getName();
-            content_data["handle"] = (LLSD::Integer)regionp->getHandle();
+            content_data["handle"] = std::to_string(regionp->getHandle());
             return content_data;
         };
     }
@@ -1305,36 +1242,12 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
     }
     else if (uri == "mikostorm://inventory")
     {
-        loader = []() {
-            LLSD items = LLSD::emptyArray();
-            LLInventoryModel::cat_array_t* cats = nullptr;
-            LLInventoryModel::item_array_t* items_arr = nullptr;
-            gInventory.getDirectDescendentsOf(LLUUID::null, cats, items_arr);
-            if (cats)
-            {
-                for (size_t i = 0; i < cats->size(); ++i)
-                {
-                    LLSD entry = LLSD::emptyMap();
-                    entry["name"] = (*cats)[i]->getName();
-                    entry["uuid"] = (*cats)[i]->getUUID().asString();
-                    entry["type"] = "folder";
-                    items.append(entry);
-                }
-            }
-            if (items_arr)
-            {
-                for (size_t i = 0; i < items_arr->size(); ++i)
-                {
-                    LLSD entry = LLSD::emptyMap();
-                    entry["name"] = (*items_arr)[i]->getName();
-                    entry["uuid"] = (*items_arr)[i]->getUUID().asString();
-                    entry["type"] = "item";
-                    items.append(entry);
-                }
-            }
-            return items;
+        loader = [this]() {
+            const auto response = dispatchTool("inventory_list", LLSD::emptyMap());
+            return response["structuredContent"]["data"];
         };
     }
+
     else if (uri == "mikostorm://chat")
     {
         loader = [this]() {
@@ -1362,7 +1275,10 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
         return makeError(-32602, llformat("Resource '%s' not found", uri.c_str()));
     }
 
-    LLSD result = runOnMain(loader);
+    LLSD result = runOnMain([this, loader, group]() {
+        if (!mRunning || !permitted(currentClient(), group)) return makeError(-32001, "Resource permission denied");
+        return loader();
+    });
     if (result.isMap() && result.has("jsonrpc"))
     {
         return result;
@@ -1385,21 +1301,15 @@ LLSD LLMCPServer::handleResourcesRead(const LLSD& params)
 
 LLSD LLMCPServer::handleSetLoggerLevel(const LLSD& params)
 {
-    std::string level = params["level"].asString();
-    std::string upper = level;
-    std::transform(upper.begin(), upper.end(), upper.begin(), toupper);
-    if (upper != "DEBUG" && upper != "INFO" && upper != "WARN" && upper != "WARNING"
-        && upper != "ERROR" && upper != "NONE")
-    {
-        return makeError(-32602, llformat("Unrecognized logging level '%s'", level.c_str()));
-    }
-    if (upper == "WARNING")
-    {
-        upper = "WARN";
-    }
-    LLError::setDefaultLevel(LLError::decodeLevel(upper));
-    LL_INFOS("MCP") << "Set logger level to: " << level << LL_ENDL;
-    return makeResult(LLSDMap("level", level));
+    const std::string level = params["level"].asString();
+    static const std::set<std::string> levels = {"debug", "info", "notice", "warning", "error", "critical", "alert", "emergency"};
+    if (!params["level"].isString() || !levels.count(level)) return makeError(-32602, "Unsupported MCP logging level");
+    std::lock_guard<std::mutex> lock(mMutex);
+    auto session = gMCPContext ? mSessions.find(gMCPContext->session) : mSessions.end();
+    if (session == mSessions.end()) return makeError(-32001, "Session closed");
+    session->second.logLevel = level;
+    // JSON-only transport currently emits no unsolicited log notifications.
+    return makeResult(LLSD::emptyMap());
 }
 
 LLSD LLMCPServer::makeError(int code, const std::string& message, const LLSD& data)

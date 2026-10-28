@@ -12,8 +12,8 @@
     can_close="false"
     chrome="true"
     follows="bottom"
-    height="162"
-    min_height="147"
+    height="181"
+    min_height="166"
     layout="topleft"
     name="camera_floater"
     title="Camera Controls"
@@ -275,11 +275,12 @@
   </panel>
   <panel
       border="false"
-      height="77"
+      height="89"
       layout="topleft"
       follows="bottom|left|right"
       left="0"
       name="preset_buttons_panel"
+      width="170"
       mouse_opaque="false">
     <button
         follows="bottom|left|right"
@@ -335,26 +336,27 @@
     </button>  
     <!-- <CJB> Bone camera - follow a specified skeleton joint -->
     <text
-        follows="bottom|left"
-        height="20"
+        follows="bottom|left|right"
+        height="14"
         layout="topleft"
         left="5"
-        bottom="3"
+        top="49"
         name="joint_label"
-        text="Bone Camera" />
+        text="Bone Camera"
+        width="160" />
     <combo_box
         follows="bottom|left|right"
         height="20"
-        left_pad="4"
-        bottom="3"
+        left="5"
+        top="65"
         mouse_opaque="true"
         name="joint_combo"
-        width="120">
+        width="160">
       <combo_list mouse_wheel_opaque="true" />
       <combo_box.item
           label="None"
           name="None"
-          value="None" />
+          value="-1" />
     </combo_box>
     <!-- </CJB> -->
   </panel>

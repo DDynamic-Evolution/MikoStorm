@@ -631,12 +631,7 @@ bool LLFloaterCamera::postBuild()
     // </FS:Ansariel>
 
     // <CJB> Bone camera - follow a specified skeleton joint
-    mJointComboBox = findChild<LLComboBox>("joint_combo");
-    if (mJointComboBox)
-    {
-        mJointComboBox->setCommitCallback(boost::bind(&LLFloaterCamera::onJointComboChanged, this, _1, _2));
-        refreshJointCombo();
-    }
+    mJointSelector.bind(findChild<LLComboBox>("joint_combo"));
     // </CJB>
 
     update();
@@ -781,56 +776,7 @@ void LLFloaterCamera::updateItemsSelection()
 // <CJB> Bone camera - follow a specified skeleton joint
 void LLFloaterCamera::refreshJointCombo()
 {
-    if (!mJointComboBox)
-    {
-        return;
-    }
-
-    camera_joint_list_t joints = getCameraJointList();
-    S32 skeleton_joint_count = static_cast<S32>(joints.size());
-
-    // The skeleton may not have been ready when the floater was first built (e.g. on
-    // login / certain locales), so rebuild the list whenever the joint set changes.
-    if (!mJointComboInitialized
-        || mJointComboBox->getItemCount() != skeleton_joint_count)
-    {
-        mJointComboBox->clearRows();
-        for (const auto& joint : joints)
-        {
-            mJointComboBox->add(joint.first, joint.first);
-        }
-        mJointComboInitialized = true;
-    }
-
-    S32 current_joint = gAgentCamera.mFollowJoint;
-    if (current_joint == -1)
-    {
-        mJointComboBox->setCurrentByIndex(0);
-    }
-    else
-    {
-        mJointComboBox->selectByValue(current_joint);
-    }
-}
-
-void LLFloaterCamera::onJointComboChanged(LLUICtrl* ctrl, const LLSD& value)
-{
-    const std::string& joint_name = value.asString();
-    if (joint_name == "None")
-    {
-        gSavedSettings.setS32("CameraFollowJoint", -1);
-    }
-    else
-    {
-        for (auto joint : gAgentAvatarp->getSkeleton())
-        {
-            if (joint->getName() == joint_name)
-            {
-                gSavedSettings.setS32("CameraFollowJoint", joint->mJointNum);
-                break;
-            }
-        }
-    }
+    mJointSelector.refresh();
 }
 // </CJB>
 

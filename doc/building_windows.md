@@ -1,5 +1,7 @@
 # Build instructions for Windows
 
+For the maintained AVX2/legacy CMD workflow, see [Reproducible Windows profiles](building_windows_profiles.md).
+
 > [!WARNING]
 > Compiling MikoStorm on **Windows** is a big hassle and requires **many adjustments** to make it work. Development is done on **Linux**, which offers a much better and much friendlier build environment. This is also the reason why there will be **fewer Windows builds** than Linux builds. Linux builds are the primary and best-supported ones.
 

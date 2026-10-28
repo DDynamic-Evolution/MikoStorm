@@ -75,5 +75,13 @@
 			<button label="Öffne Viewer-Protokolle" label_selected="Öffne Viewer-Protokolle" name="browse_crashlogs" width="140"/>
 			<button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="190"/>
 		</panel>
+        <panel label="MCP-Server" name="tab-mcp">
+            <text name="mcp_intro_text">MCP erlaubt KI-Assistenten die Steuerung des Viewers.</text>
+            <check_box label="MCP-Server aktivieren" name="mcp_enabled"/>
+            <text name="mcp_auth_label">Globaler Token (optional, leer für lokale Clients ohne Anmeldung):</text>
+            <text name="mcp_trigger_label">Signalwörter (durch Kommas getrennt, für lokalen Chat):</text>
+            <text name="mcp_hint">Änderungen gelten sofort. URL und Status stehen in der MCP-Steuerung.</text>
+            <button name="mcp_control" label="MCP-Steuerung öffnen"/>
+        </panel>
 	</tab_container>
 </panel>

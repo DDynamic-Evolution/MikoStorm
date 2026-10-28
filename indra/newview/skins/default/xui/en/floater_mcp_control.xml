@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="mcp_control" title="MCP Control" width="700" height="640" can_resize="false" can_minimize="true" save_rect="true" layout="topleft">
+  <string name="running">Running</string><string name="stopped">Stopped</string>
+  <string name="sessions">sessions</string><string name="operations">operations</string>
+  <string name="token_failed">Enter a client name; check the client limit and random generator.</string>
+  <string name="global_created">Global token changed. Existing sessions were closed.</string>
+  <string name="client_created">Client created with read access. Copy its token now; it is shown only here.</string>
+  <string name="client_removed">Client revoked.</string><string name="permissions_saved">Permissions saved and applied immediately.</string>
+  <string name="no_calls">No tool calls recorded in this viewer session.</string>
+  <text name="status" top="32" left="15" width="670" height="42" wrap="true"/>
+  <button name="start" label="Start" top="80" left="15" width="100" height="24"/>
+  <button name="stop" label="Stop" top="80" left="125" width="100" height="24"/>
+  <button name="restart" label="Restart" top="80" left="235" width="100" height="24"/>
+  <button name="copy_url" label="Copy URL" top="80" left="345" width="130" height="24"/>
+  <spinner name="port" label="Port:" control_name="MCPPort" decimal_digits="0" min_val="1024" max_val="65535" increment="1" top="115" left="15" width="170" height="23" label_width="50"/>
+  <text name="global_label" top="150" left="15" width="670" height="18">Global token (empty allows local default clients):</text>
+  <line_editor name="global_token" control_name="MCPAuthToken" is_password="true" top="172" left="15" width="490" height="23" max_length_chars="256"/>
+  <button name="generate_token" label="New global token" top="172" left="515" width="170" height="23"/>
+  <text name="clients_label" top="210" left="15" width="300" height="18">Clients and permissions</text>
+  <combo_box name="client" top="233" left="15" width="410" height="23"/>
+  <button name="remove_client" label="Revoke client" top="233" left="445" width="150" height="23"/>
+  <check_box name="allow_read" label="Read viewer data" top="265" left="15" width="220" height="20"/>
+  <check_box name="allow_camera" label="Camera / 3D audio" top="265" left="240" width="220" height="20"/>
+  <check_box name="allow_move" label="Move avatar" top="265" left="465" width="210" height="20"/>
+  <check_box name="allow_chat" label="Chat / IM" top="291" left="15" width="220" height="20"/>
+  <check_box name="allow_inventory" label="Create notecards" top="291" left="240" width="220" height="20"/>
+  <button name="save_permissions" label="Apply permissions" top="289" left="475" width="210" height="24"/>
+  <line_editor name="client_name" top="327" left="15" width="410" height="23" max_length_chars="128" label="New client name"/>
+  <button name="create_client" label="Create client (read)" top="327" left="445" width="240" height="23"/>
+  <line_editor name="new_token" top="362" left="15" width="490" height="23" is_password="true" enabled="false" max_length_chars="256"/>
+  <button name="copy_token" label="Copy new token" top="362" left="515" width="170" height="23"/>
+  <text name="feedback" top="396" left="15" width="670" height="40" wrap="true"/>
+  <text name="recent_label" top="444" left="15" width="670" height="18">Recent tool calls (client | tool | status)</text>
+  <text name="recent_calls" top="467" left="15" width="670" height="150" wrap="true" font="Monospace"/>
+</floater>

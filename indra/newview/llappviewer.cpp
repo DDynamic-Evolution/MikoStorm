@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llappviewer.h"
+#include "fsnativechat.h"
 
 // Viewer includes
 #include "llversioninfo.h"
@@ -1474,8 +1475,11 @@ bool LLAppViewer::init()
 
     gSavedSettings.setU32("DebugQualityPerformance", gSavedSettings.getU32("RenderQualityPerformance"));
 
-    // Start MCP server if enabled
+    FSNativeChat::initialize();
+
+    // Create the service even when disabled so it can be enabled live later.
 #ifdef USE_MCP
+    LLMCPServer::instance().refreshAccess();
     LL_INFOS("MCP") << "USE_MCP defined, MCPEnabled=" << gSavedSettings.getBOOL("MCPEnabled") << LL_ENDL;
     if (gSavedSettings.getBOOL("MCPEnabled"))
     {
@@ -2011,6 +2015,8 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
+    FSNativeChat::shutdown(); // Join native UI before settings/chat singletons are destroyed.
+
     //ditch LLVOAvatarSelf instance
     gAgentAvatarp = NULL;
 

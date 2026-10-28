@@ -7363,4 +7363,31 @@ Ihre aktuelle Position: [AVATAR_POS]
 	<string name="FSAvatarAlignToggleFull">
 		Voll
 	</string>
+
+    <!-- Native Windows local-chat popout -->
+    <string name="NativeChatTitle">MikoStorm — Chats</string>
+    <string name="NativeChatSend">Senden</string>
+    <string name="NativeChatTopmost">Immer im Vordergrund</string>
+    <string name="NativeChatFont">Schriftgröße:</string>
+    <string name="NativeChatSay">Sprechen</string>
+    <string name="NativeChatWhisper">Flüstern</string>
+    <string name="NativeChatShout">Rufen</string>
+    <string name="NativeChatReady">Enter: senden | Umschalt+Enter: neue Zeile</string>
+    <string name="NativeChatOffline">Gespräch nicht sendebereit — getrennt, wird initialisiert oder Textchat nicht verfügbar</string>
+    <string name="NativeChatEmpty">Bitte eine Nachricht eingeben.</string>
+    <string name="NativeChatTooLong">Nachricht ist zu lang für den Viewer-Chat. Bitte kürzen.</string>
+    <string name="NativeChatBusy">Chat-Warteschlange voll. Bitte gleich erneut versuchen.</string>
+    <string name="NativeChatHiddenName">Jemand</string>
+    <string name="NativeChatLocal">Lokaler Chat</string>
+    <string name="NativeChatIM">IM</string>
+    <string name="NativeChatGroup">Gruppe</string>
+    <string name="Command_NativeChat_Label">Windows-Chat</string>
+    <string name="Command_NativeChat_Tooltip">Lokalen Chat, private IMs und Gruppenchats im Windows-Fenster öffnen</string>
+    <string name="NativeChatFriends">Freunde</string>
+    <string name="NativeChatFriendSearch">Freunde suchen…</string>
+    <string name="NativeChatOpenFriend">Chat öffnen</string>
+    <string name="NativeChatFriendOnline">Online</string>
+    <string name="NativeChatFriendOffline">Offline</string>
+    <string name="NativeChatFriendUnnamed">Freund (Name wird geladen…)</string>
+    <string name="NativeChatFriendOpenFailed">Chat nicht geöffnet: Kontakt entfernt, eingeschränkt, getrennt oder Gesprächslimit erreicht.</string>
 </strings>

@@ -3364,4 +3364,31 @@ Your current position: [AVATAR_POS]
   <string name="OmnifilterExportDescription">Omnifiler Rule Set: [REPLACEMENT]</string>
   <string name="FSAvatarAlignToggleMini">Mini</string>
   <string name="FSAvatarAlignToggleFull">Full</string>
+
+    <!-- Native Windows local-chat popout -->
+    <string name="NativeChatTitle">MikoStorm — Chats</string>
+    <string name="NativeChatSend">Send</string>
+    <string name="NativeChatTopmost">Always on top</string>
+    <string name="NativeChatFont">Font size:</string>
+    <string name="NativeChatSay">Say</string>
+    <string name="NativeChatWhisper">Whisper</string>
+    <string name="NativeChatShout">Shout</string>
+    <string name="NativeChatReady">Enter: send | Shift+Enter: new line</string>
+    <string name="NativeChatOffline">Conversation not ready — disconnected, initializing or text chat unavailable</string>
+    <string name="NativeChatEmpty">Enter a message.</string>
+    <string name="NativeChatTooLong">Message is too long for viewer chat. Please shorten it.</string>
+    <string name="NativeChatBusy">Chat queue is full. Please try again shortly.</string>
+    <string name="NativeChatHiddenName">Someone</string>
+    <string name="NativeChatLocal">Local chat</string>
+    <string name="NativeChatIM">IM</string>
+    <string name="NativeChatGroup">Group</string>
+    <string name="Command_NativeChat_Label">Windows Chat</string>
+    <string name="Command_NativeChat_Tooltip">Open local chat, private IMs and group chats in a Windows window</string>
+    <string name="NativeChatFriends">Friends</string>
+    <string name="NativeChatFriendSearch">Search friends…</string>
+    <string name="NativeChatOpenFriend">Open chat</string>
+    <string name="NativeChatFriendOnline">Online</string>
+    <string name="NativeChatFriendOffline">Offline</string>
+    <string name="NativeChatFriendUnnamed">Friend (loading name…)</string>
+    <string name="NativeChatFriendOpenFailed">Could not open chat: no longer a friend, restricted, disconnected, or conversation limit reached.</string>
 </strings>

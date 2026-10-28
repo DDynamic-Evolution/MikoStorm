@@ -29,7 +29,7 @@ This will be a private project, more or less
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for the full release history. The current version is **1.16.36**.
+See [CHANGELOG.md](CHANGELOG.md) for the full release history. The current version is **2.0.2** (Windows AVX2). The legacy/NoAVX release remains 1.16.58.
 
 ### No 32Bit version
 
@@ -98,6 +98,8 @@ This viewer contains experimental features like
 - **PBR Materials** — Full GLTF/PBR material support with 16 shader variants
 
 ### Build Configuration
+
+Windows supports separate AVX2 and legacy profiles through [build-windows.cmd](doc/building_windows_profiles.md).
 - AVX2 optimization
 - FMOD audio
 - 3D Stream (Ayastorm)
@@ -108,179 +110,36 @@ This viewer contains experimental features like
 
 ## MCP (Model Context Protocol)
 
-MikoStorm includes a built-in MCP server that allows AI assistants like Claude Desktop, Cursor, and other MCP-compatible clients to interact with Second Life.
+Version **1.16.59** adds a live MCP control window, per-client
+permissions, session/version negotiation, structured validated tools, bounded
+inventory queries, cancellable teleport/notecard operations, and camera/audio
+and performance tools. Open **Preferences > Network & Files > MCP Server > Open
+MCP Control**. The default endpoint is `http://127.0.0.1:13231/mcp`; MCP remains
+opt-in and local only. Clients must initialize a session before calling tools.
 
-### Overview
+See [MCP setup, protocol, tools and test status](doc/mcp.md) for the handshake,
+settings, permission masks, limits and examples. The Windows AVX2 release is compiled and packaged. Native validator checks and
+the read-only HTTP smoke test passed without login. In-world actions still need
+manual validation; the older 1.16.58 binaries do not contain this update.
 
-The MCP server implements the [Model Context Protocol](https://modelcontextprotocol.io/) specification using JSON-RPC 2.0 over HTTP. It runs on `localhost` only and is disabled by default.
+## Native Windows Chat Popout
 
-### Configuration
+Version **2.0.1** includes local chat, private IMs and group conversations in a
+separate native Windows window, with individual transcripts/drafts and a
+conversation selector. Open **Communicate > Chat in Windows Window…**, the ↗
+Nearby Chat button, or drag **Windows Chat** from the Toybox onto a toolbar.
+The button opens/focuses the same window and indicates when it is open.
 
-Enable the MCP server in **Preferences > Network & Files > MCP Server**:
+Local chat supports whisper/shout. IM/group replies use the existing IM send
+path with text, moderator and RLVa checks. Font size, window placement and
+Always on top are configurable. Build and regression checks passed; native
+window interaction and in-world message behavior still need manual validation.
+See [chat setup and validation status](doc/native_chat.md).
 
-| Setting | Description |
-|---------|-------------|
-| `MCPEnabled` | Enable/disable the MCP server (default: false) |
-| `MCPPort` | Port number (default: 13231) |
-| `MCPAuthToken` | Optional Bearer token for authentication |
-
-### Endpoint
-
-```
-http://localhost:13231/mcp
-```
-
-### Available Tools
-
-#### Chat Tools
-
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `chat_say` | Send a message in local chat | `message` (required), `channel` (optional, default: 0) |
-| `chat_shout` | Send a shout in local chat (up to 100m range) | `message` (required), `channel` (optional, default: 0) |
-| `chat_im` | Send an instant message to another avatar | `target` (UUID or name, required), `message` (required) |
-
-#### Avatar Tools
-
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `avatar_sit` | Sit down on the ground or nearby object | None |
-| `avatar_stand` | Stand up from sitting position | None |
-| `avatar_walk_to` | Walk to a specific position in the current region | `x`, `y`, `z` (required) |
-| `avatar_teleport` | Teleport to a location in any region | `region`, `x`, `y`, `z` (required) |
-| `avatar_fly` | Enable or disable flying | `enabled` (required, boolean) |
-
-#### Information Tools
-
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `get_position` | Get current avatar position, region, and rotation | None |
-| `get_region_info` | Get information about the current region | None |
-| `get_nearby_agents` | List nearby avatars with positions and distances | None |
-| `get_nearby_objects` | List nearby objects with positions and distances | `max_results`, `include_attachments` (optional) |
-| `get_parcel_info` | Get information about the current parcel | None |
-| `get_self_info` | Get own avatar name, group, and state | None |
-
-#### Inventory Tools
-
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `notecard_write` | Create a new notecard in your inventory | `name`, `content` (required) |
-| `inventory_list` | List inventory folders and items at the root level | None |
-| `inventory_search` | Search inventory folders and items by name | `query` (required), `folder`, `type`, `max_results` (optional) |
-| `attachment_list` | List currently worn attachments | None |
-
-### Available Resources
-
-Resources provide read-only access to viewer state:
-
-| URI | Description |
-|-----|-------------|
-| `mikostorm://position` | Current avatar position and region |
-| `mikostorm://region` | Current region information |
-| `mikostorm://nearby` | List of nearby avatars |
-| `mikostorm://attachments` | Currently worn attachments |
-| `mikostorm://parcel` | Current parcel information |
-| `mikostorm://inventory` | Root-level inventory listing |
-
-### Example Configuration
-
-#### Claude Desktop (claude_desktop_config.json)
-
-```json
-{
-  "mcpServers": {
-    "mikostorm": {
-      "command": "curl",
-      "args": ["-X", "POST", "-H", "Content-Type: application/json", "-d", "@-", "http://localhost:13231/mcp"]
-    }
-  }
-}
-```
-
-#### Cursor (.cursor/mcp.json)
-
-```json
-{
-  "mcpServers": {
-    "mikostorm": {
-      "url": "http://localhost:13231/mcp"
-    }
-  }
-}
-```
-
-#### With Authentication
-
-```json
-{
-  "mcpServers": {
-    "mikostorm": {
-      "url": "http://localhost:13231/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_TOKEN_HERE"
-      }
-    }
-  }
-}
-```
-
-### Protocol Methods
-
-The server supports the following JSON-RPC methods:
-
-| Method | Description |
-|--------|-------------|
-| `initialize` | Initialize the MCP session |
-| `ping` | Health check |
-| `tools/list` | List all available tools |
-| `tools/call` | Call a specific tool |
-| `resources/list` | List all available resources |
-| `resources/read` | Read a specific resource |
-| `notifications/initialized` | Notify that client is initialized |
-
-### Example Requests
-
-#### List Tools
-
-```bash
-curl -X POST http://localhost:13231/mcp \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-```
-
-#### Send Chat Message
-
-```bash
-curl -X POST http://localhost:13231/mcp \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"chat_say","arguments":{"message":"Hello from AI!"}}}'
-```
-
-#### Get Position
-
-```bash
-curl -X POST http://localhost:13231/mcp \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_position"}}'
-```
-
-#### Teleport
-
-```bash
-curl -X POST http://localhost:13231/mcp \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"avatar_teleport","arguments":{"region":"Ahern","x":128,"y":128,"z":25}}}'
-```
-
-### Security
-
-- The server binds to `localhost` only (127.0.0.1)
-- No external network access
-- Optional Bearer token authentication
-- All tool calls are executed on the main thread with proper synchronization
-
----
+Version **2.0.2** also follows Windows Light/Dark/High Contrast settings and adds
+a searchable friend sidebar with online status and open-IM actions. The viewer
+is compiled and packaged; live theme changes and friend/chat interaction remain
+to be validated manually in a logged-in session.
 
 ## Camera Timeline
 

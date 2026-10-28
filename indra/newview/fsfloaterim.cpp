@@ -442,6 +442,25 @@ void FSFloaterIM::onChatSearchButtonClicked()
     LLFloaterSearchReplace::show(mChatHistory);
 }
 
+bool FSFloaterIM::sendNativeMessage(const std::string& msg)
+{
+    const auto* session = LLIMModel::instance().findIMSession(mSessionID);
+    if (!session || gDisconnected || !session->mSessionInitialized || !mSessionInitialized ||
+        !session->mTextIMPossible || !mInputEditor || !mInputEditor->getEnabled() || msg.empty()) return false;
+    if (session->isP2PSessionType() && mOtherParticipantUUID.isNull()) return false;
+    if (mDialog == IM_NOTHING_SPECIAL && FSData::instance().isSupport(mOtherParticipantUUID) &&
+        FSData::instance().isAgentFlag(gAgentID, FSData::NO_SUPPORT)) return false;
+    if (session->mSpeakers)
+    {
+        const auto speaker = session->mSpeakers->findSpeaker(gAgentID);
+        if (speaker.notNull() && speaker->mModeratorMutedText) return false;
+    }
+    // No delayed native sends during initialization, and no mutation of the
+    // viewer editor. sendMsg keeps RLVa filtering and regular message delivery.
+    sendMsg(FSCommon::applyMuPose(FSCommon::applyAutoCloseOoc(msg)));
+    return true; // Handoff, not a simulator acknowledgement.
+}
+
 void FSFloaterIM::sendMsg(const std::string& msg)
 {
     //  const std::string utf8_text = utf8str_truncate(msg, MAX_MSG_BUF_SIZE - 1);

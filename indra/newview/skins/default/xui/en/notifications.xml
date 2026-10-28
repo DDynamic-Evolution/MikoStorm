@@ -15453,4 +15453,9 @@ Username: [OWNERUSERNAME]
          text="[CONDITION] Allow This URL"/>
    </form>
   </notification>
+
+  <notification name="NativeChatOpenFailed" type="alertmodal">
+    The separate Windows chat window could not be opened. The viewer log contains details.
+    <usetemplate name="okbutton" yestext="OK"/>
+  </notification>
 </notifications>

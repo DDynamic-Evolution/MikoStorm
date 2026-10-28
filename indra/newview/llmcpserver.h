@@ -7,6 +7,12 @@
 #include <map>
 #include <functional>
 #include <mutex>
+#include <atomic>
+#include <memory>
+#include <chrono>
+#include <vector>
+#include "lluuid.h"
+#include "v3dmath.h"
 #include <deque>
 #include <set>
 #include <boost/signals2.hpp>
@@ -27,7 +33,41 @@ public:
                       const LLSD& input_schema,
                       ToolHandler handler);
 
-    LLSD handleRequest(const LLSD& request);
+    enum Permission : U32 { Read = 1, Camera = 2, Movement = 4, Chat = 8, InventoryWrite = 16 };
+    struct Context
+    {
+        std::string client = "default", session, requestKey, cancelKey;
+        std::shared_ptr<std::atomic<bool>> active;
+    };
+    LLSD handleRequest(const LLSD& request, Context context, std::string* created_session = nullptr);
+    bool authenticate(const std::string& token, bool supplied, std::string& client) const;
+    bool validSession(const std::string& session, const std::string& client) const;
+    std::string protocolForSession(const std::string& session) const;
+    static bool supportsProtocol(const std::string& version);
+    void closeSession(const std::string& session, const std::string& client);
+    void refreshAccess();
+    LLSD getStatus() const;
+    LLSD getAudit() const;
+    LLSD getClientProfiles() const;
+    void setClientPermissions(const std::string& client, U32 mask);
+    std::string createClient(const std::string& name, U32 mask);
+    void removeClient(const std::string& client);
+    static std::string generateToken();
+    static void configureLive();
+    static void idle(void* data);
+    LLSD dispatchTool(const std::string& name, const LLSD& args);
+    bool permitted(const std::string& client, U32 group) const;
+    std::string beginOperation(const std::string& kind, U32 group);
+    bool operationActive(const std::string& id);
+    void updateOperation(const std::string& id, const std::string& state, const std::string& message,
+                         F32 progress = 0.f, const LLSD& result = LLSD());
+    LLSD operationStatus(const std::string& id) const;
+    LLSD cancelOperation(const std::string& id);
+    std::string currentClient() const;
+    void registerViewerTools();
+    LLSD startTeleport(const LLSD& params);
+    LLSD writeNotecard(const LLSD& params);
+    void setOperationTarget(const std::string& id, const LLVector3d& target);
 
     void registerDefaultTools();
 
@@ -74,7 +114,7 @@ private:
     LLSD collectParcelInfo() const;
     LLSD collectSelfInfo() const;
     LLSD collectNearbyObjects(const LLSD& params) const;
-    LLSD inventorySearch(const LLSD& params) const;
+    LLSD inventorySearch(const LLSD& params);
     LLSD collectFriendsOnline() const;
     LLSD collectIMSessions() const;
 
@@ -86,11 +126,55 @@ private:
     };
 
     std::map<std::string, Tool> mTools;
-    bool mRunning;
+    std::atomic<bool> mRunning{false};
+    std::shared_ptr<std::atomic<U32>> mMainRequests = std::make_shared<std::atomic<U32>>(0);
+    std::shared_ptr<std::atomic<bool>> mSession = std::make_shared<std::atomic<bool>>(false);
     U16 mPort;
-    std::string mAuthToken;
     mutable std::mutex mMutex;
-    bool mInitialized;
+    using Clock = std::chrono::steady_clock;
+    struct Session
+    {
+        std::string client, protocol, logLevel = "info";
+        bool initialized = false;
+        Clock::time_point touched = Clock::now(), window = Clock::now();
+        U32 calls = 0;
+    };
+    struct Client { std::string name, tokenHash; U32 permissions = 0; };
+    struct Operation
+    {
+        std::string client, session, kind, state = "running", message;
+        U32 permission = 0;
+        F32 progress = 0.f;
+        LLSD result;
+        Clock::time_point started = Clock::now();
+        LLVector3d target, localTarget;
+        U64 destinationHandle = 0;
+        std::string regionName;
+        bool hasTarget = false, sawTeleport = false, uploadSubmitted = false, cancelRequested = false, cancellationSent = false;
+    };
+    U32 mDefaultPermissions = 31, mMediaPermissions = 31;
+    std::string mDefaultTokenHash, mLastError;
+    std::map<std::string, Client> mClients;
+    std::map<std::string, Session> mSessions;
+    std::map<std::string, std::shared_ptr<std::atomic<bool>>> mRequests;
+    std::map<std::string, Operation> mOperations;
+    Clock::time_point mLastOperationTick{};
+    struct SearchFrame { LLUUID folder; std::string path; size_t cat = 0, item = 0; };
+    struct SearchCursor
+    {
+        std::string client, session, query, type;
+        LLUUID root;
+        Clock::time_point touched = Clock::now();
+        std::vector<SearchFrame> stack;
+        std::set<LLUUID> visited;
+    };
+    // Only accessed on the main thread, like gInventory itself.
+    std::map<std::string, SearchCursor> mSearchCursors;
+    std::deque<LLSD> mAudit;
+    void audit(const std::string& tool, const std::string& client, const std::string& status);
+    static U32 permissionForTool(const std::string& name);
+    void updateOperations();
+    void requestOperationCancellation(const std::string& id, const std::string& reason);
 
     // Chat buffer (protected by mMutex)
     std::deque<LLSD> mChatBuffer;

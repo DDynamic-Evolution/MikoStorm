@@ -180,7 +180,7 @@ Contrast Adaptive Sharpening.
 
 ## MCP (Model Context Protocol)
 
-AI assistant integration via a built-in MCP server. See [README.md](../README.md#mcp-model-context-protocol) for full documentation.
+AI assistant integration via a built-in MCP server. See [MCP source changes and setup](mcp.md) for session lifecycle, permissions and the new control window. The current MCP improvements are unbuilt source changes; existing 1.16.58 packages predate them.
 
 - **Location:** Preferences > Network & Files > **MCP Server**
 - **How to use:** Enable the server, set a port (default: 13231), optionally set an auth token. Configure your AI client (Claude Desktop, Cursor, etc.) to connect to `http://localhost:13231/mcp`.

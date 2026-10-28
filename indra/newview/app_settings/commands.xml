@@ -727,4 +727,14 @@
         control_name="MagnifierEnabled"
          />
 
+  <command name="native_chat"
+           available_in_toybox="true"
+           icon="Command_Chat_Icon"
+           label_ref="Command_NativeChat_Label"
+           tooltip_ref="Command_NativeChat_Tooltip"
+           execute_function="NativeChat.Show"
+           is_enabled_function="NativeChat.Supported"
+           is_running_function="NativeChat.IsOpen"
+           />
+
 </commands>

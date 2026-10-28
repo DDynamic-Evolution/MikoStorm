@@ -562,7 +562,9 @@ class Windows_x86_64_Manifest(ViewerManifest):
     address_size = 64
 
     def final_exe(self):
-        return self.exec_name()+".exe"
+        # <MikoStorm> Unter allen Bedingungen nur mikostorm.exe verwenden
+        return "mikostorm.exe"
+        # </MikoStorm>
 
     def finish_build_data_dict(self, build_data_dict):
         build_data_dict['Executable'] = self.final_exe()
@@ -1003,8 +1005,8 @@ class Windows_x86_64_Manifest(ViewerManifest):
 
         inst_vars_template = """
             OutFile "%(installer_file)s"
-            !define INSTNAME   "%(app_name_oneword)s"
-            !define SHORTCUT   "%(app_name)s"
+            !define INSTNAME   "MikoStorm"
+            !define SHORTCUT   "MikoStorm"
             !define DL_URL   "%(dl_url)s"
             !define URLNAME   "secondlife"
             !define IS64BIT   "%(is64bit)d"

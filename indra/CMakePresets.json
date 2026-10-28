@@ -1,0 +1,51 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "windows-common",
+      "hidden": true,
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ADDRESS_SIZE": "64",
+        "LL_BUILD_ENV": "/MD /O2 /Ob2 /std:c++20 /permissive- /Zc:wchar_t /Z7 /GR /DEBUG /DLL_RELEASE=1 /DLL_RELEASE_FOR_DOWNLOAD=1 /DNDEBUG /D_SECURE_STL=0 /D_HAS_ITERATOR_DEBUGGING=0 /DWIN32 /D_WINDOWS /DLL_WINDOWS=1 /DUNICODE /D_UNICODE /DWINVER=0x0601 /D_WIN32_WINNT=0x0601 /DLL_OS_DRAGDROP_ENABLED=1 /DLIB_NDOF=1",
+        "VIEWER_CHANNEL": "MikoStorm-MikoStorm",
+        "OPENSIM": "ON",
+        "USE_FMODSTUDIO": "ON",
+        "USE_OPENAL": "ON",
+        "OPENAL": "OFF",
+        "USE_3D_STREAM": "ON",
+        "USE_MCP": "ON",
+        "USE_KDU": "OFF",
+        "HAVOK_TPV": "OFF",
+        "USE_AVX_OPTIMIZATION": "OFF",
+        "PACKAGE": "ON",
+        "USE_VELOPACK": "OFF",
+        "LL_TESTS": "OFF",
+        "USE_ESPEAK_NG": "OFF"
+      }
+    },
+    {
+      "name": "windows-avx2",
+      "inherits": "windows-common",
+      "binaryDir": "${sourceDir}/../build-vc170-64-avx2",
+      "cacheVariables": {
+        "USE_AVX2_OPTIMIZATION": "ON"
+      }
+    },
+    {
+      "name": "windows-legacy",
+      "inherits": "windows-common",
+      "binaryDir": "${sourceDir}/../build-vc170-64-legacy",
+      "cacheVariables": {
+        "USE_AVX2_OPTIMIZATION": "OFF"
+      }
+    }
+  ]
+}

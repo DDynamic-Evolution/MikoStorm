@@ -97,6 +97,8 @@ public:
     void reloadMessages(bool clean_messages = false);
     void sendMsgFromInputEditor(EChatType type);
     void sendMsg(const std::string& msg);
+    // External native editor: preserve this floater's draft and normal IM rules.
+    bool sendNativeMessage(const std::string& msg);
 
     // callback for LLIMModel on new messages
     // route to specific floater if it is visible

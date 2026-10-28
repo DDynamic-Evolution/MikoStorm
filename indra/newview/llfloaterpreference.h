@@ -34,6 +34,7 @@
 #define LL_LLFLOATERPREFERENCE_H
 
 #include "llfloater.h"
+#include "llcamerajointselector.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llconversationlog.h"
 #include "llsearcheditor.h"
@@ -88,7 +89,7 @@ public:
     void apply();
     void cancel(const std::vector<std::string> settings_to_skip = {});
     // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
-    // /*virtual*/ void draw();
+    void draw() override;
     // </FS:Zi>
     /*virtual*/ bool postBuild();
     /*virtual*/ void onOpen(const LLSD& key);
@@ -124,6 +125,7 @@ public:
     void        onBtnCancel(const LLSD& userdata);
 
 protected:
+    LLCameraJointSelector mJointSelector;
 
     //void      onClickClearCache();            // Clear viewer texture cache, file cache on next startup // AO: was protected, moved to public
     void        onClickBrowserClearCache();     // Clear web history and caches as well as viewer caches above
@@ -223,6 +225,10 @@ public:
     void setExternalEditor();
     void changeExternalEditorPath(const std::vector<std::string>& filenames);
     // </FS:LO>
+    // <MikoStorm> Avatar encounter log
+    void onBrowseAvatarLog();
+    void onAvatarLogPathSelected(const std::vector<std::string>& filenames);
+    // </MikoStorm>
     // <FS:Zi> FIRE-19539 - Include the alert messages in Prefs>Notifications>Alerts in preference Search.
     // void onClickEnablePopup();
     // void onClickDisablePopup();

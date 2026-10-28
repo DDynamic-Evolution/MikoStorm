@@ -25,6 +25,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsexportperms.h"
+#include "fsexportpolicy.h"
 #include "lfsimfeaturehandler.h"
 #include "llagent.h"
 #include "llinventoryfunctions.h"
@@ -201,6 +202,24 @@ bool FSExportPermsCheck::canExportNode(LLSelectNode* node, bool dae)
 
 bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std::string* description)
 {
+    std::string fallback_name, fallback_description;
+    if (!name) name = &fallback_name;
+    if (!description) description = &fallback_description;
+    using namespace FSAssetExportPolicy;
+    Grid grid = LLGridManager::getInstance()->isInSecondLife() ? Grid::second_life : Grid::unknown;
+    Policy policy = Policy::denied;
+#ifdef OPENSIM
+    if (LLGridManager::getInstance()->isInOpenSim())
+    {
+        grid = Grid::opensim;
+        switch (LFSimFeatureHandler::instance().exportPolicy())
+        {
+        case EXPORT_ALLOWED: policy = Policy::allowed; break;
+        case EXPORT_UNDEFINED: policy = Policy::undefined; break;
+        default: break;
+        }
+    }
+#endif
     bool exportable = false;
     LLViewerInventoryCategory::cat_array_t cats;
     LLViewerInventoryItem::item_array_t items;
@@ -220,30 +239,9 @@ bool FSExportPermsCheck::canExportAsset(LLUUID asset_id, std::string* name, std:
         for (S32 i = 0; i < items.size() && !exportable; ++i)
         {
             LLPermissions perms = items[i]->getPermissions();
-#ifdef OPENSIM
-            if (LLGridManager::getInstance()->isInOpenSim())
-            {
-                switch (LFSimFeatureHandler::instance().exportPolicy())
-                {
-                    case EXPORT_ALLOWED:
-                        exportable = (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT;
-                        break;
-                    /// TODO: Once enough grids adopt a version supporting exports, get consensus
-                    /// on whether we should allow full perm exports anymore.
-                    case EXPORT_UNDEFINED:
-                        exportable = (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED;
-                        break;
-                    case EXPORT_DENIED:
-                    default:
-                        exportable = perms.getCreator() == gAgentID;
-                        break;
-                }
-            }
-#endif
-            if (LLGridManager::getInstance()->isInSecondLife() && (perms.getCreator() == gAgentID))
-            {
-                exportable = true;
-            }
+            exportable = allowed(grid, policy, perms.getCreator() == gAgentID,
+                (perms.getMaskOwner() & PERM_EXPORT) == PERM_EXPORT,
+                (perms.getMaskBase() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED);
         }
     }
 

@@ -28,6 +28,9 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llviewercontrol.h"
+#ifdef USE_MCP
+#include "llmcpserver.h"
+#endif
 
 // Library includes
 #include "llwindow.h"   // getGamma()
@@ -1523,6 +1526,14 @@ void migrate_legacy_settings()
 
 void settings_setup_listeners()
 {
+#ifdef USE_MCP
+    for (const auto* setting : {"MCPEnabled", "MCPPort", "MCPAuthToken"})
+        setting_setup_signal_listener(gSavedSettings, setting, []() { LLMCPServer::configureLive(); });
+    for (const auto* setting : {"MCPClients", "MCPDefaultPermissions", "MCPMediaPermissions"})
+        setting_setup_signal_listener(gSavedSettings, setting, []() {
+            if (LLMCPServer::instanceExists()) LLMCPServer::instance().refreshAccess();
+        });
+#endif
     setting_setup_signal_listener(gSavedSettings, "FirstPersonAvatarVisible", handleRenderAvatarMouselookChanged);
     setting_setup_signal_listener(gSavedSettings, "CameraFollowJoint", handleFollowJoint);
     setting_setup_signal_listener(gSavedSettings, "RenderFarClip", handleRenderFarClipChanged);

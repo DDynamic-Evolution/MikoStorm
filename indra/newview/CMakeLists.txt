@@ -114,7 +114,6 @@ set(viewer_SOURCE_FILES
     fsfloaterimsetsound.cpp
     fsfavoritegroups.cpp
     fsinventorycustomtabs.cpp
-    pvassets.cpp
     fsfloaterassetblacklist.cpp
     fsfloateravataralign.cpp
     fsfloateravatarrendersettings.cpp
@@ -122,6 +121,7 @@ set(viewer_SOURCE_FILES
     fsfloatercontacts.cpp
     fsfloatercontactsetconfiguration.cpp
     fsfloaterexport.cpp
+    fsmikoavatarlog.cpp
     fsfloatergroup.cpp
     fsfloatergrouptitles.cpp
     fsgrouptitleregionmgr.cpp
@@ -340,6 +340,7 @@ set(viewer_SOURCE_FILES
     llfloaterbuycurrency.cpp
     llfloaterbuycurrencyhtml.cpp
     llfloaterbuyland.cpp
+    llcamerajointselector.cpp
     llfloatercamera.cpp
     llfloatercamerapresets.cpp
     llfloaterchangeitemthumbnail.cpp
@@ -918,6 +919,8 @@ set(viewer_SOURCE_FILES
 if (USE_3D_STREAM)
     list(APPEND viewer_SOURCE_FILES
         llpositionalstreammgr.cpp
+        llstream3dtagparser.cpp
+        llstream3ddiscovery.cpp
         llocclusiongeometrymgr.cpp
         )
 endif ()
@@ -925,6 +928,10 @@ endif ()
 if (USE_MCP)
     list(APPEND viewer_SOURCE_FILES
         llmcpserver.cpp
+        llmcpservice.cpp
+        llmcpoperations.cpp
+        llmcpviewertools.cpp
+        llfloatermcp.cpp
         llmcphttp.cpp
         )
 endif ()
@@ -995,7 +1002,6 @@ set(viewer_HEADER_FILES
     fsfloaterimsetsound.h
     fsfavoritegroups.h
     fsinventorycustomtabs.h
-    pvassets.h
     fsfloaterassetblacklist.h
     fsfloateravatarrendersettings.h
     fsfloaterblocklist.h
@@ -1043,6 +1049,9 @@ set(viewer_HEADER_FILES
     fsnearbychatbarlistener.h
     fsnearbychatcontrol.h
     fsnearbychathub.h
+    fsnativechat.h
+    fsnativechatmodel.h
+    fsnativechattheme.h
     fsnearbychatvoicemonitor.h
     fspanelblocklist.h
     fspanelcontactsets.h
@@ -1227,6 +1236,7 @@ set(viewer_HEADER_FILES
     llfloatercamerapresets.h
     llfloaterchangeitemthumbnail.h
     llfloaterchatmentionpicker.h
+    llcamerajointselector.h
     llfloatercamera.h
     llfloaterchatvoicevolume.h
     llfloaterclassified.h
@@ -1803,6 +1813,18 @@ if (USE_3D_STREAM)
         )
 endif ()
 
+if (USE_MCP)
+    list(APPEND viewer_HEADER_FILES
+        llmcpserver.h
+        llmcphttp.h
+        llmcphttpparser.h
+        llmcpcontext.h
+        llmcptask.h
+        llmcpvalidation.h
+        llfloatermcp.h
+        )
+endif ()
+
   list(APPEND viewer_SOURCE_FILES llperfstats.cpp)
   list(APPEND viewer_HEADER_FILES llperfstats.h)
 
@@ -1988,6 +2010,7 @@ if (WINDOWS)
          growlmanager.cpp
          growlnotifierwin.cpp
          llappviewerwin32.cpp
+         fsnativechatwin32.cpp
          llwindebug.cpp
          )
     set_source_files_properties(
@@ -2568,6 +2591,14 @@ else (WINDOWS)
         )
 endif (WINDOWS)
 
+if (WINDOWS)
+    target_link_libraries(${VIEWER_BINARY_NAME} comctl32 dwmapi)
+endif ()
+
+if (USE_MCP)
+    target_link_libraries(${VIEWER_BINARY_NAME} ll::openssl)
+endif ()
+
 # *NOTE: - this list is very sensitive to ordering, test carefully on all
 # platforms if you change the relative order of the entries here.
 # In particular, cmake 2.6.4 (when building with linux/makefile generators)
@@ -2993,6 +3024,13 @@ if (PACKAGE AND (RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING) AND VIE
   endif()
 endif ()
 
+option(MIKOSTORM_MCP_TESTS "Build the focused native MCP validator test target" OFF)
+if (USE_MCP AND MIKOSTORM_MCP_TESTS AND NOT LL_TESTS)
+  include(LLAddBuildTest)
+  LL_ADD_INTEGRATION_TEST(llmcpvalidation "" "llcommon")
+  set_target_properties(INTEGRATION_TEST_llmcpvalidation PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif ()
+
 if (LL_TESTS)
   # To add a viewer unit test, just add the test .cpp file below
   # This creates a separate test project per file listed.
@@ -3097,6 +3135,10 @@ if (LL_TESTS)
           llprimitive
           lllogin
           )
+
+  if (USE_MCP)
+    LL_ADD_INTEGRATION_TEST(llmcpvalidation "" "${test_libs}")
+  endif ()
 
   LL_ADD_INTEGRATION_TEST(cppfeatures
     ""

@@ -42,6 +42,21 @@
 		<slider label="Überblendzeit für Umgebungseinstellungen:" tool_tip="Intervall in Sekunden in dem Änderungen an den Umgebungseinstellungen ineinander überblenden. 0 = direkt ohne Verzögerung" name="manual_environment_change_transition_period"/>
 		<check_box name="EnvironmentPersistAcrossLogin" label="Sitzungsübergreifende Umgebungseinstellungen aktivieren" tool_tip="Stellt die aktuellen Umgebungseinstellungen nach einem erneuten Login wieder her."/>
 		<check_box name="FSRepeatedEnvTogglesShared" label="Tastenkombinationen für Umgebungseinstellungen sind An-Aus-Schalter" tool_tip="Wiederholtes Drücken von Tastenkombinationen schaltet zwischen der gewünschten Einstellung und gemeinsamer Umgebung um."/>
+		<text name="magnifier_header">
+			Bildschirmlupe:
+		</text>
+		<check_box name="MagnifierEnabled" label="Bildschirmlupe aktivieren, die dem Mauszeiger folgt" tool_tip="Aktiviert eine vergrösserte Ansicht des Bereichs um den Mauszeiger."/>
+		<slider name="MagnifierZoom" label="Vergrösserung der Lupe:" tool_tip="Zoomfaktor der Bildschirmlupe. 1 = keine Vergrösserung, 16 = maximale Vergrösserung."/>
+		<slider name="MagnifierSize" label="Grosse der Lupe (%):" tool_tip="Grosse der Lupe in Prozent der kleineren Fensterdimension."/>
+		<text name="miko_avatar_log_header">
+			Avatar-Begegnungsprotokoll:
+		</text>
+		<check_box name="MikoAvatarLogEnabled" label="Avatare, die mir begegnen, in eine Textdatei protokollieren" tool_tip="Falls aktiviert, wird jeder Avatar, der in deiner Region erscheint, einmalig in eine Textdatei geschrieben."/>
+		<text name="miko_avatar_log_path_label">
+			Protokolldatei:
+		</text>
+		<line_editor name="miko_avatar_log_path" control_name="MikoAvatarLogPath"/>
+		<button name="MikoAvatarLogBrowse" label="Durchsuchen" label_selected="Durchsuchen"/>
 	</panel>
 
 	<!--Protection-->

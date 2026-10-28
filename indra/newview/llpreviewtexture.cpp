@@ -61,6 +61,7 @@
 #include "llimagepng.h"
 
 #include "fscommon.h"
+#include "fsexportperms.h"
 #include "llviewermenu.h"
 
 #include <boost/lexical_cast.hpp>
@@ -187,6 +188,7 @@ bool LLPreviewTexture::postBuild()
     {
         getChild<LLButton>("Keep")->setLabel(getString("Copy"));
         childSetAction("Keep",LLPreview::onBtnCopyToInv,this);
+        getChildView("Keep")->setEnabled(mIsCopyable);
         getChildView("Discard")->setVisible( false);
     }
     else if (mShowKeepDiscard)
@@ -379,10 +381,24 @@ void LLPreviewTexture::draw()
 }
 
 
+bool LLPreviewTexture::hasExportPermission() const
+{
+    const LLViewerInventoryItem* item = static_cast<const LLViewerInventoryItem*>(getItem());
+    if (item)
+    {
+        return item->checkPermissionsSet(PERM_ITEM_UNRESTRICTED);
+    }
+
+    // A UUID identifies an asset; it does not grant permission to export it.
+    std::string name;
+    std::string description;
+    return FSExportPermsCheck::canExportAsset(mImageID, &name, &description);
+}
+
 // virtual
 bool LLPreviewTexture::canSaveAs() const
 {
-    return mIsFullPerm && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
+    return mIsFullPerm && hasExportPermission() && !mLoadingFullImage && mImage.notNull() && !mImage->isMissingAsset();
 }
 
 
@@ -416,7 +432,7 @@ void LLPreviewTexture::saveAs(uuid_vec_t remaining_ids)
 void LLPreviewTexture::saveAs(EFileformatType format, uuid_vec_t remaining_ids)
 // </FS:Ansariel>
 {
-    if (mLoadingFullImage)
+    if (!canSaveAs())
         return;
 
     loaded_callback_func callback;
@@ -448,6 +464,9 @@ void LLPreviewTexture::saveAs(EFileformatType format, uuid_vec_t remaining_ids)
 void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenames, EFileformatType format, loaded_callback_func callback, uuid_vec_t remaining_ids)
 // </FS:Ansariel>
 {
+    if (filenames.empty() || !canSaveAs())
+        return;
+
     const LLInventoryItem* item = getItem();
     if (item && mPreviewToSave)
     {
@@ -477,6 +496,9 @@ void LLPreviewTexture::saveTextureToFile(const std::vector<std::string>& filenam
 
 void LLPreviewTexture::saveMultipleToFile(const std::string& file_name)
 {
+    if (!canSaveAs() || (file_name.empty() && !getItem()))
+        return;
+
     std::string texture_location(gSavedSettings.getString("TextureSaveLocation"));
     std::string texture_name = LLDir::getScrubbedFileName(file_name.empty() ? getItem()->getName() : file_name);
 
@@ -664,7 +686,7 @@ void LLPreviewTexture::onFileLoadedForSaveTGA(bool success,
         }
     }
 
-    if( self && final && success )
+    if( self && final && success && self->mIsFullPerm && self->hasExportPermission() )
     {
         // <FS:Ansariel> Undo MAINT-2897 and use our own texture format selection
         //const U32 ext_length = 3;
@@ -739,7 +761,7 @@ void LLPreviewTexture::onFileLoadedForSavePNG(bool success,
         }
     }
 
-    if( self && final && success )
+    if( self && final && success && self->mIsFullPerm && self->hasExportPermission() )
     {
         LLPointer<LLImagePNG> image_png = new LLImagePNG;
         if( !image_png->encode( src, 0.0 ) )
@@ -1215,8 +1237,8 @@ void LLPreviewTexture::updateImageID()
         mImageID = mItemUUID;
         mShowKeepDiscard = false;
         mCopyToInv = true;
-        mIsCopyable = true;
-        mIsFullPerm = true;
+        mIsFullPerm = hasExportPermission();
+        mIsCopyable = mIsFullPerm;
     }
 
 }

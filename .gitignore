@@ -147,6 +147,8 @@ build_mikostorm.py
 build_pandaview.ps1
 __pycache__/
 
+dist/
+
 # Debian packaging build artifacts
 debian/mikostorm/
 debian/*.debhelper.log

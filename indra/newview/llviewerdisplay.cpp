@@ -1948,7 +1948,7 @@ static void render_magnifier()
     F32 mouse_yraw = (F32)mouse_y * ui_scale.mV[VY];
 
     F32 zoom = llclamp(gSavedSettings.getF32("MagnifierZoom"), 1.f, 16.f);
-    const F32 lupe_size = (F32)llmin(window_w, window_h) * 0.175f;
+    const F32 lupe_size = (F32)llmin(window_w, window_h) * llclamp(gSavedSettings.getF32("MagnifierSize"), 1.f, 100.f) * 0.01f;
     const F32 src_size = lupe_size / zoom;
 
     F32 src_left = llclamp(mouse_xraw - src_size * 0.5f, 0.f, (F32)(window_w - 1));

@@ -1,5 +1,68 @@
 # Changelog
 
+## 2.0.2 (2026-10-28)
+
+- Follow the Windows application Light/Dark preference and live theme/settings notifications; preserve High Contrast system colors and use a supported dark title bar when available.
+- Add a searchable friend sidebar, online-first sorting and open-IM actions via double-click, Enter or Open chat. Use normal friend/name/session services and recheck login, membership and RLV before opening.
+- Preserve draft/conversation state, keep contacts in memory and reject stale friend actions across account or membership changes.
+- Pass four native test programs (215 core checks plus avatar-log, camera and production Windows renderer tests) and 21 source integration checks; incrementally build/link the AVX2 viewer with MCP, OpenSim, FMOD and 3D Stream, then create and verify the NSIS installer.
+
+## 2.0.1 (2026-10-28)
+
+- Add private IM and group conversations to the native Windows chat selector, with separate bounded transcripts, drafts and native unread indicators.
+- Mirror accepted live messages and regular own echoes; exclude replay, announcements and duplicate IM forwarding into local chat.
+- Reuse the existing IM send path and retain RLV, text capability, initialization, support-contact and moderator checks. Reject stale conversation/account commands.
+- Add the translated Windows Chat Toybox button with open/focus, running-state and platform checks.
+- Incrementally build Windows x64 AVX2 with MCP, OpenSim, FMOD and 3D Stream; create and verify the NSIS installer, including the new Toybox command.
+- Pass 203 core checks (including the 11 new conversation cases), nine avatar-log checks, eight camera checks and 19 Python integration checks. In-world/native window behavior remains to be validated manually.
+
+## 1.16.59 (2026-10-28)
+
+### Native Windows local chat
+
+- Add a separate native Windows local-chat window with dedicated message loop, input, whisper/shout, selectable text/HTTP links, font size, topmost mode and saved monitor placement.
+- Open/focus it from Communicate or the nearby-chat toolbar, using translated English/German labels.
+- Mirror the accepted, unmuted current-session local-chat path; retain RLVa filtering and normal viewer sending rules. Bound the transcript/queues and invalidate drafts/commands across logout/account changes.
+- Include six transcript regression cases and five static wiring checks; compiled and tested with the AVX2 release. Native window interaction and in-world chat still need manual validation.
+
+
+### MCP
+
+- Fix repeat sit, validate walking/flying, resolve teleport regions outside the loaded neighborhood and serialize notecards correctly.
+- Share argument validation, per-client permissions and structured output across HTTP and media-plugin tools; paginate inventory/object/audio queries.
+- Add JSON-only MCP session/version lifecycle, exact JSON-RPC IDs, separate health endpoint, concurrent requests and queued-request cancellation.
+- Track teleport/notecard status and best-effort cancellation, including session expiry/revocation and late simulator effects.
+- Add live English/German MCP controls, token generation, hashed named-client tokens, grant/revoke UI and recent-call audit.
+- Expose bone camera, presets/timeline, local 3D sound mute/readout and measured FPS.
+- Validate with 192 core checks, avatar-log/camera regressions, four native MCP validator groups, 15 Python integration checks and a read-only HTTP smoke run without login.
+- Build Windows x64 AVX2 with OpenSim, FMOD, 3D Stream and MCP; create and inspect the NSIS installer. Embedded browser stays enabled by default. Legacy/NoAVX remains 1.16.58.
+- Correct the audit-list size conversion and empty-list bounds found during compilation.
+
+
+## 1.16.58 (2026-10-27)
+
+- MCP: bounded HTTP header/body parsing, partial-send handling, origin/host validation, request deadlines and cancellation of queued main-thread work during shutdown.
+- Camera: shared numeric joint selection in Camera Controls, Phototools and Preferences; refresh late skeletons and keep the active selection stable.
+- Export permissions: preserve grid-specific policy in a tested decision helper; handle omitted name/description output parameters safely.
+- Avatar log: record successful writes only, retry failed writes with backoff, disconnect pending name lookups and reload deduplication on path changes.
+- 3D audio: separate tag parsing and discovery from stream lifecycle; budget object/structure scans and add discovery timing instrumentation; reject non-finite/malformed numeric tags.
+- Windows: independent AVX2/legacy CMake presets and CMD build/packaging workflow with regression tests and SHA-256 output.
+
+## 1.16.57 (2026-10-27)
+
+### Permission Enforcement
+
+- Removed the unrestricted MikoStorm object/avatar XML exporter, its menus and floater, and both raw-asset download helpers (MikoStorm and PandaView).
+- Restored the regular inventory permissions for asset UUID access and texture saving. Removed raw animation/sound export and UUID buttons from the explorers.
+- Texture previews opened by UUID now require verified export rights. Single/bulk save entry points and asynchronous image-write callbacks recheck permissions.
+- Appearance XML diagnostics now require genuine server-granted administrator access, including the file-write callback.
+
+## 1.16.56 (2026-10-27)
+
+### Bug Fixes
+
+- **Bone Camera in Camera Controls:** Fixed the joint dropdown being drawn outside its parent panel, which made it unclickable in the compact camera controls used by the MikoStorm skin. The selector now has its own full-width row and stays inside the window at minimum size. Joint selections use numeric IDs consistently and are no longer reset every frame while browsing. The German translation inherits the corrected layout.
+
 ## 1.16.49 (2026-09-15)
 
 ### Bug Fixes

@@ -25,6 +25,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "fsnativechat.h"
 
 #include "llimview.h"
 
@@ -1735,6 +1736,7 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
         {
             mId2SessionMap.erase(old_session_id);
             mId2SessionMap[new_session_id] = session;
+            FSNativeChat::rekeyIM(old_session_id, new_session_id);
         }
 
         // <FS:Ansariel> [FS communication UI]
@@ -1830,6 +1832,7 @@ bool LLIMModel::newSession(const LLUUID& session_id, const std::string& name, co
 bool LLIMModel::clearSession(const LLUUID& session_id)
 {
     if (mId2SessionMap.find(session_id) == mId2SessionMap.end()) return false;
+    FSNativeChat::removeIM(session_id);
     delete (mId2SessionMap[session_id]);
     mId2SessionMap.erase(session_id);
     return true;
@@ -1908,6 +1911,11 @@ bool LLIMModel::addToHistory(const LLUUID& session_id,
     // <FS:Zi> Add a distinct color for server side group chat replay
     // session->addMessage(from, from_id, utf8_text, timestr, false, is_region_msg, timestamp); //might want to add date separately
     session->addMessage(from, from_id, utf8_text, timestr, CHAT_STYLE_NORMAL, is_region_msg, timestamp); //might want to add date separately
+
+    // Only accepted live messages, including normal own-message echoes. Cached
+    // and server history use separate paths and must not be imported here.
+    if (!is_announcement)
+        FSNativeChat::appendIM(session_id, from, from_id, utf8_text, timestr);
 
     static LLCachedControl<bool> show_im_in_chat(gSavedSettings, "FSShowIMInChatHistory");
     if (show_im_in_chat && !is_announcement)

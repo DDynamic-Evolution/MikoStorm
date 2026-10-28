@@ -23,6 +23,7 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llsdutil.h"
 
 #include "llfloatercameratimeline.h"
 
@@ -656,4 +657,22 @@ void LLFloaterCameraTimeline::onDurationChanged()
     mPlaybackDuration = (F32)mDurationSpinner->get();
     if (mPlaybackDuration < 0.5f) mPlaybackDuration = 0.5f;
     updateKeyframeList();
+}
+
+LLSD LLFloaterCameraTimeline::getMCPState() const
+{
+    return LLSDMap("playing", mPlaying)("keyframes", static_cast<S32>(mKeyframes.size()))
+        ("position", mCurrentTime)("duration_seconds", mPlaybackDuration)("speed", mPlaybackSpeed);
+}
+bool LLFloaterCameraTimeline::setMCPPlayback(bool play)
+{
+    if (play && mKeyframes.size() < 2) return false;
+    if (play && !mPlaying) startPlayback();
+    else if (!play && mPlaying) stopPlayback();
+    return true;
+}
+bool LLFloaterCameraTimeline::captureMCPKeyframe()
+{
+    if (mPlaying || mKeyframes.size() >= 256) return false;
+    captureCamera(); return true;
 }

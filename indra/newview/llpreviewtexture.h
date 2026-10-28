@@ -125,6 +125,7 @@ protected:
     void                adjustAspectRatio();
 
 private:
+    bool                hasExportPermission() const;
     void                updateImageID(); // set what image is being uploaded.
     void                updateDimensions();
     LLUUID              mImageID;

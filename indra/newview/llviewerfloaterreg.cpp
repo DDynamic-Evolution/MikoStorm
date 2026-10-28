@@ -30,6 +30,9 @@
 
 #include "llfloaterreg.h"
 #include "llviewerfloaterreg.h"
+#ifdef USE_MCP
+#include "llfloatermcp.h"
+#endif
 
 #include "llcommandhandler.h"
 #include "llcompilequeue.h"
@@ -395,6 +398,9 @@ LLFloaterOpenHandler gFloaterOpenHandler;
 
 void LLViewerFloaterReg::registerFloaters()
 {
+#ifdef USE_MCP
+    LLFloaterReg::add("mcp_control", "floater_mcp_control.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterMCP>);
+#endif
     if (gNonInteractive)
     {
         return;

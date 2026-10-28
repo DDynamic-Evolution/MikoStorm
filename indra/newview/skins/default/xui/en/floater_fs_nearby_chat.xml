@@ -126,6 +126,13 @@
        tool_tip="Search nearby chat"
        image_overlay="Script_Search"/>
     </layout_panel>
+    <layout_panel name="lp_native_chat_btn" auto_resize="false" user_resize="false" layout="topleft" height="20" width="26" follows="left|top">
+      <button name="native_chat_btn" label="↗" tool_tip="Open local chat, private IMs and group chats in a separate Windows window"
+              follows="left|top" top="0" left="0" width="24" height="20"
+              image_hover_unselected="Toolbar_Middle_Over" image_selected="Toolbar_Middle_Selected" image_unselected="Toolbar_Middle_Off">
+        <button.commit_callback function="NativeChat.Show"/>
+      </button>
+    </layout_panel>
     <layout_panel
       name="lp_bar"
       auto_resize="true"

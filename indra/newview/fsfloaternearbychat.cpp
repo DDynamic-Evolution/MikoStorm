@@ -31,6 +31,7 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fsfloaternearbychat.h"
+#include "fsnativechat.h"
 
 #include "chatbar_as_cmdline.h"
 #include "fschathistory.h"
@@ -213,6 +214,7 @@ bool FSFloaterNearbyChat::postBuild()
     mRecentEmojisUpdatedCallbackConnection = LLFloaterEmojiPicker::setRecentEmojisUpdatedCallback([this](const std::list<llwchar>& recent_emojis_list) { initEmojiRecentPanel(); });
 
     getChild<LLButton>("chat_history_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onHistoryButtonClicked, this));
+    getChild<LLButton>("native_chat_btn")->setEnabled(FSNativeChat::supported());
     getChild<LLButton>("chat_search_btn")->setCommitCallback(boost::bind(&FSFloaterNearbyChat::onSearchButtonClicked, this));
 
     // chat type selector and send chat button
@@ -371,6 +373,7 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
             }
         }
         target->appendMessage(chat, chat_args, input_append_params);
+        FSNativeChat::append(chat, archive, args); // Same accepted local-chat path; never the raw notification signal.
         // Bump per-tab unread badge when the chat lands in a non-active tab.
         // is_replay marks history reload paths (reloadMessages / updateChatHistoryStyle / loadHistory)
         // so we don't accumulate counts for messages the user has already seen.

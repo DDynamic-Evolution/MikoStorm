@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="mcp_control" title="MCP-Steuerung">
+  <string name="running">Läuft</string><string name="stopped">Gestoppt</string>
+  <string name="sessions">Sitzungen</string><string name="operations">Vorgänge</string>
+  <string name="token_failed">Client-Namen eingeben; Client-Limit und Zufallsgenerator prüfen.</string>
+  <string name="global_created">Globaler Token geändert. Bisherige Sitzungen wurden geschlossen.</string>
+  <string name="client_created">Client mit Leserecht erstellt. Token jetzt kopieren; er wird nur hier angezeigt.</string>
+  <string name="client_removed">Client widerrufen.</string><string name="permissions_saved">Rechte gespeichert und sofort angewendet.</string>
+  <string name="no_calls">Noch keine Tool-Aufrufe in dieser Viewer-Sitzung.</string>
+  <button name="start" label="Starten"/><button name="stop" label="Stoppen"/>
+  <button name="restart" label="Neustart"/><button name="copy_url" label="URL kopieren"/>
+  <text name="global_label">Globaler Token (leer erlaubt lokale Standard-Clients):</text>
+  <button name="generate_token" label="Neuer globaler Token"/>
+  <text name="clients_label">Clients und Berechtigungen</text>
+  <button name="remove_client" label="Client widerrufen"/>
+  <check_box name="allow_read" label="Viewer-Daten lesen"/><check_box name="allow_camera" label="Kamera / 3D-Audio"/>
+  <check_box name="allow_move" label="Avatar bewegen"/><check_box name="allow_chat" label="Chat / IM"/>
+  <check_box name="allow_inventory" label="Notecards erstellen"/>
+  <button name="save_permissions" label="Rechte übernehmen"/>
+  <line_editor name="client_name" label="Name des neuen Clients"/>
+  <button name="create_client" label="Client erstellen (Lesen)"/>
+  <button name="copy_token" label="Neuen Token kopieren"/>
+  <text name="recent_label">Letzte Tool-Aufrufe (Client | Tool | Status)</text>
+</floater>

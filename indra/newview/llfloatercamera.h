@@ -26,6 +26,7 @@
 
 #ifndef LLFLOATERCAMERA_H
 #define LLFLOATERCAMERA_H
+#include "llcamerajointselector.h"
 
 #include "llfloater.h"
 #include "lliconctrl.h"
@@ -133,7 +134,6 @@ private:
 
     // <CJB> Bone camera - follow a specified skeleton joint
     void refreshJointCombo();
-    void onJointComboChanged(LLUICtrl* ctrl, const LLSD& value);
     // </CJB>
 
     // set to true when free camera mode is selected in modes list
@@ -152,8 +152,7 @@ private:
     //LLTextBox* mPreciseCtrls { nullptr }; // <FS:Ansariel> Improved camera floater
 
     // <CJB> Bone camera - follow a specified skeleton joint
-    LLComboBox* mJointComboBox { nullptr };
-    bool        mJointComboInitialized { false };
+    LLCameraJointSelector mJointSelector;
     // </CJB>
 };
 

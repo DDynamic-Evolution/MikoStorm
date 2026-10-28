@@ -808,6 +808,7 @@
          left="15"
          max_length_chars="256"
          name="mcp_auth_token"
+         is_password="true"
          top_pad="5"
          width="400" />
 
@@ -850,8 +851,12 @@
          mouse_opaque="false"
          top_pad="20"
          width="500">
-            Connection: http://localhost:${MCPPort}/mcp  (local AI tools only)
+            Changes apply immediately. Open MCP Control for the actual URL and status.
         </text>
+
+        <button name="mcp_control" label="Open MCP Control" top_pad="18" left="15" width="210" height="24" layout="topleft">
+            <button.commit_callback function="Floater.Show" parameter="mcp_control"/>
+        </button>
 
     </panel>
 

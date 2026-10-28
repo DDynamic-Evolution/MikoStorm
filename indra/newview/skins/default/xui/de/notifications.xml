@@ -6371,4 +6371,9 @@ Benutzername: [OWNERUSERNAME]
 		</form>
 	</notification>
 
+
+  <notification name="NativeChatOpenFailed" type="alertmodal">
+    Das separate Windows-Chatfenster konnte nicht geöffnet werden. Details stehen im Viewer-Protokoll.
+    <usetemplate name="okbutton" yestext="OK"/>
+  </notification>
 </notifications>

@@ -60,6 +60,9 @@ public:
     void draw() override;
 
     static void onIdle(void* user_data);
+    LLSD getMCPState() const;
+    bool setMCPPlayback(bool play);
+    bool captureMCPKeyframe();
 
 private:
     // Keyframe management

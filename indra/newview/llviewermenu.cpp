@@ -34,6 +34,7 @@
 #include <cstdlib>
 
 #include "llviewermenu.h"
+#include "fsnativechat.h"
 
 // linden library includes
 #include "llavatarnamecache.h"  // IDEVO (I Are Not Men!)
@@ -2054,6 +2055,9 @@ class LLAdvancedEnableAppearanceToXML : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
+        if (!gAgent.isGodlikeWithoutAdminMenuFakery())
+            return false;
+
         LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
         if (obj && obj->isAnimatedObject() && obj->getControlAvatar())
         {
@@ -2079,6 +2083,9 @@ class LLAdvancedAppearanceToXML : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
+        if (!gAgent.isGodlikeWithoutAdminMenuFakery())
+            return false;
+
         LLViewerObject *obj = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
         LLVOAvatar *avatar = NULL;
         if (obj)
@@ -12732,6 +12739,10 @@ void initialize_menus()
 
     LLUICtrl::EnableCallbackRegistry::Registrar& enable = LLUICtrl::EnableCallbackRegistry::currentRegistrar();
     LLUICtrl::CommitCallbackRegistry::Registrar& commit = LLUICtrl::CommitCallbackRegistry::currentRegistrar();
+
+    commit.add("NativeChat.Show", [](LLUICtrl*, const LLSD&) { FSNativeChat::show(); });
+    enable.add("NativeChat.Supported", [](LLUICtrl*, const LLSD&) -> bool { return FSNativeChat::supported(); });
+    enable.add("NativeChat.IsOpen", [](LLUICtrl*, const LLSD&) -> bool { return FSNativeChat::isOpen(); });
 
     // Generic enable and visible
     // Don't prepend MenuName.Foo because these can be used in any menu.

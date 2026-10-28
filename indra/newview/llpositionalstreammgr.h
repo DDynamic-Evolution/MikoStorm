@@ -26,6 +26,7 @@
 #define LL_POSITIONAL_STREAM_MGR_H
 
 #include "lluuid.h"
+#include "llsd.h"
 #include "stdtypes.h"
 #include "v3math.h"
 
@@ -72,6 +73,8 @@ public:
     // Driven by Stream3DVolumeMaster signal; new bindings also pick up the
     // current setting at bind time.
     void applyMasterVolume(F32 volume);
+    LLSD getMCPStreams(S32 offset, S32 limit) const;
+    bool setSourceMuted(const LLUUID& id, bool muted);
 
     // M8: Tear down every prim binding (mono + stereo) but leave debug streams
     // alone. Used when Stream3DDescriptionScan is toggled off.
@@ -731,6 +734,8 @@ private:
 
     std::map<LLUUID, CacheEntry> mDescriptionCache;
     std::map<LLUUID, Binding> mBindings;
+    std::set<LLUUID> mMutedSources;
+    F32 sourceVolume(const LLUUID& id, F32 volume) const { return mMutedSources.count(id) ? 0.f : volume; }
     // r8 F2-a: distributed-stereo bindings, keyed by root prim id.
     std::map<LLUUID, DistributedStereoBinding> mDistributedBindings;
     // r8 F2-a: reverse index for O(log N) child→root resolution from
@@ -745,6 +750,8 @@ private:
     // M3b: round-robin cursor into gObjectList so per-pass budget doesn't
     // starve prims past the first slice when num_objects > one pass can cover.
     S32 mPollCursor = 0;
+    LLUUID mStructureCursor;
+    std::set<LLUUID> mStructureChanges;
     // r8 F2-b: prims that evaluateLinkset wants polled ahead of the
     // round-robin scan because they belong to a linkset where a source
     // declaration was just observed. Drained at the head of every
