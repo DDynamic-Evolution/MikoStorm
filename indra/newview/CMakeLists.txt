@@ -8,6 +8,8 @@ include(00-Common)
 include(Linking)
 
 include(Boost)
+include(CURL)
+include(OpenSSL)
 include(bugsplat)
 include(BuildPackagesInfo)
 include(BuildVersion)
@@ -916,6 +918,12 @@ set(viewer_SOURCE_FILES
     NACLfloaterexploresounds.cpp
     )
 
+list(APPEND viewer_SOURCE_FILES
+    lovense/fslovense.cpp
+    lovense/fsfloaterlovense.cpp
+    lovense/QrCode.cpp
+    )
+
 if (USE_3D_STREAM)
     list(APPEND viewer_SOURCE_FILES
         llpositionalstreammgr.cpp
@@ -1052,6 +1060,7 @@ set(viewer_HEADER_FILES
     fsnativechat.h
     fsnativechatmodel.h
     fsnativechattheme.h
+    fsnativechatview.h
     fsnearbychatvoicemonitor.h
     fspanelblocklist.h
     fspanelcontactsets.h
@@ -2595,9 +2604,8 @@ if (WINDOWS)
     target_link_libraries(${VIEWER_BINARY_NAME} comctl32 dwmapi)
 endif ()
 
-if (USE_MCP)
-    target_link_libraries(${VIEWER_BINARY_NAME} ll::openssl)
-endif ()
+# Lovense uses the existing matched HTTP/TLS/Boost dependencies in every profile.
+target_link_libraries(${VIEWER_BINARY_NAME} ll::libcurl ll::openssl ll::boost)
 
 # *NOTE: - this list is very sensitive to ordering, test carefully on all
 # platforms if you change the relative order of the entries here.

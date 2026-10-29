@@ -15,16 +15,22 @@ MikoStorm adds camera, communication, rendering and audio features for everyday 
 
 This project is a one man show! So be patient
 
-## Current Windows release: 2.0.2
+## Current Windows release: 2.0.5
 
-- **Windows Chat popout:** local chat, private IMs and group conversations in a separate Windows window, with individual histories and drafts.
-- **Windows appearance:** automatic Light/Dark application theme, High Contrast support and live theme updates.
-- **Friends in the popout:** searchable friend list with online status; open an IM by double-clicking, pressing Enter or choosing **Open chat**.
+- **Lovense Remote:** optional QR pairing, device/battery list, explicit device selection and manual pattern start/pause/stop with strength limits. English/German UI, disabled by default; a session token from your own application is required.
+- **Windows Chat popout:** native tabs for local chat, private IMs and groups, with separate drafts, histories, reading positions and unread indicators.
+- **Background autoscroll:** follow incoming messages even without focus; scrolling up or selecting text pauses following, and **Latest** resumes it.
+- **Chat visibility and fonts:** the popout keeps showing accepted messages with **Hide Chat** enabled; font-size and DPI changes preserve its theme colors.
+- **Windows appearance and friends:** automatic Light/Dark/High Contrast appearance, live theme updates and a searchable friend sidebar for opening IMs.
 - **Toybox button:** drag **Windows Chat** onto a toolbar to open or focus the popout.
+- **Browser and voice:** Dullahan 1.50/Chromium 152 and WebRTC m144 with device-change, microphone and shutdown fixes; FMOD 2.03.14 retained. The embedded browser is enabled by default.
 - **Build features:** Windows x64 AVX2, OpenSim, FMOD, positional 3D Stream audio and optional MCP support.
-- **Embedded browser:** enabled by default.
 
-The current AVX2 installer is version **2.0.2**. The older legacy/NoAVX package remains **1.16.58** and predates the new chat features.
+The local **2.0.5 AVX2 NSIS installer** was built and verified. The older legacy/NoAVX package remains **1.16.58** and predates these updates. See [Windows Chat](doc/native_chat.md) and [audio/browser update notes](doc/upstream_audio_browser.md). Live in-world behavior still needs manual validation.
+
+### Lovense setup
+
+Optional Lovense Remote pairing with a local QR code, explicit device selection, pattern playback, strength limits and pause/stop controls. Disabled by default; connects only after a click and uses a session token from your own application. Lovense is included in the verified 2.0.5 installer. Live pairing/device testing still requires your own valid session token and devices. See [Lovense setup](doc/lovense.md).
 
 ### Builds
 

@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.5 (2026-10-29)
+
+- Add an optional Lovense window and Toybox/Communicate entry with English/German UI, QR pairing, device/battery list and explicit pattern start/pause/stop.
+- Default to disconnected, require device selection, cap intensity and command duration, stop on window close/logout/disconnect, and keep session credentials in memory only. Use existing verified TLS/network dependencies and an owner-side session-token utility; do not embed third-party developer credentials.
+- Incrementally compile and link Windows x64 AVX2 through CMD/VS2022 with OpenSim, FMOD 2.03.14, 3D Stream and MCP. Build the 2.0.5 NSIS installer and verify its integrity, version and payload, including English/German Lovense controls, settings, notices and current browser/voice runtimes. No MCP tests or viewer startup.
+- Confirm English button/status/error/help text and English descriptions of all five Lovense settings. Prior focused validation passed 42 protocol and six integration checks; real pairing/device control remains untested. Manual pattern playback does not synchronize avatar animations.
+
+## 2.0.4 (2026-10-29)
+
+- Update Dullahan to 1.50/Chromium 152 and WebRTC to m144 with matching package hashes; retain FMOD 2.03.14.
+- Include voice device/default-device/replug, microphone lifecycle and shutdown fixes, a dedicated voice queue and bounded connection draining. Add the live StopMicCaptureWhenMuted debug setting; preserve existing server-mute behavior.
+- Deliver native conversation tabs for local chat, IMs and groups with stable ordering, unread indicators, separate drafts and reading state.
+- Keep Autoscroll following incoming messages while the popout is inactive; deliberate scrolling or selection pauses it and **Latest** resumes following.
+- Continue showing accepted local messages in the popout with **Hide Chat** enabled, preserving mute, replay, session and RLV filtering.
+- Preserve text/background colors when changing font size or applying DPI updates.
+- Incrementally build and link Windows x64 AVX2 through CMD/VS2022 with OpenSim, FMOD, 3D Stream and MCP. Compile the NSIS installer and verify its integrity, version and payload, including the new browser/voice runtimes. No MCP tests or viewer startup.
+- Prior focused validation passed six audio/dependency source checks, 15 native-chat integration checks, 40 native chat/autoscroll checks and theme/font rendering regressions. Live in-world validation remains pending.
+
+## 2.0.3 (2026-10-28, package verification pending)
+
+- **Popout conversation tabs:** replace the conversation dropdown with native Windows tabs for local chat, private IMs and groups. Preserve tab order when unread counts change and use overflow arrows for more conversations.
+- **Autoscroll:** follow new messages by default, pause when scrolling up or selecting text, and keep a separate reading position and preference for each conversation. Add an Autoscroll checkbox and **Latest** button with a bounded new-message count.
+- Preserve reading anchors and selections when retained history moves; discard expired positions safely on history gaps or account/conversation changes.
+- Add focused hidden-window tab/scroll regressions and extend native theme rendering checks. The earlier tab/autoscroll sources were compiled and the AVX2 viewer linked through CMD/VS2022. NSIS packaging was interrupted before final confirmation, payload verification and delivery; this is not a verified installer release.
+
 ## 2.0.2 (2026-10-28)
 
 - **Automatic Windows appearance:** the chat popout follows the Windows application Light/Dark setting and updates while open. High Contrast uses system colors; a dark title bar is used where supported.

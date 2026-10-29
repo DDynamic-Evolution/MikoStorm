@@ -326,12 +326,6 @@ static std::string appendTime()
 
 void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD &args)
 {
-    static LLCachedControl<bool> fsHideLocalChat(gSavedSettings, "FSHideLocalChat", false);
-    if (fsHideLocalChat)
-    {
-        return;
-    }
-
     LLChat& tmp_chat = const_cast<LLChat&>(chat);
     // <FS:AYA> Phase 3: V1 style = plain text mode
     bool use_plain_text_chat_history = gSavedSettings.getS32("AYAChatWindowStyle") == 0;
@@ -344,6 +338,18 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
         {
             tmp_chat.mTimeStr = appendTime();
         }
+    }
+
+    // This is still the handler's filtered local-chat path. Hide Chat controls the
+    // viewer presentation, not delivery to the independent Windows popout.
+    if (!chat.mMuted)
+    {
+        FSNativeChat::append(chat, archive, args);
+    }
+    static LLCachedControl<bool> fsHideLocalChat(gSavedSettings, "FSHideLocalChat", false);
+    if (fsHideLocalChat)
+    {
+        return;
     }
 
     tmp_chat.mFromName = chat.mFromName;
@@ -373,7 +379,6 @@ void FSFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
             }
         }
         target->appendMessage(chat, chat_args, input_append_params);
-        FSNativeChat::append(chat, archive, args); // Same accepted local-chat path; never the raw notification signal.
         // Bump per-tab unread badge when the chat lands in a non-active tab.
         // is_replay marks history reload paths (reloadMessages / updateChatHistoryStyle / loadHistory)
         // so we don't accumulate counts for messages the user has already seen.

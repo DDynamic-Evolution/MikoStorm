@@ -48,7 +48,7 @@ class NativeChatSource(unittest.TestCase):
     def test_chat_path_and_session_validation(self):
         floater = source('fsfloaternearbychat.cpp')
         fn = floater.split('void FSFloaterNearbyChat::addMessage(', 1)[1].split('void FSFloaterNearbyChat::', 1)[0]
-        self.assertLess(fn.index('if (fsHideLocalChat)'), fn.index('FSNativeChat::append('))
+        self.assertLess(fn.index('FSNativeChat::append('), fn.index('if (fsHideLocalChat)'))
         self.assertLess(fn.index('if (!chat.mMuted)'), fn.index('FSNativeChat::append('))
         cpp = source('fsnativechatwin32.cpp')
         self.assertIn('args["is_replay"].asBoolean()', cpp)
@@ -59,6 +59,38 @@ class NativeChatSource(unittest.TestCase):
         self.assertIn('FSNearbyChat::instance().sendChat(text,', cpp)
         self.assertNotIn('really_send_chat_from_viewer', cpp)
         self.assertNotIn('gMessageSystem', cpp)
+
+    def test_hide_chat_only_hides_viewer_presentation(self):
+        fn = source('fsfloaternearbychat.cpp').split('void FSFloaterNearbyChat::addMessage(', 1)[1].split('void FSFloaterNearbyChat::', 1)[0]
+        self.assertEqual(fn.count('FSNativeChat::append('), 1)
+        self.assertLess(fn.index('tmp_chat.mTimeStr = appendTime()'), fn.index('FSNativeChat::append('))
+        self.assertLess(fn.index('FSNativeChat::append('), fn.index('if (fsHideLocalChat)'))
+        self.assertLess(fn.index('if (fsHideLocalChat)'), fn.index('mChatHistoryMuted->appendMessage('))
+        manager = source('fsnativechatwin32.cpp').split('void append(const LLChat&', 1)[1].split('void appendIM(', 1)[0]
+        self.assertNotIn('FSHideLocalChat', manager)
+        for guard in ['!archive', 'args["is_replay"].asBoolean()', 'chat.mMuted', 'CHAT_TYPE_IM_GROUP', 'filter(name, text']:
+            self.assertIn(guard, manager)
+        handler = source('llfloaterimnearbychathandler.cpp').split('void LLFloaterIMNearbyChatHandler::processChat(', 1)[1]
+        accepted = handler.rindex('nearby_chat->addMessage(chat_msg, true, args)')
+        self.assertLess(handler.index('CHAT_TYPE_DIRECT'), accepted)
+        self.assertLess(handler.index('ShowScriptErrors'), accepted)
+        self.assertLess(handler.index('CHAT_TYPE_IM && chat_msg.mSourceType == CHAT_SOURCE_OBJECT'), accepted)
+        self.assertLess(accepted, handler.index('getBOOL("FSHideLocalChat")'))
+
+    def test_background_following_uses_user_intent_without_focus(self):
+        view = source('fsnativechatview.h')
+        remember = view.split('void remember(HWND control)', 1)[1].split('void observeUser(', 1)[0]
+        self.assertNotIn('mFollowing=', remember)
+        for forbidden in ['SetFocus(', 'SetForegroundWindow(', 'GetForegroundWindow(', 'EM_SCROLLCARET']:
+            self.assertNotIn(forbidden, view)
+        self.assertIn('if (mUpdating || !mInitialized) return;', view)
+        replace = view.split('void replace(HWND control', 1)[1].split('void jumpToLatest(', 1)[0]
+        self.assertLess(replace.index('WM_SETREDRAW,TRUE'), replace.index('scrollToEnd(control)'))
+        ui = source('fsnativechatwin32.cpp').split('static LRESULT CALLBACK historyProc(', 1)[1].split('static LRESULT CALLBACK inputProc(', 1)[0]
+        self.assertIn('currentView().observeUser(hwnd)', ui)
+        for message in ['WM_MOUSEWHEEL', 'WM_VSCROLL', 'WM_MOUSEMOVE', 'WM_KEYDOWN']:
+            self.assertIn(message, ui)
+        self.assertNotIn('WM_KILLFOCUS', ui)
 
     def test_accepted_im_path_and_no_history_import(self):
         cpp = source('llimview.cpp')
@@ -125,6 +157,20 @@ class NativeChatSource(unittest.TestCase):
         self.assertIn('mTheme.richEdit(mHistory)', cpp)
         self.assertIn('comctl32 dwmapi', source('CMakeLists.txt'))
 
+    def test_font_size_reapplies_current_rich_edit_colors(self):
+        cpp = source('fsnativechatwin32.cpp')
+        apply = cpp.split('void applyFont()', 1)[1].split('void applyTheme()', 1)[0]
+        self.assertIn('mTheme.richEditFont(mHistory, font)', apply)
+        self.assertNotIn('SendMessageW(mHistory, WM_SETFONT', apply)
+        theme = source('fsnativechattheme.h')
+        font = theme.split('void richEditFont(', 1)[1].split('HBRUSH colorControl(', 1)[0]
+        self.assertLess(font.index('SendMessageW(control, WM_SETFONT'), font.index('richEdit(control)'))
+        self.assertLess(font.index('richEdit(control)'), font.index('RedrawWindow('))
+        self.assertNotIn('refresh(', font)
+        palette = theme.split('void richEdit(HWND control)', 1)[1].split('void richEditFont(', 1)[0]
+        for required in ['CFM_COLOR | CFM_BACKCOLOR', 'format.crTextColor = foreground', 'format.crBackColor = surface', 'SCF_DEFAULT', 'SCF_ALL']:
+            self.assertIn(required, palette)
+
     def test_friend_open_is_checked_and_never_sends(self):
         cpp = source('fsnativechatwin32.cpp')
         opener = cpp.split('void openFriend(const Command& command)', 1)[1].split('bool canSendSelected()', 1)[0]
@@ -137,6 +183,18 @@ class NativeChatSource(unittest.TestCase):
         self.assertNotIn('LLAvatarNameCache::', ui)
         for required in ['FriendSearchID', 'LBN_DBLCLK', 'Command::OpenFriend', 'FindNLSStringEx(', 'mFriends.clear()']:
             self.assertIn(required, cpp)
+
+    def test_tabs_and_per_conversation_autoscroll(self):
+        cpp = source('fsnativechatwin32.cpp')
+        self.assertIn('child(WC_TABCONTROLW', cpp)
+        self.assertNotIn('mConversations, CB_', cpp)
+        for required in ['TCN_SELCHANGING', 'TCN_SELCHANGE', 'mTabs.selected(', 'mViews.clear()', 'mTabs.contains(', 'currentView().remember(mHistory)', 'AutoScrollID', 'LatestID', 'historyCount', 'historyDropped']:
+            self.assertIn(required, cpp)
+        self.assertIn('ODT_TAB', source('fsnativechattheme.h'))
+        for lang in ['en', 'de']:
+            strings = ET.fromstring(source(f'skins/default/xui/{lang}/strings.xml'))
+            for name in ['NativeChatAutoScroll', 'NativeChatLatest']:
+                self.assertIsNotNone(strings.find(f"string[@name='{name}']"))
 
     def test_platform_and_settings(self):
         cmake = source('CMakeLists.txt')

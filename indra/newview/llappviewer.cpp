@@ -28,6 +28,7 @@
 
 #include "llappviewer.h"
 #include "fsnativechat.h"
+#include "lovense/fslovense.h"
 
 // Viewer includes
 #include "llversioninfo.h"
@@ -2015,6 +2016,7 @@ void LLAppViewer::flushLFSIO()
 
 bool LLAppViewer::cleanup()
 {
+    MikoLovense::Client::instance().shutdown(); // Stop and join before TLS/settings teardown.
     FSNativeChat::shutdown(); // Join native UI before settings/chat singletons are destroyed.
 
     //ditch LLVOAvatarSelf instance
@@ -6331,6 +6333,7 @@ void LLAppViewer::idleShutdown()
 
 void LLAppViewer::sendLogoutRequest()
 {
+    MikoLovense::Client::instance().disconnect();
     if(!mLogoutRequestSent && gMessageSystem)
     {
         //Set internal status variables and marker files before actually starting the logout process
@@ -6692,6 +6695,7 @@ void LLAppViewer::idleNetwork()
 
 void LLAppViewer::disconnectViewer()
 {
+    MikoLovense::Client::instance().disconnect();
     if (gDisconnected)
     {
         return;

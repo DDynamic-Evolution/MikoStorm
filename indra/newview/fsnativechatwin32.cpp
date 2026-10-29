@@ -2,6 +2,8 @@
 #include "fsnativechat.h"
 #include "fsnativechatmodel.h"
 #include "fsnativechattheme.h"
+#include "fsnativechatview.h"
+#include <map>
 #include "llcallingcard.h"
 #include "llavatarnamecache.h"
 #include "llavatarname.h"
@@ -45,7 +47,7 @@ namespace
 constexpr UINT Wake = WM_APP + 173;
 constexpr std::array<int, 8> FontSizes{10, 12, 14, 16, 18, 20, 24, 28};
 constexpr wchar_t WindowClass[] = L"MikoStorm.NativeNearbyChat.1";
-constexpr int SendID = 101, TopID = 102, FontID = 103, InputID = 104, ModeID = 105, ConversationID = 106, FriendSearchID = 107, FriendListID = 108, OpenFriendID = 109;
+constexpr int SendID = 101, TopID = 102, FontID = 103, InputID = 104, ModeID = 105, ConversationID = 106, FriendSearchID = 107, FriendListID = 108, OpenFriendID = 109, AutoScrollID = 110, LatestID = 111;
 std::wstring wide(const std::string& text)
 {
     if (text.empty()) return {};
@@ -72,7 +74,7 @@ std::wstring textOf(HWND control)
 enum class Reply { Ready, Empty, TooLong, Offline, OpenFailed };
 struct Labels
 {
-    std::wstring title, send, top, font, say, whisper, shout, ready, offline, empty, tooLong, busy, friends, search, openFriend, friendOnline, friendOffline, openFailed;
+    std::wstring title, send, top, font, say, whisper, shout, ready, offline, empty, tooLong, busy, friends, search, openFriend, friendOnline, friendOffline, openFailed, autoScroll, latest;
 };
 struct Choice
 {
@@ -100,7 +102,7 @@ struct Bridge
     int points = 14;
     std::array<int, 4> rect{80, 80, 640, 500};
     std::string draft, error, conversation;
-    U64 token = 0;
+    U64 token = 0, historyCount = 0, historyDropped = 0;
     bool local = true, accountReady = false;
     std::optional<std::vector<FSNativeChat::FriendEntry>> friends;
     std::size_t friendTotal = 0;
@@ -133,6 +135,8 @@ public:
     {
         if (mBridge->stop) return;
         mOle = SUCCEEDED(OleInitialize(nullptr));
+        INITCOMMONCONTROLSEX common{sizeof(common), ICC_TAB_CLASSES};
+        if (!InitCommonControlsEx(&common)) { fail("Windows tab controls could not be loaded"); return; }
         mRichEdit = LoadLibraryExW(L"Msftedit.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
         if (!mRichEdit) { fail("Windows Rich Edit could not be loaded"); return; }
         WNDCLASSEXW wc{}; wc.cbSize = sizeof(wc); wc.lpfnWndProc = windowProc;
@@ -194,7 +198,7 @@ private:
         mFriendSearch = child(L"EDIT", L"", WS_TABSTOP | WS_BORDER | ES_AUTOHSCROLL, FriendSearchID);
         mFriendList = child(L"LISTBOX", L"", WS_TABSTOP | WS_BORDER | WS_VSCROLL | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | LBS_OWNERDRAWFIXED | LBS_HASSTRINGS, FriendListID);
         mOpenFriend = child(L"BUTTON", mLabels.openFriend.c_str(), WS_TABSTOP | BS_OWNERDRAW, OpenFriendID);
-        mConversations = child(L"COMBOBOX", L"", WS_TABSTOP | CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS | WS_VSCROLL, ConversationID);
+        mConversations = child(WC_TABCONTROLW, L"", WS_TABSTOP | TCS_SINGLELINE | TCS_FIXEDWIDTH | TCS_OWNERDRAWFIXED | TCS_TOOLTIPS, ConversationID);
         mMode = child(L"COMBOBOX", L"", WS_TABSTOP | CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS, ModeID);
         mTop = child(L"BUTTON", mLabels.top.c_str(), WS_TABSTOP | BS_AUTOCHECKBOX, TopID);
         mFontLabel = child(L"STATIC", mLabels.font.c_str(), 0, 0);
@@ -203,11 +207,16 @@ private:
         mInput = child(L"EDIT", L"", WS_TABSTOP | WS_BORDER | WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN, InputID);
         mSend = child(L"BUTTON", mLabels.send.c_str(), WS_TABSTOP | BS_OWNERDRAW, SendID);
         mStatus = child(L"STATIC", mLabels.offline.c_str(), 0, 0);
-        if (!mFriendLabel || !mFriendSearch || !mFriendList || !mOpenFriend || !mConversations || !mMode || !mTop || !mFontLabel || !mFontSize || !mHistory || !mInput || !mSend || !mStatus) return false;
+        mAutoScroll = child(L"BUTTON", mLabels.autoScroll.c_str(), WS_TABSTOP | BS_AUTOCHECKBOX, AutoScrollID);
+        mLatest = child(L"BUTTON", mLabels.latest.c_str(), WS_TABSTOP | BS_OWNERDRAW, LatestID);
+        if (!mFriendLabel || !mFriendSearch || !mFriendList || !mOpenFriend || !mConversations || !mMode || !mTop || !mFontLabel || !mFontSize || !mHistory || !mInput || !mSend || !mStatus || !mAutoScroll || !mLatest) return false;
         SendMessageW(mFriendSearch, EM_SETLIMITTEXT, 128, 0);
         SendMessageW(mFriendSearch, EM_SETCUEBANNER, TRUE, reinterpret_cast<LPARAM>(mLabels.search.c_str()));
         if (!SetWindowSubclass(mFriendList, auxiliaryProc, 1, reinterpret_cast<DWORD_PTR>(this))) return false;
-        for (const HWND combo : {mConversations, mMode, mFontSize})
+        SendMessageW(mConversations, TCM_SETITEMSIZE, 0, MAKELPARAM(155, 27));
+        if (!SetWindowSubclass(mConversations, auxiliaryProc, 1, reinterpret_cast<DWORD_PTR>(this))) return false;
+        if (!SetWindowSubclass(mHistory, historyProc, 1, reinterpret_cast<DWORD_PTR>(this))) return false;
+        for (const HWND combo : {mMode, mFontSize})
             if (!SetWindowSubclass(combo, auxiliaryProc, 1, reinterpret_cast<DWORD_PTR>(this))) return false;
         SendMessageW(mMode, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(mLabels.say.c_str()));
         SendMessageW(mMode, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(mLabels.whisper.c_str()));
@@ -245,7 +254,7 @@ private:
         HFONT font = CreateFontW(-MulDiv(mPoints, static_cast<int>(dpi), 72), 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH, L"Segoe UI");
         if (!font) return;
-        SendMessageW(mHistory, WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
+        mTheme.richEditFont(mHistory, font);
         SendMessageW(mInput, WM_SETFONT, reinterpret_cast<WPARAM>(font), TRUE);
         if (mFont) DeleteObject(mFont);
         mFont = font;
@@ -266,10 +275,12 @@ private:
         MoveWindow(mFriendSearch, 10, 36, sidebar, 25, TRUE);
         MoveWindow(mFriendList, 10, 68, sidebar, (std::max)(1, height - 113), TRUE);
         MoveWindow(mOpenFriend, 10, (std::max)(80, height - 36), sidebar, 27, TRUE);
-        MoveWindow(mConversations, left, 8, chatWidth, 360, TRUE);
+        MoveWindow(mConversations, left, 8, chatWidth, 31, TRUE);
         MoveWindow(mMode, left, 42, 110, 180, TRUE); MoveWindow(mTop, left + 122, 44, (std::max)(100, chatWidth - 300), 22, TRUE);
         MoveWindow(mFontLabel, width - 170, 46, 95, 20, TRUE); MoveWindow(mFontSize, width - 73, 42, 63, 220, TRUE);
-        MoveWindow(mHistory, left, 76, chatWidth, (std::max)(1, height - 186), TRUE);
+        MoveWindow(mHistory, left, 76, chatWidth, (std::max)(1, height - 222), TRUE);
+        MoveWindow(mAutoScroll, left, height - 139, (std::max)(100, chatWidth - 170), 27, TRUE);
+        MoveWindow(mLatest, width - 170, height - 139, 160, 27, TRUE);
         MoveWindow(mInput, left, (std::max)(76, height - 100), (std::max)(1, chatWidth - 110), 64, TRUE);
         MoveWindow(mSend, width - 110, (std::max)(76, height - 100), 100, 28, TRUE);
         MoveWindow(mStatus, left, (std::max)(144, height - 27), chatWidth, 22, TRUE);
@@ -346,53 +357,51 @@ private:
         if (full) { SetWindowTextW(mStatus, mLabels.busy.c_str()); return; }
         mSubmitted = draft; mPending = true; EnableWindow(mSend, FALSE); EnableWindow(mConversations, FALSE); EnableWindow(mOpenFriend, FALSE);
     }
-    void render(const std::deque<std::string>& lines, bool reset)
+    FSNativeChat::HistoryView& currentView() { return mViews[{mConversation, mToken}]; }
+    void scrollControls()
+    {
+        const auto& view = currentView();
+        SendMessageW(mAutoScroll, BM_SETCHECK, view.enabled() ? BST_CHECKED : BST_UNCHECKED, 0);
+        const auto caption = mLabels.latest + (view.newMessages() ? L" (" + std::to_wstring(view.newMessages()) + L")" : L"");
+        SetWindowTextW(mLatest, caption.c_str()); InvalidateRect(mAutoScroll, nullptr, TRUE);
+    }
+    void render(const std::deque<std::string>& lines, bool reset, U64 count, U64 dropped)
     {
         if (lines.empty() && !reset) return;
-        SCROLLINFO scroll{}; scroll.cbSize = sizeof(scroll); scroll.fMask = SIF_RANGE | SIF_PAGE | SIF_POS;
-        GetScrollInfo(mHistory, SB_VERT, &scroll);
-        CHARRANGE selected{}; SendMessageW(mHistory, EM_EXGETSEL, 0, reinterpret_cast<LPARAM>(&selected));
-        POINT position{}; SendMessageW(mHistory, EM_GETSCROLLPOS, 0, reinterpret_cast<LPARAM>(&position));
-        const bool follow = selected.cpMin == selected.cpMax && scroll.nPos + static_cast<int>(scroll.nPage) >= scroll.nMax - 2;
-        if (reset) mTranscript.clear();
-        const auto dropped = mTranscript.dropped();
+        const bool gap = !reset && count > mHistoryCount + lines.size();
+        const auto oldLines = mTranscript.lines();
+        const auto oldDropped = mTranscript.dropped();
+        if (reset || gap) mTranscript.clear();
         for (const auto& line : lines) mTranscript.append(line);
-        // Once old text expires, never keep a selection pointing at different
-        // messages. Ordinary appends preserve both selection and scroll position.
-        if (mTranscript.dropped() != dropped) { selected = {0, 0}; position = {0, 0}; }
-        std::string text; for (const auto& line : mTranscript.lines()) text += line + "\r\n";
-        const auto display = wide(text);
-        SendMessageW(mHistory, WM_SETREDRAW, FALSE, 0);
-        SetWindowTextW(mHistory, display.c_str());
-        if (follow || reset)
-        { SendMessageW(mHistory, EM_SETSEL, static_cast<WPARAM>(-1), -1); SendMessageW(mHistory, EM_SCROLLCARET, 0, 0); }
-        else
+        std::size_t removedChars = 0;
+        if (!reset && !gap)
         {
-            const auto size = static_cast<LONG>(display.size());
-            selected.cpMin = (std::min)(selected.cpMin, size); selected.cpMax = (std::min)(selected.cpMax, size);
-            SendMessageW(mHistory, EM_EXSETSEL, 0, reinterpret_cast<LPARAM>(&selected));
-            SendMessageW(mHistory, EM_SETSCROLLPOS, 0, reinterpret_cast<LPARAM>(&position));
+            const auto removed = (std::min)(oldLines.size(), mTranscript.dropped() - oldDropped);
+            for (std::size_t i = 0; i < removed; ++i)
+                removedChars += FSNativeChat::HistoryView::normalize(wide(oldLines[i])).size() + 1;
         }
-        SendMessageW(mHistory, WM_SETREDRAW, TRUE, 0); InvalidateRect(mHistory, nullptr, TRUE);
+        std::string text; for (const auto& line : mTranscript.lines()) text += line + "\r\n";
+        currentView().replace(mHistory, wide(text), removedChars, count, dropped, reset, gap);
+        mHistoryCount = count; scrollControls();
     }
     void updateChoices()
     {
-        SendMessageW(mConversations, CB_RESETCONTENT, 0, 0);
-        for (std::size_t i = 0; i < mChoices.size(); ++i)
+        std::vector<FSNativeChat::TabItem> items;
+        for (const auto& choice : mChoices) items.push_back({choice.key, wide(choice.label), choice.token});
+        if (!mTabs.update(mConversations, items, mConversation, mToken)) fail("Could not update native chat tabs");
+        for (auto it = mViews.begin(); it != mViews.end(); )
         {
-            const auto text = wide(mChoices[i].label);
-            const auto index = SendMessageW(mConversations, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(text.c_str()));
-            if (mChoices[i].key == mConversation && mChoices[i].token == mToken)
-                SendMessageW(mConversations, CB_SETCURSEL, index, 0);
+            if (!mTabs.contains(it->first.first, it->first.second)) it = mViews.erase(it);
+            else ++it;
         }
     }
     void selectConversation()
     {
         if (mPending || mSwitching) return;
-        const auto index = SendMessageW(mConversations, CB_GETCURSEL, 0, 0);
-        if (index < 0 || static_cast<std::size_t>(index) >= mChoices.size()) return;
-        saveDraft();
-        const auto& choice = mChoices[static_cast<std::size_t>(index)];
+        const auto* selected = mTabs.selected(mConversations);
+        if (!selected || (selected->key == mConversation && selected->token == mToken)) return;
+        saveDraft(); currentView().remember(mHistory);
+        const auto choice = *selected;
         Command command{Command::Select, "", 0, mGeneration};
         command.conversation = choice.key; command.token = choice.token;
         bool full;
@@ -409,7 +418,8 @@ private:
     {
         mBridge->wakePending = false;
         if (mBridge->stop) { DestroyWindow(mWindow); return; }
-        std::deque<std::string> lines; std::optional<Reply> reply; bool reset, local;
+        std::deque<std::string> lines; std::optional<Reply> reply; bool reset, local; U64 count, dropped;
+        currentView().remember(mHistory);
         const U64 oldGeneration = mGeneration;
         std::string draft; std::optional<std::vector<Choice>> choices;
         std::optional<std::vector<FSNativeChat::FriendEntry>> friends;
@@ -418,12 +428,14 @@ private:
             lines.swap(mBridge->lines); reply = mBridge->reply; mBridge->reply.reset();
             reset = mBridge->reset; mBridge->reset = false; mConnected = mBridge->connected; mGeneration = mBridge->generation;
             mConversation = mBridge->conversation; mToken = mBridge->token; local = mBridge->local;
+            count = mBridge->historyCount; dropped = mBridge->historyDropped;
             if (reset) draft = mBridge->draft;
             choices.swap(mBridge->choices); friends.swap(mBridge->friends);
             mFriendTotal = mBridge->friendTotal; mAccountReady = mBridge->accountReady;
         }
         if (oldGeneration != mGeneration)
         {
+            mViews.clear(); mTabs.clear(mConversations);
             mFriends.clear(); mFilteredFriends.clear(); SetWindowTextW(mFriendSearch, L"");
             SendMessageW(mFriendList, LB_RESETCONTENT, 0, 0);
         }
@@ -438,7 +450,7 @@ private:
         }
         if (choices || reset) updateChoices();
         EnableWindow(mMode, local);
-        render(lines, reset);
+        render(lines, reset, count, dropped);
         if (reply)
         {
             if (*reply == Reply::Ready && textOf(mInput) == mSubmitted) SetWindowTextW(mInput, L"");
@@ -497,7 +509,13 @@ private:
         }
         case WM_COMMAND:
             if (LOWORD(wparam) == SendID && HIWORD(wparam) == BN_CLICKED) send();
-            else if (LOWORD(wparam) == ConversationID && HIWORD(wparam) == CBN_SELCHANGE) selectConversation();
+            else if (LOWORD(wparam) == AutoScrollID && HIWORD(wparam) == BN_CLICKED)
+            {
+                currentView().enable(mHistory, SendMessageW(mAutoScroll, BM_GETCHECK, 0, 0) == BST_CHECKED);
+                scrollControls();
+            }
+            else if (LOWORD(wparam) == LatestID && HIWORD(wparam) == BN_CLICKED)
+            { currentView().jumpToLatest(mHistory); scrollControls(); }
             else if (LOWORD(wparam) == OpenFriendID && HIWORD(wparam) == BN_CLICKED) openFriend();
             else if (LOWORD(wparam) == FriendListID && HIWORD(wparam) == LBN_DBLCLK) openFriend();
             else if (LOWORD(wparam) == FriendSearchID && HIWORD(wparam) == EN_CHANGE) updateFriends();
@@ -517,15 +535,20 @@ private:
         case WM_NOTIFY:
         {
             auto* header = reinterpret_cast<NMHDR*>(lparam);
-            if (header->hwndFrom == mTop && header->code == NM_CUSTOMDRAW)
+            if (header->hwndFrom == mConversations)
+            {
+                if (header->code == TCN_SELCHANGING) return mPending || mSwitching;
+                if (header->code == TCN_SELCHANGE) { selectConversation(); return 0; }
+            }
+            if ((header->hwndFrom == mTop || header->hwndFrom == mAutoScroll) && header->code == NM_CUSTOMDRAW)
             {
                 const auto* draw = reinterpret_cast<NMCUSTOMDRAW*>(lparam);
                 if (draw->dwDrawStage == CDDS_PREPAINT)
                 {
-                    DRAWITEMSTRUCT item{}; item.CtlType = ODT_BUTTON; item.CtlID = TopID; item.hwndItem = mTop;
+                    DRAWITEMSTRUCT item{}; item.CtlType = ODT_BUTTON; item.CtlID = static_cast<UINT>(header->idFrom); item.hwndItem = header->hwndFrom;
                     item.hDC = draw->hdc; item.rcItem = draw->rc;
                     item.itemState = (draw->uItemState & CDIS_DISABLED ? ODS_DISABLED : 0) | (draw->uItemState & CDIS_FOCUS ? ODS_FOCUS : 0);
-                    mTheme.drawItem(item, true, mTopmost); return CDRF_SKIPDEFAULT;
+                    mTheme.drawItem(item, true, header->hwndFrom == mTop ? mTopmost : currentView().enabled()); return CDRF_SKIPDEFAULT;
                 }
             }
             if (header->hwndFrom == mHistory && header->code == EN_LINK)
@@ -579,13 +602,34 @@ private:
         auto* self = reinterpret_cast<NativeWindow*>(data);
         try
         {
+            if (hwnd == self->mConversations && msg == WM_ERASEBKGND)
+            {
+                RECT rect{}; GetClientRect(hwnd, &rect); FillRect(reinterpret_cast<HDC>(wparam), &rect, self->mTheme.backgroundBrush); return 1;
+            }
             if (hwnd == self->mFriendList && msg == WM_KEYDOWN && wparam == VK_RETURN) { self->openFriend(); return 0; }
             if (msg == WM_NCDESTROY) RemoveWindowSubclass(hwnd, auxiliaryProc, id);
             const auto result = DefSubclassProc(hwnd, msg, wparam, lparam);
-            if (msg == WM_PAINT && hwnd != self->mFriendList) self->mTheme.paintComboArrow(hwnd);
+            if (msg == WM_PAINT && hwnd != self->mFriendList && hwnd != self->mConversations) self->mTheme.paintComboArrow(hwnd);
             return result;
         }
         catch (...) { return DefSubclassProc(hwnd, msg, wparam, lparam); }
+    }
+    static LRESULT CALLBACK historyProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam, UINT_PTR id, DWORD_PTR data)
+    {
+        auto* self = reinterpret_cast<NativeWindow*>(data);
+        if (msg == WM_NCDESTROY) RemoveWindowSubclass(hwnd, historyProc, id);
+        const auto result = DefSubclassProc(hwnd, msg, wparam, lparam);
+        try
+        {
+            const bool navigation = (msg == WM_KEYDOWN || msg == WM_KEYUP) && (wparam == VK_UP || wparam == VK_DOWN ||
+                wparam == VK_LEFT || wparam == VK_RIGHT || wparam == VK_PRIOR || wparam == VK_NEXT ||
+                wparam == VK_HOME || wparam == VK_END || (wparam == 'A' && (GetKeyState(VK_CONTROL) & 0x8000)));
+            const bool selecting = msg == WM_MOUSEMOVE && (wparam & MK_LBUTTON);
+            if (self->mReady && (msg == WM_VSCROLL || msg == WM_MOUSEWHEEL || navigation || selecting || msg == WM_LBUTTONUP))
+            { self->currentView().observeUser(hwnd); self->scrollControls(); }
+        }
+        catch (...) { /* Keep exceptions inside the native message callback. */ }
+        return result;
     }
     static LRESULT CALLBACK inputProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam, UINT_PTR id, DWORD_PTR data)
     {
@@ -607,8 +651,11 @@ private:
     std::shared_ptr<Bridge> mBridge;
     Labels mLabels;
     HWND mWindow = nullptr, mHistory = nullptr, mInput = nullptr, mSend = nullptr, mTop = nullptr, mFontLabel = nullptr, mFontSize = nullptr, mMode = nullptr, mStatus = nullptr, mConversations = nullptr;
-    HWND mFriendLabel = nullptr, mFriendSearch = nullptr, mFriendList = nullptr, mOpenFriend = nullptr;
+    HWND mFriendLabel = nullptr, mFriendSearch = nullptr, mFriendList = nullptr, mOpenFriend = nullptr, mAutoScroll = nullptr, mLatest = nullptr;
     FSNativeChat::NativeTheme mTheme;
+    FSNativeChat::TabStrip mTabs;
+    std::map<std::pair<std::string, U64>, FSNativeChat::HistoryView> mViews;
+    U64 mHistoryCount = 0;
     std::vector<FSNativeChat::FriendEntry> mFriends, mFilteredFriends;
     std::size_t mFriendTotal = 0;
     bool mAccountReady = false;
@@ -658,7 +705,8 @@ public:
             translated("NativeChatSay"), translated("NativeChatWhisper"), translated("NativeChatShout"), translated("NativeChatReady"),
             translated("NativeChatOffline"), translated("NativeChatEmpty"), translated("NativeChatTooLong"), translated("NativeChatBusy"),
             translated("NativeChatFriends"), translated("NativeChatFriendSearch"), translated("NativeChatOpenFriend"),
-            translated("NativeChatFriendOnline"), translated("NativeChatFriendOffline"), translated("NativeChatFriendOpenFailed")};
+            translated("NativeChatFriendOnline"), translated("NativeChatFriendOffline"), translated("NativeChatFriendOpenFailed"),
+            translated("NativeChatAutoScroll"), translated("NativeChatLatest")};
         mBridge = bridge; publishSelection(true); mPublishedRows.clear(); publishRows(); refreshFriends(true);
         try
         {
@@ -675,7 +723,7 @@ public:
     {
         if (!mInitialized || !archive || args["is_replay"].asBoolean() || chat.mMuted ||
             chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP ||
-            chat.mText.empty() || gSavedSettings.getBOOL("FSHideLocalChat")) return;
+            chat.mText.empty()) return;
         synchronizeSession(); if (!mConnected) return;
         auto name = chat.mFromName, text = chat.mText;
         filter(name, text, chat.mFromID, chat.mRlvNamesFiltered);
@@ -835,7 +883,9 @@ private:
             {
                 mBridge->generation = mGeneration; mBridge->conversation = selected.key; mBridge->token = selected.token;
                 mBridge->local = selected.kind == Book::Kind::Local; mBridge->draft = selected.draft;
-                mBridge->lines = selected.history.lines(); mBridge->reset = true; mBridge->reply.reset();
+                mBridge->lines = selected.history.lines();
+                mBridge->historyDropped = selected.history.dropped(); mBridge->historyCount = selected.history.dropped() + selected.history.lines().size();
+                mBridge->reset = true; mBridge->reply.reset();
             }
             changed = changed || stateChanged;
         }
@@ -869,6 +919,7 @@ private:
                 if (mBridge->generation != mGeneration || mBridge->conversation != item.key || mBridge->token != item.token) return;
                 if (mBridge->lines.size() >= FSNativeChat::Transcript::MaxEntries) mBridge->lines.pop_front();
                 mBridge->lines.push_back(item.history.lines().back());
+                mBridge->historyDropped = item.history.dropped(); mBridge->historyCount = item.history.dropped() + item.history.lines().size();
             }
             mBridge->wake();
         }

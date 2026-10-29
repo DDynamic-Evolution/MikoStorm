@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="miko_lovense" title="Lovense" width="780" height="700" layout="topleft" can_resize="false" can_minimize="true" can_close="true" save_rect="true" save_visibility="false" single_instance="true">
+  <string name="disconnected">Getrennt</string>
+  <string name="connecting">Verbindung wird hergestellt...</string>
+  <string name="scan">QR-Code in Lovense Remote scannen.</string>
+  <string name="ready">Verbunden. Geräte auswählen und Start drücken.</string>
+  <string name="running">Ausgewählte Geräte werden angesteuert.</string>
+  <string name="paused">Gestoppt / pausiert. Mit Start fortsetzen.</string>
+  <string name="error_token">Sitzungstoken abgewiesen. Neuen Token für die eigene Lovense-Anwendung erzeugen.</string>
+  <string name="error_network">Verbindung beendet. Netzwerk, Zertifikate und Sitzungstoken prüfen und erneut verbinden.</string>
+  <string name="error_protocol">Ungültige Serverantwort. Verbindung beendet.</string>
+  <string name="error_qr">QR-Code nicht verfügbar. Neu laden oder erneut verbinden.</string>
+  <string name="need_token">Lovense aktivieren und gültigen Sitzungstoken sowie Plattformnamen eingeben.</string>
+  <string name="invalid_pattern">Mindestens ein Gerät auswählen. Muster: bis zu 64 Werte von 0 bis 20, getrennt durch Semikolons.</string>
+  <check_box name="enabled" left="15" top="32" width="720" height="23" label="Manuelle Lovense-Verbindungen aktivieren" control_name="MikoLovenseEnabled" />
+  <text name="platform_label" left="15" top="67" width="175" height="20" wrap="true">Anwendung / Plattform:</text>
+  <line_editor name="platform" left="195" top="64" width="300" height="24" max_length_chars="128" control_name="MikoLovensePlatform" />
+  <text name="token_label" left="15" top="102" width="740" height="20" wrap="true">Sitzungstoken (wird nicht gespeichert):</text>
+  <line_editor name="auth_token" left="15" top="128" width="480" height="24" is_password="true" max_length_chars="4096" />
+  <button name="connect" left="510" top="128" width="120" height="25" label="Verbinden" />
+  <button name="disconnect" left="640" top="128" width="120" height="25" label="Trennen" />
+  <panel name="qr_code" left="15" top="175" width="230" height="230" border_visible="true" />
+  <text name="devices_label" left="265" top="170" width="495" height="24" wrap="true">Geräte auswählen (Strg/Umschalt für mehrere):</text>
+  <scroll_list name="toys" left="265" top="200" width="495" height="205" multi_select="true" commit_on_selection_change="true" commit_on_keyboard_movement="true" draw_heading="true">
+    <column name="name" label="Gerät" width="370" />
+    <column name="battery" label="Akku" width="95" />
+  </scroll_list>
+  <button name="reload" left="15" top="415" width="230" height="25" label="QR-Code neu laden" />
+  <text name="pattern_label" left="265" top="425" width="495" height="22" wrap="true">Muster (Werte durch Semikolons trennen):</text>
+  <line_editor name="pattern" left="265" top="450" width="495" height="24" control_name="MikoLovensePattern" max_length_chars="256" />
+  <spinner name="strength" left="265" top="487" width="385" height="25" label="Maximale Stärke:" label_width="235" control_name="MikoLovenseMaxStrength" decimal_digits="0" min_val="1" max_val="20" increment="1" />
+  <button name="start" left="265" top="530" width="160" height="25" label="Start / Fortsetzen" />
+  <button name="pause" left="435" top="530" width="150" height="25" label="Pause" />
+  <button name="stop" left="595" top="530" width="165" height="25" label="Stopp" />
+  <text name="status" left="15" top="570" width="745" height="36" wrap="true" />
+  <text name="feedback" left="15" top="608" width="745" height="36" wrap="true" />
+  <check_box name="help" left="15" top="648" width="220" height="22" label="Hinweise anzeigen" control_name="MikoLovenseShowHelp" />
+  <text name="instructions" left="15" top="455" width="230" height="180" wrap="true">Geräte in Lovense Remote verbinden, Sitzungstoken des eigenen Dienstes eingeben und QR-Code scannen. Geräte bewusst auswählen; keine automatische Animations-Synchronisierung. Schließen beendet die Steuerung.</text>
+</floater>

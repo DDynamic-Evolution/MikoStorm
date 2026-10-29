@@ -56,6 +56,15 @@ public:
         SendMessageW(control, EM_SETCHARFORMAT, SCF_DEFAULT, reinterpret_cast<LPARAM>(&format));
         SendMessageW(control, EM_SETCHARFORMAT, SCF_ALL, reinterpret_cast<LPARAM>(&format));
     }
+    void richEditFont(HWND control, HFONT font) const
+    {
+        // WM_SETFONT can reset Rich Edit character colors to automatic/system
+        // values. Restore the current palette before repainting, for both the
+        // existing transcript and the default format of subsequent messages.
+        SendMessageW(control, WM_SETFONT, reinterpret_cast<WPARAM>(font), FALSE);
+        richEdit(control);
+        RedrawWindow(control, nullptr, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME);
+    }
     HBRUSH colorControl(HDC dc, bool field, bool enabled) const
     {
         SetTextColor(dc, enabled ? (field ? foreground : buttonText) : disabled); SetBkColor(dc, field ? surface : background);
@@ -63,7 +72,7 @@ public:
     }
     bool drawItem(const DRAWITEMSTRUCT& item, bool checkbox, bool checked) const
     {
-        if (item.CtlType != ODT_BUTTON && item.CtlType != ODT_COMBOBOX && item.CtlType != ODT_LISTBOX) return false;
+        if (item.CtlType != ODT_BUTTON && item.CtlType != ODT_COMBOBOX && item.CtlType != ODT_LISTBOX && item.CtlType != ODT_TAB) return false;
         const int saved = SaveDC(item.hDC);
         const bool selected = (item.itemState & ODS_SELECTED) != 0;
         const bool enabled = (item.itemState & ODS_DISABLED) == 0;
@@ -99,6 +108,14 @@ public:
                 text.left += 22;
             }
             else FrameRect(item.hDC, &item.rcItem, borderBrush);
+        }
+        else if (item.CtlType == ODT_TAB)
+        {
+            label.resize(2048);
+            TCITEMW tab{}; tab.mask = TCIF_TEXT; tab.pszText = label.data(); tab.cchTextMax = static_cast<int>(label.size());
+            if (SendMessageW(item.hwndItem, TCM_GETITEMW, item.itemID, reinterpret_cast<LPARAM>(&tab))) label.resize(wcslen(label.c_str()));
+            else label.clear();
+            FrameRect(item.hDC, &item.rcItem, borderBrush);
         }
         else if (item.itemID != static_cast<UINT>(-1))
         {

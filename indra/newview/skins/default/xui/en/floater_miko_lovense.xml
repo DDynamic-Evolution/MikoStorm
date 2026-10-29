@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<floater name="miko_lovense" title="Lovense" width="780" height="700" layout="topleft" can_resize="false" can_minimize="true" can_close="true" save_rect="true" save_visibility="false" single_instance="true">
+  <string name="disconnected">Disconnected</string>
+  <string name="connecting">Connecting...</string>
+  <string name="scan">Scan the QR code in Lovense Remote.</string>
+  <string name="ready">Connected. Select devices, then press Start.</string>
+  <string name="running">Running on selected devices.</string>
+  <string name="paused">Stopped / paused. Press Start to resume.</string>
+  <string name="error_token">Session token rejected. Obtain a new token for your Lovense application.</string>
+  <string name="error_network">Connection ended. Check the network, certificates and session token, then connect again.</string>
+  <string name="error_protocol">Invalid server response. Connection stopped.</string>
+  <string name="error_qr">QR code unavailable. Reload or reconnect.</string>
+  <string name="need_token">Enable Lovense and enter a valid session token and platform name.</string>
+  <string name="invalid_pattern">Select at least one device. Pattern: up to 64 levels from 0 to 20, separated by semicolons.</string>
+  <check_box name="enabled" left="15" top="32" width="720" height="23" label="Enable manual Lovense connections" control_name="MikoLovenseEnabled" />
+  <text name="platform_label" left="15" top="67" width="175" height="20" wrap="true">Application / platform:</text>
+  <line_editor name="platform" left="195" top="64" width="300" height="24" max_length_chars="128" control_name="MikoLovensePlatform" />
+  <text name="token_label" left="15" top="102" width="740" height="20" wrap="true">Session token (not saved):</text>
+  <line_editor name="auth_token" left="15" top="128" width="480" height="24" is_password="true" max_length_chars="4096" />
+  <button name="connect" left="510" top="128" width="120" height="25" label="Connect" />
+  <button name="disconnect" left="640" top="128" width="120" height="25" label="Disconnect" />
+  <panel name="qr_code" left="15" top="175" width="230" height="230" border_visible="true" />
+  <text name="devices_label" left="265" top="170" width="495" height="24" wrap="true">Select devices (Ctrl/Shift for several):</text>
+  <scroll_list name="toys" left="265" top="200" width="495" height="205" multi_select="true" commit_on_selection_change="true" commit_on_keyboard_movement="true" draw_heading="true">
+    <column name="name" label="Device" width="370" />
+    <column name="battery" label="Battery" width="95" />
+  </scroll_list>
+  <button name="reload" left="15" top="415" width="230" height="25" label="Reload QR code" />
+  <text name="pattern_label" left="265" top="425" width="495" height="22" wrap="true">Pattern (levels separated by semicolons):</text>
+  <line_editor name="pattern" left="265" top="450" width="495" height="24" control_name="MikoLovensePattern" max_length_chars="256" />
+  <spinner name="strength" left="265" top="487" width="385" height="25" label="Maximum strength:" label_width="235" control_name="MikoLovenseMaxStrength" decimal_digits="0" min_val="1" max_val="20" increment="1" />
+  <button name="start" left="265" top="530" width="160" height="25" label="Start / resume" />
+  <button name="pause" left="435" top="530" width="150" height="25" label="Pause" />
+  <button name="stop" left="595" top="530" width="165" height="25" label="Stop" />
+  <text name="status" left="15" top="570" width="745" height="36" wrap="true" />
+  <text name="feedback" left="15" top="608" width="745" height="36" wrap="true" />
+  <check_box name="help" left="15" top="648" width="220" height="22" label="Show help" control_name="MikoLovenseShowHelp" />
+  <text name="instructions" left="15" top="455" width="230" height="180" wrap="true">Connect toys in Lovense Remote, enter a session token from your own service and scan the code. Select devices explicitly; no automatic animation sync. Closing this window stops control.</text>
+</floater>

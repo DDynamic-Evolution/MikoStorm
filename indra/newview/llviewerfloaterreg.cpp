@@ -30,6 +30,7 @@
 
 #include "llfloaterreg.h"
 #include "llviewerfloaterreg.h"
+#include "lovense/fsfloaterlovense.h"
 #ifdef USE_MCP
 #include "llfloatermcp.h"
 #endif
@@ -405,6 +406,7 @@ void LLViewerFloaterReg::registerFloaters()
     {
         return;
     }
+    LLFloaterReg::add("miko_lovense", "floater_miko_lovense.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterLovense>);
     // *NOTE: Please keep these alphabetized for easier merges
 
     LLFloaterAboutUtil::registerFloater();

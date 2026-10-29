@@ -79,8 +79,8 @@ def add_info(key, pkg, lines):
     # </FS:Ansariel>
         dups[key].add(pkg)
 
-versions=autobuild('install', '--versions', '--install-dir', args.install_dir)
-copyrights=autobuild('install', '--copyrights', '--install-dir', args.install_dir)
+versions=autobuild('install', '--skip-source-environment', '--versions', '--install-dir', args.install_dir)
+copyrights=autobuild('install', '--skip-source-environment', '--copyrights', '--install-dir', args.install_dir)
 viewer_copyright = copyrights.readline() # first line is the copyright for the viewer itself
 
 # Two different autobuild outputs, but we treat them essentially the same way:

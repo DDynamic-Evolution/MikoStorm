@@ -1,10 +1,65 @@
 # Native Windows chat window
 
-Status: 2026-10-28. **Windows AVX2 2.0.2** includes automatic Windows application
-Light/Dark/High Contrast appearance and the searchable friend sidebar, along with
-local/private/group chats and the Toybox button. The viewer was incrementally
-compiled and linked, and the NSIS installer was built and verified. The older
-2.0.1 installer predates the theme/friend additions.
+Status: 2026-10-29. **Windows AVX2 2.0.5** includes native conversation tabs,
+background autoscroll, popout messages with Hide Chat enabled, stable font colors,
+automatic Windows appearance, the searchable friend sidebar and Toybox button.
+The viewer was incrementally compiled/linked and the NSIS installer built and
+verified. Older 2.0.2 installers predate the tab/background/font updates.
+
+## Background following, Hide Chat and font colors (2.0.4)
+
+Autoscroll now keeps following incoming messages while the popout is inactive or
+another application has focus. It does not activate the popout or move keyboard
+focus. Only deliberate history scrolling or selection changes update the pause/
+follow decision. Scroll-to-bottom runs after Rich Edit redraw/layout is enabled
+and positions the viewport directly, without depending on a visible caret.
+Manually reading older/selected text or disabling Autoscroll still pauses it;
+Latest resumes following. These states remain separate for each conversation.
+
+**Hide Chat / FSHideLocalChat** controls the viewer chat presentation. The native
+popout continues to receive accepted local messages while Hide Chat is enabled.
+This does not turn viewer chat visibility or regular logging back on. The native
+history keeps its existing in-memory limits. Muted messages, replay, forwarded
+IMs and debug/OAuth messages excluded upstream remain excluded; session and RLVa
+checks still apply. Toggling Hide Chat does not clear or duplicate native history.
+
+Changing the popout font size also reapplies the current Rich Edit theme colors
+before repainting. Existing text and the default format for later incoming
+messages retain their foreground/background colors; font/DPI updates do not
+refresh or replace the selected Windows palette.
+
+These changes are compiled and linked into the **2.0.4.0 AVX2** viewer
+through CMD/VS2022, with OpenSim, FMOD, 3D Stream and MCP. All 15 native-chat
+Python integration checks and both focused native test programs passed: 40
+chat/tab/autoscroll checks, plus the theme renderer with 100 resource-safe
+refresh cycles and font/color checks at eight sizes across four palettes.
+The new NSIS installer was built and verified. No MCP tests or viewer startup
+were performed. In-world/visual
+validation with actual local/IM/group conversations is still pending.
+
+## Tabs and autoscroll (2.0.4)
+
+Native Windows conversation tabs are included in the verified 2.0.4 installer.
+Local chat, IMs and groups each have their own tab,
+draft, transcript and reading state. Tabs keep their order while unread labels
+change. Overflow arrows allow access to more tabs; labels use native tooltips.
+Closing an ordinary viewer IM removes its tab. New private chats still open from
+the friend sidebar, and new group conversations use the normal viewer UI.
+
+**Autoscroll / Automatisch scrollen** starts enabled in each conversation. New
+messages follow the bottom while no text is selected. Scrolling up or selecting
+text pauses following so messages do not move away while being read. Return to
+the bottom with the selection cleared to resume automatically, or click
+**Latest / Neueste**. The button also re-enables Autoscroll and clears its pending
+message count. Its count is capped at 999 and is separate from tab unread counts.
+Unchecking Autoscroll keeps following disabled until re-enabled or Latest is used.
+
+Reading position, text selection and the Autoscroll preference are remembered per
+conversation while the native window is open. They are not saved to disk. Live
+history trimming shifts anchors to the same retained text; expired selections,
+inactive snapshots with pruned history and incoming queue gaps reset safely to
+the oldest retained message while paused. Account changes clear all reading state,
+and a closed/recreated conversation cannot inherit the old lifetime's position.
 
 ## Use
 
@@ -25,7 +80,7 @@ ordinary native title bar. Without a readable app-mode setting, controls fall
 back to system colors. The code only reads the preference and never changes
 Windows theme, security or privacy settings.
 
-The chat history, inputs, friend list, buttons and dropdown content use the
+The chat history, inputs, friend list, buttons, tabs and remaining dropdown content use the
 matching palette. Theme changes preserve conversation selection, drafts and
 history. Current font size and Always on top behavior stay available. Display,
 DPI, screen-reader and live theme-switch behavior need manual validation.
@@ -61,7 +116,8 @@ viewer window is minimized. It remains attached to the current viewer login.
 Closing the popout leaves the viewer running; viewer cleanup closes and joins
 its UI thread before chat/settings services are destroyed.
 
-- A conversation dropdown separates **Local chat**, private **IMs** and **Groups**.
+- Conversation tabs separate **Local chat**, private **IMs** and **Groups** in the
+  current source (the released 2.0.2 installer uses a conversation dropdown).
   Existing viewer IM/group sessions appear automatically (within about a second);
   new private chats can also open from the friend sidebar in version 2.0.2.
   New groups use the ordinary viewer UI; the popout does not join/leave/snooze them.
@@ -102,8 +158,9 @@ manual runtime verification in the new build.
 
 The mirror is fed from `FSFloaterNearbyChat::addMessage` inside the accepted,
 unmuted local-chat branch, after the normal handler's filtering. It does not
-subscribe to the earlier raw notification signal. It respects `FSHideLocalChat`,
-excludes muted messages, IM/group-IM types and history replay, and additionally
+subscribe to the earlier raw notification signal. The current source delivers to
+the popout before the viewer-only `FSHideLocalChat` return. It excludes muted
+messages, IM/group-IM types and history replay, and additionally
 masks restricted names/locations through the existing RLVa helpers.
 
 Local sending passes through the existing nearby-chat service, including its
@@ -147,6 +204,8 @@ The popout does not reopen automatically after restarting the viewer.
   bridge, main-thread session checks, formatting, settings and normal chat send.
 - `fsnativechat.h`: main-thread entry points and no-op unsupported-platform stubs.
 - `fsnativechatmodel.h`: transcripts, conversation/friend lifetimes and theme policy.
+- `fsnativechatview.h`: native tab identities and per-conversation Rich Edit
+  following, UTF-16 reading anchors, selection restoration and message counts.
 - `fsnativechattheme.h`: read-only Windows app-theme detection, DWM title bar,
   system/High Contrast fallback, owner drawing and GDI brush lifetime.
 - `llappviewer.cpp`: initialize service; close/join at the beginning of cleanup.
@@ -167,6 +226,21 @@ control call. Normal focus handling keeps native typing away from avatar keys.
 
 ## Validation
 
+The following tab/scroll results predate the background/Hide Chat source fixes.
+For the earlier tabs/autoscroll update, the changed production
+`fsnativechatwin32.cpp` translation unit compiles with the AVX2 Release project
+through CMD/VS2022. The focused `native_chat_view_regression` uses actual hidden
+Win32 tabs and Rich Edit controls to check stable identities/order, overflow,
+following/pause/resume, per-tab restoration, UTF-16 positions beyond 65535,
+trimming, expired snapshots, queue gaps and bounded counts. The theme renderer
+also draws tabs across 100 resource-safe refresh cycles. Both native programs and
+all 12 native-chat Python integration checks passed before the background fixes.
+A later 2.0.3 AVX2 build linked the viewer and prepared/wrote the NSIS setup, but
+its completion was not confirmed and the payload was not verified or delivered.
+No MCP tests or viewer startup were performed for that build.
+
+The following release validation describes the existing installer:
+
 The full **2.0.2** AVX2 viewer compiled and linked successfully through CMD/VS2022.
 All **21 Python integration checks** and all **four native test programs** passed:
 **215 core** checks, nine avatar-log checks, eight camera checks and the Windows
@@ -181,7 +255,7 @@ actual live theme notifications, or logged-in friend/private/group behavior.
 Manual checks still required:
 
 1. Switch Windows application Light/Dark and High Contrast while the popout is
-   open/minimized. Check title bar, text, selection, checkbox, dropdowns, focus,
+   open/minimized. Check title bar, text, selection, checkboxes, tabs, dropdowns, focus,
    links and copied text. Draft/history must remain intact; test DPI moves too.
 2. Friend sorting/search with Unicode names, status/name changes, offline IM,
    duplicate display names, removal/readding, and pending open on logout/account
@@ -198,10 +272,22 @@ Manual checks still required:
 7. Mute/debug/OAuth filtering and RLVa name/location/send restrictions; IM/group messages appear only in their own conversations; ordinary logging unaffected.
 8. Disconnect/logout/account change with a pending send or unsent draft, also with
    the popout already closed; old transcript/draft must not reappear.
-9. Incoming bursts, reading selected/scrolled text, bounded history, repeated
+9. Tab overflow, keyboard tab selection, Unicode/duplicate labels and unread
+   updates while browsing the overflow strip. Reading position, selection and
+   Autoscroll preference must survive switching local/IM/group conversations.
+10. Autoscroll while another application has focus, while typing in the main viewer
+   and after minimizing/restoring. Incoming messages must reach the bottom without
+   taking focus; deliberate reading pauses and the disabled checkbox must persist.
+11. Enable/disable Hide Chat while receiving local chat. Native messages continue
+   exactly once; viewer chat remains hidden. Mute, RLV and replay exclusions hold.
+12. Autoscroll pause/resume via wheel, scrollbar and keyboard; Latest and checkbox;
+   incoming bursts, reading selected/scrolled text, bounded history, repeated
    open/close, missing Rich Edit and orderly viewer exit during window startup.
 
 API references:
+[Tab controls](https://learn.microsoft.com/en-us/windows/win32/controls/tab-control-styles),
+[Rich Edit redraw/layout](https://learn.microsoft.com/en-us/windows/win32/gdi/wm-setredraw),
+[Rich Edit scroll-position limitations](https://learn.microsoft.com/en-us/windows/win32/controls/em-getscrollpos),
 [Windows message loops](https://learn.microsoft.com/en-us/windows/win32/winmsg/using-messages-and-message-queues),
 [Rich Edit](https://learn.microsoft.com/en-us/windows/win32/controls/rich-edit-controls),
 [control subclassing](https://learn.microsoft.com/en-us/windows/win32/controls/subclassing-overview),

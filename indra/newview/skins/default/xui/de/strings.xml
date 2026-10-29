@@ -7390,4 +7390,8 @@ Ihre aktuelle Position: [AVATAR_POS]
     <string name="NativeChatFriendOffline">Offline</string>
     <string name="NativeChatFriendUnnamed">Freund (Name wird geladen…)</string>
     <string name="NativeChatFriendOpenFailed">Chat nicht geöffnet: Kontakt entfernt, eingeschränkt, getrennt oder Gesprächslimit erreicht.</string>
+  <string name="NativeChatAutoScroll">Automatisch scrollen</string>
+  <string name="NativeChatLatest">Neueste</string>
+    <string name="Command_MikoLovense_Label">Lovense</string>
+    <string name="Command_MikoLovense_Tooltip">Ausgewählte Lovense-Geräte verbinden und steuern</string>
 </strings>

@@ -882,6 +882,9 @@
              function="Floater.ToggleOrBringToFront"
              parameter="fs_nearby_chat" />
         </menu_item_check>
+        <menu_item_call label="Lovense..." name="Miko Lovense">
+            <menu_item_call.on_click function="Floater.ToggleOrBringToFront" parameter="miko_lovense"/>
+        </menu_item_call>
         <menu_item_call label="Chat in Windows Window..." name="Native Nearby Chat">
             <menu_item_call.on_click function="NativeChat.Show" />
             <menu_item_call.on_enable function="NativeChat.Supported" />
